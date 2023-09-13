@@ -5,42 +5,16 @@ project(PepperEngine)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-set(PepperEngine_VERSION_MAJOR 1)
-set(PepperEngine_VERSION_MINOR 0)
+set(PepperEngine_VERSION_MAJOR 0)
+set(PepperEngine_VERSION_MINOR 1)
 
 
 #add_executable(PepperEngine main.cpp )
 
-#configure_file(PEConfig.h.in PEConfig.h)
-#
-#target_include_directories(PepperEngine PUBLIC
-#                           "${PROJECT_BINARY_DIR}"
-#                           )
-#
-#add_subdirectory(libs/ImGui)
-#target_link_libraries(PepperEngine PUBLIC ImGui)
-#target_include_directories(PepperEngine PUBLIC
-#                          "${PROJECT_BINARY_DIR}"
-#                          "${PROJECT_SOURCE_DIR}/libs/ImGui"
-#                          )
-#
-#target_link_libraries(PepperEngine PUBLIC libs/glfw3.lib)
-#target_include_directories(PepperEngine PUBLIC
-#                          "${PROJECT_BINARY_DIR}"
-#                          "${PROJECT_SOURCE_DIR}/libs/GLFW"
-#                          )
-#
-#target_link_libraries(PepperEngine PUBLIC libs/vulkan-1.lib)
-#target_include_directories(PepperEngine PUBLIC
-#                          "${PROJECT_BINARY_DIR}"
-#                          "${PROJECT_SOURCE_DIR}/libs/Vulkan"
-#                          )
-#
-#target_include_directories(PepperEngine PUBLIC "%VULKAN_SDK%/include")
-#target_include_directories(PepperEngine PUBLIC "libs/GLFW/include") 
+#configure_file(PEConfig.h.in PEConfig.h
 
 # GLFW
-set(GLFW_DIR "D:/Program Files/GLFW/glfw-3.3.8") # Set this to point to an up-to-date GLFW repo
+set(GLFW_DIR libs/external/GLFW/glfw-3.3.8) # Set this to point to an up-to-date GLFW repo
 option(GLFW_BUILD_EXAMPLES "Build the GLFW example programs" OFF)
 option(GLFW_BUILD_TESTS "Build the GLFW test programs" OFF)
 option(GLFW_BUILD_DOCS "Build the GLFW documentation" OFF)
@@ -57,7 +31,7 @@ find_package(Vulkan REQUIRED)
 set(LIBRARIES "glfw;Vulkan::Vulkan")
 
 # Dear ImGui
-set(IMGUI_DIR libs/ImGui)
+set(IMGUI_DIR libs/external/ImGui)
 include_directories(${IMGUI_DIR})
 
 # Use vulkan headers from glfw:
