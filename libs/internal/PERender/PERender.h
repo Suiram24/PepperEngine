@@ -44,9 +44,6 @@ namespace engine
 		class PERender
 		{
 
-
-
-
 			//Singleton setup
 		public:
 			static PERender& getInstance()
@@ -61,7 +58,6 @@ namespace engine
 			{
 			}
 		protected:
-
 
 			//Methods
 		public:

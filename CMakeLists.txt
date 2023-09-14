@@ -39,6 +39,11 @@ include_directories(${GLFW_DIR}/deps)
 
 #PERender
 add_subdirectory(libs/internal/PERender)
+add_subdirectory(libs/internal/PEMaths)
+add_subdirectory(libs/internal/PEPhysics)
+set(LIBRARIES ${LIBRARIES} PERender PEMaths PEPhysics)
+
+
 set(LIBRARIES ${LIBRARIES} PERender)
 
 
