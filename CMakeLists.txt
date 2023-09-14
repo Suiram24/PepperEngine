@@ -37,6 +37,11 @@ include_directories(${IMGUI_DIR})
 # Use vulkan headers from glfw:
 include_directories(${GLFW_DIR}/deps)
 
+#PERender
+add_subdirectory(libs/internal/PERender)
+set(LIBRARIES ${LIBRARIES} PERender)
+
+
 file(GLOB sources *.cpp)
 
 add_executable(PepperEngine ${sources} ${IMGUI_DIR}/imgui_impl_glfw.cpp ${IMGUI_DIR}/imgui_impl_vulkan.cpp ${IMGUI_DIR}/imgui.cpp ${IMGUI_DIR}/imgui_draw.cpp ${IMGUI_DIR}/imgui_demo.cpp ${IMGUI_DIR}/imgui_tables.cpp ${IMGUI_DIR}/imgui_widgets.cpp)
