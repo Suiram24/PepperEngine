@@ -1,5 +1,3 @@
-
-
 #ifndef PERENDER_CPERENDERER_H
 #define PERENDER_CPERENDERER_H
 
@@ -29,7 +27,7 @@ namespace engine
 #endif
 		namespace vk 
 		{
-			// Data
+			// Vulkan Data
 			static VkAllocationCallbacks* g_Allocator = nullptr;
 			static VkInstance               g_Instance = VK_NULL_HANDLE;
 			static VkPhysicalDevice         g_PhysicalDevice = VK_NULL_HANDLE;
@@ -45,12 +43,18 @@ namespace engine
 			static bool                     g_SwapChainRebuild = false;
 		}
 
-
+		/**
+		 * @brief Singleton used to setup render libs and render frames.
+		*/
 		class CPeRenderer
 		{
 
 			//Singleton setup
 		public:
+			/**
+			 * @brief Get the instance of the singleton
+			 * @return A reference of the instance 
+			*/
 			static CPeRenderer& getInstance()
 			{
 				static CPeRenderer instance;
@@ -66,27 +70,40 @@ namespace engine
 
 			//Methods
 		public:
-			// Setup ImGui, GLFW and Vulkan
+
+			/**
+			* @brief Setup ImGui, GLFW and Vulkan
+			* @return 0 if setup finished correctly, 1 otherwise
+			*/
 			int RenderSetup();
-			// Cleanup to call before closin program
+			
+			/**
+			 * @brief Cleanup to call before closin program
+			 * @return 
+			*/
 			int RenderCleanup();
 
-			//ImGui begin frame (call at the start of the frame)
+			/**
+			 * @brief ImGui begin frame (call at the start of the frame)
+			*/
 			void BeginFrame();
-			//ImGui render frame (call at the end of the frame)
+
+			/**
+			 * @brief ImGui render frame (call at the end of the frame)
+			*/
 			void RenderFrame();
 		private:
 		protected:
 
 		public:
-			GLFWwindow* m_window = nullptr;
-			ImGuiIO* m_io = nullptr;
+			GLFWwindow* m_window = nullptr;	/// Pointer to the main GLFW window
+			ImGuiIO* m_io = nullptr;		/// Pointer to the ImGUI I/O
 
 			//
 			//Demo (may need to be cleaned later)
-			ImVec4 m_clear_color;
-			bool m_show_demo_window;	//description
-			bool m_show_another_window;
+			ImVec4 m_clear_color;		/// ImGUI demo variable
+			bool m_show_demo_window;	/// ImGUI demo variable
+			bool m_show_another_window; /// ImGUI demo variable
 		private:
 			ImGui_ImplVulkanH_Window* m_wd = nullptr;
 			VkResult m_err;

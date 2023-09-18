@@ -1,7 +1,7 @@
 # Pepper Engine
 ___
 ## Description
-PepperEngine is a simple game engine made for the UQAC 8INF935 course by Marius Bozane and Alexandre Viala.
+PepperEngine is a simple game engine made for the UQAC 8INF935 course by Marius Bozane, Alexandre Viala and Benoît Miège.
 
 ## How to build
 For now, you need to have the Vulkan SDK installed on your machine (will fix this later).
@@ -11,13 +11,6 @@ Then, just clone the repo, open the CMakeLists.txt with visual studio and genera
 
 A few simple rules to follow:
 
-
-
-### File Headers 
-
-Files headers should look like that:
-
-//TODO
 
 ### Namespaces
 
@@ -48,10 +41,37 @@ namespace engine
 
 ### Comments
 
-You should always comment your classes/functions/variables.   
+You should always comment your classes/functions/variables.
+You can enable doxygen-style comments in visual studio (Tools > Options > Text Editor > C/C++ > General > "Doxygen (/\*\*)").   
+You can then type " /\*\* " to generate a comment block.
+
 Exemple:
 
-//TODO
+```cpp
+
+/**
+ * @brief Singleton used to setup render libs and render frames.
+*/
+class CPeRenderer
+{
+public:
+    /**
+    * @brief Setup ImGui, GLFW and Vulkan
+    * @return 0 if setup finished correctly, 1 otherwise
+    */
+    int RenderSetup();
+    
+protected:
+private:
+
+
+public:
+    GLFWwindow* m_window = nullptr;	/// Pointer to the main GLFW window
+    ImGuiIO* m_io = nullptr;		/// Pointer to the ImGUI I/O
+protected:
+private:
+}
+```
 
 ### Variables names
 
