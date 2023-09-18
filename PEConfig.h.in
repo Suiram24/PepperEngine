@@ -1,3 +1,0 @@
-// the configured options and settings for PepperEngine
-#define PE_VERSION_MAJOR @PepperEngine_VERSION_MAJOR@
-#define PE_VERSION_MINOR @PepperEngine_VERSION_MINOR@

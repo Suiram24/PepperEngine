@@ -9,10 +9,6 @@ set(PepperEngine_VERSION_MAJOR 0)
 set(PepperEngine_VERSION_MINOR 1)
 
 
-#add_executable(PepperEngine main.cpp )
-
-#configure_file(PeConfig.h.in PeConfig.h)
-
 # GLFW
 set(GLFW_DIR libs/external/GLFW/glfw-3.3.8) # Set this to point to an up-to-date GLFW repo
 option(GLFW_BUILD_EXAMPLES "Build the GLFW example programs" OFF)
