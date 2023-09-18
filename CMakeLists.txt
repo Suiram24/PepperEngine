@@ -11,7 +11,7 @@ set(PepperEngine_VERSION_MINOR 1)
 
 #add_executable(PepperEngine main.cpp )
 
-#configure_file(PEConfig.h.in PEConfig.h
+#configure_file(PeConfig.h.in PeConfig.h)
 
 # GLFW
 set(GLFW_DIR libs/external/GLFW/glfw-3.3.8) # Set this to point to an up-to-date GLFW repo
@@ -38,13 +38,13 @@ include_directories(${IMGUI_DIR})
 include_directories(${GLFW_DIR}/deps)
 
 #PERender
-add_subdirectory(libs/internal/PERender)
-add_subdirectory(libs/internal/PEMaths)
-add_subdirectory(libs/internal/PEPhysics)
-set(LIBRARIES ${LIBRARIES} PERender PEMaths PEPhysics)
+add_subdirectory(libs/internal/PeRender)
+add_subdirectory(libs/internal/PeMaths)
+add_subdirectory(libs/internal/PePhysics)
+set(LIBRARIES ${LIBRARIES} PeRender PeMaths PePhysics)
 
 
-set(LIBRARIES ${LIBRARIES} PERender)
+set(LIBRARIES ${LIBRARIES} PeRender)
 
 
 file(GLOB sources *.cpp)

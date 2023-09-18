@@ -1,10 +1,9 @@
-#include "PERender.h"
+#include "CPeRenderer.h"
 
 namespace engine
 {
     namespace render
     {
-
         static void glfw_error_callback(int error, const char* description)
         {
             fprintf(stderr, "GLFW Error %d: %s\n", error, description);
@@ -334,7 +333,7 @@ namespace engine
         }
 
 
-        int PeRenderer::RenderSetup()
+        int CPeRenderer::RenderSetup()
         {
             glfwSetErrorCallback(glfw_error_callback);
             if (!glfwInit())
@@ -451,7 +450,7 @@ namespace engine
         }
 
 
-        int PeRenderer::RenderCleanup()
+        int CPeRenderer::RenderCleanup()
         {
             // Cleanup
             m_err = vkDeviceWaitIdle(vk::g_Device);
@@ -469,7 +468,7 @@ namespace engine
             return 0;
         }
 
-        void PeRenderer::BeginFrame()
+        void CPeRenderer::BeginFrame()
         {
             glfwPollEvents();
 
@@ -494,7 +493,7 @@ namespace engine
         }
 
 
-        void PeRenderer::RenderFrame()
+        void CPeRenderer::RenderFrame()
         {
             // Rendering
             ImGui::Render();

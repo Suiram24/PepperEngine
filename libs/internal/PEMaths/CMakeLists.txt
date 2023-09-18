@@ -1,1 +1,1 @@
-add_library(PEMaths PEMaths.h PEMaths.cpp)
+add_library(PeMaths PeMaths.h PeMaths.cpp)

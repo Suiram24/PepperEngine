@@ -1,5 +1,5 @@
-# Visual Studio 2019 cache/options directory
+#Visual studio files
 .vs/
 
-# outputs
+#Build
 out/

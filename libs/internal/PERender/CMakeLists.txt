@@ -1,3 +1,3 @@
 link_directories(libs/external/Vulkan/Include)
-add_library(PERender PERender.h PERender.cpp)
-target_link_libraries(PERender "Vulkan::Vulkan")
+add_library(PeRender CPeRenderer.h CPeRenderer.cpp)
+target_link_libraries(PeRender "Vulkan::Vulkan")
