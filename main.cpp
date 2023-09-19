@@ -10,6 +10,8 @@
 
 #include "libs/internal/PERender/CPeRenderer.h"
 
+#include <math.h>
+
 // Main code
 int main(int, char**)
 {
@@ -19,47 +21,57 @@ int main(int, char**)
     while (!glfwWindowShouldClose(engine::render::CPeRenderer::getInstance().m_window))
     {
         engine::render::CPeRenderer::getInstance().BeginFrame();
+        
 
-        bool &show_demo_window = engine::render::CPeRenderer::getInstance().m_show_demo_window;
-        bool &show_another_window = engine::render::CPeRenderer::getInstance().m_show_another_window;
-        ImVec4 &clear_color = engine::render::CPeRenderer::getInstance().m_clear_color;
-        ImGuiIO& io = *engine::render::CPeRenderer::getInstance().m_io;
-        //// 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-        //if (show_demo_window)
-        //    ImGui::ShowDemoWindow(&show_demo_window);
+        ImVec4 &clear_color = engine::render::CPeRenderer::getInstance().m_clear_color; //for background color (used in RenderFrame())
+        ImGuiIO& io = *engine::render::CPeRenderer::getInstance().m_io; //to retrieve framerate
+        static bool startSim = false;
 
         // 2. Show a simple window that we create ourselves. We use a Begin/End pair to create a named window.
         {
-            static float f = 0.0f;
-            static int counter = 0;
+            static float force = 0.0f;
+            static int angle = 0;
+           
 
-            ImGui::Begin("Hello PepperEngine!");                          // Create a window called "Hello, world!" and append into it.
+            ImGui::Begin("PepperEngine options");                          // Create a window called "Hello, world!" and append into it.
 
-            ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-            ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
-            ImGui::Checkbox("Another Window", &show_another_window);
+            ImGui::Text("Welcome in the pepper engine");               // Display some text (you can use a format strings too)
 
-            ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-            ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
 
-            if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-                counter++;
-            ImGui::SameLine();
-            ImGui::Text("counter = %d", counter);
+            ImGui::SliderInt("Angle", &angle, 0, 90);
+            ImGui::SliderFloat("float", &force, 0.0f, 100.0f);
+            ImGui::ColorEdit3("Background color", (float*)&clear_color); // Edit 3 floats representing a color
+
+            if (ImGui::Button("Start simulation"))
+            {
+                startSim = true;
+                ImGui::SetNextWindowPos(ImVec2(300, 300));
+                ImGui::SetNextWindowSize(ImVec2(800, 120));
+            }
+            
 
             ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
             ImGui::End();
         }
 
-        // 3. Show another simple window.
-        if (show_another_window)
+        if (startSim)
         {
-            ImGui::Begin("Another Window", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-            ImGui::Text("Hello from another window!");
-            if (ImGui::Button("Close Me"))
-                show_another_window = false;
+            //
+            // ImGUI demo code (replace with real trajectory once particle physics is implemented)
+            struct Funcs
+            {
+                static float Sin(void*, int i) { return sinf(i * 0.1f); }
+            };
+            
+            ImGui::Begin("Ball throw simulation");
+
+            static int display_count = 70;
+
+            float (*func)(void*, int) = Funcs::Sin;
+            ImGui::PlotLines("trajectory", func, NULL, display_count, 0, NULL, -1.0f, 1.0f, ImVec2(0, 80));
             ImGui::End();
         }
+
 
         // Rendering
         engine::render::CPeRenderer::getInstance().RenderFrame();

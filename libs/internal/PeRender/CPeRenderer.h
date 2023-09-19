@@ -21,7 +21,7 @@ namespace engine
 #define GLFW_INCLUDE_NONE
 #define GLFW_INCLUDE_VULKAN
 
-		//#define IMGUI_UNLIMITED_FRAME_RATE
+		#define IMGUI_UNLIMITED_FRAME_RATE
 #ifdef _DEBUG
 #define IMGUI_VULKAN_DEBUG_REPORT
 #endif
