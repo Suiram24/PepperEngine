@@ -102,8 +102,6 @@ namespace engine
 			//
 			//Demo (may need to be cleaned later)
 			ImVec4 m_clear_color;		/// ImGUI demo variable
-			bool m_show_demo_window;	/// ImGUI demo variable
-			bool m_show_another_window; /// ImGUI demo variable
 		private:
 			ImGui_ImplVulkanH_Window* m_wd = nullptr;
 			VkResult m_err;

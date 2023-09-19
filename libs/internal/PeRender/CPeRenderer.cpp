@@ -443,8 +443,6 @@ namespace engine
             }
 
             // Our state
-            m_show_demo_window = true;
-            m_show_another_window = false;
             m_clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
         }
