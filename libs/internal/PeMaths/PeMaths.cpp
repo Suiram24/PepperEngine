@@ -1,5 +1,6 @@
 #include "PeMaths.h"
 #include <cmath>
+#include <cstdio>
 
 namespace engine {
 	namespace maths {
@@ -68,5 +69,11 @@ namespace engine {
 		{
 			return *m_z_coordinate;
 		}
+
+		void CPe3DVector::printCoordinate() const
+		{
+			printf("x: %lf; y: %lf; z: %lf\n", getX(), getY(), getZ());
+		}
+
 	}
 }

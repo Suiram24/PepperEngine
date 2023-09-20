@@ -122,7 +122,11 @@ namespace engine
 			*/
 			double getZ() const;
 
-		private:
+			/**
+			 * @brief A simple print method. Meant for deggug.
+			*/
+			void printCoordinate() const;
+
 			~CPe3DVector()
 			{
 				delete m_x_coordinate;
