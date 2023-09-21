@@ -1,5 +1,7 @@
 #Visual studio files
 .vs/
+.vscode/
 
 #Build
 out/
+build/
