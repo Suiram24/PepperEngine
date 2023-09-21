@@ -30,6 +30,18 @@ set(LIBRARIES "glfw;Vulkan::Vulkan")
 set(IMGUI_DIR libs/external/ImGui)
 include_directories(${IMGUI_DIR})
 
+# glm
+set(GLM_DIR libs/external/glm)
+include_directories(${GLM_DIR})
+
+# stb
+set(STB_DIR libs/external/stb-master)
+include_directories(${STB_DIR})
+
+# tinyobj loader
+set(TINYOBJ_L_DIR libs/external/tinyobjloader-release)
+include_directories(${TINYOBJ_L_DIR})
+
 # Use vulkan headers from glfw:
 include_directories(${GLFW_DIR}/deps)
 
