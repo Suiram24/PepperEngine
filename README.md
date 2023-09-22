@@ -73,10 +73,11 @@ private:
 }
 ```
 
-### Variables names
+### Variables and Functions names
 
 - Never start a variable with an underscore or put double underscore in it.
-- Use camelCase 
+- Use camelCase
+- Functions start with a capital letter 
 - Class member should start with 'm_'
 - Function parameter should start with 'p_'
 - Internal classes start with 'CPe'
