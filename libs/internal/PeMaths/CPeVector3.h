@@ -12,21 +12,23 @@ namespace engine
 		{
 			// Fields
 		private:
-			double* m_x_coordinate;
-			double* m_y_coordinate;
-			double* m_z_coordinate;
+			double m_x;
+			double m_y;
+			double m_z;
 
 			// Methods
 		public:
-			CPeVector3(double p_x, double p_y, double p_z) : m_x_coordinate(new double(p_x)),
-				m_y_coordinate(new double(p_y)),
-				m_z_coordinate(new double(p_z))
+			CPeVector3(double p_x, double p_y, double p_z) : 
+				m_x(p_x),
+				m_y(p_y),
+				m_z(p_z)
 			{
 			}
 
-			CPeVector3(const CPeVector3& p_vector) : m_x_coordinate(new double(p_vector.getX())),
-				m_y_coordinate(new double(p_vector.getY())),
-				m_z_coordinate(new double(p_vector.getZ()))
+			CPeVector3(const CPeVector3& p_vector) : 
+				m_x(p_vector.GetX()),
+				m_y(p_vector.GetY()),
+				m_z(p_vector.GetZ())
 			{
 			}
 
@@ -76,13 +78,13 @@ namespace engine
 			 * @brief Compute the norm of the CPeVector3.
 			 * @return A double.
 			*/
-			const double getNorm() const;
+			const double GetNorm() const;
 
 			/**
 			 * @brief Compute the normalize vector associated with 'this'.
 			 * @return A new CPeVector3.
 			*/
-			CPeVector3* normalizeVector() const;
+			CPeVector3* NormalizeVector() const;
 
 			/**
 			 * @brief Compute the scalar product (or dot product) between two CPeVector3.
@@ -90,12 +92,12 @@ namespace engine
 			 * @param p_vectorB A CPeVector3.
 			 * @return A double.
 			*/
-			static const double scalarProduct(const CPeVector3& p_vectorA, const CPeVector3& p_vectorB)
+			static const double ScalarProduct(const CPeVector3& p_vectorA, const CPeVector3& p_vectorB)
 			{
 				return
-					p_vectorA.getX() * p_vectorB.getX() +
-					p_vectorA.getY() * p_vectorB.getY() +
-					p_vectorA.getZ() * p_vectorB.getZ();
+					p_vectorA.GetX() * p_vectorB.GetX() +
+					p_vectorA.GetY() * p_vectorB.GetY() +
+					p_vectorA.GetZ() * p_vectorB.GetZ();
 			}
 
 			/**
@@ -105,33 +107,31 @@ namespace engine
 			 * @param p_vectorB A CPeVector3.
 			 * @return A new CPeVector3.
 			*/
-			static CPeVector3* vectorProduct(const CPeVector3& p_vectorA, const CPeVector3& p_vectorB);
+			static CPeVector3* CrossProduct(const CPeVector3& p_vectorA, const CPeVector3& p_vectorB);
 
 			/**
-			 * @brief Accessor to m_x_coordinate.
+			 * @brief Accessor to m_x.
 			*/
-			double getX() const;
+			double GetX() const;
 
 			/**
-			 * @brief Accessor to m_y_coordinate.
+			 * @brief Accessor to m_y.
 			*/
-			double getY() const;
+			double GetY() const;
 
 			/**
-			 * @brief Accessor to m_z_coordinate.
+			 * @brief Accessor to m_z.
 			*/
-			double getZ() const;
+			double GetZ() const;
 
 			/**
 			 * @brief A simple print method. Meant for deggug.
 			*/
-			void printCoordinate() const;
+			void PrintCoordinate() const;
 
 			~CPeVector3()
 			{
-				delete m_x_coordinate;
-				delete m_y_coordinate;
-				delete m_z_coordinate;
+
 			}
 		};
 	}

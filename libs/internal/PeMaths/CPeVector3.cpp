@@ -7,97 +7,98 @@ namespace engine {
 		
 		CPeVector3* CPeVector3::operator=(const CPeVector3& p_vector)
 		{
-			this->m_x_coordinate = new double(p_vector.getX());
-			this->m_y_coordinate = new double(p_vector.getY());
-			this->m_z_coordinate = new double(p_vector.getZ());
+			this->m_x = p_vector.GetX();
+			this->m_y = p_vector.GetY();
+			this->m_z = p_vector.GetZ();
 			return this;
 		}
 
 		CPeVector3* CPeVector3::operator+(const CPeVector3& p_vector) const
 		{
 			CPeVector3* sumVector = new CPeVector3(
-				this->getX() + p_vector.getX(),
-				this->getY() + p_vector.getY(),
-				this->getZ() + p_vector.getZ());
+				this->GetX() + p_vector.GetX(),
+				this->GetY() + p_vector.GetY(),
+				this->GetZ() + p_vector.GetZ());
 			return sumVector;
 		}
 
 		CPeVector3* CPeVector3::operator+=(const CPeVector3& p_vector)
 		{
-			(*m_x_coordinate) += p_vector.getX();
-			(*m_y_coordinate) += p_vector.getY();
-			(*m_z_coordinate) += p_vector.getZ();
+			m_x += p_vector.GetX();
+			m_y += p_vector.GetY();
+			m_z += p_vector.GetZ();
 			return this;
 		}
 
 		CPeVector3* CPeVector3::operator-(const CPeVector3& p_vector) const
 		{
 			CPeVector3* subVector = new CPeVector3(
-				this->getX() - p_vector.getX(),
-				this->getY() - p_vector.getY(),
-				this->getZ() - p_vector.getZ());
+				this->GetX() - p_vector.GetX(),
+				this->GetY() - p_vector.GetY(),
+				this->GetZ() - p_vector.GetZ());
+			
 			return subVector;
 		}
 
 		CPeVector3* CPeVector3::operator-=(const CPeVector3& p_vector)
 		{
-			(*m_x_coordinate) -= p_vector.getX();
-			(*m_y_coordinate) -= p_vector.getY();
-			(*m_z_coordinate) -= p_vector.getZ();
+			m_x -= p_vector.GetX();
+			m_y -= p_vector.GetY();
+			m_z -= p_vector.GetZ();
 			return this;
 		}
 
 		CPeVector3* CPeVector3::operator*(double p_scalar) const
 		{
 			CPeVector3* mulVector = new CPeVector3(
-				p_scalar * this->getX(),
-				p_scalar * this->getY(),
-				p_scalar * this->getZ());
+				p_scalar * this->GetX(),
+				p_scalar * this->GetY(),
+				p_scalar * this->GetZ());
 			return mulVector;
 		}
 
-		const double CPeVector3::getNorm() const
+		const double CPeVector3::GetNorm() const
 		{
-			return sqrt(pow(this->getX(), 2) + pow(this->getY(), 2) + pow(this->getZ(), 2));
+			return sqrt(pow(this->GetX(), 2) + pow(this->GetY(), 2) + pow(this->GetZ(), 2));
 		}
 
-		CPeVector3* CPeVector3::normalizeVector() const
+		CPeVector3* CPeVector3::NormalizeVector() const
 		{
-			const double& norm = this->getNorm();
+			const double& norm = this->GetNorm();
 			CPeVector3* normVector = new CPeVector3(
-				this->getX() / norm,
-				this->getY() / norm,
-				this->getZ() / norm);
+				this->GetX() / norm,
+				this->GetY() / norm,
+				this->GetZ() / norm);
 			return normVector;
 		}
 
-		CPeVector3* CPeVector3::vectorProduct(const CPeVector3& p_vectorA, const CPeVector3& p_vectorB)
+		CPeVector3* CPeVector3::CrossProduct(const CPeVector3& p_vectorA, const CPeVector3& p_vectorB)
 		{
 			CPeVector3* prodVector = new CPeVector3(
-				p_vectorA.getY() * p_vectorB.getZ() - p_vectorA.getZ() * p_vectorB.getY(),
-				p_vectorA.getZ() * p_vectorB.getX() - p_vectorA.getX() * p_vectorB.getZ(),
-				p_vectorA.getX() * p_vectorB.getY() - p_vectorA.getY() * p_vectorB.getX());
+				p_vectorA.GetY() * p_vectorB.GetZ() - p_vectorA.GetZ() * p_vectorB.GetY(),
+				p_vectorA.GetZ() * p_vectorB.GetX() - p_vectorA.GetX() * p_vectorB.GetZ(),
+				p_vectorA.GetX() * p_vectorB.GetY() - p_vectorA.GetY() * p_vectorB.GetX());
 			return prodVector;
 		}
 
-		double CPeVector3::getX() const
+		double CPeVector3::GetX() const
 		{
-			return *m_x_coordinate;
+			return m_x;
 		}
 
-		double CPeVector3::getY() const
+		double CPeVector3::GetY() const
 		{
-			return *m_y_coordinate;
+			return m_y;
 		}
 		
-		double CPeVector3::getZ() const
+		double CPeVector3::GetZ() const
 		{
-			return *m_z_coordinate;
+			return m_z;
 		}
 
-		void CPeVector3::printCoordinate() const
+		void CPeVector3::PrintCoordinate() const
 		{
-			printf("x: %lf; y: %lf; z: %lf\n", getX(), getY(), getZ());
+			printf("x: %lf; y: %lf; z: %lf\n", GetX(), GetY(), GetZ());
 		}
 
 	}
