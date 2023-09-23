@@ -30,7 +30,6 @@ namespace engine {
 			std::vector<CPeForces*> m_forces;
 
 			//Methods
-
 		public:
 			CPeParticle(CPeTransform& p_transform, double p_massInverse, double p_damping) :
 				CPeMovable(p_transform),
@@ -93,6 +92,48 @@ namespace engine {
 			 * @param A new acceleration value for the particle.
 			*/
 			void SetAcceleration(pemaths::CPeVector3& p_acceleration);
+
+			/**
+			 * @brief Compute the sum of all forces, the new acceleration, velocity and position.
+			 * @param p_timeStep The time step to integrate.
+			*/
+			void Update(double p_timeStep);
+
+			/**
+			 * @brief Compute the sum of all forces, the new acceleration, velocity and position with precision.
+			 * @param p_timeStep The time step to integrate.
+			*/
+			void UpdatePrecisely(double p_timeStep);
+
+		private:
+			/**
+			 * @brief Compute the sum of all forces in m_forces.
+			 * @return The sum of m_forces.
+			*/
+			pemaths::CPeVector3& sumForces() const;
+
+			/**
+			 * @brief Compute the new acceleration based on all forces and gravity.
+			*/
+			void UpdateAcceleration(pemaths::CPeVector3& p_sumForces);
+
+			/**
+			 * @brief Compute the new velocity.
+			 * @param p_timeStep The time step to integrate.
+			*/
+			void UpdateVelocity(double p_timeStep);
+
+			/**
+			 * @brief Compute the new position with minimum precision.
+			 * @param p_timeStep The time step to integrate.
+			*/
+			void UpdatePosition(double p_timeStep);
+
+			/**
+			 * @brief Compute the new position with maximum precision.
+			 * @param p_timeStep The time step to integrate.
+			*/
+			void UpdatePositionPrecisely(double p_timeStep);
 		};
 	}
 }
