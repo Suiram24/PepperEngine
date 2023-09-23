@@ -37,42 +37,42 @@ namespace engine
 			 * @param p_vector A CPeVector3 to copy.
 			 * @return 'this'.
 			*/
-			CPeVector3* operator=(const CPeVector3& p_vector);
+			CPeVector3& operator=(const CPeVector3& p_vector);
 
 			/**
 			 * @brief Define the operator 'plus' for two CPeVector3. None of the vectors are modified.
 			 * @param p_vector A CPeVector3 to add with 'this'.
 			 * @return  A new CPeVector3.
 			*/
-			CPeVector3* operator+(const CPeVector3& p_vector) const;
+			CPeVector3 operator+(const CPeVector3& p_vector) const;
 
 			/**
 			 * @brief Redefine the operator '+=' to work on CPeVector3.
 			 * @param p_vector A CPeVector3 to add to 'this'.
 			 * @return 'this'.
 			*/
-			CPeVector3* operator+=(const CPeVector3& p_vector);
+			CPeVector3& operator+=(const CPeVector3& p_vector);
 
 			/**
 			 * @brief Define the operator 'minus' for two CPeVector3. None of the vectors are modified.
 			 * @param p_vector A CPeVector3 to substract from 'this'.
 			 * @return  A new CPeVector3.
 			*/
-			CPeVector3* operator-(const CPeVector3& p_vector) const;
+			CPeVector3 operator-(const CPeVector3& p_vector) const;
 
 			/**
 			 * @brief Redefine the operator '-=' to work on CPeVector3.
 			 * @param p_vector A CPeVector3 to substract from 'this'.
 			 * @return 'this'.
 			*/
-			CPeVector3* operator-=(const CPeVector3& p_vector);
+			CPeVector3& operator-=(const CPeVector3& p_vector);
 
 			/**
 			 * @brief Define the operator 'multiplication' for a double and a CPeVector3. 'this' is not modified.
 			 * @param p_scalar A double to multipliate 'this'
 			 * @return  A new CPeVector3.
 			*/
-			CPeVector3* operator*(double p_scalar) const;
+			CPeVector3 operator*(double p_scalar) const;
 
 			/**
 			 * @brief Compute the norm of the CPeVector3.
@@ -84,7 +84,7 @@ namespace engine
 			 * @brief Compute the normalize vector associated with 'this'.
 			 * @return A new CPeVector3.
 			*/
-			CPeVector3* NormalizeVector() const;
+			CPeVector3 NormalizeVector() const;
 
 			/**
 			 * @brief Compute the scalar product (or dot product) between two CPeVector3.
@@ -107,7 +107,7 @@ namespace engine
 			 * @param p_vectorB A CPeVector3.
 			 * @return A new CPeVector3.
 			*/
-			static CPeVector3* CrossProduct(const CPeVector3& p_vectorA, const CPeVector3& p_vectorB);
+			static CPeVector3 CrossProduct(const CPeVector3& p_vectorA, const CPeVector3& p_vectorB);
 
 			/**
 			 * @brief Accessor to m_x.
