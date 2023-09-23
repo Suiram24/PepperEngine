@@ -36,6 +36,20 @@ namespace engine {
 			{
 			}
 
+			CPeTransform(double p_x, double p_y, double p_z) :
+				m_position(pemaths::CPeVector3(p_x, p_y, p_z)),
+				m_orientation(pemaths::CPeVector3(0., 0., 0.)),
+				m_size(pemaths::CPeVector3(1., 1., 1.))
+			{
+			}
+
+			CPeTransform() :
+				m_position(pemaths::CPeVector3(0., 0., 0.)),
+				m_orientation(pemaths::CPeVector3(0., 0., 0.)),
+				m_size(pemaths::CPeVector3(1., 1., 1.))
+			{
+			}
+
 			/**
 			 * @brief Accessor for m_position.
 			 * @return m_position.
