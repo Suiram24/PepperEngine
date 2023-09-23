@@ -1,0 +1,100 @@
+#ifndef CPEPARTICLE_CPEPARTICLE_H
+#define CPEPARTICLE_CPEPARTICLE_H
+
+#include <vector>
+
+#include "../PeMaths/PeMaths.h"
+#include "CPeMovable.h"
+#include "CPeForces.h"
+
+namespace pemaths = engine::maths;
+
+namespace engine {
+	namespace physics {
+		/**
+		 * @brief A simple implementation of a particle in standard Newton's Physics applied to video games.
+		*/
+		class CPeParticle : public CPeMovable {
+			//Fields
+		private:
+			pemaths::CPeVector3& m_velocity;
+			
+			pemaths::CPeVector3& m_acceleration;
+
+			double m_massInverse;
+
+			double m_damping;
+
+			double m_gravity;
+
+			std::vector<CPeForces*> m_forces;
+
+			//Methods
+
+		public:
+			CPeParticle(CPeTransform& p_transform, double p_massInverse, double p_damping) :
+				CPeMovable(p_transform),
+				m_velocity(pemaths::CPeVector3(0., 0., 0.)),
+				m_acceleration(pemaths::CPeVector3(0., 0., 0.)),
+				m_massInverse(p_massInverse),
+				m_damping(p_damping),
+				m_gravity(10.)
+			{
+			}
+
+			CPeParticle(CPeTransform& p_transform, double p_massInverse) :
+				CPeMovable(p_transform),
+				m_velocity(pemaths::CPeVector3(0., 0., 0.)),
+				m_acceleration(pemaths::CPeVector3(0., 0., 0.)),
+				m_massInverse(p_massInverse),
+				m_damping(0.999),
+				m_gravity(10.)
+			{
+			}
+
+			/**
+			 * @brief Accessor for m_velocity.
+			 * @return m_velocity.
+			*/
+			const pemaths::CPeVector3& GetVelocity() const;
+
+			/**
+			 * @brief Accessor for m_acceleration.
+			 * @return m_acceleration.
+			*/
+			const pemaths::CPeVector3& GetAcceleration() const;
+
+			/**
+			 * @brief Setter for m_massInverse.
+			 * @param A new mass inverse value. Should be positive or zero.
+			*/
+			void SetMassInverse(double p_massInverse);
+
+			/**
+			 * @brief Setter for m_massInverse compute from the mass value
+			 * @param A new mass value. Should be strictly positive.
+			*/
+			void SetMass(double p_mass);
+
+			/**
+			 * @brief Setter for m_gravity.
+			 * @param A new gravity value for the particle.
+			*/
+			void SetGravity(double p_gravity);
+
+			/**
+			 * @brief Setter for m_velocity.
+			 * @param A new velocity value for the particle.
+			*/
+			void SetVelocity(pemaths::CPeVector3& p_velocity);
+
+			/**
+			 * @brief Setter for m_acceleration.
+			 * @param A new acceleration value for the particle.
+			*/
+			void SetAcceleration(pemaths::CPeVector3& p_acceleration);
+		};
+	}
+}
+
+#endif /* CPEPARTICLE_CPEPARTICLE_H */
