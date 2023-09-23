@@ -17,17 +17,17 @@ namespace engine {
 			return m_size;
 		}
 
-		void CPeTransform::SetPosition(pemaths::CPeVector3& p_position)
+		void CPeTransform::SetPosition(const pemaths::CPeVector3& p_position)
 		{
 			m_position = p_position;
 		}
 
-		void CPeTransform::SetOrientation(pemaths::CPeVector3& p_orientation)
+		void CPeTransform::SetOrientation(const pemaths::CPeVector3& p_orientation)
 		{
 			m_orientation = p_orientation;
 		}
 
-		void CPeTransform::SetSize(pemaths::CPeVector3& p_size)
+		void CPeTransform::SetSize(const pemaths::CPeVector3& p_size)
 		{
 			m_size = p_size;
 		}

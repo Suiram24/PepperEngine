@@ -14,11 +14,11 @@ namespace engine {
 		class CPeForces {
 			//Fields
 		private:
-			pemaths::CPeVector3& m_value;
+			pemaths::CPeVector3 m_value;
 
 			//Methods
 		public:
-			CPeForces(pemaths::CPeVector3& p_value) :m_value(p_value)
+			CPeForces(const pemaths::CPeVector3& p_value) :m_value(p_value)
 			{
 			}
 
