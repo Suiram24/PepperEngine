@@ -1,16 +1,54 @@
 #ifndef PEENGINE_CPEVULKANRENDERER_H
 #define PEENGINE_CPEVULKANRENDERER_H
 
+#include "CPeGraphicalVertex.h"
+
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 #include <vulkan/vulkan.h>
 #include <vector>
+#include <optional>
+#include <string>
 
-namespace vrenderer {
+namespace vk {
 
-    class HelloTriangleApplication {
+    const uint32_t WIDTH = 800;
+    const uint32_t HEIGHT = 600;
+
+    const std::string MODEL_PATH = "models/viking_room.obj";
+    const std::string TEXTURE_PATH = "textures/viking_room.png";
+
+    const int MAX_FRAMES_IN_FLIGHT = 2;
+
+    const std::vector<const char*> validationLayers = {
+        "VK_LAYER_KHRONOS_validation"
+    };
+
+    const std::vector<const char*> deviceExtensions = {
+        VK_KHR_SWAPCHAIN_EXTENSION_NAME
+    };
+
+    struct SwapChainSupportDetails {
+        VkSurfaceCapabilitiesKHR capabilities;
+        std::vector<VkSurfaceFormatKHR> formats;
+        std::vector<VkPresentModeKHR> presentModes;
+    };
+
+    struct QueueFamilyIndices {
+        std::optional<uint32_t> graphicsFamily;
+        std::optional<uint32_t> presentFamily;
+
+        bool isComplete() {
+            return graphicsFamily.has_value() && presentFamily.has_value();
+        }
+    };
+
+    class CPeVulkanRenderer {
     public:
-        void run();
+        void init();
+        void init(GLFWwindow* window);
+        void cleanup();
+        void drawFrame();
 
     private:
         GLFWwindow* window;
@@ -71,8 +109,6 @@ namespace vrenderer {
 
         bool framebufferResized = false;
 
-        void initWindow();
-
         static void framebufferResizeCallback(GLFWwindow* window, int width, int height);
 
         void initVulkan();
@@ -81,9 +117,10 @@ namespace vrenderer {
 
         void cleanupSwapChain();
 
-        void cleanup();
 
         void recreateSwapChain();
+
+        void createInstance();
 
         void populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo);
 
@@ -103,7 +140,11 @@ namespace vrenderer {
 
         void createDescriptorSetLayout();
 
+        void createGraphicsPipeline();
+
         void createFramebuffers();
+        
+        void createCommandPool();
 
         void createDepthResources();
 
@@ -118,6 +159,8 @@ namespace vrenderer {
         void createTextureImageView();
 
         void createTextureSampler();
+        
+        VkImageView createImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags);
 
         void createImage(
             uint32_t width,
@@ -137,6 +180,10 @@ namespace vrenderer {
         void loadModel();
 
         void createVertexBuffer();
+
+        void createIndexBuffer();
+
+        void createUniformBuffers();
 
         void createDescriptorPool();
 
@@ -166,7 +213,6 @@ namespace vrenderer {
 
         void updateUniformBuffer(uint32_t currentImage);
 
-        void drawFrame();
 
         VkShaderModule createShaderModule(const std::vector<char>& code);
 
