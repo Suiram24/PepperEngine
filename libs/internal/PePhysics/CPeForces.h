@@ -2,6 +2,7 @@
 #define CPEFORCES_CPEFORCES_H
 
 #include "../PeMaths/PeMaths.h"
+#include "CPeParticle.h"
 
 namespace pemaths = engine::maths;
 
@@ -12,6 +13,7 @@ namespace engine {
 		 * @brief A class for Newton's Physics forces.
 		*/
 		class CPeForces {
+
 			//Fields
 		private:
 			pemaths::CPeVector3 m_value;
@@ -27,6 +29,9 @@ namespace engine {
 			 * @return m_value.
 			*/
 			const pemaths::CPeVector3& GetValue() const;
+
+			virtual const pemaths::CPeVector3& Compute(const CPeParticle& p_particule) const;
+
 		};
 	}
 }

@@ -45,5 +45,50 @@ namespace engine {
 		{
 			m_acceleration = p_acceleration;
 		}
+
+		void CPeParticle::Update(double p_timeStep)
+		{
+			UpdatePosition(p_timeStep);
+			UpdateAcceleration(sumForces());
+			UpdateVelocity(p_timeStep);
+		}
+
+		void CPeParticle::UpdatePrecisely(double p_timeStep) {
+			UpdatePositionPrecisely(p_timeStep);
+			UpdateAcceleration(sumForces());
+			UpdateVelocity(p_timeStep);
+		}
+
+		pemaths::CPeVector3& CPeParticle::sumForces() const
+		{
+			//TODO 
+			pemaths::CPeVector3 S(0., 0., 0.);
+			return S;
+		}
+
+		void CPeParticle::UpdateAcceleration(pemaths::CPeVector3& p_sumForces)
+		{
+			pemaths::CPeVector3 G(0., -m_gravity, 0.);//TODO better define gravity beforehand
+			m_acceleration = (p_sumForces * m_massInverse) + G;
+		}
+
+		void CPeParticle::UpdateVelocity(double p_timeStep)
+		{
+			m_velocity = (m_velocity * m_damping) + (m_acceleration * p_timeStep);
+		}
+
+		void CPeParticle::UpdatePosition(double p_timeStep)
+		{
+			m_transform.SetPosition(m_transform.GetPosition() + (m_velocity * p_timeStep));
+		}
+
+		void CPeParticle::UpdatePositionPrecisely(double p_timeStep)
+		{
+			m_transform.SetPosition(
+				m_transform.GetPosition() + 
+				(m_velocity * p_timeStep) +
+				m_acceleration * (p_timeStep*p_timeStep/2)
+			);
+		}
 	}
 }
