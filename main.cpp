@@ -11,17 +11,25 @@
 #include "libs/internal/PERender/CPeRenderer.h"
 
 #include <math.h>
+#include <iostream>
 
 // Main code
 int main(int, char**)
 {
-    engine::render::CPeRenderer::getInstance().RenderSetup();
-
+    std::cout << "step 2" << std::endl;
+    try{
+        engine::render::CPeRenderer::getInstance().RenderSetup();
+    }
+    catch (const std::exception& e) {
+        std::cerr << e.what() << std::endl;
+        return EXIT_FAILURE;
+    }
+    std::cout << "step 2" << std::endl;
     // Main loop
     while (!glfwWindowShouldClose(engine::render::CPeRenderer::getInstance().m_window))
     {
         engine::render::CPeRenderer::getInstance().BeginFrame();
-        
+        std::cout << "step 1" << std::endl;
 
         ImVec4 &clear_color = engine::render::CPeRenderer::getInstance().m_clear_color; //for background color (used in RenderFrame())
         ImGuiIO& io = *engine::render::CPeRenderer::getInstance().m_io; //to retrieve framerate
@@ -53,6 +61,7 @@ int main(int, char**)
             ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
             ImGui::End();
         }
+        std::cout << "step 2" << std::endl;
 
         if (startSim)
         {
@@ -71,14 +80,21 @@ int main(int, char**)
             ImGui::PlotLines("trajectory", func, NULL, display_count, 0, NULL, -1.0f, 1.0f, ImVec2(0, 80));
             ImGui::End();
         }
+        std::cout << "step 3" << std::endl;
 
 
         // Rendering
-        engine::render::CPeRenderer::getInstance().RenderFrame();
+        try {
+            engine::render::CPeRenderer::getInstance().RenderFrame();
+        }
+        catch (const std::exception& e) {
+            std::cerr << e.what() << std::endl;
+            return EXIT_FAILURE;
+        }
     }
 
     engine::render::CPeRenderer::getInstance().RenderCleanup();
     
 
-    return 0;
+    return EXIT_SUCCESS;
 }
