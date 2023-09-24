@@ -9,12 +9,32 @@
 ///////////////////////////////////////////////////////////////////////
 
 #include "libs/internal/PERender/CPeRenderer.h"
+#include "libs/internal/PeMaths/PeMaths.h"
+#include "libs/internal/PePhysics/PePhysics.h"
 
 #include <math.h>
+
+#include <cstdio>
+
+namespace maths = engine::maths;
+namespace pephysics = engine::physics;
+
 
 // Main code
 int main(int, char**)
 {
+   
+
+    printf("___Physics_Test___\n");
+    pephysics::CPeParticle maParticule(pephysics::CPeTransform(), 1.0);
+    maParticule.SetVelocity(maths::CPeVector3(10.,10.,0));
+    maParticule.GetTransform().GetPosition().PrintCoordinate();
+    for (int i = 0; i < 25; i++)
+    {
+        maParticule.Update(0.1);
+        maParticule.GetTransform().GetPosition().PrintCoordinate();
+    }
+
     engine::render::CPeRenderer::getInstance().RenderSetup();
 
     // Main loop

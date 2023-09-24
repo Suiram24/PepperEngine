@@ -27,7 +27,7 @@ namespace engine {
 
 			double m_gravity;
 
-			std::vector<CPeForces*> m_forces;
+			//std::vector<CPeForces*> m_forces;
 
 			//Methods
 		public:
@@ -110,7 +110,7 @@ namespace engine {
 			 * @brief Compute the sum of all forces in m_forces.
 			 * @return The sum of m_forces.
 			*/
-			pemaths::CPeVector3& sumForces() const;
+			pemaths::CPeVector3 sumForces() const;
 
 			/**
 			 * @brief Compute the new acceleration based on all forces and gravity.
@@ -134,6 +134,8 @@ namespace engine {
 			 * @param p_timeStep The time step to integrate.
 			*/
 			void UpdatePositionPrecisely(double p_timeStep);
+
+
 		};
 	}
 }

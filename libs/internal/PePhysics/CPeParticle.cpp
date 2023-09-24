@@ -59,7 +59,7 @@ namespace engine {
 			UpdateVelocity(p_timeStep);
 		}
 
-		pemaths::CPeVector3& CPeParticle::sumForces() const
+		pemaths::CPeVector3 CPeParticle::sumForces() const
 		{
 			//TODO 
 			pemaths::CPeVector3 S(0., 0., 0.);

@@ -30,7 +30,7 @@ namespace engine {
 			*/
 			const pemaths::CPeVector3& GetValue() const;
 
-			virtual const pemaths::CPeVector3& Compute(const CPeParticle& p_particule) const;
+			//virtual const pemaths::CPeVector3& Compute(const CPeParticle& p_particule) const = 0;
 
 		};
 	}
