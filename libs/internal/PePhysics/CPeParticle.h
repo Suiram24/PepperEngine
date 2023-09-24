@@ -17,9 +17,9 @@ namespace engine {
 		class CPeParticle : public CPeMovable {
 			//Fields
 		private:
-			pemaths::CPeVector3& m_velocity;
+			pemaths::CPeVector3 m_velocity;
 			
-			pemaths::CPeVector3& m_acceleration;
+			pemaths::CPeVector3 m_acceleration;
 
 			double m_massInverse;
 
@@ -31,7 +31,7 @@ namespace engine {
 
 			//Methods
 		public:
-			CPeParticle(CPeTransform& p_transform, double p_massInverse, double p_damping) :
+			CPeParticle(const CPeTransform& p_transform, double p_massInverse, double p_damping) :
 				CPeMovable(p_transform),
 				m_velocity(pemaths::CPeVector3(0., 0., 0.)),
 				m_acceleration(pemaths::CPeVector3(0., 0., 0.)),
@@ -41,7 +41,7 @@ namespace engine {
 			{
 			}
 
-			CPeParticle(CPeTransform& p_transform, double p_massInverse) :
+			CPeParticle(const CPeTransform& p_transform, double p_massInverse) :
 				CPeMovable(p_transform),
 				m_velocity(pemaths::CPeVector3(0., 0., 0.)),
 				m_acceleration(pemaths::CPeVector3(0., 0., 0.)),
@@ -65,12 +65,12 @@ namespace engine {
 
 			/**
 			 * @brief Setter for m_massInverse.
-			 * @param A new mass inverse value. Should be positive or zero.
+			 * @param A new mass inverse value. Should be positive or zero (for infinite mass).
 			*/
 			void SetMassInverse(double p_massInverse);
 
 			/**
-			 * @brief Setter for m_massInverse compute from the mass value
+			 * @brief Setter for m_massInverse compute from the mass value.
 			 * @param A new mass value. Should be strictly positive.
 			*/
 			void SetMass(double p_mass);
@@ -85,13 +85,13 @@ namespace engine {
 			 * @brief Setter for m_velocity.
 			 * @param A new velocity value for the particle.
 			*/
-			void SetVelocity(pemaths::CPeVector3& p_velocity);
+			void SetVelocity(const pemaths::CPeVector3& p_velocity);
 
 			/**
 			 * @brief Setter for m_acceleration.
 			 * @param A new acceleration value for the particle.
 			*/
-			void SetAcceleration(pemaths::CPeVector3& p_acceleration);
+			void SetAcceleration(const pemaths::CPeVector3& p_acceleration);
 
 			/**
 			 * @brief Compute the sum of all forces, the new acceleration, velocity and position.

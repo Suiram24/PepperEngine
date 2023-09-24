@@ -36,14 +36,14 @@ namespace engine {
 			m_gravity = p_gravity;
 		}
 
-		void CPeParticle::SetVelocity(pemaths::CPeVector3& p_velocity)
+		void CPeParticle::SetVelocity(const pemaths::CPeVector3& p_velocity)
 		{
 			m_velocity = p_velocity;
 		}
 
-		void CPeParticle::SetAcceleration(pemaths::CPeVector3& p_acceleration)
+		void CPeParticle::SetAcceleration(const pemaths::CPeVector3& p_acceleration)
 		{
-			p_acceleration = p_acceleration;
+			m_acceleration = p_acceleration;
 		}
 
 		void CPeParticle::Update(double p_timeStep)

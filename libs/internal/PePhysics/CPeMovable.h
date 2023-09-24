@@ -11,11 +11,11 @@ namespace engine {
 		class CPeMovable {
 			//Fields
 		protected:
-			CPeTransform& m_transform;
+			CPeTransform m_transform;
 
 			//Methods
 		public:
-			CPeMovable(CPeTransform& p_transform) : m_transform(p_transform)
+			CPeMovable(const CPeTransform& p_transform) : m_transform(p_transform)
 			{
 			}
 

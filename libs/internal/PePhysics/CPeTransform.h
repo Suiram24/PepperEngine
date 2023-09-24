@@ -14,23 +14,37 @@ namespace engine {
 		{
 			//Fields
 		private:
-			pemaths::CPeVector3& m_position;
+			pemaths::CPeVector3 m_position;
 
-			pemaths::CPeVector3& m_orientation;
+			pemaths::CPeVector3 m_orientation;
 
-			pemaths::CPeVector3& m_size;
+			pemaths::CPeVector3 m_size;
 
 			//Methods
 		public:
-			CPeTransform(pemaths::CPeVector3& p_position, pemaths::CPeVector3& p_orientation, pemaths::CPeVector3& p_size) :
+			CPeTransform(const pemaths::CPeVector3& p_position, const pemaths::CPeVector3& p_orientation, const pemaths::CPeVector3& p_size) :
 				m_position(p_position),
 				m_orientation(p_orientation),
 				m_size(p_size)
 			{
 			}
 
-			CPeTransform(pemaths::CPeVector3& p_position) :
+			CPeTransform(const pemaths::CPeVector3& p_position) :
 				m_position(p_position),
+				m_orientation(pemaths::CPeVector3(0., 0., 0.)),
+				m_size(pemaths::CPeVector3(1., 1., 1.))
+			{
+			}
+
+			CPeTransform(double p_x, double p_y, double p_z) :
+				m_position(pemaths::CPeVector3(p_x, p_y, p_z)),
+				m_orientation(pemaths::CPeVector3(0., 0., 0.)),
+				m_size(pemaths::CPeVector3(1., 1., 1.))
+			{
+			}
+
+			CPeTransform() :
+				m_position(pemaths::CPeVector3(0., 0., 0.)),
 				m_orientation(pemaths::CPeVector3(0., 0., 0.)),
 				m_size(pemaths::CPeVector3(1., 1., 1.))
 			{
@@ -58,19 +72,19 @@ namespace engine {
 			 * @brief Setter for m_position.
 			 * @param The new position.
 			*/
-			void SetPosition(pemaths::CPeVector3& p_position);
+			void SetPosition(const pemaths::CPeVector3& p_position);
 
 			/**
 			 * @brief Setter for m_orientation.
 			 * @param The new orientation.
 			*/
-			void SetOrientation(pemaths::CPeVector3& p_orientation);
+			void SetOrientation(const pemaths::CPeVector3& p_orientation);
 
 			/**
 			 * @brief Setter for m_size.
 			 * @param The new size.
 			*/
-			void SetSize(pemaths::CPeVector3& p_size);
+			void SetSize(const pemaths::CPeVector3& p_size);
 
 		};
 	}
