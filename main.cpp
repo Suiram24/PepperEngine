@@ -24,62 +24,59 @@ namespace pephysics = engine::physics;
 // Main code
 int main(int, char**)
 {
+
+    //
+    // Game initialization
     static int angle(30);
     static float force(14);
-
     printf("___Physics_Test___\n");
     pephysics::CPeParticle maParticule(pephysics::CPeTransform(), 1.0);
     maParticule.SetVelocity(maths::CPeVector3(10.,10.,0));
     maParticule.GetTransform().GetPosition().PrintCoordinate();
     pemaths::CPeVector3 zero(0, 0, 0);
-    
-
     static ImVec2 values[250] = {};
+    ImVec2 curPos(0, 720);
+    static bool throwBall = false;
+    static bool ballThrowed = false;
+    static int sucess = 0;
+    static int cnt = 0;
     
-    
-
+    //
+    //Setup render (Imgui + vulkan + GLFW)
     engine::render::CPeRenderer::getInstance().RenderSetup();
 
-    ImVec2 curPos(0, 720);
-    
-
-   
 
 
+    //
     // Main loop
     while (!glfwWindowShouldClose(engine::render::CPeRenderer::getInstance().m_window))
     {
         engine::render::CPeRenderer::getInstance().BeginFrame();
+
+        //
+        // reset particle (we compute the entire movement every frame for this exemple)
         maParticule.SetPosition(zero);
         maParticule.SetVelocity(zero);
 
+        //
+        // retrieve Imgui objects
         ImVec4 &clear_color = engine::render::CPeRenderer::getInstance().m_clear_color; //for background color (used in RenderFrame())
         ImGuiIO& io = *engine::render::CPeRenderer::getInstance().m_io; //to retrieve framerate
-        static bool throwBall = false;
-        static bool ballThrowed = false;
-        static int sucess = 0;
-        static int cnt = 0;
-
         auto painter = ImGui::GetBackgroundDrawList();
 
+        //
+        // Draw the target
         painter->AddLine(ImVec2(1280, 100), ImVec2(1280, 200), ImGui::GetColorU32(ImVec4(.9, .4, .1, 1)), 30);
 
-
-        // 2. Show a simple window that we create ourselves. We use a Begin/End pair to create a named window.
+        //
+        // Draw the GUI
         {
-            //static float force = 0.0f;
-            
-           
             ImGui::SetNextWindowPos(ImVec2(0,0));
             ImGui::SetNextWindowSize(ImVec2(500,200));
-            ImGui::Begin("PepperEngine options");                          // Create a window called "Hello, world!" and append into it.
-
-            ImGui::Text("Welcome in the pepper engine");               // Display some text (you can use a format strings too)
-
-
+            ImGui::Begin("PepperEngine options");       
+            ImGui::Text("Welcome in the pepper engine");
             ImGui::SliderInt("Angle", &angle, 0, 90);
             ImGui::SliderFloat("float", &force, 0.0f, 20.0f);
-            //ImGui::ColorEdit3("Background color", (float*)&clear_color); // Edit 3 floats representing a color
 
             if (ImGui::Button("Throw"))
             {
@@ -99,10 +96,15 @@ int main(int, char**)
             ImGui::End();
         }
 
-        if (ballThrowed == true)
+
+        //
+        // Game logic
+        if (ballThrowed == true) //draw only after ball is throwed once
         {
-            if (throwBall == true)
+            if (throwBall == true) //Only called once per throw button press
             {
+                //
+                // Compute the entire movement of the ball
                 throwBall = false;
                 double radAngle = (angle * PI) / 180;
                 maParticule.SetVelocity(maths::CPeVector3(force * cos(radAngle), force * sin(radAngle), 0));
@@ -118,17 +120,21 @@ int main(int, char**)
                 
             }
             
-            
+            //
+            // Draw (every frame) the movement with a dotted line
             for (int i = 0; i < 249; i++)
             {
                 if (values[i++].y <= 0)
                 {
-                    
                     break;
                 }
+
                 painter->AddLine(values[i], values[i++], ImGui::GetColorU32(ImVec4(1, 1, 1, 1)));
+
                 if (values[i++].x >= 1280)
                 {
+                    //
+                    // Sucess condition
                     if (sucess == 0 && values[i++].y >= 100 && values[i++].y <= 200)
                     {
                         sucess = cnt;
@@ -139,30 +145,6 @@ int main(int, char**)
             }
         }
         
-
-        //if (startSim)
-        //{
-        //    //
-        //    // ImGUI demo code (replace with real trajectory once particle physics is implemented)
-        //    struct Funcs
-        //    {
-        //        static float Sin(void*, int i) { return sinf(i * 0.1f); }
-        //    };
-        //    
-        //    ImGui::Begin("Ball throw simulation");
-
-        //    static int display_count = 70;
-
-        //    float (*func)(void*, int) = Funcs::Sin;
-        //    ImGui::PlotLines("trajectory", func, NULL, display_count, 0, NULL, -1.0f, 1.0f, ImVec2(0, 80));
-        //    ImGui::End();
-        //}
-
-
-
-        
- 
-
 
         // Rendering
         engine::render::CPeRenderer::getInstance().RenderFrame();
