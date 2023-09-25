@@ -341,7 +341,7 @@ namespace engine
 
             // Create window with Vulkan context
             glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-            m_window = glfwCreateWindow(1280, 720, "Dear ImGui GLFW+Vulkan example", nullptr, nullptr);
+            m_window = glfwCreateWindow(1280, 720, "Pepper Engine Physics demo", nullptr, nullptr);
             if (!glfwVulkanSupported())
             {
                 printf("GLFW: Vulkan Not Supported\n");
