@@ -3,6 +3,8 @@ ___
 ## Description
 PepperEngine is a simple game engine made for the UQAC 8INF935 course by Marius Bozane, Alexandre Viala and Benoît Miège.
 
+The code is in the /libs/internal directory, and the report in /docs.
+
 ## How to build
 For now, you need to have the Vulkan SDK installed on your machine (will fix this later).
 Then, just clone the repo, open the CMakeLists.txt with visual studio and generate the PepperEngine executable.
