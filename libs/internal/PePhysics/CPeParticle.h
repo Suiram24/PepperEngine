@@ -94,6 +94,12 @@ namespace engine {
 			void SetAcceleration(const pemaths::CPeVector3& p_acceleration);
 
 			/**
+			 * @brief Setter for m_position.
+			 * @param A new position value for the particle.
+			*/
+			void SetPosition(const pemaths::CPeVector3& p_position);
+
+			/**
 			 * @brief Compute the sum of all forces, the new acceleration, velocity and position.
 			 * @param p_timeStep The time step to integrate.
 			*/

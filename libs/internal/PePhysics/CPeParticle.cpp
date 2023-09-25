@@ -46,6 +46,11 @@ namespace engine {
 			m_acceleration = p_acceleration;
 		}
 
+		void CPeParticle::SetPosition(const pemaths::CPeVector3& p_position)
+		{
+			m_transform.SetPosition(p_position);
+		}
+
 		void CPeParticle::Update(double p_timeStep)
 		{
 			UpdatePosition(p_timeStep);
