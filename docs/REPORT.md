@@ -6,7 +6,7 @@
 
 Afin de rendre le projet modulable, réutilisable, et facile à maintenir, il a été décidé de séparer les différents composants du moteur en différentes librairies internes, en limitant au strict minimum les dépendances. 
 Un coding standard, améliorable en continu, a également été créé dans ce but de maintenabilité. 
-Les schémas de l'architecture (brouillons, puis mise au propre quand ce sera fait) sont disponibles dans docs,graphs et sont consultables avec le logiciel draw.io.
+Les schémas de l'architecture (brouillons, puis mise au propre quand ce sera fait) sont disponibles dans docs/graphs et sont consultables avec le logiciel draw.io.
 
 
 ![Schéma des dépendances des librairies, avec le moteur dépendant de PeRender et PePhysic, cette dernière dépendant de PeMaths](image.png)
@@ -43,7 +43,7 @@ La majeure partie du code a été déplacée dans la librairie PeRender, et les 
 
 
  La partie graphique avec Vulkan est particulièrement complexe. Nous n'avions pour la plupart que quelques connaissances sommaires en pipeline de rendu et l'utilisation de Vulkan n'a pas rendu les choses aisées. 
- Nous avons eu d'énorme difficulté à lier le tutoriel d'Alexander Overvoorde avec l'exemple fourni par ImGUI. 
+ Nous avons eu d'énormes difficultés à lier le tutoriel d'Alexander Overvoorde avec l'exemple fourni par ImGUI. 
 
 
  En effet, le fonctionnement de Vulkan avec ImGUI diffère de celui avec openGL et nécessite d'intégrer directement imGUI dans le pipeline de rendu de Vulkan.
