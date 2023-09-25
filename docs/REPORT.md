@@ -1,8 +1,23 @@
 # Phase 1
 
+## Architecture du projet
+
+Afin de rendre le projet modulable, réutilisable, et facile à maintenir, il a été décidé de séparer les différent composant du moteur en différentes librairies internes, en limitant au strict minimum les dépendances.   
+Un coding standart, améliorable en continue, a également été crée dans ce but de maintenabilité.    
+Les schéma de l'architecture (brouillons, puis mise au propre quand ce sera fait) sont disponible dans docs/graphs, à ouvrir avec draw.io.
+
+![Schéma des dépendances des librairies, avec le moteur dépendant de PeRender et PePhysic, cette dernière dépendant de PeMaths](image.png)
+
+Il a été décidé d'utiliser CMake car nous avions peu d'expérience dessus et que le maitriser est une compétence appréciable.
+
+La première étape à donc été de créer le projet à partir de l'exemple ImGui GLFW + Vulkan (voir la section vulkan ci dessous) et du 
+**[tutoriel officiel CMake](https://cmake.org/cmake/help/latest/guide/tutorial/index.html)** .
+
+La plupart du code a été déplacé dans la librairie PeRender, et les fonction graphique facilement accecible à travers le singleton CPeRenderer, mais caché derrière une couche d'abstraction.
+
 ## API Graphique Vulkan
 
- Pour programmer notre engin physique, nous avons choisi d'utiliseer l'API graphique Vulkan. Etant donné la grande complexité de cette bibliothèque graphique, nous avons choisi de partir d'un engin graphique conçu pas à pas dans un tutoriel :
+ Pour programmer notre engin physique, nous avons choisi d'utiliser l'API graphique Vulkan étant donnée sa grande compatibilité et son importance dans l'industrie du jeu vidéo actuellement. Etant donné la grande complexité de cette bibliothèque graphique, nous avons choisi de partir d'un engin graphique conçu pas à pas dans un tutoriel :
 
  > **[Vulkan Tutorial](https://vulkan-tutorial.com/)**
  >
@@ -20,7 +35,7 @@
 
  D'autant plus que la réalisation du tutoriel Vulkan nous a demandé un temps considérable étant donné que ce dernier est particulièrement long.
 
- C'est pour ces diversers raisons que nous n'avons pas encore pu intégrer le moteur graphique Vulkan à l'intérieur du projet.
+ C'est pour ces diversers raisons que nous n'avons pas encore pu intégrer le rendu 3D de Vulkan à l'intérieur du projet.
 
  ## Classe de Vecteur3D
 
@@ -42,3 +57,9 @@
  Une fois encore pour préparer la suite du projet, le prototype d'une fonction de somme de forces a été écrit. Son implémentation renvoie pour l'instant un vecteur (0., 0., 0.) pour être fonctionnel avec le calcul de l'accélaration.
  L'accélération dépend actuellement seulement du vecteur gravité.
  La seule erreur rencontrée fut la confusion entre une instance et ça référence. Elle a été remarqué car cela produisait des valeurs incohérentes en test.
+
+ ## Démonstration (jeu de tir)
+
+ Afin de démontrer le fonctionnement de la librairie de physique, nous avons réalisé un jeu de démonstration très simple, ou il faut ajuste l'angle et la force d'un tir pour envoyer un ballon sur une cible.
+ Le rendu 3D avec vulkan n'étant pas encore disponible, il a été décidé de réaliser un aperçu rapide avec ImGui pour ne pas perdre de temps.   
+ L'utilisation de texture avec ImGui nécessitant plus de temps (implémentation de stb par exemple), nous avons simplement dessiné le parcours de la balle à chaque lancé en utilisant les AddLines de ImGui.
