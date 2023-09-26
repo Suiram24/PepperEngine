@@ -15,8 +15,8 @@ namespace vk {
     const uint32_t WIDTH = 800;
     const uint32_t HEIGHT = 600;
 
-    const std::string MODEL_PATH = "models/viking_room.obj";
-    const std::string TEXTURE_PATH = "textures/viking_room.png";
+    const std::string MODEL_PATH = "C:/Users/Algat/Documents/git/PepperEngine/models/viking_room.obj";
+    const std::string TEXTURE_PATH = "C:/Users/Algat/Documents/git/PepperEngine/textures/viking_room.png";
 
     const int MAX_FRAMES_IN_FLIGHT = 2;
 
@@ -81,6 +81,10 @@ namespace vk {
         VkDeviceMemory depthImageMemory;
         VkImageView depthImageView;
 
+        VkImage colorImage;
+        VkDeviceMemory colorImageMemory;
+        VkImageView colorImageView;
+
         VkImage textureImage;
         VkDeviceMemory textureImageMemory;
         VkImageView textureImageView;
@@ -102,6 +106,10 @@ namespace vk {
 
         std::vector<VkCommandBuffer> commandBuffers;
 
+        uint32_t mipLevels;
+
+        VkSampleCountFlagBits msaaSamples = VK_SAMPLE_COUNT_1_BIT;
+
         std::vector<VkSemaphore> imageAvailableSemaphores;
         std::vector<VkSemaphore> renderFinishedSemaphores;
         std::vector<VkFence> inFlightFences;
@@ -112,6 +120,8 @@ namespace vk {
         static void framebufferResizeCallback(GLFWwindow* window, int width, int height);
 
         void initVulkan();
+
+        void initImGui();
 
         void mainLoop();
 
@@ -160,11 +170,13 @@ namespace vk {
 
         void createTextureSampler();
         
-        VkImageView createImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags);
+        VkImageView createImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags, uint32_t mipLevels);
 
         void createImage(
             uint32_t width,
             uint32_t height,
+            uint32_t mipLevels,
+            VkSampleCountFlagBits numSamples,
             VkFormat format,
             VkImageTiling tiling,
             VkImageUsageFlags usage,
@@ -173,7 +185,9 @@ namespace vk {
             VkDeviceMemory& imageMemory
         );
 
-        void transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout);
+        void createColorResources();
+
+        void transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout, uint32_t mipLevels);
 
         void copyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height);
 
@@ -213,6 +227,9 @@ namespace vk {
 
         void updateUniformBuffer(uint32_t currentImage);
 
+        void generateMipmaps(VkImage image, VkFormat imageFormat, int32_t texWidth, int32_t texHeight, uint32_t mipLevels);
+
+        VkSampleCountFlagBits getMaxUsableSampleCount();
 
         VkShaderModule createShaderModule(const std::vector<char>& code);
 
