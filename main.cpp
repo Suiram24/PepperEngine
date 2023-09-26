@@ -8,23 +8,43 @@
 //
 ///////////////////////////////////////////////////////////////////////
 
-#include "libs/internal/PERender/CPeRenderer.h"
+#include "libs/internal/PeRender/CPeVulkanRenderer.h"
 
 #include <math.h>
+#include <imgui.h>
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+
+#include <stdio.h>          // printf, fprintf
+#include <stdlib.h>
+
+#include <GLFW/glfw3.h>
+#include <vulkan/vulkan.h>
 
 // Main code
 int main(int, char**)
 {
-    engine::render::CPeRenderer::getInstance().RenderSetup();
+    //engine::render::CPeRenderer::getInstance().RenderSetup();
+    glfwInit();
+
+    glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+
+    GLFWwindow* window = glfwCreateWindow(vk::WIDTH, vk::HEIGHT, "Vulkan", nullptr, nullptr);
+
+    vk::CPeVulkanRenderer renderer;
+    renderer.init(window);
 
     // Main loop
-    while (!glfwWindowShouldClose(engine::render::CPeRenderer::getInstance().m_window))
+    while (!glfwWindowShouldClose(window))
     {
-        engine::render::CPeRenderer::getInstance().BeginFrame();
+        //engine::render::CPeRenderer::getInstance().BeginFrame();
+        glfwPollEvents();
+        renderer.drawFrame();
         
-
-        ImVec4 &clear_color = engine::render::CPeRenderer::getInstance().m_clear_color; //for background color (used in RenderFrame())
-        ImGuiIO& io = *engine::render::CPeRenderer::getInstance().m_io; //to retrieve framerate
+        /*
+        
+        ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f); //for background color (used in RenderFrame())
+        ImGuiIO& io  = ImGui::GetIO();; //to retrieve framerate
         static bool startSim = false;
 
         // 2. Show a simple window that we create ourselves. We use a Begin/End pair to create a named window.
@@ -71,13 +91,15 @@ int main(int, char**)
             ImGui::PlotLines("trajectory", func, NULL, display_count, 0, NULL, -1.0f, 1.0f, ImVec2(0, 80));
             ImGui::End();
         }
+        renderer.endDrawFrame();
+        */
 
 
         // Rendering
-        engine::render::CPeRenderer::getInstance().RenderFrame();
+        //engine::render::CPeRenderer::getInstance().RenderFrame();
     }
 
-    engine::render::CPeRenderer::getInstance().RenderCleanup();
+    //engine::render::CPeRenderer::getInstance().RenderCleanup();
     
 
     return 0;

@@ -3,7 +3,6 @@
 
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
-#include "imgui_impl_vulkan.h"
 
 #include <stdio.h>          // printf, fprintf
 #include <stdlib.h>         // abort
@@ -38,7 +37,7 @@ namespace engine
 			static VkPipelineCache          g_PipelineCache = VK_NULL_HANDLE;
 			static VkDescriptorPool         g_DescriptorPool = VK_NULL_HANDLE;
 
-			static ImGui_ImplVulkanH_Window g_MainWindowData;
+			//static ImGui_ImplVulkanH_Window g_MainWindowData;
 			static int                      g_MinImageCount = 2;
 			static bool                     g_SwapChainRebuild = false;
 		}
@@ -103,7 +102,7 @@ namespace engine
 			//Demo (may need to be cleaned later)
 			ImVec4 m_clear_color;		/// ImGUI demo variable
 		private:
-			ImGui_ImplVulkanH_Window* m_wd = nullptr;
+			//ImGui_ImplVulkanH_Window* m_wd = nullptr;
 			VkResult m_err;
 			
 
