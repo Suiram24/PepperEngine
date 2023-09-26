@@ -86,9 +86,10 @@ void vk::CPeVulkanRenderer::init()
     initImGui();
 }
 
-void vk::CPeVulkanRenderer::init(GLFWwindow *window)
+void vk::CPeVulkanRenderer::init(GLFWwindow *window, engine::render::CPeImGuiRenderer* gui)
 {
     this->window = window;
+    imguiRenderer = gui;
     glfwSetWindowUserPointer(window, this);
     glfwSetFramebufferSizeCallback(window, framebufferResizeCallback);
     initVulkan();
@@ -1412,32 +1413,7 @@ void vk::CPeVulkanRenderer::recordCommandBuffer(VkCommandBuffer commandBuffer, u
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 
-    {
-        ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f); //for background color (used in RenderFrame())
-        ImGuiIO& io  = ImGui::GetIO();; //to retrieve framerate
-        static float force = 0.0f;
-        static int angle = 0;
-
-
-        ImGui::Begin("PepperEngine options");                          // Create a window called "Hello, world!" and append into it.
-
-        ImGui::Text("Welcome in the pepper engine");               // Display some text (you can use a format strings too)
-
-
-        ImGui::SliderInt("Angle", &angle, 0, 90);
-        ImGui::SliderFloat("float", &force, 0.0f, 100.0f);
-        ImGui::ColorEdit3("Background color", (float*)&clear_color); // Edit 3 floats representing a color
-
-        if (ImGui::Button("Start simulation"))
-        {
-            ImGui::SetNextWindowPos(ImVec2(300, 300));
-            ImGui::SetNextWindowSize(ImVec2(800, 120));
-        }
-
-
-        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
-        ImGui::End();
-    }
+    imguiRenderer->RenderInterface();
 
     ImGui::Render();
     ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), commandBuffer, 0, NULL);

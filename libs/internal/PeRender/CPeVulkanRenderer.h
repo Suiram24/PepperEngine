@@ -9,6 +9,7 @@
 #include <vector>
 #include <optional>
 #include <string>
+#include "CPeRenderer.h"
 
 namespace vk {
 
@@ -46,7 +47,7 @@ namespace vk {
     class CPeVulkanRenderer {
     public:
         void init();
-        void init(GLFWwindow* window);
+        void init(GLFWwindow* window, engine::render::CPeImGuiRenderer* gui);
         void cleanup();
         void drawFrame();
 
@@ -116,6 +117,8 @@ namespace vk {
         uint32_t currentFrame = 0;
 
         bool framebufferResized = false;
+
+        engine::render::CPeImGuiRenderer* imguiRenderer;
 
         static void framebufferResizeCallback(GLFWwindow* window, int width, int height);
 
