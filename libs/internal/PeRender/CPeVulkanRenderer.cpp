@@ -549,8 +549,8 @@ void vk::CPeVulkanRenderer::createDescriptorSetLayout() {
 }
 
 void vk::CPeVulkanRenderer::createGraphicsPipeline() {
-    auto vertShaderCode = readFile("C:/Users/Algat/Documents/git/PepperEngine/shaders/vert.spv");
-    auto fragShaderCode = readFile("C:/Users/Algat/Documents/git/PepperEngine/shaders/frag.spv");
+    auto vertShaderCode = readFile("shaders/shader.vert.spv");
+    auto fragShaderCode = readFile("shaders/shader.frag.spv");
 
     VkShaderModule vertShaderModule = createShaderModule(vertShaderCode);
     VkShaderModule fragShaderModule = createShaderModule(fragShaderCode);
