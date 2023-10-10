@@ -1,7 +1,9 @@
 #include "CPeGraphicalObjects.h"
 
-#define TINYOBJLOADER_IMPLEMENTATION
+//#define TINYOBJLOADER_IMPLEMENTATION
 #include <tiny_obj_loader.h>
+#include<stdexcept>
+
 
 vk::ModelWatcher::ModelWatcher(GenericRenderer& renderer, std::string modelPath) : 
     device(renderer.getDevice()),
