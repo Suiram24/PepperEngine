@@ -2,6 +2,7 @@
 #define PEENGINE_CPEVULKANRENDERER_H
 
 #include "CPeGraphicalVertex.h"
+#include "CPeBluePrints.h"
 
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
@@ -44,12 +45,21 @@ namespace vk {
         }
     };
 
-    class CPeVulkanRenderer {
+    class CPeVulkanRenderer: public GenericRenderer {
     public:
         void init();
         void init(GLFWwindow* window, engine::render::CPeImGuiRenderer* gui);
         void cleanup();
         void drawFrame();
+        VkDevice& getDevice();
+        VkPhysicalDevice& getPhysicalDevice();
+        VkCommandPool& getCommandPool();
+        VkQueue& getGraphicsQueue();
+
+        // Models methods
+        void AddModel(ModelObject& object);
+
+        void RemoveModel(ModelObject& object);
 
     private:
         GLFWwindow* window;
@@ -91,13 +101,6 @@ namespace vk {
         VkImageView textureImageView;
         VkSampler textureSampler;
 
-        std::vector<Vertex> vertices;
-        std::vector<uint32_t> indices;
-        VkBuffer vertexBuffer;
-        VkDeviceMemory vertexBufferMemory;
-        VkBuffer indexBuffer;
-        VkDeviceMemory indexBufferMemory;
-
         std::vector<VkBuffer> uniformBuffers;
         std::vector<VkDeviceMemory> uniformBuffersMemory;
         std::vector<void*> uniformBuffersMapped;
@@ -120,6 +123,8 @@ namespace vk {
 
         engine::render::CPeImGuiRenderer* imguiRenderer;
 
+        std::vector<ModelObject*> graphicalObjects;
+
         static void framebufferResizeCallback(GLFWwindow* window, int width, int height);
 
         void initVulkan();
@@ -129,7 +134,6 @@ namespace vk {
         void mainLoop();
 
         void cleanupSwapChain();
-
 
         void recreateSwapChain();
 
@@ -160,6 +164,12 @@ namespace vk {
         void createCommandPool();
 
         void createDepthResources();
+
+        // Models functions
+
+        void DestroyModels();
+
+        void RenderModels(VkCommandBuffer commandBuffer);
 
         VkFormat findSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features);
 
@@ -193,12 +203,6 @@ namespace vk {
         void transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout, uint32_t mipLevels);
 
         void copyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height);
-
-        void loadModel();
-
-        void createVertexBuffer();
-
-        void createIndexBuffer();
 
         void createUniformBuffers();
 
