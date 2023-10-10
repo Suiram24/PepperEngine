@@ -9,6 +9,7 @@
 ///////////////////////////////////////////////////////////////////////
 
 #include "libs/internal/PeRender/CPeVulkanRenderer.h"
+#include "libs/internal/PeRender/CPeGraphicalObjects.h"
 
 #include <stdio.h>          // printf, fprintf
 #include <stdlib.h>
@@ -30,6 +31,8 @@ int main(int, char**)
     engine::render::CPeImGuiRenderer& imguiRenderer = engine::render::CPeImGuiRenderer::getInstance();
     imguiRenderer.SetupInterface();
     renderer.init(window, &imguiRenderer);
+
+    vk::ModelWatcher model1(renderer, "models/viking_room.obj");
 
     // Main loop
     while (!glfwWindowShouldClose(window))
