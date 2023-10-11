@@ -8,6 +8,8 @@ namespace pemaths = engine::maths;
 
 namespace engine {
 	namespace physics {
+
+		class CPeParticle;//forward declaration to avoid circular dependency.
 		
 		/**
 		 * @brief A class for Newton's Physics forces.
@@ -30,7 +32,7 @@ namespace engine {
 			*/
 			const pemaths::CPeVector3& GetValue() const;
 
-			//virtual const pemaths::CPeVector3& Compute(const CPeParticle& p_particule) const = 0;
+			virtual const pemaths::CPeVector3& Compute(const CPeParticle& p_particule, double p_timeStep) const = 0;
 
 		};
 	}
