@@ -169,7 +169,7 @@ namespace vk {
 
         void DestroyModels();
 
-        void RenderModels(VkCommandBuffer commandBuffer);
+        void RenderModels(VkCommandBuffer commandBuffer, VkPipelineLayout& pipelineLayout);
 
         VkFormat findSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features);
 

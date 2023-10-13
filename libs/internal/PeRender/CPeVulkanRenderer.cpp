@@ -781,10 +781,10 @@ void vk::CPeVulkanRenderer::DestroyModels()
     }
 }
 
-void vk::CPeVulkanRenderer::RenderModels(VkCommandBuffer commandBuffer)
+void vk::CPeVulkanRenderer::RenderModels(VkCommandBuffer commandBuffer, VkPipelineLayout& pipelineLayout)
 {
     for (auto& model : graphicalObjects) {
-        model->Render(commandBuffer);
+        model->Render(commandBuffer, pipelineLayout);
     }
 }
 
@@ -1382,7 +1382,7 @@ void vk::CPeVulkanRenderer::recordCommandBuffer(VkCommandBuffer commandBuffer, u
     vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, 1, &descriptorSets[currentFrame], 0, nullptr);
 
     //glm::mat4 transform = glm::translate(glm::mat4(1.0), glm::vec3(-2.0, 0.0, 0.0));
-    RenderModels(commandBuffer);
+    RenderModels(commandBuffer, pipelineLayout);
 
     ImGui_ImplVulkan_NewFrame();
     ImGui_ImplGlfw_NewFrame();
