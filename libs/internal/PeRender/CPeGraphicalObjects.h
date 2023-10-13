@@ -10,6 +10,22 @@
 namespace vk {
     class ModelWatcher: public ModelObject {
     public:
+        glm::vec3 pos;
+        glm::vec3 scale;
+        
+
+        const char* modelPath;
+        bool loaded = false;
+
+        ModelWatcher(vk::GenericRenderer& renderer, std::string modelPath);
+
+        void Load(const char* path);
+        void Load();
+        void Destroy();
+        void Render(VkCommandBuffer commandBuffer, VkPipelineLayout& pipelineLayout);
+        void SetPos(float x, float y, float z);
+        void SetScale(float s);
+    private:
         std::vector<vk::Vertex> vertices;
         std::vector<uint32_t> indices;
         VkBuffer vertexBuffer;
@@ -22,16 +38,9 @@ namespace vk {
         VkQueue& graphicsQueue;
         VkCommandPool& commandPool;
 
-        const char* modelPath;
-        bool loaded = false;
+        bool posHasChanged = false;
+        glm::vec3 translationVector;
 
-        ModelWatcher(vk::GenericRenderer& renderer, std::string modelPath);
-
-        void Load(const char* path);
-        void Load();
-        void Destroy();
-        void Render(VkCommandBuffer commandBuffer);
-    private:
         void loadModel(const char* path);
         void createVertexBuffer();
         void createIndexBuffer();

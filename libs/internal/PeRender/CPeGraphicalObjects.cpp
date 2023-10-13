@@ -10,7 +10,10 @@ vk::ModelWatcher::ModelWatcher(GenericRenderer& renderer, std::string modelPath)
     physicalDevice(renderer.getPhysicalDevice()),
     commandPool(renderer.getCommandPool()),
     graphicsQueue(renderer.getGraphicsQueue()),
-    modelPath(modelPath.c_str()) 
+    modelPath(modelPath.c_str()),
+    pos(glm::vec3(0.f,0.f,0.f)),
+    scale(glm::vec3(1.f)),
+    translationVector(glm::vec3(0.f, 0.f, 0.f))
 {
     Load();
     renderer.AddModel(*this);
@@ -38,7 +41,11 @@ void vk::ModelWatcher::Load() {
     loaded = true;
 }
 
-void vk::ModelWatcher::Render(VkCommandBuffer commandBuffer) {
+void vk::ModelWatcher::Render(VkCommandBuffer commandBuffer, VkPipelineLayout& pipelineLayout) {
+    glm::mat4 transform = glm::translate(glm::mat4(1.0), pos);
+    transform = glm::scale(transform, scale);
+    vkCmdPushConstants(commandBuffer, pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(glm::mat4), &transform);
+
     VkBuffer vertexBuffers[] = { vertexBuffer };
     VkDeviceSize offsets[] = { 0 };
     vkCmdBindVertexBuffers(commandBuffer, 0, 1, vertexBuffers, offsets);
@@ -46,6 +53,14 @@ void vk::ModelWatcher::Render(VkCommandBuffer commandBuffer) {
     vkCmdBindIndexBuffer(commandBuffer, indexBuffer, 0, VK_INDEX_TYPE_UINT32);
 
     vkCmdDrawIndexed(commandBuffer, static_cast<uint32_t>(indices.size()), 1, 0, 0, 0);
+}
+
+void vk::ModelWatcher::SetPos(float x, float y, float z) {
+    pos = glm::vec3(x, y, z);
+}
+
+void vk::ModelWatcher::SetScale(float s) {
+    scale = glm::vec3(s);
 }
 
 void vk::ModelWatcher::loadModel(const char* path) {
@@ -162,6 +177,7 @@ void vk::ModelWatcher::createIndexBuffer() {
 
     copyBuffer(stagingBuffer, indexBuffer, bufferSize);
 
+    vkDestroyBuffer(device, stagingBuffer, nullptr);
     vkDestroyBuffer(device, stagingBuffer, nullptr);
     vkFreeMemory(device, stagingBufferMemory, nullptr);
 }
