@@ -4,13 +4,14 @@ namespace pemaths = engine::maths;
 
 namespace engine {
 	namespace physics {
-		class CPeForceDrag : public CPeForces {
+		class CPeForceSpring : public CPeForces {
 		private:
-			float m_k1;
-			float m_k2;
+			CPeParticle m_other;
+			float m_k;
+			float m_restLength;
 
 		public:
-			CPeForceDrag(float p_k1, float p_k2) :m_k1(p_k1), m_k2(p_k2)
+			CPeForceSpring(CPeParticle p_other, float p_k, float p_restLength) :m_other(p_other), m_k(p_k), m_restLength(p_restLength)
 			{
 
 			}

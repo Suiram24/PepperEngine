@@ -26,9 +26,8 @@ int main(int, char**)
 {
     pephysics::CPeParticle particuleTest(pephysics::CPeTransform(), 1.0);
     particuleTest.SetGravity(maths::CPeVector3(0., 0., 0.));
-    pephysics::CPeForces* uneForce = new pephysics::CPeForces(1., 1., 0.);
+    pephysics::CPeForces* uneForce = new pephysics::CPeForceDrag(2., 1.);
 
-    particuleTest.AddForce(uneForce);
 
     delete uneForce;
 
