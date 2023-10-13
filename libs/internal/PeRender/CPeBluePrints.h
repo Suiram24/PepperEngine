@@ -11,7 +11,7 @@ namespace vk {
         virtual void Load(const char* path) = 0;
         virtual void Load() = 0;
         virtual void Destroy() = 0;
-        virtual void Render(VkCommandBuffer commandBuffer) = 0;
+        virtual void Render(VkCommandBuffer commandBuffer, VkPipelineLayout& pipelineLayout) = 0;
     };
 
     class GenericRenderer {
