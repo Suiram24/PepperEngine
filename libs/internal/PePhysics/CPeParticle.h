@@ -4,17 +4,17 @@
 #include <vector>
 
 #include "../PeMaths/PeMaths.h"
-#include "CPeMovable.h"
-#include "CPeForces.h"
+#include "CPeEntity.h"
 
 namespace pemaths = engine::maths;
 
 namespace engine {
 	namespace physics {
+
 		/**
 		 * @brief A simple implementation of a particle in standard Newton's Physics applied to video games.
 		*/
-		class CPeParticle : public CPeMovable {
+		class CPeParticle : public CPeEntity {
 			//Fields
 		private:
 			pemaths::CPeVector3 m_velocity;
@@ -31,8 +31,8 @@ namespace engine {
 
 			//Methods
 		public:
-			CPeParticle(const CPeTransform& p_transform, double p_massInverse, double p_damping) :
-				CPeMovable(p_transform),
+			CPeParticle(double p_massInverse, double p_damping) :
+				CPeEntity(),
 				m_velocity(pemaths::CPeVector3(0., 0., 0.)),
 				m_acceleration(pemaths::CPeVector3(0., 0., 0.)),
 				m_massInverse(p_massInverse),
@@ -42,7 +42,7 @@ namespace engine {
 			}
 
 			CPeParticle(const CPeTransform& p_transform, double p_massInverse) :
-				CPeMovable(p_transform),
+				CPeEntity(),
 				m_velocity(pemaths::CPeVector3(0., 0., 0.)),
 				m_acceleration(pemaths::CPeVector3(0., 0., 0.)),
 				m_massInverse(p_massInverse),
