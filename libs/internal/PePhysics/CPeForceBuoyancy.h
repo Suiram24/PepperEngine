@@ -1,10 +1,10 @@
-#include "CPeForces.h"
+#include "CPeForce.h"
 
 namespace pemaths = engine::maths;
 
 namespace engine {
 	namespace physics {
-		class CPeForceBuoyancy : public CPeForces {
+		class CPeForceBuoyancy : public CPeForce {
 		private:
 			float m_immersionDepth;// depth for a total immersion of the particle in m
 			float m_volume;//particle volume in m**3

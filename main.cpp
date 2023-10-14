@@ -24,13 +24,6 @@ namespace pephysics = engine::physics;
 // Main code
 int main(int, char**)
 {
-    pephysics::CPeParticle particuleTest(pephysics::CPeTransform(), 1.0);
-    particuleTest.SetGravity(maths::CPeVector3(0., 0., 0.));
-    pephysics::CPeForces* uneForce = new pephysics::CPeForceDrag(2., 1.);
-
-
-    delete uneForce;
-
     //
     // Game initialization
     static int angle(30);

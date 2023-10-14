@@ -2,7 +2,7 @@
 #define PEPHYSICS_PEPHYSICS_H
 
 #include "CPeParticle.h"
-#include "CPeForces.h"
+#include "CPeForce.h"
 #include "CPeForceDrag.h"//Temporary
 
 

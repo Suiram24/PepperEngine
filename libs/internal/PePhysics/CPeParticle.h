@@ -5,7 +5,7 @@
 
 #include "../PeMaths/PeMaths.h"
 #include "CPeMovable.h"
-#include "CPeForces.h"
+#include "CPeForce.h"
 
 namespace pemaths = engine::maths;
 
@@ -25,8 +25,6 @@ namespace engine {
 
 			double m_damping;// no unit
 
-			pemaths::CPeVector3 m_gravity;// in m/s²
-
 			pemaths::CPeVector3 m_sumForces;
 
 			//Methods
@@ -37,7 +35,6 @@ namespace engine {
 				m_acceleration(pemaths::CPeVector3(0., 0., 0.)),
 				m_massInverse(p_massInverse),
 				m_damping(p_damping),
-				m_gravity(pemaths::CPeVector3(0., -10., 0.)),
 				m_sumForces(pemaths::CPeVector3(0.,0.,0.))
 			{
 			}
@@ -48,16 +45,15 @@ namespace engine {
 				m_acceleration(pemaths::CPeVector3(0., 0., 0.)),
 				m_massInverse(p_massInverse),
 				m_damping(0.999),
-				m_gravity(pemaths::CPeVector3(0., -10., 0.)),
 				m_sumForces(pemaths::CPeVector3(0., 0., 0.))
 			{
 			}
 
 			/**
 			 * @brief Accessor for m_massInverse.
-			 * @return m_velocity (m/s).
+			 * @return m_massInverse (m/s).
 			*/
-			const pemaths::CPeVector3& GetMassInverse() const;
+			const double GetMassInverse() const;
 
 			/**
 			 * @brief Accessor for m_velocity.
@@ -82,12 +78,6 @@ namespace engine {
 			 * @param A new mass value. Should be strictly positive in kg.
 			*/
 			void SetMass(double p_mass);
-
-			/**
-			 * @brief Setter for m_gravity.
-			 * @param A new gravity value for the particle in m/s².
-			*/
-			void SetGravity(pemaths::CPeVector3 p_gravity);
 
 			/**
 			 * @brief Setter for m_velocity.
@@ -128,7 +118,7 @@ namespace engine {
 		private:
 			
 			/**
-			 * @brief Compute the new acceleration based on all forces and gravity.
+			 * @brief Compute the new acceleration based on all forces.
 			*/
 			void UpdateAcceleration();
 

@@ -1,10 +1,10 @@
-#include "CPeForces.h"
+#include "CPeForce.h"
 
 namespace pemaths = engine::maths;
 
 namespace engine {
 	namespace physics {
-		class CPeForceSpring : public CPeForces {
+		class CPeForceSpring : public CPeForce {
 		private:
 			CPeParticle m_other;
 			float m_k;

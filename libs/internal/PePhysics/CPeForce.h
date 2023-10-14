@@ -1,5 +1,5 @@
-#ifndef CPEFORCES_CPEFORCES_H
-#define CPEFORCES_CPEFORCES_H
+#ifndef CPeForce_CPeForce_H
+#define CPeForce_CPeForce_H
 
 #include "../PeMaths/PeMaths.h"
 #include "CPeParticle.h"
@@ -14,7 +14,7 @@ namespace engine {
 		/**
 		 * @brief A class for Newton's Physics forces.
 		*/
-		class CPeForces {
+		class CPeForce {
 
 
 			//Methods
@@ -26,4 +26,4 @@ namespace engine {
 	}
 }
 
-#endif /* CPEFORCES_CPEFORCES_H */
+#endif /* CPeForce_CPeForce_H */

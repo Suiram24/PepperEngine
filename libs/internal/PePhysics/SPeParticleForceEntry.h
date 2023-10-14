@@ -3,7 +3,7 @@
 
 
 #include "CPeParticle.h"
-#include "CPeForces.h"
+#include "CPeForce.h"
 
 
 namespace engine {
@@ -11,8 +11,9 @@ namespace engine {
 
 		struct SPeParticleForceEntry
 		{
-			CPeForces* m_force;
+			CPeForce* m_force;
 			CPeParticle* m_particle;
+			float lifeSpan;
 		};
 	}
 }
