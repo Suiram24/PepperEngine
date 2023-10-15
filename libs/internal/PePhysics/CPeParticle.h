@@ -29,23 +29,23 @@ namespace engine {
 
 			//Methods
 		public:
-			CPeParticle(const CPeTransform& p_transform, double p_massInverse, double p_damping) :
-				CPeMovable(p_transform),
-				m_velocity(pemaths::CPeVector3(0., 0., 0.)),
-				m_acceleration(pemaths::CPeVector3(0., 0., 0.)),
-				m_massInverse(p_massInverse),
-				m_damping(p_damping),
-				m_sumForces(pemaths::CPeVector3(0.,0.,0.))
+			CPeParticle(const CPeTransform& p_transform, double p_massInverse, double p_damping)
+				: CPeMovable(p_transform)
+				, m_velocity(pemaths::CPeVector3(0., 0., 0.))
+				, m_acceleration(pemaths::CPeVector3(0., 0., 0.))
+				, m_massInverse(p_massInverse)
+				, m_damping(p_damping)
+				, m_sumForces(pemaths::CPeVector3(0.,0.,0.))
 			{
 			}
 
-			CPeParticle(const CPeTransform& p_transform, double p_massInverse) :
-				CPeMovable(p_transform),
-				m_velocity(pemaths::CPeVector3(0., 0., 0.)),
-				m_acceleration(pemaths::CPeVector3(0., 0., 0.)),
-				m_massInverse(p_massInverse),
-				m_damping(0.999),
-				m_sumForces(pemaths::CPeVector3(0., 0., 0.))
+			CPeParticle(const CPeTransform& p_transform, double p_massInverse)
+				: CPeMovable(p_transform)
+				, m_velocity(pemaths::CPeVector3(0., 0., 0.))
+				, m_acceleration(pemaths::CPeVector3(0., 0., 0.))
+				, m_massInverse(p_massInverse)
+				, m_damping(0.999)
+				, m_sumForces(pemaths::CPeVector3(0.,0.,0.))
 			{
 			}
 
@@ -110,10 +110,17 @@ namespace engine {
 			void UpdatePrecisely(double p_timeStep);
 
 			/**
-			 * @brief Update the sum of all forces applied on the particule.
+			 * @brief Update the sum of all forces applied on the particule. Deprecated, forces should use AddForce instead.
 			 * @param p_sumForces The new sum of all forces applied on the particule.
+			 * @deprecated
 			*/
 			void SetSumForces(pemaths::CPeVector3 p_sumForces);
+
+			/**
+			 * @brief Add a force to this particle sumforce vector
+			 * @param p_forceValue The value of the force to be applied on the particule.
+			*/
+			void AddForce(const pemaths::CPeVector3& p_forceValue);
 
 		private:
 			

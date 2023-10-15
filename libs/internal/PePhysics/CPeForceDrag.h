@@ -10,12 +10,14 @@ namespace engine {
 			float m_k2;
 
 		public:
-			CPeForceDrag(float p_k1, float p_k2) :m_k1(p_k1), m_k2(p_k2)
+			CPeForceDrag(float p_k1, float p_k2)
+				: m_k1(p_k1)
+				, m_k2(p_k2)
 			{
 
 			}
 
-			const pemaths::CPeVector3& Compute(const CPeParticle& p_particule, double p_timeStep) const;
+			void Compute(CPeParticle& p_particule, double p_timeStep) const;
 		};
 	}
 }

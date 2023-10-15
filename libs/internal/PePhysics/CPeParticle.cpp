@@ -87,9 +87,14 @@ namespace engine {
 			);
 		}
 
-		void CPeParticle::SetSumForces(pemaths::CPeVector3 p_sumForces)
+		void CPeParticle::SetSumForces(const pemaths::CPeVector3& p_sumForces)
 		{
 			m_sumForces = p_sumForces;
+		}
+
+		void CPeParticle::AddForce(const pemaths::CPeVector3& p_forceValue)
+		{
+			m_sumForces += p_forceValue;
 		}
 
 	}

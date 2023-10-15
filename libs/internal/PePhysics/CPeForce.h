@@ -20,7 +20,7 @@ namespace engine {
 			//Methods
 		public:
 
-			virtual const pemaths::CPeVector3& Compute(const CPeParticle& p_particule, double p_timeStep) const = 0;
+			virtual void Compute(CPeParticle& p_particule, double p_timeStep) const = 0;
 
 		};
 	}
