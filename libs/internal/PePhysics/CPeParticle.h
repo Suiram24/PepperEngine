@@ -4,17 +4,18 @@
 #include <vector>
 
 #include "../PeMaths/PeMaths.h"
-#include "CPeMovable.h"
-#include "CPeForce.h"
+#include "CPeComponent.h"
+#include "CPeTransform.h"
 
 namespace pemaths = engine::maths;
 
 namespace engine {
 	namespace physics {
+
 		/**
 		 * @brief A simple implementation of a particle in standard Newton's Physics applied to video games. All units use SI.
 		*/
-		class CPeParticle : public CPeMovable {
+		class CPeParticle : public CPeComponent {
 			//Fields
 		private:
 			pemaths::CPeVector3 m_velocity;// in m/s
@@ -29,18 +30,18 @@ namespace engine {
 
 			//Methods
 		public:
-			CPeParticle(const CPeTransform& p_transform, double p_massInverse, double p_damping)
-				: CPeMovable(p_transform)
+			CPeParticle(CPeEntity& p_owner, double p_massInverse, double p_damping)
+				: CPeComponent(p_owner)
 				, m_velocity(pemaths::CPeVector3(0., 0., 0.))
 				, m_acceleration(pemaths::CPeVector3(0., 0., 0.))
 				, m_massInverse(p_massInverse)
 				, m_damping(p_damping)
-				, m_sumForces(pemaths::CPeVector3(0.,0.,0.))
+				, m_sumForces(pemaths::CPeVector3(0., 0., 0.))
 			{
 			}
 
-			CPeParticle(const CPeTransform& p_transform, double p_massInverse)
-				: CPeMovable(p_transform)
+			CPeParticle(CPeEntity& p_owner, double p_massInverse)
+				: CPeComponent(p_owner)
 				, m_velocity(pemaths::CPeVector3(0., 0., 0.))
 				, m_acceleration(pemaths::CPeVector3(0., 0., 0.))
 				, m_massInverse(p_massInverse)
@@ -53,7 +54,13 @@ namespace engine {
 			 * @brief Accessor for m_massInverse.
 			 * @return m_massInverse (m/s).
 			*/
-			const double GetMassInverse() const;
+			double GetMassInverse() const;
+
+			/**
+			 * @brief Accessor for m_owner's transform.
+			 * @return m_owner->m_transform.
+			*/
+			CPeTransform& GetTransform();
 
 			/**
 			 * @brief Accessor for m_velocity.
@@ -95,7 +102,7 @@ namespace engine {
 			 * @brief Setter for m_position.
 			 * @param A new position value for the particle.
 			*/
-			void SetPosition(const pemaths::CPeVector3& p_position);
+			void SetPosition(const pemaths::CPeVector3& p_position) const;
 
 			/**
 			 * @brief Compute the new acceleration, velocity and position.
@@ -114,7 +121,7 @@ namespace engine {
 			 * @param p_sumForces The new sum of all forces applied on the particule.
 			 * @deprecated
 			*/
-			void SetSumForces(pemaths::CPeVector3 p_sumForces);
+			void SetSumForces(const pemaths::CPeVector3& p_sumForces);
 
 			/**
 			 * @brief Add a force to this particle sumforce vector

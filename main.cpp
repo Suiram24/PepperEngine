@@ -26,10 +26,11 @@ int main(int, char**)
 {
     //
     // Game initialization
+    pephysics::CPeEntity monEntite = pephysics::CPeEntity();
     static int angle(30);
     static float force(14);
     printf("___Physics_Test___\n");
-    pephysics::CPeParticle maParticule(pephysics::CPeTransform(), 1.0);
+    pephysics::CPeParticle maParticule(monEntite, 1.0);
     maParticule.SetVelocity(maths::CPeVector3(10.,10.,0));
     maParticule.GetTransform().GetPosition().PrintCoordinate();
     pemaths::CPeVector3 zero(0, 0, 0);
@@ -150,7 +151,6 @@ int main(int, char**)
     }
 
     engine::render::CPeRenderer::getInstance().RenderCleanup();
-    
 
     return 0;
 }
