@@ -5,5 +5,8 @@
 
 #include "../PeMaths/PeMaths.h"
 #include "CPeParticle.h"
+#include "CPeForce.h"
+#include "CPeForceDrag.h"//Temporary
+
 
 #endif /* PEPHYSICS_PEPHYSICS_H */
