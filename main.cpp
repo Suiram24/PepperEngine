@@ -24,7 +24,6 @@ namespace pephysics = engine::physics;
 // Main code
 int main(int, char**)
 {
-
     //
     // Game initialization
     static int angle(30);

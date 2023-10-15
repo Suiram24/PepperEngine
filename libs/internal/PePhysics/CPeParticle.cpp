@@ -2,6 +2,10 @@
 
 namespace engine {
 	namespace physics {
+		const double CPeParticle::GetMassInverse() const
+		{
+			return m_massInverse;
+		}
 
 		const pemaths::CPeVector3& CPeParticle::GetVelocity() const
 		{
@@ -31,11 +35,6 @@ namespace engine {
 			SetMassInverse(1 / p_mass);
 		}
 
-		void CPeParticle::SetGravity(double p_gravity)
-		{
-			m_gravity = p_gravity;
-		}
-
 		void CPeParticle::SetVelocity(const pemaths::CPeVector3& p_velocity)
 		{
 			m_velocity = p_velocity;
@@ -54,27 +53,19 @@ namespace engine {
 		void CPeParticle::Update(double p_timeStep)
 		{
 			UpdatePosition(p_timeStep);
-			UpdateAcceleration(sumForces());
+			UpdateAcceleration();
 			UpdateVelocity(p_timeStep);
 		}
 
 		void CPeParticle::UpdatePrecisely(double p_timeStep) {
 			UpdatePositionPrecisely(p_timeStep);
-			UpdateAcceleration(sumForces());
+			UpdateAcceleration();
 			UpdateVelocity(p_timeStep);
 		}
 
-		pemaths::CPeVector3 CPeParticle::sumForces() const
+		void CPeParticle::UpdateAcceleration()
 		{
-			//TODO 
-			pemaths::CPeVector3 S(0., 0., 0.);
-			return S;
-		}
-
-		void CPeParticle::UpdateAcceleration(pemaths::CPeVector3& p_sumForces)
-		{
-			pemaths::CPeVector3 G(0., -m_gravity, 0.);//TODO better define gravity beforehand
-			m_acceleration = (p_sumForces * m_massInverse) + G;
+			m_acceleration = m_sumForces * m_massInverse;
 		}
 
 		void CPeParticle::UpdateVelocity(double p_timeStep)
@@ -95,5 +86,16 @@ namespace engine {
 				m_acceleration * (p_timeStep*p_timeStep/2)
 			);
 		}
+
+		void CPeParticle::SetSumForces(const pemaths::CPeVector3& p_sumForces)
+		{
+			m_sumForces = p_sumForces;
+		}
+
+		void CPeParticle::AddForce(const pemaths::CPeVector3& p_forceValue)
+		{
+			m_sumForces += p_forceValue;
+		}
+
 	}
 }

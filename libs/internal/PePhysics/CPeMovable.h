@@ -15,7 +15,8 @@ namespace engine {
 
 			//Methods
 		public:
-			CPeMovable(const CPeTransform& p_transform) : m_transform(p_transform)
+			CPeMovable(const CPeTransform& p_transform)
+				: m_transform(p_transform)
 			{
 			}
 
