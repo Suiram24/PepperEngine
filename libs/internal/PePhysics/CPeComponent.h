@@ -15,18 +15,21 @@ namespace engine {
 		{
 			//flieds
 		protected:
-			CPeEntity * m_owner;
+			CPeEntity& m_owner;
 			bool m_isActive;
 
 		public:
 			//Methods
-			CPeComponent(CPeEntity * p_owner) : m_owner(p_owner), m_isActive(true)
+			CPeComponent(CPeEntity& p_owner)
+				: m_owner(p_owner)
+				, m_isActive(true)
 			{
+				p_owner.AddComponent(this);
 			}
 
 			void SetActive(bool p_active);
 
-			CPeEntity * GetOwner();
+			CPeEntity& GetOwner();
 
 		};
 

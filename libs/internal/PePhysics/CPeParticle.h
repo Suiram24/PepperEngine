@@ -32,7 +32,7 @@ namespace engine {
 
 			//Methods
 		public:
-			CPeParticle(CPeEntity* p_owner, double p_massInverse, double p_damping) :
+			CPeParticle(CPeEntity& p_owner, double p_massInverse, double p_damping) :
 				CPeComponent(p_owner),
 				m_velocity(pemaths::CPeVector3(0., 0., 0.)),
 				m_acceleration(pemaths::CPeVector3(0., 0., 0.)),
@@ -42,7 +42,7 @@ namespace engine {
 			{
 			}
 
-			CPeParticle(CPeEntity* p_owner, double p_massInverse) :
+			CPeParticle(CPeEntity& p_owner, double p_massInverse) :
 				CPeComponent(p_owner),
 				m_velocity(pemaths::CPeVector3(0., 0., 0.)),
 				m_acceleration(pemaths::CPeVector3(0., 0., 0.)),

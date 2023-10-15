@@ -25,16 +25,25 @@ namespace engine {
 			//Methods
 		public:
 			//TODO change m_uuid
-			CPeEntity():m_uuid(0), m_transform(CPeTransform()), m_components(std::vector<CPeComponent*>())
+			CPeEntity()
+				: m_uuid(0)
+				, m_transform()
+				, m_components()
 			{
 			}
 
-			/*template<class T>
-			T* GetComponent() const;
+			CPeEntity(const CPeTransform& p_transform)
+				: m_uuid(0)
+				, m_transform(p_transform)
+				, m_components()
+			{
+			}
+
+			//template<class T>
+			//T* GetComponent<T>() const;
 
 
-			template<class T>
-			void AddComponent(T* p_component);*/
+			void AddComponent(CPeComponent* p_component);
 
 		};
 	}

@@ -3,23 +3,23 @@
 namespace engine {
 	namespace physics {
 
-		/*template<class T>
-		T* CPeEntity::GetComponent() const
-		{
-			for (std::vector<CPeComponent*>::iterator it = m_components.begin(); it != m_components.end(); ++it)
-			{
-				if (typeid(*it) == typeid(T))
-				{
-					return it;
-				}
-			}
-			return nullptr;
-		}
+		//template<class T>
+		//T* CPeEntity::GetComponent<T>() const
+		//{
+		//	for (std::vector<CPeComponent*>::iterator it = m_components.begin(); it != m_components.end(); ++it)
+		//	{
+		//		if (typeid(*it) == typeid(T))
+		//		{
+		//			return it;
+		//		}
+		//	}
+		//	return nullptr;
+		//}
+		
 
-		template<class T>
-		void CPeEntity:: AddComponent(T* p_component)
+		void CPeEntity:: AddComponent(CPeComponent* p_component)
 		{
 			m_components.push_back(p_component);
-		}*/
+		}
 	}
 }
