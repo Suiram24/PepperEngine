@@ -2,7 +2,7 @@
 
 namespace engine {
 	namespace physics {
-		const double CPeParticle::GetMassInverse() const
+		double CPeParticle::GetMassInverse() const
 		{
 			return m_massInverse;
 		}

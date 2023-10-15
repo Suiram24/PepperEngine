@@ -54,7 +54,7 @@ namespace engine {
 			 * @brief Accessor for m_massInverse.
 			 * @return m_massInverse (m/s).
 			*/
-			const double GetMassInverse() const;
+			double GetMassInverse() const;
 
 			/**
 			 * @brief Accessor for m_owner's transform.
@@ -121,7 +121,7 @@ namespace engine {
 			 * @param p_sumForces The new sum of all forces applied on the particule.
 			 * @deprecated
 			*/
-			void SetSumForces(pemaths::CPeVector3 p_sumForces);
+			void SetSumForces(const pemaths::CPeVector3& p_sumForces);
 
 			/**
 			 * @brief Add a force to this particle sumforce vector
