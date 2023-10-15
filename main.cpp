@@ -26,7 +26,7 @@ int main(int, char**)
 {
     //
     // Game initialization
-    pephysics::CPeEntity* monEntite = new pephysics::CPeEntity();
+    pephysics::CPeEntity monEntite = pephysics::CPeEntity();
     static int angle(30);
     static float force(14);
     printf("___Physics_Test___\n");
@@ -151,7 +151,6 @@ int main(int, char**)
     }
 
     engine::render::CPeRenderer::getInstance().RenderCleanup();
-    delete monEntite;
 
     return 0;
 }
