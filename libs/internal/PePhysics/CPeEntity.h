@@ -3,11 +3,11 @@
 
 #include <vector>
 
-#include "CPeComponent.h"
 #include "CPeTransform.h"
 
 namespace engine {
 	namespace physics {
+		class CPeComponent;
 
 		/**
 		 * @brief Class for all physics objects
@@ -17,10 +17,10 @@ namespace engine {
 			//flieds
 		public:
 			const int m_uuid;//TODO create PeUUID
+			CPeTransform m_transform;
 		private:
 			std::vector<CPeComponent*> m_components;
 		protected:
-			CPeTransform m_transform;
 
 			//Methods
 		public:
@@ -28,12 +28,6 @@ namespace engine {
 			CPeEntity():m_uuid(0), m_transform(CPeTransform()), m_components(std::vector<CPeComponent*>())
 			{
 			}
-
-			/**
-			 * @brief Accessor for m_transform.
-			 * @return m_transform.
-			*/
-			const CPeTransform& GetTransform() const;
 
 			/*template<class T>
 			T* GetComponent() const;

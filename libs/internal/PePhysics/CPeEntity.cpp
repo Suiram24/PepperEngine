@@ -3,11 +3,6 @@
 namespace engine {
 	namespace physics {
 
-		const CPeTransform& CPeEntity::GetTransform() const
-		{
-			return m_transform;
-		}
-
 		/*template<class T>
 		T* CPeEntity::GetComponent() const
 		{

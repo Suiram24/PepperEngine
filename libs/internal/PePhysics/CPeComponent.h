@@ -3,11 +3,10 @@
 
 #include <string>
 #include <cstdio>
+#include "CPeEntity.h"
 
 namespace engine {
 	namespace physics {
-
-		class CPeEntity;
 
 		/**
 		 * @brief Interface for all physics objects component
@@ -15,19 +14,19 @@ namespace engine {
 		class CPeComponent
 		{
 			//flieds
-		private:
-			const CPeEntity* m_owner;
+		protected:
+			CPeEntity * m_owner;
 			bool m_isActive;
 
 		public:
 			//Methods
-			CPeComponent(const CPeEntity* p_owner) : m_owner(p_owner), m_isActive(true)
+			CPeComponent(CPeEntity * p_owner) : m_owner(p_owner), m_isActive(true)
 			{
 			}
 
 			void SetActive(bool p_active);
 
-			const CPeEntity* GetOwner() const;
+			CPeEntity * GetOwner();
 
 		};
 

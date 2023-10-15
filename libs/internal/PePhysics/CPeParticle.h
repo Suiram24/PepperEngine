@@ -4,7 +4,8 @@
 #include <vector>
 
 #include "../PeMaths/PeMaths.h"
-#include "CPeEntity.h"
+#include "CPeComponent.h"
+#include "CPeTransform.h"
 
 namespace pemaths = engine::maths;
 
@@ -14,7 +15,7 @@ namespace engine {
 		/**
 		 * @brief A simple implementation of a particle in standard Newton's Physics applied to video games.
 		*/
-		class CPeParticle : public CPeEntity {
+		class CPeParticle : public CPeComponent {
 			//Fields
 		private:
 			pemaths::CPeVector3 m_velocity;
@@ -31,8 +32,8 @@ namespace engine {
 
 			//Methods
 		public:
-			CPeParticle(double p_massInverse, double p_damping) :
-				CPeEntity(),
+			CPeParticle(CPeEntity* p_owner, double p_massInverse, double p_damping) :
+				CPeComponent(p_owner),
 				m_velocity(pemaths::CPeVector3(0., 0., 0.)),
 				m_acceleration(pemaths::CPeVector3(0., 0., 0.)),
 				m_massInverse(p_massInverse),
@@ -41,8 +42,8 @@ namespace engine {
 			{
 			}
 
-			CPeParticle(const CPeTransform& p_transform, double p_massInverse) :
-				CPeEntity(),
+			CPeParticle(CPeEntity* p_owner, double p_massInverse) :
+				CPeComponent(p_owner),
 				m_velocity(pemaths::CPeVector3(0., 0., 0.)),
 				m_acceleration(pemaths::CPeVector3(0., 0., 0.)),
 				m_massInverse(p_massInverse),
@@ -50,6 +51,12 @@ namespace engine {
 				m_gravity(10.)
 			{
 			}
+
+			/**
+			 * @brief Accessor for m_owner's transform.
+			 * @return m_owner->m_transform.
+			*/
+			CPeTransform& GetTransform();
 
 			/**
 			 * @brief Accessor for m_velocity.
@@ -97,7 +104,7 @@ namespace engine {
 			 * @brief Setter for m_position.
 			 * @param A new position value for the particle.
 			*/
-			void SetPosition(const pemaths::CPeVector3& p_position);
+			void SetPosition(const pemaths::CPeVector3& p_position) const;
 
 			/**
 			 * @brief Compute the sum of all forces, the new acceleration, velocity and position.

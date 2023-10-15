@@ -3,6 +3,12 @@
 namespace engine {
 	namespace physics {
 
+		CPeTransform& CPeParticle::GetTransform()
+		{
+			return m_owner->m_transform;
+		}
+
+
 		const pemaths::CPeVector3& CPeParticle::GetVelocity() const
 		{
 			return m_velocity;
@@ -46,9 +52,9 @@ namespace engine {
 			m_acceleration = p_acceleration;
 		}
 
-		void CPeParticle::SetPosition(const pemaths::CPeVector3& p_position)
+		void CPeParticle::SetPosition(const pemaths::CPeVector3& p_position) const
 		{
-			m_transform.SetPosition(p_position);
+			m_owner->m_transform.SetPosition(p_position);
 		}
 
 		void CPeParticle::Update(double p_timeStep)
@@ -84,13 +90,13 @@ namespace engine {
 
 		void CPeParticle::UpdatePosition(double p_timeStep)
 		{
-			m_transform.SetPosition(m_transform.GetPosition() + (m_velocity * p_timeStep));
+			m_owner->m_transform.SetPosition(m_owner->m_transform.GetPosition() + (m_velocity * p_timeStep));
 		}
 
 		void CPeParticle::UpdatePositionPrecisely(double p_timeStep)
 		{
-			m_transform.SetPosition(
-				m_transform.GetPosition() + 
+			m_owner->m_transform.SetPosition(
+				m_owner->m_transform.GetPosition() +
 				(m_velocity * p_timeStep) +
 				m_acceleration * (p_timeStep*p_timeStep/2)
 			);
