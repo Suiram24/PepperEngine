@@ -48,9 +48,10 @@ namespace vk {
     class CPeVulkanRenderer: public GenericRenderer {
     public:
         void init();
-        void init(GLFWwindow* window, engine::render::CPeImGuiRenderer* gui);
+        void init(GLFWwindow* window);
         void cleanup();
-        void drawFrame();
+        void beginDrawFrame();
+        void endDrawFrame();
         VkDevice& getDevice();
         VkPhysicalDevice& getPhysicalDevice();
         VkCommandPool& getCommandPool();
@@ -118,10 +119,9 @@ namespace vk {
         std::vector<VkSemaphore> renderFinishedSemaphores;
         std::vector<VkFence> inFlightFences;
         uint32_t currentFrame = 0;
+        uint32_t imageIndexFrame = 0;
 
         bool framebufferResized = false;
-
-        engine::render::CPeImGuiRenderer* imguiRenderer;
 
         std::vector<ModelObject*> graphicalObjects;
 
@@ -130,8 +130,6 @@ namespace vk {
         void initVulkan();
 
         void initImGui();
-
-        void mainLoop();
 
         void cleanupSwapChain();
 
@@ -228,7 +226,9 @@ namespace vk {
 
         void createCommandBuffers();
 
-        void recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex);
+        void beginRecordCommandBuffer(VkCommandBuffer& commandBuffer, uint32_t imageIndex);
+
+        void endRecordCommandBuffer(VkCommandBuffer& commandBuffer);
 
         void createSyncObjects();
 

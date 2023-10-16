@@ -105,10 +105,9 @@ void vk::CPeVulkanRenderer::init()
     initImGui();
 }
 
-void vk::CPeVulkanRenderer::init(GLFWwindow *window, engine::render::CPeImGuiRenderer* gui)
+void vk::CPeVulkanRenderer::init(GLFWwindow *window)
 {
     this->window = window;
-    imguiRenderer = gui;
     glfwSetWindowUserPointer(window, this);
     glfwSetFramebufferSizeCallback(window, framebufferResizeCallback);
     initVulkan();
@@ -168,13 +167,6 @@ void vk::CPeVulkanRenderer::initImGui() {
 
     vkDeviceWaitIdle(device);
     ImGui_ImplVulkan_DestroyFontUploadObjects();
-}
-
-void vk::CPeVulkanRenderer::mainLoop() {
-    while (!glfwWindowShouldClose(window)) {
-        glfwPollEvents();
-        drawFrame();
-    }
 }
 
 void vk::CPeVulkanRenderer::cleanupSwapChain() {
@@ -770,6 +762,7 @@ void vk::CPeVulkanRenderer::RemoveModel(ModelObject& object) {
         }
     }
     if (elemFound) {
+        graphicalObjects[targetIndex]->Destroy();
         graphicalObjects.erase(graphicalObjects.begin() + targetIndex);
     }
 }
@@ -1338,7 +1331,7 @@ void vk::CPeVulkanRenderer::createCommandBuffers() {
     }
 }
 
-void vk::CPeVulkanRenderer::recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex) {
+void vk::CPeVulkanRenderer::beginRecordCommandBuffer(VkCommandBuffer& commandBuffer, uint32_t imageIndex) {
     VkCommandBufferBeginInfo beginInfo{};
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
     beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
@@ -1387,9 +1380,9 @@ void vk::CPeVulkanRenderer::recordCommandBuffer(VkCommandBuffer commandBuffer, u
     ImGui_ImplVulkan_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
+}
 
-    imguiRenderer->RenderInterface();
-
+void vk::CPeVulkanRenderer::endRecordCommandBuffer(VkCommandBuffer& commandBuffer) {
     ImGui::Render();
     ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), commandBuffer, 0, NULL);
 
@@ -1436,11 +1429,9 @@ void vk::CPeVulkanRenderer::updateUniformBuffer(uint32_t currentImage) {
     memcpy(uniformBuffersMapped[currentImage], &ubo, sizeof(ubo));
 }
 
-void vk::CPeVulkanRenderer::drawFrame() {
+void vk::CPeVulkanRenderer::beginDrawFrame() {
     vkWaitForFences(device, 1, &inFlightFences[currentFrame], VK_TRUE, UINT64_MAX);
-
-    uint32_t imageIndex;
-    VkResult result = vkAcquireNextImageKHR(device, swapChain, UINT64_MAX, imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE, &imageIndex);
+    VkResult result = vkAcquireNextImageKHR(device, swapChain, UINT64_MAX, imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE, &imageIndexFrame);
 
     if (result == VK_ERROR_OUT_OF_DATE_KHR) {
         recreateSwapChain();
@@ -1451,11 +1442,14 @@ void vk::CPeVulkanRenderer::drawFrame() {
     }
 
     updateUniformBuffer(currentFrame);
-    recordCommandBuffer(commandBuffers[currentFrame], imageIndex);
+    beginRecordCommandBuffer(commandBuffers[currentFrame], imageIndexFrame);
+}
+
+
+void vk::CPeVulkanRenderer::endDrawFrame() {
+    endRecordCommandBuffer(commandBuffers[currentFrame]);
 
     vkResetFences(device, 1, &inFlightFences[currentFrame]);
-
-
 
     VkSubmitInfo submitInfo{};
     submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
@@ -1487,9 +1481,9 @@ void vk::CPeVulkanRenderer::drawFrame() {
     presentInfo.swapchainCount = 1;
     presentInfo.pSwapchains = swapChains;
 
-    presentInfo.pImageIndices = &imageIndex;
+    presentInfo.pImageIndices = &imageIndexFrame;
 
-    result = vkQueuePresentKHR(presentQueue, &presentInfo);
+    VkResult result = vkQueuePresentKHR(presentQueue, &presentInfo);
 
     if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || framebufferResized) {
         framebufferResized = false;
