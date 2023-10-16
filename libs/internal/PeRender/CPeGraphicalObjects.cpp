@@ -13,7 +13,9 @@ vk::ModelWatcher::ModelWatcher(GenericRenderer& renderer, std::string modelPath)
     modelPath(modelPath.c_str()),
     pos(glm::vec3(0.f,0.f,0.f)),
     scale(glm::vec3(1.f)),
-    translationVector(glm::vec3(0.f, 0.f, 0.f))
+    translationVector(glm::vec3(0.f, 0.f, 0.f)),
+    indexBuffer(VK_NULL_HANDLE),
+    vertexBuffer(VK_NULL_HANDLE)
 {
     Load();
     renderer.AddModel(*this);
@@ -177,7 +179,6 @@ void vk::ModelWatcher::createIndexBuffer() {
 
     copyBuffer(stagingBuffer, indexBuffer, bufferSize);
 
-    vkDestroyBuffer(device, stagingBuffer, nullptr);
     vkDestroyBuffer(device, stagingBuffer, nullptr);
     vkFreeMemory(device, stagingBufferMemory, nullptr);
 }
