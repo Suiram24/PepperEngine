@@ -45,11 +45,12 @@ include_directories(${TINYOBJ_L_DIR})
 # Use vulkan headers from glfw:
 include_directories(${GLFW_DIR}/deps)
 
-#PERender
+#Pe libs
 add_subdirectory(libs/internal/PeRender)
 add_subdirectory(libs/internal/PeMaths)
 add_subdirectory(libs/internal/PePhysics)
-set(LIBRARIES ${LIBRARIES} PeRender PeMaths PePhysics)
+add_subdirectory(libs/internal/PeEngineCore)
+set(LIBRARIES ${LIBRARIES} PeRender PeMaths PePhysics PeEngineCore)
 
 
 

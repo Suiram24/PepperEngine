@@ -1,7 +1,7 @@
 #include "CPeEntity.h"
 
 namespace engine {
-	namespace physics {
+	namespace core {
 
 		//template<class T>
 		//T* CPeEntity::GetComponent<T>() const
@@ -17,7 +17,7 @@ namespace engine {
 		//}
 		
 
-		void CPeEntity:: AddComponent(CPeComponent* p_component)
+		void CPeEntity::AddComponent(CPeComponent* p_component)
 		{
 			m_components.push_back(p_component);
 		}
