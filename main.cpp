@@ -39,7 +39,7 @@ int main(int, char**)
     vk::CPeVulkanRenderer renderer;
     engine::render::CPeImGuiRenderer& imguiRenderer = engine::render::CPeImGuiRenderer::getInstance();
     imguiRenderer.SetupInterface();
-    renderer.init(window, &imguiRenderer);
+    renderer.init(window);
 
     //vk::ModelWatcher model1(renderer, "models/viking_room.obj");
     vk::SphereMesh model2(renderer);
@@ -57,7 +57,9 @@ int main(int, char**)
         //model2.SetPos(std::sin(i), 0, 0);
         //model2.SetScale(std::abs(std::sin(i)) * 2);
         glfwPollEvents();
-        renderer.drawFrame();
+        renderer.beginDrawFrame();
+        imguiRenderer.RenderInterface();
+        renderer.endDrawFrame();
         i += 0.1f;
       /*
       //
