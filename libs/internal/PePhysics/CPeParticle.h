@@ -4,10 +4,12 @@
 #include <vector>
 
 #include "../PeMaths/PeMaths.h"
-#include "CPeComponent.h"
-#include "CPeTransform.h"
+#include "../PeEngineCore/PeEngineCore.h"
+
+
 
 namespace pemaths = engine::maths;
+namespace pecore = engine::core;
 
 namespace engine {
 	namespace physics {
@@ -15,7 +17,7 @@ namespace engine {
 		/**
 		 * @brief A simple implementation of a particle in standard Newton's Physics applied to video games. All units use SI.
 		*/
-		class CPeParticle : public CPeComponent {
+		class CPeParticle : public pecore::CPeComponent {
 			//Fields
 		private:
 			pemaths::CPeVector3 m_velocity;// in m/s
@@ -30,7 +32,7 @@ namespace engine {
 
 			//Methods
 		public:
-			CPeParticle(CPeEntity& p_owner, double p_massInverse, double p_damping)
+			CPeParticle(pecore::CPeEntity& p_owner, double p_massInverse, double p_damping)
 				: CPeComponent(p_owner)
 				, m_velocity(pemaths::CPeVector3(0., 0., 0.))
 				, m_acceleration(pemaths::CPeVector3(0., 0., 0.))
@@ -40,7 +42,7 @@ namespace engine {
 			{
 			}
 
-			CPeParticle(CPeEntity& p_owner, double p_massInverse)
+			CPeParticle(pecore::CPeEntity& p_owner, double p_massInverse)
 				: CPeComponent(p_owner)
 				, m_velocity(pemaths::CPeVector3(0., 0., 0.))
 				, m_acceleration(pemaths::CPeVector3(0., 0., 0.))
@@ -60,7 +62,7 @@ namespace engine {
 			 * @brief Accessor for m_owner's transform.
 			 * @return m_owner->m_transform.
 			*/
-			CPeTransform& GetTransform();
+			pemaths::CPeTransform& GetTransform();
 
 			/**
 			 * @brief Accessor for m_velocity.

@@ -1,7 +1,7 @@
 #include "CPeComponent.h"
 
 namespace engine {
-	namespace physics {
+	namespace core {
 
 		void CPeComponent::SetActive(bool p_active)
 		{

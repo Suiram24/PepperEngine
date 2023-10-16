@@ -7,7 +7,7 @@ namespace engine {
 			return m_massInverse;
 		}
 
-		CPeTransform& CPeParticle::GetTransform()
+		pemaths::CPeTransform& CPeParticle::GetTransform()
 		{
 			return m_owner.m_transform;
 		}

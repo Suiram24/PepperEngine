@@ -6,7 +6,7 @@
 #include "CPeEntity.h"
 
 namespace engine {
-	namespace physics {
+	namespace core {
 
 		/**
 		 * @brief Interface for all physics objects component

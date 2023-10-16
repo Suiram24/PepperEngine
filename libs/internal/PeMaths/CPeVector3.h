@@ -1,5 +1,5 @@
-#ifndef CPEVECTOR3_CPEVECTOR3_H
-#define CPEVECTOR3_CPEVECTOR3_H
+#ifndef CPEMATHS_CPEVECTOR3_H
+#define CPEMATHS_CPEVECTOR3_H
 
 namespace engine
 {
@@ -137,4 +137,4 @@ namespace engine
 	}
 }
 
-#endif /* CPEVECTOR3_CPEVECTOR3_H */
+#endif /* CPEMATHS_CPEVECTOR3_H */

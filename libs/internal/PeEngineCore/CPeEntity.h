@@ -2,13 +2,12 @@
 #define CPEENTITY_CPEENTITY_H
 
 #include <vector>
-
-#include "CPeTransform.h"
+#include "..\PeMaths\PeMaths.h"
 
 namespace engine {
-	namespace physics {
+	namespace core {
 		class CPeComponent;
-
+		namespace pemaths = engine::maths;
 		/**
 		 * @brief Class for all physics objects
 		*/
@@ -17,7 +16,7 @@ namespace engine {
 			//flieds
 		public:
 			const int m_uuid;//TODO create PeUUID
-			CPeTransform m_transform;
+			pemaths::CPeTransform m_transform;
 		private:
 			std::vector<CPeComponent*> m_components;
 		protected:
@@ -32,7 +31,7 @@ namespace engine {
 			{
 			}
 
-			CPeEntity(const CPeTransform& p_transform)
+			CPeEntity(const pemaths::CPeTransform& p_transform)
 				: m_uuid(0)
 				, m_transform(p_transform)
 				, m_components()
