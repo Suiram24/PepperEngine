@@ -8,7 +8,7 @@ add_library(PePhysics	PePhysics.h
 						"EngineForces/CPeForceSpring.h"			"EngineForces/CPeForceSpring.cpp" 
 						"EngineForces/CPeForceAnchoredSpring.h"	"EngineForces/CPeForceAnchoredSpring.cpp" 
 						"EngineForces/CPeForceBuoyancy.h"		"EngineForces/CPeForceBuoyancy.cpp" 
-						"EngineForces/CPeForceGravity.h"		"EngineForces/CPeForceGravity.cpp"
-						"SPeParticleForceEntry.h" "CollisionSystem/CPeCollisionSystem.h" "CollisionSystem/CPeParticleContact.h" "CollisionSystem/CPeColliderComponent.h" "CollisionSystem/CPeContactGenerator.h")
+								
+						"SPeParticleForceEntry.h" "CollisionSystem/CPeCollisionSystem.h" "CollisionSystem/CPeParticleContact.h" "CollisionSystem/CPeColliderComponent.h" "CollisionSystem/CPeContactGenerator.h" "CollisionSystem/CPeParticleContact.cpp")
 
 target_link_libraries(PePhysics PeEngineCore PeMaths)

@@ -15,8 +15,6 @@ namespace engine {
 		class CPeParticleContact {
 			//Fields
 		private:
-			static const float DEFAULT_PENETRATION = 0.9f;
-
 			CPeParticle& m_particleA;
 			CPeParticle& m_particleB;
 			
@@ -24,7 +22,10 @@ namespace engine {
 
 			float m_penatration;// the penetration distance
 
-			pemaths::CPeVector3 m_contactNormal;
+			pemaths::CPeVector3 m_contactNormal; 
+			pemaths::CPeVector3 m_separatingVelocity;
+			float m_separatingSpeed;
+
 
 			//Methods
 		public:
@@ -34,15 +35,19 @@ namespace engine {
 				, m_restitution(p_restitution)
 				, m_penatration(ComputePenetration())
 				, m_contactNormal(ComputeContactNormal())
+				, m_separatingVelocity(ComputeSeparatingVelocity())
+				, m_separatingSpeed(ComputeSeparatingSpeed())
 			{
 			}
 
 			CPeParticleContact(CPeParticle& p_particleA, CPeParticle& p_particleB)
 				: m_particleA(p_particleA)
 				, m_particleB(p_particleB)
-				, m_restitution(DEFAULT_PENETRATION)
+				, m_restitution(0.9f)
 				, m_penatration(ComputePenetration())
 				, m_contactNormal(ComputeContactNormal())
+				, m_separatingVelocity(ComputeSeparatingVelocity())
+				, m_separatingSpeed(ComputeSeparatingSpeed())
 			{
 			}
 
@@ -53,11 +58,15 @@ namespace engine {
 
 			pemaths::CPeVector3 ComputeContactNormal() const;
 
-			float ComputeSeperatingVelocity();
+			pemaths::CPeVector3 ComputeSeparatingVelocity() const;
+
+			float ComputeSeparatingSpeed() const;
 
 			void ResolveVelocity();
 
 			void ResolvePenetration();
+
+			bool IsContactAtRest(float p_duration) const;
 		};
 	}
 }
