@@ -14,13 +14,13 @@ namespace engine {
 		*/
 		class CPeParticleContact {
 			//Fields
-		private:
+		protected:
 			CPeParticle* m_particleA;
 			CPeParticle* m_particleB;
 			
 			float m_restitution;// define the elacticness of the collision
 
-			float m_penatration;// the penetration distance
+			float m_penetration;// the penetration distance
 
 			pemaths::CPeVector3 m_contactNormal; 
 			pemaths::CPeVector3 m_separatingVelocity;
@@ -33,7 +33,7 @@ namespace engine {
 				: m_particleA(p_particleA)
 				, m_particleB(p_particleB)
 				, m_restitution(p_restitution)
-				, m_penatration(ComputePenetration())
+				, m_penetration(ComputePenetration())
 				, m_contactNormal(ComputeContactNormal())
 				, m_separatingVelocity(ComputeSeparatingVelocity())
 				, m_separatingSpeed(ComputeSeparatingSpeed())
@@ -44,7 +44,7 @@ namespace engine {
 				: m_particleA(p_particleA)
 				, m_particleB(p_particleB)
 				, m_restitution(0.9f)
-				, m_penatration(ComputePenetration())
+				, m_penetration(ComputePenetration())
 				, m_contactNormal(ComputeContactNormal())
 				, m_separatingVelocity(ComputeSeparatingVelocity())
 				, m_separatingSpeed(ComputeSeparatingSpeed())
@@ -55,17 +55,17 @@ namespace engine {
 
 			static bool CompareContactSeparationSpeed(CPeParticleContact* p_contact1, CPeParticleContact* p_contact2);
 
-			float GetSeparatingSpeed() const;
+			virtual float GetSeparatingSpeed() const;
 
 			/**
 			* @brief Returns the distance between the two particles taking their radius into account.
 			*/
 			static float DistanceBetweenParticle(CPeParticle& p_particleA, CPeParticle& p_particleB);
 
-		private:
-			float ComputePenetration() const;
+		protected:
+			virtual float ComputePenetration() const;
 
-			pemaths::CPeVector3 ComputeContactNormal() const;
+			virtual pemaths::CPeVector3 ComputeContactNormal() const;
 
 			pemaths::CPeVector3 ComputeSeparatingVelocity() const;
 
@@ -76,6 +76,8 @@ namespace engine {
 			void ResolvePenetration();
 
 			bool IsContactAtRest(float p_duration) const;
+
+			void ResetValues();
 		};
 	}
 }

@@ -35,6 +35,10 @@ namespace engine {
 				}
 			}
 
+			for (int it = 0; it < m_oneTimeContacts.size(); it++)
+			{
+				delete m_oneTimeContacts[it];
+			}
 			m_oneTimeContacts.clear();
 		}
 		
