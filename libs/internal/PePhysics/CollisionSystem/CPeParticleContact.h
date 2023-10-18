@@ -15,8 +15,8 @@ namespace engine {
 		class CPeParticleContact {
 			//Fields
 		private:
-			CPeParticle& m_particleA;
-			CPeParticle& m_particleB;
+			CPeParticle* m_particleA;
+			CPeParticle* m_particleB;
 			
 			float m_restitution;// define the elacticness of the collision
 
@@ -29,7 +29,7 @@ namespace engine {
 
 			//Methods
 		public:
-			CPeParticleContact(CPeParticle& p_particleA, CPeParticle& p_particleB, float p_restitution)
+			CPeParticleContact(CPeParticle* p_particleA, CPeParticle* p_particleB, float p_restitution)
 				: m_particleA(p_particleA)
 				, m_particleB(p_particleB)
 				, m_restitution(p_restitution)
@@ -40,7 +40,7 @@ namespace engine {
 			{
 			}
 
-			CPeParticleContact(CPeParticle& p_particleA, CPeParticle& p_particleB)
+			CPeParticleContact(CPeParticle* p_particleA, CPeParticle* p_particleB)
 				: m_particleA(p_particleA)
 				, m_particleB(p_particleB)
 				, m_restitution(0.9f)
@@ -52,6 +52,15 @@ namespace engine {
 			}
 
 			void Resolve(float p_duration);
+
+			static bool CompareContactSeparationSpeed(CPeParticleContact* p_contact1, CPeParticleContact* p_contact2);
+
+			float GetSeparatingSpeed() const;
+
+			/**
+			* @brief Returns the distance between the two particles taking their radius into account.
+			*/
+			static float DistanceBetweenParticle(CPeParticle& p_particleA, CPeParticle& p_particleB);
 
 		private:
 			float ComputePenetration() const;
