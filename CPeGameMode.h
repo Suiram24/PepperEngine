@@ -48,9 +48,10 @@ namespace engine {
 
 	public:
 	protected:
-	private:
 		GLFWwindow* m_window;
 		vk::CPeVulkanRenderer* m_renderer;
+	private:
+
 	};
 	
 }
