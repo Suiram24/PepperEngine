@@ -4,9 +4,6 @@ namespace pedemo {
 
 	void DemoCustomGameMode::GameStart()
 	{
-		//vk::SphereMesh m2(*m_renderer);
-		//sphere1 = vk::SphereMesh(*m_renderer);
-		//sphere2 = vk::SphereMesh(*m_renderer);
 		i = 0;
 
 	}
