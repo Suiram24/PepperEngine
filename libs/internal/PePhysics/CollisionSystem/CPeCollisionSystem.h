@@ -8,12 +8,18 @@
 namespace engine {
 	namespace physics {
 
+		/**
+		 * @brief The class that detect contacts and resolve collisions. Provides an interface to add permanent contacts.
+		*/
 		class CPeCollisionSystem {
 		private:
+			// vector of detected contacts
 			std::vector<CPeParticleContact*> m_oneTimeContacts;
 
+			// vector of permanent contatcs
 			std::vector<CPeParticleContact*> m_permanentContacts;
 
+			// number of iteration for the solver
 			int m_solverIteration;
 
 		public:
@@ -24,16 +30,32 @@ namespace engine {
 			{
 			}
 
+			/**
+			 * @brief Detect the contacts and resolve te collisions.
+			 * @param p_duration The time of simulation in second.
+			 * @param p_particles A vector of the particles with a CPeColliderComponent.
+			*/
 			void UpdateCollision(float p_duration, std::vector<CPeParticle*> p_particles);
 
+			/**
+			 * @brief Register a permanent contact.
+			 * @param p_contact The contact to register.
+			*/
 			void AddPermanentContact(CPeParticleContact* p_contact);
 
 		private:
+
+			/**
+			 * @brief Detect the new collisions.
+			 * @param p_particles A vector of the particles with a CPeColliderComponent.
+			*/
 			void DetectCollions(std::vector<CPeParticle*> p_particles);
 
+			/**
+			 * @brief Resolve both type of collisions.
+			 * @param p_duration The time of simulation in second.
+			*/
 			void ResolveCollisions(float p_duration);
-
-
 		};
 	}
 }

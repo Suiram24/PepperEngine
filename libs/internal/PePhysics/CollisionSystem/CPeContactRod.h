@@ -7,10 +7,13 @@
 namespace engine {
 	namespace physics {
 
+		/**
+		 * @brief Represent a rod between two particle.
+		*/
 		class CPeContactRod : public CPeParticleContact {
 			//Fields
 		private:
-			float m_length;
+			float m_length;// the length of the rod in meter
 
 			//Methods
 		public:

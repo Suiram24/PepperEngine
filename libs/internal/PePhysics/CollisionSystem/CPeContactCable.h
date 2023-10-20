@@ -7,10 +7,13 @@
 namespace engine {
 	namespace physics {
 
+		/**
+		 * @brief Represent a cable between two particle.
+		*/
 		class CPeContactCable : public CPeParticleContact {
 			//Fields
 		private:
-			float m_maxLength;
+			float m_maxLength;// The cable maximum length in meter
 			
 			//Methods
 		public:
