@@ -3,10 +3,13 @@
 
 #include "..\CPeGameMode.h"
 #include "..\libs\internal\PeRender\SphereMesh.h"
+#include "..\Libs\internal\PeEngineCore\PeEngineCore.h"
+#include "..\Libs\internal\PePhysics\PePhysics.h"
 
 #include <optional>
 
 namespace pedemo {
+	namespace pephy = engine::physics;
 	
 	/**
 		* @brief A class for basic components regarding the physics of a 3D elements.
@@ -16,6 +19,7 @@ namespace pedemo {
 	public:
 		DemoCustomGameMode()
 			: engine::CPeGameMode()
+			, entity1()
 		{
 		}
 
@@ -41,10 +45,12 @@ namespace pedemo {
 	public:
 	protected:
 	private:
-
+		pephy::CPeForceSystem* forceSystem;
 		//std::optional<vk::SphereMesh> sphere1;
 		//std::optional<vk::SphereMesh> sphere2;
 		int i;
+
+		pecore::CPeEntity entity1;
 
 	};
 	

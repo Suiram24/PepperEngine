@@ -6,7 +6,23 @@
 
 namespace engine {
 	namespace core {
+
+		namespace consts
+		{
+			const int maxEntityNumber = 100;
+			const int maxComponentsPerEntity = 5;
+		}
+
 		class CPeComponent;
+
+		struct SPeComponentSlot
+		{
+			CPeComponent* m_component = nullptr;
+			bool isValid = false;
+		};
+
+
+		
 		namespace pemaths = engine::maths;
 		/**
 		 * @brief Class for all physics objects
@@ -18,7 +34,7 @@ namespace engine {
 			const int m_uuid;//TODO create PeUUID
 			pemaths::CPeTransform m_transform;
 		private:
-			std::vector<CPeComponent*> m_components;
+			SPeComponentSlot m_components[consts::maxComponentsPerEntity];
 		protected:
 
 			//Methods

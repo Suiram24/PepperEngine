@@ -2,6 +2,7 @@ link_directories(libs/internal/PeEngineCore)
 link_directories(libs/internal/PeMaths)
 
 add_library(PePhysics	PePhysics.h 
+						"CPeForceSystem.h"							"CPeForceSystem.cpp"
 						"CPeParticle.h"							"CPeParticle.cpp"
 						"CPeForce.h"							"CPeForce.cpp" 
 						"EngineForces/CPeForceDrag.h"			"EngineForces/CPeForceDrag.cpp"   

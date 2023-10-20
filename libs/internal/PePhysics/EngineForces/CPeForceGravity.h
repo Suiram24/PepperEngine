@@ -1,3 +1,6 @@
+#ifndef PEPHYSICS_CPEFORCEGRAVITY_H
+#define PEPHYSICS_CPEFORCEGRAVITY_H
+
 #include "..\CPeForce.h"
 
 namespace pemaths = engine::maths;
@@ -23,3 +26,5 @@ namespace engine {
 		};
 	}
 }
+
+#endif /* PEPHYSICS_CPEFORCEGRAVITY_H */

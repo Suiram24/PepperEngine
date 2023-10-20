@@ -26,28 +26,47 @@ namespace engine {
 		//vk::CPeVulkanRenderer renderer;
 		engine::render::CPeImGuiRenderer& imguiRenderer = engine::render::CPeImGuiRenderer::getInstance();
 		imguiRenderer.SetupInterface();
-		m_renderer.init(m_window, &imguiRenderer);
+		m_renderer.init(m_window);
 
 		//
 		// Give the window and renderer to the gamemode
 		m_ActiveGameMode->InitGameMode(m_window, &m_renderer);
+
+		m_forceSystem = &engine::physics::CPeForceSystem::GetInstance();
 
 
 		m_ActiveGameMode->GameStart();
 
 		while (!glfwWindowShouldClose(m_window))
 		{
+			glfwPollEvents();
+			m_renderer.beginDrawFrame();
+
+
 			m_ActiveGameMode->GameUpdate();
 
-			glfwPollEvents();
-			m_renderer.drawFrame();
+			PhysicUpdate(ImGui::GetIO().DeltaTime);
 
+			m_renderer.endDrawFrame();
 		}
 
 		m_ActiveGameMode->GameEnd();
 
 	}
 
+	void CPeGameManager::PhysicUpdate(double p_deltaTime)
+	{
+		double totalTime = m_UncomputedTimeLeft + p_deltaTime;
+		while (totalTime > m_timeStep)
+		{
+			m_forceSystem->Update(m_timeStep);
+			totalTime -= m_timeStep;
+		}
 
+		m_UncomputedTimeLeft = totalTime;
+
+		
+	}
 	
 }
+

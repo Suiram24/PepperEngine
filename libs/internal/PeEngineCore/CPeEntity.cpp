@@ -19,7 +19,18 @@ namespace engine {
 
 		void CPeEntity::AddComponent(CPeComponent* p_component)
 		{
-			m_components.push_back(p_component);
+			for (size_t i = 0; i < consts::maxComponentsPerEntity; i++)
+			{
+				if (!m_components[i].isValid)
+				{
+					m_components[i].m_component = p_component;
+					m_components[i].isValid = true;
+					return;
+				}
+			}
+
+			printf("Error: no component slot left on this entity");
+			
 		}
 	}
 }

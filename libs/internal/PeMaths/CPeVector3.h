@@ -12,12 +12,13 @@ namespace engine
 		{
 			// Fields
 		private:
-			double m_x;
+			double m_x; 
 			double m_y;
 			double m_z;
 
 			// Methods
 		public:
+
 			CPeVector3(double p_x, double p_y, double p_z) : 
 				m_x(p_x),
 				m_y(p_y),
@@ -29,6 +30,13 @@ namespace engine
 				m_x(p_vector.GetX()),
 				m_y(p_vector.GetY()),
 				m_z(p_vector.GetZ())
+			{
+			}
+
+			CPeVector3() :
+				m_x(0),
+				m_y(0),
+				m_z(0)
 			{
 			}
 
