@@ -42,17 +42,23 @@ namespace engine
 			//, m_renderer()
 			, m_UncomputedTimeLeft(0)
 		{
-			
+			m_forceSystem = &engine::physics::CPeForceSystem::GetInstance();
+			AllocateObjectsPool();		
 		}
 
 		void SetGameMode(CPeGameMode* p_gameMode);
 
 		void StartGame();
 
+		pecore::CPeEntity& CreateEntity(const pemaths::CPeTransform& p_transform = pemaths::CPeTransform());
+
 	protected:
 	private:
 
 		void PhysicUpdate(double p_deltaTime);
+
+		void AllocateObjectsPool();
+		void FreeObjectsPool();
 
 	public:
 	protected:
@@ -68,6 +74,8 @@ namespace engine
 		// Physics
 		double m_UncomputedTimeLeft;
 		const double m_timeStep = double(1)/consts::physicsFrameRate;
+
+		pecore::CPeObjectPool<pecore::CPeEntity, pecore::consts::maxEntityNumber>* m_entityPool;
 		
 	};
 	

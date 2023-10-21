@@ -31,7 +31,7 @@ namespace engine {
 		{
 			//flieds
 		public:
-			const int m_uuid;//TODO create PeUUID
+			int m_uuid;//TODO create PeUUID
 			pemaths::CPeTransform m_transform;
 		private:
 			SPeComponentSlot m_components[consts::maxComponentsPerEntity];
@@ -53,6 +53,9 @@ namespace engine {
 				, m_components()
 			{
 			}
+
+			void Initialise(const pemaths::CPeTransform& p_transform);
+			bool IsActive();
 
 			//template<class T>
 			//T* GetComponent<T>() const;

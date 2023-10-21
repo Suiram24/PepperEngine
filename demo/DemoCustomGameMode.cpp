@@ -20,8 +20,11 @@ namespace pedemo {
 		i = 0;
 		forceSystem = &pephy::CPeForceSystem::GetInstance();
 
-		pephy::CPeParticle& particleComp1 = forceSystem->CreateParticleComponent(&entity1);
-		pephy::CPeForceAnchoredSpring& anchoredSpring1 = forceSystem->CreateForceAnchoredSpring(pemaths::CPeVector3(0, 0, 2), 1, 1);
+		entity1 = &engine::CPeGameManager::getInstance().CreateEntity();
+
+		entity1->m_transform.SetPosition(pemaths::CPeVector3(0, 0, 0));
+		pephy::CPeParticle& particleComp1 = forceSystem->CreateParticleComponent(entity1);
+		pephy::CPeForceAnchoredSpring& anchoredSpring1 = forceSystem->CreateForceAnchoredSpring(pemaths::CPeVector3(0, 0, 1), 1000, 0.5);
 		forceSystem->AddForceToParticle(&anchoredSpring1, &particleComp1);
 
 	}
@@ -30,7 +33,11 @@ namespace pedemo {
 	{
 		DrawImGuiInterface();
 		static vk::SphereMesh sphere1(*m_renderer);
-		//static vk::SphereMesh sphere2(*m_renderer);
+		static vk::SphereMesh sphere2(*m_renderer);
+
+		sphere2.SetPos(0, -0.25, 1);
+		sphere2.SetScale(0.25);
+
 		
 		//sphere2.SetPos(std::sin(i*0.1), 0, 0);
 		i++;
@@ -39,7 +46,8 @@ namespace pedemo {
 		//static pecore::CPeObjectPool<pecore::CPeComponent, 50> pool;
 		
 		
-		sphere1.SetPos(0, 0, entity1.m_transform.GetPosition().GetZ());
+		sphere1.SetPos(0, 0, entity1->m_transform.GetPosition().GetZ());
+		sphere1.SetScale(0.25);
 
 	}
 

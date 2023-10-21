@@ -2,6 +2,7 @@
 #define DEMO_DEMOCUSTOMGAMEMODE_H
 
 #include "..\CPeGameMode.h"
+#include "..\CPeGameManager.h"
 #include "..\libs\internal\PeRender\SphereMesh.h"
 #include "..\Libs\internal\PeEngineCore\PeEngineCore.h"
 #include "..\Libs\internal\PePhysics\PePhysics.h"
@@ -19,7 +20,7 @@ namespace pedemo {
 	public:
 		DemoCustomGameMode()
 			: engine::CPeGameMode()
-			, entity1()
+			, entity1(nullptr)
 		{
 		}
 
@@ -50,7 +51,7 @@ namespace pedemo {
 		//std::optional<vk::SphereMesh> sphere2;
 		int i;
 
-		pecore::CPeEntity entity1;
+		pecore::CPeEntity* entity1;
 
 	};
 	

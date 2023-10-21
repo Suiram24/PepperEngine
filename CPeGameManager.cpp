@@ -32,7 +32,7 @@ namespace engine {
 		// Give the window and renderer to the gamemode
 		m_ActiveGameMode->InitGameMode(m_window, &m_renderer);
 
-		m_forceSystem = &engine::physics::CPeForceSystem::GetInstance();
+		
 
 
 		m_ActiveGameMode->GameStart();
@@ -66,6 +66,23 @@ namespace engine {
 		m_UncomputedTimeLeft = totalTime;
 
 		
+	}
+
+	void CPeGameManager::AllocateObjectsPool()
+	{
+		m_entityPool = new pecore::CPeObjectPool<pecore::CPeEntity, pecore::consts::maxEntityNumber>();
+		m_forceSystem->AllocateObjectsPool();
+	}
+
+	void CPeGameManager::FreeObjectsPool()
+	{
+		delete m_entityPool;
+		m_forceSystem->FreeObjectsPool();
+	}
+
+	pecore::CPeEntity& CPeGameManager::CreateEntity(const pemaths::CPeTransform& p_transform)
+	{
+		return m_entityPool->Create(p_transform);
 	}
 	
 }

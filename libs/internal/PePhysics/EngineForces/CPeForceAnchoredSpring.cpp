@@ -17,7 +17,7 @@ namespace engine {
 			double n = d.GetNorm();
 			if (n > m_restLength)
 			{
-				d = d *  ((n - m_restLength) / n) * p_timeStep;
+				d = d *  ((n - m_restLength) / n) * m_k * p_timeStep;
 			}
 			p_particule.AddForce(d);
 			return;

@@ -15,14 +15,18 @@ namespace pemaths = engine::maths;
 namespace pecore = engine::core;
 
 namespace engine {
+
+	class CPeGameManager;
 	namespace physics {
+		
 		 
 		/**
 		 * @brief A class for Newton's Physics forces.
 		*/
 		class CPeForceSystem {
+	public:
 
-		public:
+			friend class engine::CPeGameManager;
 			//
 			// Singleton setup
 			static CPeForceSystem& GetInstance()
@@ -56,19 +60,22 @@ namespace engine {
 
 			}
 
+			void AllocateObjectsPool();
+			void FreeObjectsPool();
+
 		public:
 		protected:
 		private:
 			
 
-			pecore::CPeObjectPool<SPeParticleForceEntry, 4 * pecore::consts::maxEntityNumber > m_registry;
+			pecore::CPeObjectPool<SPeParticleForceEntry, 4 * pecore::consts::maxEntityNumber>* m_registry;
 
-			pecore::CPeObjectPool<CPeForceDrag, pecore::consts::maxEntityNumber> m_dragPool;
-			pecore::CPeObjectPool<CPeForceAnchoredSpring, pecore::consts::maxEntityNumber> m_anchoredSpringPool;
-			pecore::CPeObjectPool<CPeForceSpring, pecore::consts::maxEntityNumber> m_springPool;
-			pecore::CPeObjectPool<CPeForceBuoyancy, pecore::consts::maxEntityNumber> m_buoyancyPool;
+			pecore::CPeObjectPool<CPeForceDrag, pecore::consts::maxEntityNumber>* m_dragPool;
+			pecore::CPeObjectPool<CPeForceAnchoredSpring, pecore::consts::maxEntityNumber>* m_anchoredSpringPool;
+			pecore::CPeObjectPool<CPeForceSpring, pecore::consts::maxEntityNumber>* m_springPool;
+			pecore::CPeObjectPool<CPeForceBuoyancy, pecore::consts::maxEntityNumber>* m_buoyancyPool;
 
-			pecore::CPeObjectPool<CPeParticle, pecore::consts::maxEntityNumber> m_particlePool;
+			pecore::CPeObjectPool<CPeParticle, pecore::consts::maxEntityNumber>* m_particlePool;
 
 		};
 	}

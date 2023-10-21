@@ -15,7 +15,16 @@ namespace engine {
 		//	}
 		//	return nullptr;
 		//}
-		
+		void CPeEntity::Initialise(const pemaths::CPeTransform& p_transform)
+		{
+			m_uuid = 21;
+			m_transform = p_transform;
+		}
+
+		bool CPeEntity::IsActive()
+		{
+			return m_uuid != 0;
+		}
 
 		void CPeEntity::AddComponent(CPeComponent* p_component)
 		{
