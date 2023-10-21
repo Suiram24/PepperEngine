@@ -13,6 +13,7 @@
 #include "libs/internal/PeRender/SphereMesh.h"
 #include "libs/internal/PeMaths/PeMaths.h"
 #include "libs/internal/PePhysics/PePhysics.h"
+#include "libs/internal/PeRender/CPeViewManager.h"
 
 #include <cstdio>        // printf, fprintf
 #include <stdlib.h>
@@ -37,6 +38,7 @@ int main(int, char**)
     GLFWwindow* window = glfwCreateWindow(vk::WIDTH, vk::HEIGHT, "Vulkan", nullptr, nullptr);
 
     vk::CPeVulkanRenderer renderer;
+    vk::ViewManager view(renderer);
     engine::render::CPeImGuiRenderer& imguiRenderer = engine::render::CPeImGuiRenderer::getInstance();
     imguiRenderer.SetupInterface();
     renderer.init(window);
@@ -60,6 +62,8 @@ int main(int, char**)
         renderer.beginDrawFrame();
         imguiRenderer.RenderInterface();
         renderer.endDrawFrame();
+        view.rotateAroundY(0.05f);
+        
         i += 0.1f;
       /*
       //

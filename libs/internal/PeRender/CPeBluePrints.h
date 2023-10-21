@@ -2,6 +2,7 @@
 #define PEENGINE_CPE_BLUE_PRINTS_H
 
 #include <vulkan/vulkan.h>
+#include <glm/glm.hpp>
 
 namespace vk {
     class ModelObject {        
@@ -16,6 +17,7 @@ namespace vk {
 
     class GenericRenderer {
     public:
+        virtual void setViewMatrix(glm::mat4&) = 0;
         virtual VkDevice& getDevice() = 0;
         virtual VkPhysicalDevice& getPhysicalDevice() = 0;
         virtual VkCommandPool& getCommandPool() = 0;
