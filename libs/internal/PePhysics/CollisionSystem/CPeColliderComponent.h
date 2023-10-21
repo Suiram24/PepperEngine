@@ -13,10 +13,10 @@ namespace engine {
 		*/
 		class CPeColliderComponent : public pecore::CPeComponent {
 		private:
-			float m_radius;// radius of the spheric particle in meter
+			double m_radius;// radius of the spheric particle in meter
 
 		public:
-			CPeColliderComponent(pecore::CPeEntity& p_owner, float p_radius) 
+			CPeColliderComponent(pecore::CPeEntity& p_owner, double p_radius) 
 				: CPeComponent(p_owner)
 				, m_radius(p_radius)
 			{
@@ -26,13 +26,13 @@ namespace engine {
 			 * @brief Get for radius.
 			 * @return The particle radius in meter.
 			*/
-			float GetRadius() const;
+			double GetRadius() const;
 
 			/**
 			 * @brief Setter for the radius.
 			 * @param p_radius A new radius in meter.
 			*/
-			void SetRadius(float p_radius);
+			void SetRadius(double p_radius);
 		};
 	}
 }

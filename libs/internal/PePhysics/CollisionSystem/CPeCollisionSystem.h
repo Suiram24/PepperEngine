@@ -16,7 +16,7 @@ namespace engine {
 			// vector of detected contacts
 			std::vector<CPeParticleContact*> m_oneTimeContacts;
 
-			// vector of permanent contatcs
+			// vector of permanent contacts
 			std::vector<CPeParticleContact*> m_permanentContacts;
 
 			// number of iteration for the solver
@@ -32,10 +32,10 @@ namespace engine {
 
 			/**
 			 * @brief Detect the contacts and resolve te collisions.
-			 * @param p_duration The time of simulation in second.
+			 * @param p_timeStep The time of simulation in second.
 			 * @param p_particles A vector of the particles with a CPeColliderComponent.
 			*/
-			void UpdateCollision(float p_duration, std::vector<CPeParticle*> p_particles);
+			void UpdateCollision(double p_timeStep, std::vector<CPeParticle*> p_particles);
 
 			/**
 			 * @brief Register a permanent contact.
@@ -53,9 +53,9 @@ namespace engine {
 
 			/**
 			 * @brief Resolve both type of collisions.
-			 * @param p_duration The time of simulation in second.
+			 * @param p_timeStep The time of simulation in second.
 			*/
-			void ResolveCollisions(float p_duration);
+			void ResolveCollisions(double p_timeStep);
 		};
 	}
 }

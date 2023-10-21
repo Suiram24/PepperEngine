@@ -18,18 +18,18 @@ namespace engine {
 			CPeParticle* m_particleA;
 			CPeParticle* m_particleB;
 			
-			float m_restitution;// define the elacticness of the collision
+			double m_restitution;// define the elacticness of the collision
 
-			float m_penetration;// the penetration distance
+			double m_penetration;// the penetration distance
 
 			pemaths::CPeVector3 m_contactNormal; 
 			pemaths::CPeVector3 m_separatingVelocity;
-			float m_separatingSpeed;
+			double m_separatingSpeed;
 
 
 			//Methods
 		public:
-			CPeParticleContact(CPeParticle* p_particleA, CPeParticle* p_particleB, float p_restitution)
+			CPeParticleContact(CPeParticle* p_particleA, CPeParticle* p_particleB, double p_restitution)
 				: m_particleA(p_particleA)
 				, m_particleB(p_particleB)
 				, m_restitution(p_restitution)
@@ -53,9 +53,9 @@ namespace engine {
 
 			/**
 			 * @brief Resolve the contact.
-			 * @param p_duration The time of simulation in second.
+			 * @param p_timeStep The time of simulation in second.
 			*/
-			void Resolve(float p_duration);
+			void Resolve(double p_timeStep);
 
 			/**
 			 * @brief A comparator between two CPeParticleContact.
@@ -69,7 +69,7 @@ namespace engine {
 			 * @brief Getter for the separating speed.
 			 * @return the separating speed.
 			*/
-			virtual float GetSeparatingSpeed() const;
+			virtual double GetSeparatingSpeed() const;
 
 			/**
 			* @brief Returns the distance between the two particles taking their radius into account.
@@ -77,7 +77,7 @@ namespace engine {
 			* @param p_particleB
 			* @return the distance between the two particles surfaces.
 			*/
-			static float DistanceBetweenParticle(CPeParticle& p_particleA, CPeParticle& p_particleB);
+			static double DistanceBetweenParticle(CPeParticle& p_particleA, CPeParticle& p_particleB);
 
 		protected:
 
@@ -85,7 +85,7 @@ namespace engine {
 			* @brief Compute the penetration between the two particles radius.
 			* @return the penetration between the two particles radius.
 			*/
-			virtual float ComputePenetration() const;
+			virtual double ComputePenetration() const;
 
 			/**
 			* @brief Compute the contact normal between the two particles.
@@ -103,7 +103,7 @@ namespace engine {
 			* @brief Compute the separating speed of two particles.
 			* @return the separating speed of two particles.
 			*/
-			float ComputeSeparatingSpeed() const;
+			double ComputeSeparatingSpeed() const;
 
 			/**
 			* @brief Change the velocity of the particles to resolve collision.
@@ -117,10 +117,10 @@ namespace engine {
 
 			/**
 			* @brief Verifies if the contact is at rest.
-			* @param p_duration The time of simulation in second.
+			* @param p_timeStep The time of simulation in second.
 			* @return is the contact at rest.
 			*/
-			bool IsContactAtRest(float p_duration) const;
+			bool IsContactAtRest(double p_timeStep) const;
 
 			/**
 			* @brief Compute the contact normal, penetration, separating speed and separating velocity.

@@ -3,9 +3,9 @@
 namespace engine {
 	namespace physics {
 
-		float CPeContactCable::ComputePenetration() const
+		double CPeContactCable::ComputePenetration() const
 		{
-			float dist = CPeParticleContact::DistanceBetweenParticle(*m_particleA, *m_particleB);
+			double dist = CPeParticleContact::DistanceBetweenParticle(*m_particleA, *m_particleB);
 
 			if (dist > m_maxLength)
 			{
@@ -14,9 +14,9 @@ namespace engine {
 			return 0.;
 		}
 
-		float CPeContactCable::GetSeparatingSpeed() const
+		double CPeContactCable::GetSeparatingSpeed() const
 		{
-			float dist = CPeParticleContact::DistanceBetweenParticle(*m_particleA, *m_particleB);
+			double dist = CPeParticleContact::DistanceBetweenParticle(*m_particleA, *m_particleB);
 
 			if (dist > m_maxLength)
 			{

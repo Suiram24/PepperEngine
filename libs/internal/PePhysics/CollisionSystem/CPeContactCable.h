@@ -13,20 +13,20 @@ namespace engine {
 		class CPeContactCable : public CPeParticleContact {
 			//Fields
 		private:
-			float m_maxLength;// The cable maximum length in meter
+			double m_maxLength;// The cable maximum length in meter
 			
 			//Methods
 		public:
-			CPeContactCable(CPeParticle* p_particleA, CPeParticle* p_particleB, float p_restitution, float p_maxLength)
+			CPeContactCable(CPeParticle* p_particleA, CPeParticle* p_particleB, double p_restitution, double p_maxLength)
 				: CPeParticleContact(p_particleA, p_particleB, p_restitution)
 				, m_maxLength(p_maxLength)
 			{
 			}
 
-			float GetSeparatingSpeed() const;
+			double GetSeparatingSpeed() const;
 
 		protected:
-			float ComputePenetration() const;
+			double ComputePenetration() const;
 		};
 	}
 }

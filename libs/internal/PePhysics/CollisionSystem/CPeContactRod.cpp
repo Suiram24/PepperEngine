@@ -3,9 +3,9 @@
 namespace engine {
 	namespace physics {
 
-		float CPeContactRod::GetSeparatingSpeed() const
+		double CPeContactRod::GetSeparatingSpeed() const
 		{
-			float dist = CPeParticleContact::DistanceBetweenParticle(*m_particleA, *m_particleB);
+			double dist = CPeParticleContact::DistanceBetweenParticle(*m_particleA, *m_particleB);
 			if ((dist - m_length) > 0.01)
 			{
 				return -m_separatingSpeed;
@@ -19,7 +19,7 @@ namespace engine {
 		
 		pemaths::CPeVector3 CPeContactRod::ComputeContactNormal() const
 		{
-			float dist = CPeParticleContact::DistanceBetweenParticle(*m_particleA, *m_particleB);
+			double dist = CPeParticleContact::DistanceBetweenParticle(*m_particleA, *m_particleB);
 			if (dist > m_length)
 			{
 				return this->CPeParticleContact::ComputeContactNormal() * (- 1.);

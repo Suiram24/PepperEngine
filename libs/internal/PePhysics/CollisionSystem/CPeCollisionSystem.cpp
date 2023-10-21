@@ -4,7 +4,7 @@
 namespace engine {
 	namespace physics {
 		
-		void CPeCollisionSystem::ResolveCollisions(float p_duration)
+		void CPeCollisionSystem::ResolveCollisions(double p_timeStep)
 		{
 			for (int k = 0; k < m_solverIteration; k++)
 			{
@@ -31,7 +31,7 @@ namespace engine {
 						break;
 					}
 
-					cont->Resolve(p_duration);
+					cont->Resolve(p_timeStep);
 				}
 			}
 
@@ -42,10 +42,10 @@ namespace engine {
 			m_oneTimeContacts.clear();
 		}
 		
-		void CPeCollisionSystem::UpdateCollision(float p_duration, std::vector<CPeParticle*> p_particles)
+		void CPeCollisionSystem::UpdateCollision(double p_timeStep, std::vector<CPeParticle*> p_particles)
 		{
 			DetectCollions(p_particles);
-			ResolveCollisions(p_duration);
+			ResolveCollisions(p_timeStep);
 		}
 
 
@@ -62,7 +62,7 @@ namespace engine {
 			{
 				for (int j = i+1; j < nbParticles; j++)
 				{
-					float dist = CPeParticleContact::DistanceBetweenParticle(*p_particles[i], *p_particles[j]);
+					double dist = CPeParticleContact::DistanceBetweenParticle(*p_particles[i], *p_particles[j]);
 					if (dist < 0)
 					{
 						CPeParticleContact* newContact = new CPeParticleContact(p_particles[i], p_particles[j]);

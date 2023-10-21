@@ -2,12 +2,12 @@
 
 namespace engine {
 	namespace physics {
-		float CPeColliderComponent::GetRadius() const
+		double CPeColliderComponent::GetRadius() const
 		{
 			return m_radius;
 		}
 
-		void CPeColliderComponent::SetRadius(float p_radius)
+		void CPeColliderComponent::SetRadius(double p_radius)
 		{
 			m_radius = p_radius;
 		}

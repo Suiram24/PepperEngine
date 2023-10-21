@@ -13,23 +13,23 @@ namespace engine {
 		class CPeContactRod : public CPeParticleContact {
 			//Fields
 		private:
-			float m_length;// the length of the rod in meter
+			double m_length;// the length of the rod in meter
 
 			//Methods
 		public:
-			CPeContactRod(CPeParticle* p_particleA, CPeParticle* p_particleB, float p_restitution, float p_length)
+			CPeContactRod(CPeParticle* p_particleA, CPeParticle* p_particleB, double p_restitution, double p_length)
 				: CPeParticleContact(p_particleA, p_particleB, p_restitution)
 				, m_length(p_length)
 			{
 			}
 
-			CPeContactRod(CPeParticle* p_particleA, CPeParticle* p_particleB, float p_length)
+			CPeContactRod(CPeParticle* p_particleA, CPeParticle* p_particleB, double p_length)
 				: CPeParticleContact(p_particleA, p_particleB)
 				, m_length(p_length)
 			{
 			}
 
-			float GetSeparatingSpeed() const;
+			double GetSeparatingSpeed() const;
 
 		protected:
 			pemaths::CPeVector3 ComputeContactNormal() const;

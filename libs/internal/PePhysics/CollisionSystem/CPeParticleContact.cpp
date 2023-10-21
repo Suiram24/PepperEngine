@@ -12,11 +12,11 @@ namespace engine {
 			m_separatingVelocity = ComputeSeparatingVelocity();
 		}
 
-		void CPeParticleContact::Resolve(float p_duration)
+		void CPeParticleContact::Resolve(double p_timeStep)
 		{
 			ResetValues();
 
-			if (!IsContactAtRest(p_duration))
+			if (!IsContactAtRest(p_timeStep))
 			{
 				ResolveVelocity();
 			}
@@ -28,23 +28,23 @@ namespace engine {
 			return p_contact1->GetSeparatingSpeed() < p_contact2->GetSeparatingSpeed();
 		}
 
-		float CPeParticleContact::GetSeparatingSpeed() const
+		double CPeParticleContact::GetSeparatingSpeed() const
 		{
 			return m_separatingSpeed;
 		}
 
 
-		float CPeParticleContact::ComputePenetration() const
+		double CPeParticleContact::ComputePenetration() const
 		{
 			return -CPeParticleContact::DistanceBetweenParticle(*m_particleA, *m_particleB);
 		}
 
-		float CPeParticleContact::DistanceBetweenParticle(CPeParticle& p_particleA, CPeParticle& p_particleB)
+		double CPeParticleContact::DistanceBetweenParticle(CPeParticle& p_particleA, CPeParticle& p_particleB)
 		{
-			float r1 = p_particleA.GetOwner().GetComponent<CPeColliderComponent>()->GetRadius();
-			float r2 = p_particleB.GetOwner().GetComponent<CPeColliderComponent>()->GetRadius();
+			double r1 = p_particleA.GetOwner().GetComponent<CPeColliderComponent>()->GetRadius();
+			double r2 = p_particleB.GetOwner().GetComponent<CPeColliderComponent>()->GetRadius();
 
-			float dist = p_particleA.GetTransform().GetPosition().DistanceTo(p_particleB.GetTransform().GetPosition());
+			double dist = p_particleA.GetTransform().GetPosition().DistanceTo(p_particleB.GetTransform().GetPosition());
 
 			return dist - r1 - r2;
 		}
@@ -60,7 +60,7 @@ namespace engine {
 			return m_contactNormal * ComputeSeparatingSpeed();
 		}
 		
-		float CPeParticleContact::ComputeSeparatingSpeed() const
+		double CPeParticleContact::ComputeSeparatingSpeed() const
 		{
 			return pemaths::CPeVector3::ScalarProduct(m_particleA->GetVelocity() - m_particleB->GetVelocity(),m_contactNormal);
 		}
@@ -68,24 +68,24 @@ namespace engine {
 
 		void CPeParticleContact::ResolveVelocity()
 		{
-			float k = (m_restitution + 1) * m_separatingSpeed/ (m_particleA->GetMassInverse() + m_particleB->GetMassInverse());
+			double k = (m_restitution + 1) * m_separatingSpeed/ (m_particleA->GetMassInverse() + m_particleB->GetMassInverse());
 			m_particleA->SetVelocity(m_particleA->GetVelocity() - (m_contactNormal * k * m_particleA->GetMassInverse()));
 			m_particleB->SetVelocity(m_particleB->GetVelocity() + (m_contactNormal * k * m_particleB->GetMassInverse()));
 		}
 
 		void CPeParticleContact::ResolvePenetration()
 		{
-			float d = m_penetration;
-			float mA = m_particleA->GetMass();
-			float mB = m_particleB->GetMass();
+			double d = m_penetration;
+			double mA = m_particleA->GetMass();
+			double mB = m_particleB->GetMass();
 
 			m_particleA->SetPosition(m_particleA->GetTransform().GetPosition() + (m_contactNormal * (d * mB / (mA + mB))));
 			m_particleB->SetPosition(m_particleB->GetTransform().GetPosition() - (m_contactNormal * (d * mA / (mA + mB))));
 		}
 
-		bool CPeParticleContact::IsContactAtRest(float p_duration) const
+		bool CPeParticleContact::IsContactAtRest(double p_timeStep) const
 		{
-			return pemaths::CPeVector3::OrthographicProjection((m_particleA->GetGravity() * p_duration), m_separatingVelocity).GetNorm() > m_separatingVelocity.GetNorm();
+			return pemaths::CPeVector3::OrthographicProjection((m_particleA->GetGravity() * p_timeStep), m_separatingVelocity).GetNorm() > m_separatingVelocity.GetNorm();
 		}
 
 	}
