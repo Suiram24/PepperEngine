@@ -54,6 +54,18 @@ namespace engine {
 			m_permanentContacts.push_back(p_contact);
 		}
 
+		void CPeCollisionSystem::CreateRodBetween(CPeParticle* p_particleA, CPeParticle* p_particleB, double p_restitution, double p_length)
+		{
+			CPeContactRod* rod = new CPeContactRod(p_particleA, p_particleB, p_restitution, p_length);
+			AddPermanentContact(rod);
+		}
+
+		void CPeCollisionSystem::CreateCableBetween(CPeParticle* p_particleA, CPeParticle* p_particleB, double p_restitution, double p_maxLength)
+		{
+			CPeContactCable* cable = new CPeContactCable(p_particleA, p_particleB, p_restitution, p_maxLength);
+			AddPermanentContact(cable);
+		}
+
 		void CPeCollisionSystem::DetectCollions(std::vector<CPeParticle*>* p_particles)
 		{
 			int nbParticles = p_particles->size();
