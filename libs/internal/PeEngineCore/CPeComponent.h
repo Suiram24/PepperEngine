@@ -15,21 +15,35 @@ namespace engine {
 		{
 			//flieds
 		protected:
-			CPeEntity& m_owner;
+			CPeEntity* m_owner;
 			bool m_isActive;
 
 		public:
 			//Methods
 			CPeComponent(CPeEntity& p_owner)
-				: m_owner(p_owner)
+				: m_owner(&p_owner)
 				, m_isActive(true)
 			{
 				p_owner.AddComponent(this);
 			}
 
-			void SetActive(bool p_active);
+			CPeComponent()
+				: m_owner(nullptr)
+				, m_isActive(false)
+			{
+			}
 
-			CPeEntity& GetOwner();
+
+			void Initialise(CPeEntity& p_owner)
+			{
+				m_owner = &p_owner;
+				m_isActive = true;
+			}
+
+			void SetActive(bool p_active);
+			bool IsActive() const;
+
+			CPeEntity& GetOwner() const;
 
 		};
 

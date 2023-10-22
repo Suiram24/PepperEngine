@@ -2,6 +2,33 @@
 
 namespace engine {
 	namespace physics {
+
+		void CPeParticle::Initialise(pecore::CPeEntity* p_owner, double p_massInverse, double p_damping)
+		{
+			m_isActive = true;
+			m_owner = p_owner;
+			m_velocity = pemaths::CPeVector3(0., 0., 0.);
+			m_acceleration = pemaths::CPeVector3(0., 0., 0.);
+			m_massInverse = p_massInverse;
+			m_damping = p_damping;
+			m_sumForces = pemaths::CPeVector3(0., 0., 0.);
+
+			p_owner->AddComponent(this);
+		}
+		void CPeParticle::Initialise(pecore::CPeEntity& p_owner, double p_massInverse)
+		{
+			m_isActive = true;
+			m_owner = &p_owner;
+			m_velocity = pemaths::CPeVector3(0., 0., 0.);
+			m_acceleration = pemaths::CPeVector3(0., 0., 0.);
+			m_massInverse = p_massInverse;
+			m_damping = 0.999;
+			m_sumForces = pemaths::CPeVector3(0., 0., 0.);
+
+			p_owner.AddComponent(this);
+		}
+
+
 		double CPeParticle::GetMassInverse() const
 		{
 			return m_massInverse;
@@ -14,7 +41,7 @@ namespace engine {
 
 		pemaths::CPeTransform& CPeParticle::GetTransform()
 		{
-			return m_owner.m_transform;
+			return m_owner->m_transform;
 		}
 
 		const pemaths::CPeVector3& CPeParticle::GetGravity() const
@@ -67,7 +94,7 @@ namespace engine {
 
 		void CPeParticle::SetPosition(const pemaths::CPeVector3& p_position) const
 		{
-			m_owner.m_transform.SetPosition(p_position);
+			m_owner->m_transform.SetPosition(p_position);
 		}
 
 		void CPeParticle::Update(double p_timeStep)
@@ -75,12 +102,15 @@ namespace engine {
 			UpdatePosition(p_timeStep);
 			UpdateAcceleration();
 			UpdateVelocity(p_timeStep);
+			m_sumForces = pemaths::CPeVector3(0, 0, 0);
+			
 		}
 
 		void CPeParticle::UpdatePrecisely(double p_timeStep) {
-			UpdatePositionPrecisely(p_timeStep);
 			UpdateAcceleration();
 			UpdateVelocity(p_timeStep);
+			UpdatePositionPrecisely(p_timeStep);
+			m_sumForces = pemaths::CPeVector3(0, 0, 0);
 		}
 
 		void CPeParticle::UpdateAcceleration()
@@ -95,14 +125,14 @@ namespace engine {
 
 		void CPeParticle::UpdatePosition(double p_timeStep)
 		{
-			m_owner.m_transform.SetPosition(m_owner.m_transform.GetPosition() + (m_velocity * p_timeStep));
+			m_owner->m_transform.SetPosition(m_owner->m_transform.GetPosition() + (m_velocity * p_timeStep));
 			
 		}
 
 		void CPeParticle::UpdatePositionPrecisely(double p_timeStep)
 		{
-			m_owner.m_transform.SetPosition(
-				m_owner.m_transform.GetPosition() +
+			m_owner->m_transform.SetPosition(
+				m_owner->m_transform.GetPosition() +
 				(m_velocity * p_timeStep) +
 				m_acceleration * (p_timeStep*p_timeStep/2)
 			);

@@ -8,9 +8,14 @@ namespace engine {
 			m_isActive = p_active;
 		}
 
-		CPeEntity& CPeComponent::GetOwner()
+		CPeEntity& CPeComponent::GetOwner() const
 		{
-			return m_owner;
+			return *m_owner;
+		}
+
+		bool CPeComponent::IsActive() const
+		{
+			return m_isActive;
 		}
 
 		

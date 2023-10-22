@@ -53,10 +53,15 @@ add_subdirectory(libs/internal/PeEngineCore)
 set(LIBRARIES ${LIBRARIES} PeRender PeMaths PePhysics PeEngineCore)
 
 
+#file(GLOB sources main.cpp)
+file(GLOB sources *.cpp *.h)
+#file(GLOB sources *.h)
 
-file(GLOB sources *.cpp)
+file(GLOB pedemo 
+    "demo/*.cpp"
+    "demo/*.h")
 
-add_executable(PepperEngine ${sources} ${IMGUI_DIR}/imgui_impl_glfw.cpp  ${IMGUI_DIR}/imgui.cpp ${IMGUI_DIR}/imgui_draw.cpp ${IMGUI_DIR}/imgui_demo.cpp ${IMGUI_DIR}/imgui_tables.cpp ${IMGUI_DIR}/imgui_widgets.cpp)
+add_executable(PepperEngine ${sources} ${pedemo} ${IMGUI_DIR}/imgui_impl_glfw.cpp  ${IMGUI_DIR}/imgui.cpp ${IMGUI_DIR}/imgui_draw.cpp ${IMGUI_DIR}/imgui_demo.cpp ${IMGUI_DIR}/imgui_tables.cpp ${IMGUI_DIR}/imgui_widgets.cpp)
 target_link_libraries(PepperEngine ${LIBRARIES})
 target_compile_definitions(PepperEngine PUBLIC -DImTextureID=ImU64)
 

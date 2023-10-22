@@ -7,6 +7,8 @@ namespace vk {
 	class SphereMesh : public vk::ModelWatcher {
 	public:
         SphereMesh(vk::GenericRenderer& renderer);
+
+		void operator=(SphereMesh const& sphere);
 	private:
 		//std::string modelPathSphere = "models/sphere.obj";
 	};
