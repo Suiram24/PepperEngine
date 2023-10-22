@@ -118,6 +118,15 @@ namespace engine
 			static CPeVector3 CrossProduct(const CPeVector3& p_vectorA, const CPeVector3& p_vectorB);
 
 			/**
+			 * @brief Compute the orthographic projection of vector A on vector B.
+			 *
+			 * @param p_vectorA A CPeVector3.
+			 * @param p_vectorB A CPeVector3.
+			 * @return A new CPeVector3.
+			*/
+			static CPeVector3 OrthographicProjection(const CPeVector3& p_vectorA, const CPeVector3& p_vectorB);
+
+			/**
 			 * @brief Accessor to m_x.
 			*/
 			double GetX() const;
@@ -131,6 +140,14 @@ namespace engine
 			 * @brief Accessor to m_z.
 			*/
 			double GetZ() const;
+
+			/**
+			 * @brief Compute the distance to an other vector.
+			 *
+			 * @param p_vector A CPeVector3.
+			 * @return Distance to p_vector.
+			*/
+			double DistanceTo(const CPeVector3& p_vector) const;
 
 			/**
 			 * @brief A simple print method. Meant for deggug.

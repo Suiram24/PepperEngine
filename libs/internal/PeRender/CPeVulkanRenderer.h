@@ -52,6 +52,8 @@ namespace vk {
         void cleanup();
         void beginDrawFrame();
         void endDrawFrame();
+
+        void setViewMatrix(glm::mat4& viewMatrix);
         VkDevice& getDevice();
         VkPhysicalDevice& getPhysicalDevice();
         VkCommandPool& getCommandPool();
@@ -63,6 +65,7 @@ namespace vk {
         void RemoveModel(ModelObject& object);
 
     private:
+        glm::mat4* viewMatrix;
         GLFWwindow* window;
 
         VkInstance instance;
@@ -231,6 +234,8 @@ namespace vk {
         void endRecordCommandBuffer(VkCommandBuffer& commandBuffer);
 
         void createSyncObjects();
+
+        void setupMatrix();
 
         void updateUniformBuffer(uint32_t currentImage);
 

@@ -81,6 +81,13 @@ namespace engine {
 			return prodVector;
 		}
 
+		CPeVector3 CPeVector3::OrthographicProjection(const CPeVector3& p_vectorA, const CPeVector3& p_vectorB)
+		{
+			double normB = p_vectorB.GetNorm();
+			return p_vectorB * (CPeVector3::ScalarProduct(p_vectorA, p_vectorB) / (normB * normB));
+		}
+
+
 		double CPeVector3::GetX() const
 		{
 			return m_x;
@@ -95,6 +102,12 @@ namespace engine {
 		{
 			return m_z;
 		}
+		
+		double CPeVector3::DistanceTo(const CPeVector3& p_vector) const
+		{
+			return (*this - p_vector).GetNorm();
+		}
+
 
 		void CPeVector3::PrintCoordinate() const
 		{

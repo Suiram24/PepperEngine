@@ -63,6 +63,7 @@ namespace engine {
 
 			void AddComponent(CPeComponent* p_component);
 
+
 		};
 	}
 }
