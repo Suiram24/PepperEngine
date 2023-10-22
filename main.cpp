@@ -47,10 +47,7 @@ int main(int, char**)
     glfwSetCursorPosCallback(window, controls::CameraController::cursorPositionCallback);
     glfwSetKeyCallback(window, controls::CameraController::keyCallback);
 
-    engine::render::CPeImGuiRenderer& imguiRenderer = engine::render::CPeImGuiRenderer::getInstance();
-    imguiRenderer.SetupInterface();
     renderer.init(window);
-
     //vk::ModelWatcher model1(renderer, "models/viking_room.obj");
     vk::SphereMesh model2(renderer);
 
@@ -69,7 +66,6 @@ int main(int, char**)
         glfwPollEvents();
         controls::CameraController::getKeyboardInputs(window);
         renderer.beginDrawFrame();
-        imguiRenderer.RenderInterface();
         renderer.endDrawFrame();
         //view.rotateAroundY(0.05f);
         
