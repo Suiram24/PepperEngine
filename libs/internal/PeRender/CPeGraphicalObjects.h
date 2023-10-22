@@ -17,7 +17,7 @@ namespace vk {
         const char* modelPath;
         bool loaded = false;
 
-        ModelWatcher(vk::GenericRenderer& renderer, std::string modelPath);
+        ModelWatcher(vk::GenericRenderer& renderer, std::string modelPath, TextureObject& texture);
 
         void Load(const char* path);
         void Load();
@@ -26,6 +26,7 @@ namespace vk {
         void SetPos(float x, float y, float z);
         void SetScale(float s);
     private:
+        TextureObject& texture;
         std::vector<vk::Vertex> vertices;
         std::vector<uint32_t> indices;
         VkBuffer vertexBuffer;

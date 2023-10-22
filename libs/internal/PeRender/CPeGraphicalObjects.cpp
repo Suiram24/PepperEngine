@@ -4,16 +4,16 @@
 #include <tiny_obj_loader.h>
 #include<stdexcept>
 
-
-vk::ModelWatcher::ModelWatcher(GenericRenderer& renderer, std::string modelPath) : 
+vk::ModelWatcher::ModelWatcher(vk::GenericRenderer& renderer, std::string modelPath, TextureObject& texture) :
     device(renderer.getDevice()),
     physicalDevice(renderer.getPhysicalDevice()),
     commandPool(renderer.getCommandPool()),
     graphicsQueue(renderer.getGraphicsQueue()),
     modelPath(modelPath.c_str()),
-    pos(glm::vec3(0.f,0.f,0.f)),
+    pos(glm::vec3(0.f, 0.f, 0.f)),
     scale(glm::vec3(1.f)),
     translationVector(glm::vec3(0.f, 0.f, 0.f)),
+    texture(texture),
     indexBuffer(VK_NULL_HANDLE),
     vertexBuffer(VK_NULL_HANDLE)
 {
@@ -29,13 +29,6 @@ void vk::ModelWatcher::Destroy() {
     vkFreeMemory(device, vertexBufferMemory, nullptr);
 }
 
-void vk::ModelWatcher::Load(const char* path) {
-    loadModel(path);
-    createVertexBuffer();
-    createIndexBuffer();
-    loaded = true;
-}
-
 void vk::ModelWatcher::Load() {
     loadModel(modelPath);
     createVertexBuffer();
@@ -44,6 +37,8 @@ void vk::ModelWatcher::Load() {
 }
 
 void vk::ModelWatcher::Render(VkCommandBuffer commandBuffer, VkPipelineLayout& pipelineLayout) {
+    vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 1, 1, &texture.GetTextureDescriptorSet(), 0, nullptr);
+
     glm::mat4 transform = glm::translate(glm::mat4(1.0), pos);
     transform = glm::scale(transform, scale);
     vkCmdPushConstants(commandBuffer, pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(glm::mat4), &transform);
