@@ -24,6 +24,10 @@ namespace engine {
 			}
 		}
 
+		bool CPeContactCable::IsContactAtRest(double p_timeStep) const
+		{
+			return false;
+		}
 
 
 	}

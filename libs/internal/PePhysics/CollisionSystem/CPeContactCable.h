@@ -27,6 +27,8 @@ namespace engine {
 
 		protected:
 			double ComputePenetration() const;
+			bool IsContactAtRest(double p_timeStep) const;
+
 		};
 	}
 }

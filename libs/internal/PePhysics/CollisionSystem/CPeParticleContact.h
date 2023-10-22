@@ -120,7 +120,7 @@ namespace engine {
 			* @param p_timeStep The time of simulation in second.
 			* @return is the contact at rest.
 			*/
-			bool IsContactAtRest(double p_timeStep) const;
+			virtual bool IsContactAtRest(double p_timeStep) const;
 
 			/**
 			* @brief Compute the contact normal, penetration, separating speed and separating velocity.
