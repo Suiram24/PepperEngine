@@ -4,6 +4,7 @@ add_library(
 	CpeVulkanRenderer.h		CpeVulkanRenderer.cpp
 	CPeGraphicalVertex.h	CPeGraphicalVertex.cpp
 	CPeGraphicalObjects.h	CPeGraphicalObjects.cpp
+	CPeTexture.h			CPeTexture.cpp
 	SphereMesh.h			SphereMesh.cpp
 	PlaneMesh.h				PlaneMesh.cpp
 	CPeViewManager.h		CPeViewManager.cpp
