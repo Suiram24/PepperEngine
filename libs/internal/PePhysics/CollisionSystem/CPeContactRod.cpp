@@ -47,5 +47,10 @@ namespace engine {
 			}
 			return pemaths::CPeVector3(0, 0, 0);
 		}
+
+		bool CPeContactRod::IsContactAtRest(double p_timeStep) const
+		{
+			return false;
+		}
 	}
 }
