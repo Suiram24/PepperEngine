@@ -41,18 +41,22 @@ namespace pedemo {
 		entity1 = &engine::CPeGameManager::getInstance().CreateEntity();
 		entity2 = &engine::CPeGameManager::getInstance().CreateEntity();
 		entity3 = &engine::CPeGameManager::getInstance().CreateEntity();
+		entity4 = &engine::CPeGameManager::getInstance().CreateEntity();
 
 		entity1->m_transform.SetPosition(pemaths::CPeVector3(0, 8, -0.1));
 		entity2->m_transform.SetPosition(pemaths::CPeVector3(0.1, 6, 0.2));
 		entity3->m_transform.SetPosition(pemaths::CPeVector3(-1, 6, -1));
+		entity4->m_transform.SetPosition(pemaths::CPeVector3(0, 1, 0));
 
 		pephy::CPeParticle* particleComp1 = forceSystem->CreateParticleComponent(entity1);
 		pephy::CPeParticle* particleComp2 = forceSystem->CreateParticleComponent(entity2);
 		pephy::CPeParticle* particleComp3 = forceSystem->CreateParticleComponent(entity3/*, 0, 0, pemaths::CPeVector3()*/);
+		pephy::CPeParticle* particleComp4 = forceSystem->CreateParticleComponent(entity4, 0, 0, pemaths::CPeVector3());
 
 		pephy::CPeColliderComponent* colliderComp1 = colliderSystem->CreateColliderComponent(entity1, 0.5);
 		pephy::CPeColliderComponent* colliderComp2 = colliderSystem->CreateColliderComponent(entity2, 0.5);
 		pephy::CPeColliderComponent* colliderComp3 = colliderSystem->CreateColliderComponent(entity3, 0.5);
+		pephy::CPeColliderComponent* colliderComp4 = colliderSystem->CreateColliderComponent(entity4, 0.5);
 
 		//colliderSystem->CreateCableBetween(particleComp1, particleComp2, 0.999, 3);
 		//colliderSystem->CreateCableBetween(particleComp2, particleComp3, 0.999, 3);
@@ -62,9 +66,18 @@ namespace pedemo {
 		pephy::CPeForceSpring* spring2 = forceSystem->CreateForceSpring(particleComp3, 100, 3);
 		pephy::CPeForceSpring* spring3 = forceSystem->CreateForceSpring(particleComp1, 100, 3);
 
-		forceSystem->AddForceToParticle(spring1, particleComp1, -1);
-		forceSystem->AddForceToParticle(spring2, particleComp2, -1);
-		forceSystem->AddForceToParticle(spring3, particleComp3, -1);
+		pephy::CPeForceSpring* spring4 = forceSystem->CreateForceSpring(particleComp4, 100, 3);
+
+		//forceSystem->AddForceToParticle(spring1, particleComp1, -1);
+		//forceSystem->AddForceToParticle(spring2, particleComp2, -1);
+		//forceSystem->AddForceToParticle(spring3, particleComp3, -1);
+
+		forceSystem->AddForceToParticle(spring4, particleComp1, -1);
+		forceSystem->AddForceToParticle(spring4, particleComp2, -1);
+		//forceSystem->AddForceToParticle(spring4, particleComp3, -1);
+
+		colliderSystem->CreateCableBetween(particleComp2, particleComp3, 0.999, 2);
+
 
 		//Setup ground
 		//std::vector<vk::PlaneMesh*> planes;
@@ -94,17 +107,10 @@ namespace pedemo {
 		static vk::SphereMesh sphere1(*m_renderer);
 		static vk::SphereMesh sphere2(*m_renderer);
 		static vk::SphereMesh sphere3(*m_renderer);
-		
-
-		//if (entity1->m_transform.GetPosition().GetY() < 0)
-		//{
-		//	entity1->GetComponent<pephy::CPeParticle>()->SetVelocity(pemaths::CPeVector3(0,- entity1->GetComponent<pephy::CPeParticle>()->GetVelocity().GetY(), 0));
-		//}
-		//if (entity2->m_transform.GetPosition().GetY() < 0)
-		//{
-		//	entity2->GetComponent<pephy::CPeParticle>()->SetVelocity(pemaths::CPeVector3(0, -entity1->GetComponent<pephy::CPeParticle>()->GetVelocity().GetY(), 0));
-		//}
-
+		static vk::SphereMesh sphere4(*m_renderer);
+		static float pos[3] = { entity4->m_transform.GetPosition().GetX(), entity4->m_transform.GetPosition().GetY(), entity4->m_transform.GetPosition().GetZ() };
+		static float min[3] = { -5,1,-5 };
+		static float max[3] = { 5,10,5 };
 
 		sphere1.SetPos(entity1->m_transform.GetPosition().GetX(), entity1->m_transform.GetPosition().GetY(), entity1->m_transform.GetPosition().GetZ());
 		sphere1.SetScale(0.5);
@@ -115,16 +121,22 @@ namespace pedemo {
 		sphere3.SetPos(entity3->m_transform.GetPosition().GetX(), entity3->m_transform.GetPosition().GetY(), entity3->m_transform.GetPosition().GetZ());
 		sphere3.SetScale(0.5);
 
-		printf("Y positions: %.3f, %.3f, %.3f", entity1->m_transform.GetPosition().GetY(), entity2->m_transform.GetPosition().GetY(), entity3->m_transform.GetPosition().GetY());
-		//sphere2.SetPos(std::sin(i*0.1), 0, 0);
-		i++;
+		sphere4.SetPos(entity4->m_transform.GetPosition().GetX(), entity4->m_transform.GetPosition().GetY(), entity4->m_transform.GetPosition().GetZ());
+		sphere4.SetScale(0.5);
 
-		//namespace pecore = engine::core;
-		////static pecore::CPeObjectPool<pecore::CPeComponent, 50> pool;
-		//
-		//
-		//sphere1.SetPos(0, 0, entity1->m_transform.GetPosition().GetZ());
-		//sphere1.SetScale(0.25);
+		//printf("Y positions: %.3f, %.3f, %.3f", entity1->m_transform.GetPosition().GetY(), entity2->m_transform.GetPosition().GetY(), entity3->m_transform.GetPosition().GetY());
+		//sphere2.SetPos(std::sin(i*0.1), 0, 0);
+		//i++;
+
+		ImGui::Begin("Controls");
+
+		ImGui::DragFloat3("Sphere position", pos,0.1, -5, 5, "%.2f");
+
+		ImGui::End();
+
+		entity4->m_transform.SetPosition(pemaths::CPeVector3(pos[0], pos[1], pos[2]));
+
+
 
 	}
 
