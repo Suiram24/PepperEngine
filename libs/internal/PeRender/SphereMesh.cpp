@@ -1,6 +1,6 @@
 #include "SphereMesh.h"
 
-vk::SphereMesh::SphereMesh(vk::GenericRenderer& renderer) : ModelWatcher(renderer, "models/sphere.obj")
+vk::SphereMesh::SphereMesh(vk::GenericRenderer& renderer, TextureObject& texture) : ModelWatcher(renderer, "models/sphere.obj", texture)
 {
 }
 
