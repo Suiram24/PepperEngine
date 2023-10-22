@@ -6,5 +6,6 @@
 #include "CPeCameraController.h"
 #include "SphereMesh.h"
 #include "PlaneMesh.h"
+#include "CPeTexture.h"
 
 #endif /* PERENDER_PERENDER_H */
