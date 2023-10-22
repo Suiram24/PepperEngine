@@ -10,6 +10,11 @@
 namespace engine {
 	namespace physics {
 
+		namespace consts
+		{
+			constexpr int nbIterationCollider = 1;
+		}
+
 		/**
 		 * @brief The class that detect contacts and resolve collisions. Provides an interface to add permanent contacts.
 		*/
@@ -64,7 +69,7 @@ namespace engine {
 			CPeCollisionSystem()
 				: m_oneTimeContacts(std::vector<CPeParticleContact*>())
 				, m_permanentContacts(std::vector<CPeParticleContact*>())
-				, m_solverIteration(2)
+				, m_solverIteration(consts::nbIterationCollider)
 			{
 			}
 
