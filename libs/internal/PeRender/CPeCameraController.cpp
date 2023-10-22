@@ -81,7 +81,7 @@ void controls::CameraController::cursorPositionCallback(GLFWwindow* window, doub
 			getInstance().viewManager->rotateAroundX(-getInstance().orientationSensivity * movementX);
 		}
 		if (std::abs(movementY) > 0) {
-			getInstance().viewManager->rotateAroundZ(getInstance().orientationSensivity * movementY);
+			getInstance().viewManager->rotateUpDown(getInstance().orientationSensivity * movementY);
 		}
 		getInstance().viewManager->submitViewMatrix();
 	}

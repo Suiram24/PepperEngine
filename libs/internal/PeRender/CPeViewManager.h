@@ -23,6 +23,8 @@ namespace vk {
 		void rotateAroundX(float angle);
 		void rotateAroundY(float angle);
 		void rotateAroundZ(float angle);
+		void rotateAroundAxis(float angle, float x, float y, float z);
+		void rotateUpDown(float angle);
 
 		void goForwardX(float distance);
 		void goForwardY(float distance);
