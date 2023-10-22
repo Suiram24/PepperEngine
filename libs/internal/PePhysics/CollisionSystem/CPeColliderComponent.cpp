@@ -27,7 +27,6 @@ namespace engine {
 
 		double CPeColliderComponent::GetRadius() const
 		{
-			m_owner;
 			return m_radius;
 		}
 
