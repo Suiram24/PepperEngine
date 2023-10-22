@@ -3,9 +3,9 @@
 namespace engine {
 	namespace physics {
 
-		CPeParticle& CPeForceSystem::CreateParticleComponent(pecore::CPeEntity* p_owner, double p_massInverse /*= 1*/, double p_damping /*= 0.999*/)
+		CPeParticle& CPeForceSystem::CreateParticleComponent(pecore::CPeEntity* p_owner, double p_massInverse /*= 1*/, double p_damping /*= 0.999*/, pemaths::CPeVector3 p_gravity/* = pemaths::CPeVector3(0, -10, 0)*/)
 		{
-			return m_particlePool->Create(p_owner, p_massInverse, p_damping);
+			return m_particlePool->Create(p_owner, p_massInverse, p_damping, p_gravity);
 		}
 
 		CPeForceDrag& CPeForceSystem::CreateForceDrag(float p_k1, float p_k2)

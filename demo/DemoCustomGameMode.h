@@ -24,6 +24,8 @@ namespace pedemo {
 		DemoCustomGameMode()
 			: engine::CPeGameMode()
 			, entity1(nullptr)
+			, entity2(nullptr)
+			, entity3(nullptr)
 		{
 		}
 
@@ -50,11 +52,16 @@ namespace pedemo {
 	protected:
 	private:
 		pephy::CPeForceSystem* forceSystem;
+		pephy::CPeCollisionSystem* colliderSystem;
 		//std::optional<vk::SphereMesh> sphere1;
 		//std::optional<vk::SphereMesh> sphere2;
 		int i;
 
 		pecore::CPeEntity* entity1;
+		pecore::CPeEntity* entity2;
+		pecore::CPeEntity* entity3;
+
+
 
 	};
 	

@@ -69,7 +69,7 @@ namespace engine {
 			{
 			}
 
-			void Initialise(pecore::CPeEntity* p_owner, double p_massInverse, double p_damping);
+			void Initialise(pecore::CPeEntity* p_owner, double p_massInverse, double p_damping, pemaths::CPeVector3 p_gravity);
 
 			void Initialise(pecore::CPeEntity& p_owner, double p_massInverse);//Deprecated
 

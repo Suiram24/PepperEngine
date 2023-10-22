@@ -3,7 +3,7 @@
 namespace engine {
 	namespace physics {
 
-		void CPeParticle::Initialise(pecore::CPeEntity* p_owner, double p_massInverse, double p_damping)
+		void CPeParticle::Initialise(pecore::CPeEntity* p_owner, double p_massInverse, double p_damping, pemaths::CPeVector3 p_gravity)
 		{
 			m_isActive = true;
 			m_owner = p_owner;
@@ -11,6 +11,7 @@ namespace engine {
 			m_acceleration = pemaths::CPeVector3(0., 0., 0.);
 			m_massInverse = p_massInverse;
 			m_damping = p_damping;
+			m_gravity = p_gravity;
 			m_sumForces = pemaths::CPeVector3(0., 0., 0.);
 
 			p_owner->AddComponent(this);
