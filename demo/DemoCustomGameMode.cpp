@@ -21,34 +21,52 @@ namespace pedemo {
 		forceSystem = &pephy::CPeForceSystem::GetInstance();
 		colliderSystem = &pephy::CPeCollisionSystem::GetInstance();
 
+		for (int i = 0; i < 10; i++)
+		{
+			for (int j = 0; j < 10; j++)
+			{
+				floorEntities[i][j] = &engine::CPeGameManager::getInstance().CreateEntity();
+				floorEntities[i][j]->m_transform.SetPosition(pemaths::CPeVector3(i-5, 0, j-5));
+
+				forceSystem->CreateParticleComponent(floorEntities[i][j], 0, 0, pemaths::CPeVector3());
+				colliderSystem->CreateColliderComponent(floorEntities[i][j], 0.5);
+			}
+		}
+
 		entity1 = &engine::CPeGameManager::getInstance().CreateEntity();
 		entity2 = &engine::CPeGameManager::getInstance().CreateEntity();
 		entity3 = &engine::CPeGameManager::getInstance().CreateEntity();
 
-		entity1->m_transform.SetPosition(pemaths::CPeVector3(-5, 10, 0));
-		entity2->m_transform.SetPosition(pemaths::CPeVector3(-5, 1, 0));
-		entity3->m_transform.SetPosition(pemaths::CPeVector3(-5, 0, 0));
+		entity1->m_transform.SetPosition(pemaths::CPeVector3(-5, 10, -0.1));
+		entity2->m_transform.SetPosition(pemaths::CPeVector3(-5, 3, 0.2));
+		entity3->m_transform.SetPosition(pemaths::CPeVector3(-5, 3, -1));
 
-		pephy::CPeParticle& particleComp1 = forceSystem->CreateParticleComponent(entity1);
-		pephy::CPeParticle& particleComp2 = forceSystem->CreateParticleComponent(entity2);
-		pephy::CPeParticle& particleComp3 = forceSystem->CreateParticleComponent(entity3, 0, 0, pemaths::CPeVector3());
+		pephy::CPeParticle* particleComp1 = forceSystem->CreateParticleComponent(entity1);
+		pephy::CPeParticle* particleComp2 = forceSystem->CreateParticleComponent(entity2);
+		pephy::CPeParticle* particleComp3 = forceSystem->CreateParticleComponent(entity3/*, 0, 0, pemaths::CPeVector3()*/);
 
-
+		pephy::CPeColliderComponent* colliderComp1 = colliderSystem->CreateColliderComponent(entity1, 0.5);
+		pephy::CPeColliderComponent* colliderComp2 = colliderSystem->CreateColliderComponent(entity2, 0.5);
+		pephy::CPeColliderComponent* colliderComp3 = colliderSystem->CreateColliderComponent(entity3, 0.5);
 		//pephy::CPeForceAnchoredSpring& anchoredSpring1 = forceSystem->CreateForceAnchoredSpring(pemaths::CPeVector3(0, 0, 1), 1000, 0.5);
 		//forceSystem->AddForceToParticle(&anchoredSpring1, &particleComp1);
+
+
 
 	}
 
 	void DemoCustomGameMode::GameUpdate()
 	{
-		static pephy::CPeColliderComponent colliderComp1(*entity1, 0.5);
-		static pephy::CPeColliderComponent colliderComp2(*entity2, 0.5);
-		static pephy::CPeColliderComponent colliderComp3(*entity3, 0.5);
+		//static pephy::CPeColliderComponent colliderComp1(*entity1, 0.5);
+		//static pephy::CPeColliderComponent colliderComp2(*entity2, 0.5);
+		//static pephy::CPeColliderComponent colliderComp3(*entity3, 0.5);
 
 		DrawImGuiInterface();
 		static vk::SphereMesh sphere1(*m_renderer);
 		static vk::SphereMesh sphere2(*m_renderer);
 		static vk::SphereMesh sphere3(*m_renderer);
+
+
 
 		//if (entity1->m_transform.GetPosition().GetY() < 0)
 		//{

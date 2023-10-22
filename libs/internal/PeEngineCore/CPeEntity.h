@@ -9,7 +9,7 @@ namespace engine {
 
 		namespace consts
 		{
-			const int maxEntityNumber = 100;
+			const int maxEntityNumber = 200;
 			const int maxComponentsPerEntity = 5;
 		}
 

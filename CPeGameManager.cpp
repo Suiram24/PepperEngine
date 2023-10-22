@@ -117,6 +117,7 @@ namespace engine {
 	{
 		m_entityPool = new pecore::CPeObjectPool<pecore::CPeEntity, pecore::consts::maxEntityNumber>();
 		m_forceSystem->AllocateObjectsPool();
+		m_collisionSystem->AllocateObjectsPool();
 	}
 
 	void CPeGameManager::FreeObjectsPool()

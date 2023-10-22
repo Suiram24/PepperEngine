@@ -43,6 +43,7 @@ namespace engine
 			, m_UncomputedTimeLeft(0)
 		{
 			m_forceSystem = &engine::physics::CPeForceSystem::GetInstance();
+			m_collisionSystem = &engine::physics::CPeCollisionSystem::GetInstance();
 			AllocateObjectsPool();		
 		}
 
@@ -69,6 +70,7 @@ namespace engine
 		GLFWwindow* m_window;
 		vk::CPeVulkanRenderer m_renderer;
 		engine::physics::CPeForceSystem* m_forceSystem;
+		engine::physics::CPeCollisionSystem* m_collisionSystem;
 
 	
 		//

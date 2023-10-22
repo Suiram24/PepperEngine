@@ -61,6 +61,8 @@ namespace pedemo {
 		pecore::CPeEntity* entity2;
 		pecore::CPeEntity* entity3;
 
+		pecore::CPeEntity* floorEntities[10][10];
+
 
 
 	};
