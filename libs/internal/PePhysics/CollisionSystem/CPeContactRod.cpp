@@ -6,6 +6,7 @@ namespace engine {
 		double CPeContactRod::GetSeparatingSpeed() const
 		{
 			double dist = CPeParticleContact::DistanceBetweenParticle(*m_particleA, *m_particleB);
+
 			if ((dist - m_length) > 0.01)
 			{
 				return -m_separatingSpeed;
@@ -17,14 +18,34 @@ namespace engine {
 			return 0.;
 		}
 		
+		double CPeContactRod::ComputePenetration() const
+		{
+			double dist = CPeParticleContact::DistanceBetweenParticle(*m_particleA, *m_particleB);
+
+			if ((dist - m_length) > 0.01)
+			{
+				return m_length- dist;
+			}
+			if ((dist - m_length) < -0.01)
+			{
+				return m_length - dist;
+			}
+			return 0.;
+		}
+
 		pemaths::CPeVector3 CPeContactRod::ComputeContactNormal() const
 		{
 			double dist = CPeParticleContact::DistanceBetweenParticle(*m_particleA, *m_particleB);
-			if (dist > m_length)
+			
+			if ((dist - m_length) > 0.01)
 			{
 				return this->CPeParticleContact::ComputeContactNormal() * (- 1.);
 			}
-			return this->CPeParticleContact::ComputeContactNormal();
+			if ((dist - m_length) < -0.01)
+			{
+				return this->CPeParticleContact::ComputeContactNormal();
+			}
+			return pemaths::CPeVector3(0, 0, 0);
 		}
 	}
 }

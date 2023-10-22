@@ -4,7 +4,6 @@ namespace engine {
 	namespace physics {
 		double CPeColliderComponent::GetRadius() const
 		{
-			m_owner;
 			return m_radius;
 		}
 
