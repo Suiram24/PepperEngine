@@ -63,6 +63,10 @@ namespace vk {
 
         void RemoveModel(ModelObject& object);
 
+        void SetNearPlan(float distance);
+
+        void SetFarPlan(float distance);
+
     private:
         glm::mat4* viewMatrix;
         GLFWwindow* window;
@@ -124,6 +128,9 @@ namespace vk {
         uint32_t imageIndexFrame = 0;
 
         bool framebufferResized = false;
+
+        float nearPlan = 0.1f;
+        float farPlan = 10.0f;
 
         std::vector<ModelObject*> graphicalObjects;
 
