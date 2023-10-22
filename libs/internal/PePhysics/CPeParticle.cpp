@@ -7,11 +7,20 @@ namespace engine {
 			return m_massInverse;
 		}
 
+		double CPeParticle::GetMass() const
+		{
+			return 1 / m_massInverse;
+		}
+
 		pemaths::CPeTransform& CPeParticle::GetTransform()
 		{
 			return m_owner.m_transform;
 		}
 
+		const pemaths::CPeVector3& CPeParticle::GetGravity() const
+		{
+			return m_gravity;
+		}
 
 		const pemaths::CPeVector3& CPeParticle::GetVelocity() const
 		{
@@ -39,6 +48,11 @@ namespace engine {
 				throw "A mass cannot have zero or negative value.";
 			}
 			SetMassInverse(1 / p_mass);
+		}
+
+		void CPeParticle::SetGravity(const pemaths::CPeVector3& p_gravity)
+		{
+			m_gravity = p_gravity;
 		}
 
 		void CPeParticle::SetVelocity(const pemaths::CPeVector3& p_velocity)
@@ -71,7 +85,7 @@ namespace engine {
 
 		void CPeParticle::UpdateAcceleration()
 		{
-			m_acceleration = m_sumForces * m_massInverse;
+			m_acceleration = m_sumForces * m_massInverse + m_gravity;
 		}
 
 		void CPeParticle::UpdateVelocity(double p_timeStep)

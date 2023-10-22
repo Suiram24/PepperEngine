@@ -38,11 +38,12 @@ namespace engine {
 			{
 			}
 
-			//template<class T>
-			//T* GetComponent<T>() const;
+			template<class T>
+			T* GetComponent() const;
 
 
 			void AddComponent(CPeComponent* p_component);
+
 
 		};
 	}

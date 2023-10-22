@@ -28,6 +28,8 @@ namespace engine {
 
 			double m_damping;// no unit
 
+			pemaths::CPeVector3 m_gravity;
+
 			pemaths::CPeVector3 m_sumForces;
 
 			//Methods
@@ -38,6 +40,7 @@ namespace engine {
 				, m_acceleration(pemaths::CPeVector3(0., 0., 0.))
 				, m_massInverse(p_massInverse)
 				, m_damping(p_damping)
+				, m_gravity(pemaths::CPeVector3(0., -10., 0.))
 				, m_sumForces(pemaths::CPeVector3(0., 0., 0.))
 			{
 			}
@@ -48,6 +51,7 @@ namespace engine {
 				, m_acceleration(pemaths::CPeVector3(0., 0., 0.))
 				, m_massInverse(p_massInverse)
 				, m_damping(0.999)
+				, m_gravity(pemaths::CPeVector3(0., -10., 0.))
 				, m_sumForces(pemaths::CPeVector3(0.,0.,0.))
 			{
 			}
@@ -57,6 +61,10 @@ namespace engine {
 			 * @return m_massInverse (m/s).
 			*/
 			double GetMassInverse() const;
+
+			double GetMass() const;
+
+			const pemaths::CPeVector3& GetGravity() const;
 
 			/**
 			 * @brief Accessor for m_owner's transform.
@@ -78,31 +86,37 @@ namespace engine {
 
 			/**
 			 * @brief Setter for m_massInverse.
-			 * @param A new mass inverse value. Should be positive or zero (for infinite mass) in kg-1.
+			 * @param p_massInverse A new mass inverse value. Should be positive or zero (for infinite mass) in kg-1.
 			*/
 			void SetMassInverse(double p_massInverse);
 
 			/**
 			 * @brief Setter for m_massInverse compute from the mass value.
-			 * @param A new mass value. Should be strictly positive in kg.
+			 * @param p_mass A new mass value. Should be strictly positive in kg.
 			*/
 			void SetMass(double p_mass);
 
 			/**
+			 * @brief Setter for m_gravity.
+			 * @param p_gravity A new gravity value for the particle.
+			*/
+			void SetGravity(const pemaths::CPeVector3& p_gravity);
+
+			/**
 			 * @brief Setter for m_velocity.
-			 * @param A new velocity value for the particle in m/s.
+			 * @param p_velocity A new velocity value for the particle in m/s.
 			*/
 			void SetVelocity(const pemaths::CPeVector3& p_velocity);
 
 			/**
 			 * @brief Setter for m_acceleration.
-			 * @param A new acceleration value for the particle in m/s².
+			 * @param p_acceleration A new acceleration value for the particle in m/s².
 			*/
 			void SetAcceleration(const pemaths::CPeVector3& p_acceleration);
 
 			/**
 			 * @brief Setter for m_position.
-			 * @param A new position value for the particle.
+			 * @param p_position A new position value for the particle.
 			*/
 			void SetPosition(const pemaths::CPeVector3& p_position) const;
 
