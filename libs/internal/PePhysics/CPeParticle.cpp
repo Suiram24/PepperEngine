@@ -2,16 +2,53 @@
 
 namespace engine {
 	namespace physics {
+
+		void CPeParticle::Initialise(pecore::CPeEntity* p_owner, double p_massInverse, double p_damping, pemaths::CPeVector3 p_gravity)
+		{
+			m_isActive = true;
+			m_owner = p_owner;
+			m_velocity = pemaths::CPeVector3(0., 0., 0.);
+			m_acceleration = pemaths::CPeVector3(0., 0., 0.);
+			m_massInverse = p_massInverse;
+			m_damping = p_damping;
+			m_gravity = p_gravity;
+			m_sumForces = pemaths::CPeVector3(0., 0., 0.);
+
+			p_owner->AddComponent(this);
+		}
+		void CPeParticle::Initialise(pecore::CPeEntity& p_owner, double p_massInverse)
+		{
+			m_isActive = true;
+			m_owner = &p_owner;
+			m_velocity = pemaths::CPeVector3(0., 0., 0.);
+			m_acceleration = pemaths::CPeVector3(0., 0., 0.);
+			m_massInverse = p_massInverse;
+			m_damping = 0.999;
+			m_sumForces = pemaths::CPeVector3(0., 0., 0.);
+
+			p_owner.AddComponent(this);
+		}
+
+
 		double CPeParticle::GetMassInverse() const
 		{
 			return m_massInverse;
 		}
 
-		pemaths::CPeTransform& CPeParticle::GetTransform()
+		double CPeParticle::GetMass() const
 		{
-			return m_owner.m_transform;
+			return 1 / m_massInverse;
 		}
 
+		pemaths::CPeTransform& CPeParticle::GetTransform()
+		{
+			return m_owner->m_transform;
+		}
+
+		const pemaths::CPeVector3& CPeParticle::GetGravity() const
+		{
+			return m_gravity;
+		}
 
 		const pemaths::CPeVector3& CPeParticle::GetVelocity() const
 		{
@@ -41,6 +78,11 @@ namespace engine {
 			SetMassInverse(1 / p_mass);
 		}
 
+		void CPeParticle::SetGravity(const pemaths::CPeVector3& p_gravity)
+		{
+			m_gravity = p_gravity;
+		}
+
 		void CPeParticle::SetVelocity(const pemaths::CPeVector3& p_velocity)
 		{
 			m_velocity = p_velocity;
@@ -53,7 +95,7 @@ namespace engine {
 
 		void CPeParticle::SetPosition(const pemaths::CPeVector3& p_position) const
 		{
-			m_owner.m_transform.SetPosition(p_position);
+			m_owner->m_transform.SetPosition(p_position);
 		}
 
 		void CPeParticle::Update(double p_timeStep)
@@ -61,17 +103,20 @@ namespace engine {
 			UpdatePosition(p_timeStep);
 			UpdateAcceleration();
 			UpdateVelocity(p_timeStep);
+			m_sumForces = pemaths::CPeVector3(0, 0, 0);
+			
 		}
 
 		void CPeParticle::UpdatePrecisely(double p_timeStep) {
-			UpdatePositionPrecisely(p_timeStep);
 			UpdateAcceleration();
 			UpdateVelocity(p_timeStep);
+			UpdatePositionPrecisely(p_timeStep);
+			m_sumForces = pemaths::CPeVector3(0, 0, 0);
 		}
 
 		void CPeParticle::UpdateAcceleration()
 		{
-			m_acceleration = m_sumForces * m_massInverse;
+			m_acceleration = m_sumForces * m_massInverse + m_gravity;
 		}
 
 		void CPeParticle::UpdateVelocity(double p_timeStep)
@@ -81,14 +126,14 @@ namespace engine {
 
 		void CPeParticle::UpdatePosition(double p_timeStep)
 		{
-			m_owner.m_transform.SetPosition(m_owner.m_transform.GetPosition() + (m_velocity * p_timeStep));
+			m_owner->m_transform.SetPosition(m_owner->m_transform.GetPosition() + (m_velocity * p_timeStep));
 			
 		}
 
 		void CPeParticle::UpdatePositionPrecisely(double p_timeStep)
 		{
-			m_owner.m_transform.SetPosition(
-				m_owner.m_transform.GetPosition() +
+			m_owner->m_transform.SetPosition(
+				m_owner->m_transform.GetPosition() +
 				(m_velocity * p_timeStep) +
 				m_acceleration * (p_timeStep*p_timeStep/2)
 			);
