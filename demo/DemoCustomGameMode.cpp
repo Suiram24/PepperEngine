@@ -33,7 +33,16 @@ namespace pedemo {
 		pephy::CPeParticle& particleComp2 = forceSystem->CreateParticleComponent(entity2);
 		pephy::CPeParticle& particleComp3 = forceSystem->CreateParticleComponent(entity3, 0, 0, pemaths::CPeVector3());
 
-
+		//Setup ground
+		std::vector<vk::PlaneMesh*> planes;
+		float centerX = -5.0f, centerY = -0.5f, centerZ = 0.0f;
+		float gridSize = 7;
+		for (int i = 0; i < gridSize; ++i) {
+			for (int j = 0; j < gridSize; ++j) {
+				planes.push_back(new vk::PlaneMesh(*m_renderer));
+				planes.back()->SetPos((j - gridSize / 2) * 1 + centerX, centerY, (i - gridSize / 2) * 1 + centerZ);
+			}
+		}
 		//pephy::CPeForceAnchoredSpring& anchoredSpring1 = forceSystem->CreateForceAnchoredSpring(pemaths::CPeVector3(0, 0, 1), 1000, 0.5);
 		//forceSystem->AddForceToParticle(&anchoredSpring1, &particleComp1);
 
@@ -49,6 +58,7 @@ namespace pedemo {
 		static vk::SphereMesh sphere1(*m_renderer);
 		static vk::SphereMesh sphere2(*m_renderer);
 		static vk::SphereMesh sphere3(*m_renderer);
+		
 
 		//if (entity1->m_transform.GetPosition().GetY() < 0)
 		//{
