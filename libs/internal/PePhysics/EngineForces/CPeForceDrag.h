@@ -1,3 +1,6 @@
+#ifndef PEPHYSICS_CPEFORCEDRAG_H
+#define PEPHYSICS_CPEFORCEDRAG_H
+
 #include "..\CPeForce.h"
 
 namespace pemaths = engine::maths;
@@ -10,14 +13,19 @@ namespace engine {
 			float m_k2;
 
 		public:
-			CPeForceDrag(float p_k1, float p_k2)
-				: m_k1(p_k1)
-				, m_k2(p_k2)
+			CPeForceDrag()
+				: CPeForce()
+				, m_k1(0)
+				, m_k2(0)
 			{
 
 			}
+
+			void Initialise(float p_k1, float p_k2);
 
 			void Compute(CPeParticle& p_particule, double p_timeStep) const;
 		};
 	}
 }
+
+#endif /* PEPHYSICS_CPEFORCEDRAG_H */

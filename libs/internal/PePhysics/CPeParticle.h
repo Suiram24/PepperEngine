@@ -34,7 +34,10 @@ namespace engine {
 
 			//Methods
 		public:
-			CPeParticle(pecore::CPeEntity& p_owner, double p_massInverse, double p_damping)
+			
+			//TODO: Remove deprecated functions and constructors
+
+			CPeParticle(pecore::CPeEntity& p_owner, double p_massInverse, double p_damping)//Deprecated
 				: CPeComponent(p_owner)
 				, m_velocity(pemaths::CPeVector3(0., 0., 0.))
 				, m_acceleration(pemaths::CPeVector3(0., 0., 0.))
@@ -44,8 +47,8 @@ namespace engine {
 				, m_sumForces(pemaths::CPeVector3(0., 0., 0.))
 			{
 			}
-
-			CPeParticle(pecore::CPeEntity& p_owner, double p_massInverse)
+			
+			CPeParticle(pecore::CPeEntity& p_owner, double p_massInverse)//Deprecated
 				: CPeComponent(p_owner)
 				, m_velocity(pemaths::CPeVector3(0., 0., 0.))
 				, m_acceleration(pemaths::CPeVector3(0., 0., 0.))
@@ -55,6 +58,20 @@ namespace engine {
 				, m_sumForces(pemaths::CPeVector3(0.,0.,0.))
 			{
 			}
+
+			CPeParticle()
+				: CPeComponent()
+				, m_velocity(pemaths::CPeVector3(0., 0., 0.))
+				, m_acceleration(pemaths::CPeVector3(0., 0., 0.))
+				, m_massInverse(0)
+				, m_damping(0)
+				, m_sumForces(pemaths::CPeVector3(0., 0., 0.))
+			{
+			}
+
+			void Initialise(pecore::CPeEntity* p_owner, double p_massInverse, double p_damping);
+
+			void Initialise(pecore::CPeEntity& p_owner, double p_massInverse);//Deprecated
 
 			/**
 			 * @brief Accessor for m_massInverse.

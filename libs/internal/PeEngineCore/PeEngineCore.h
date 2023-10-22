@@ -3,5 +3,6 @@
 
 #include "CPeEntity.h"
 #include "CPeComponent.h"
+#include "CPeObjectPool.h"
 
 #endif /* PEENGINECORE_PEENGINECORE_H */
