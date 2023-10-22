@@ -18,7 +18,7 @@ namespace engine {
 			return &m_anchoredSpringPool->Create(p_anchor, p_k, p_restLength);
 		}
 
-		CPeForceSpring* CPeForceSystem::CreateForceSpring(CPeParticle& p_other, float p_k, float p_restLength)
+		CPeForceSpring* CPeForceSystem::CreateForceSpring(CPeParticle* p_other, float p_k, float p_restLength)
 		{
 			return &m_springPool->Create(p_other, p_k, p_restLength);
 		}

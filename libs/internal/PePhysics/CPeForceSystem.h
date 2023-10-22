@@ -41,7 +41,7 @@ namespace engine {
 			
 			CPeForceDrag* CreateForceDrag(float p_k1, float p_k2);
 			CPeForceAnchoredSpring* CreateForceAnchoredSpring(const pemaths::CPeVector3& p_anchor, float p_k, float p_restLength);
-			CPeForceSpring* CreateForceSpring(CPeParticle& p_other, float p_k, float p_restLength);
+			CPeForceSpring* CreateForceSpring(CPeParticle* p_other, float p_k, float p_restLength);
 			CPeForceBuoyancy* CreateForceBuoyancy(float p_immersionDepth, float p_volume, float p_liquidLevel, float p_liquidDensity = 1);
 
 			bool AddForceToParticle(CPeForce* p_force, CPeParticle* p_particle, double p_lifespan = -1);

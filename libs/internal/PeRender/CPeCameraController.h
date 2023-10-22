@@ -13,7 +13,7 @@ namespace controls {
 		float displacementSensivity = 0.01f;
 		float orientationSensivity = 0.005f;
 		double mousePositionX, mousePositionY;
-		bool moveMod = false;
+		bool moveMod = true;
 		bool mKeyPressed = false;
 		bool isQwerty = true;
 

@@ -21,6 +21,7 @@ namespace pedemo {
 		forceSystem = &pephy::CPeForceSystem::GetInstance();
 		colliderSystem = &pephy::CPeCollisionSystem::GetInstance();
 
+		std::vector<vk::SphereMesh*> spheres;
 		for (int i = 0; i < 10; i++)
 		{
 			for (int j = 0; j < 10; j++)
@@ -30,6 +31,10 @@ namespace pedemo {
 
 				forceSystem->CreateParticleComponent(floorEntities[i][j], 0, 0, pemaths::CPeVector3());
 				colliderSystem->CreateColliderComponent(floorEntities[i][j], 0.5);
+
+				spheres.push_back(new vk::SphereMesh(*m_renderer));
+				spheres.back()->SetPos(i - 5, 0, j - 5);
+				spheres.back()->SetScale(0.5);
 			}
 		}
 
@@ -37,9 +42,9 @@ namespace pedemo {
 		entity2 = &engine::CPeGameManager::getInstance().CreateEntity();
 		entity3 = &engine::CPeGameManager::getInstance().CreateEntity();
 
-		entity1->m_transform.SetPosition(pemaths::CPeVector3(-5, 10, -0.1));
-		entity2->m_transform.SetPosition(pemaths::CPeVector3(-5, 3, 0.2));
-		entity3->m_transform.SetPosition(pemaths::CPeVector3(-5, 3, -1));
+		entity1->m_transform.SetPosition(pemaths::CPeVector3(0, 8, -0.1));
+		entity2->m_transform.SetPosition(pemaths::CPeVector3(0.1, 6, 0.2));
+		entity3->m_transform.SetPosition(pemaths::CPeVector3(-1, 6, -1));
 
 		pephy::CPeParticle* particleComp1 = forceSystem->CreateParticleComponent(entity1);
 		pephy::CPeParticle* particleComp2 = forceSystem->CreateParticleComponent(entity2);
@@ -48,8 +53,32 @@ namespace pedemo {
 		pephy::CPeColliderComponent* colliderComp1 = colliderSystem->CreateColliderComponent(entity1, 0.5);
 		pephy::CPeColliderComponent* colliderComp2 = colliderSystem->CreateColliderComponent(entity2, 0.5);
 		pephy::CPeColliderComponent* colliderComp3 = colliderSystem->CreateColliderComponent(entity3, 0.5);
+
+		//colliderSystem->CreateCableBetween(particleComp1, particleComp2, 0.999, 3);
+		//colliderSystem->CreateCableBetween(particleComp2, particleComp3, 0.999, 3);
+		//colliderSystem->CreateCableBetween(particleComp3, particleComp1, 0.999, 3);
+
+		pephy::CPeForceSpring* spring1 = forceSystem->CreateForceSpring(particleComp2, 100, 3);
+		pephy::CPeForceSpring* spring2 = forceSystem->CreateForceSpring(particleComp3, 100, 3);
+		pephy::CPeForceSpring* spring3 = forceSystem->CreateForceSpring(particleComp1, 100, 3);
+
+		forceSystem->AddForceToParticle(spring1, particleComp1, -1);
+		forceSystem->AddForceToParticle(spring2, particleComp2, -1);
+		forceSystem->AddForceToParticle(spring3, particleComp3, -1);
+
+		//Setup ground
+		//std::vector<vk::PlaneMesh*> planes;
+		//float centerX = -5.0f, centerY = -0.5f, centerZ = 0.0f;
+		//float gridSize = 7;
+		//for (int i = 0; i < gridSize; ++i) {
+		//	for (int j = 0; j < gridSize; ++j) {
+		//		planes.push_back(new vk::PlaneMesh(*m_renderer));
+		//		planes.back()->SetPos((j - gridSize / 2) * 1 + centerX, centerY, (i - gridSize / 2) * 1 + centerZ);
+		//	}
+		//}
 		//pephy::CPeForceAnchoredSpring& anchoredSpring1 = forceSystem->CreateForceAnchoredSpring(pemaths::CPeVector3(0, 0, 1), 1000, 0.5);
 		//forceSystem->AddForceToParticle(&anchoredSpring1, &particleComp1);
+
 
 
 
@@ -65,8 +94,7 @@ namespace pedemo {
 		static vk::SphereMesh sphere1(*m_renderer);
 		static vk::SphereMesh sphere2(*m_renderer);
 		static vk::SphereMesh sphere3(*m_renderer);
-
-
+		
 
 		//if (entity1->m_transform.GetPosition().GetY() < 0)
 		//{

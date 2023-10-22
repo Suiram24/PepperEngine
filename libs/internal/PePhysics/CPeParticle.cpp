@@ -108,22 +108,22 @@ namespace engine {
 		void CPeParticle::Update(double p_timeStep)
 		{
 			UpdatePosition(p_timeStep);
-			UpdateAcceleration();
+			UpdateAcceleration(p_timeStep);
 			UpdateVelocity(p_timeStep);
 			m_sumForces = pemaths::CPeVector3(0, 0, 0);
 			
 		}
 
 		void CPeParticle::UpdatePrecisely(double p_timeStep) {
-			UpdateAcceleration();
+			UpdateAcceleration(p_timeStep);
 			UpdateVelocity(p_timeStep);
 			UpdatePositionPrecisely(p_timeStep);
 			m_sumForces = pemaths::CPeVector3(0, 0, 0);
 		}
 
-		void CPeParticle::UpdateAcceleration()
+		void CPeParticle::UpdateAcceleration(double p_timeStep)
 		{
-			m_acceleration = m_sumForces * m_massInverse + m_gravity;
+			m_acceleration = (m_sumForces* (1/p_timeStep)) * m_massInverse + m_gravity;
 		}
 
 		void CPeParticle::UpdateVelocity(double p_timeStep)
