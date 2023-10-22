@@ -29,9 +29,9 @@ namespace pedemo {
 		entity2->m_transform.SetPosition(pemaths::CPeVector3(-5, 1, 0));
 		entity3->m_transform.SetPosition(pemaths::CPeVector3(-5, 0, 0));
 
-		/*pephy::CPeParticle& particleComp1 = forceSystem->CreateParticleComponent(entity1);
+		pephy::CPeParticle& particleComp1 = forceSystem->CreateParticleComponent(entity1);
 		pephy::CPeParticle& particleComp2 = forceSystem->CreateParticleComponent(entity2);
-		pephy::CPeParticle& particleComp3 = forceSystem->CreateParticleComponent(entity3, 0, 0, pemaths::CPeVector3());*/
+		pephy::CPeParticle& particleComp3 = forceSystem->CreateParticleComponent(entity3, 0, 0, pemaths::CPeVector3());
 
 
 		//pephy::CPeForceAnchoredSpring& anchoredSpring1 = forceSystem->CreateForceAnchoredSpring(pemaths::CPeVector3(0, 0, 1), 1000, 0.5);
@@ -52,11 +52,11 @@ namespace pedemo {
 
 		//if (entity1->m_transform.GetPosition().GetY() < 0)
 		//{
-		//	entity1->GetComponent<pephy::CPeParticle>()->SetVelocity(pemaths::CPeVector3(0, 5, 0));
+		//	entity1->GetComponent<pephy::CPeParticle>()->SetVelocity(pemaths::CPeVector3(0,- entity1->GetComponent<pephy::CPeParticle>()->GetVelocity().GetY(), 0));
 		//}
 		//if (entity2->m_transform.GetPosition().GetY() < 0)
 		//{
-		//	entity2->GetComponent<pephy::CPeParticle>()->SetVelocity(pemaths::CPeVector3(0, 5, 0));
+		//	entity2->GetComponent<pephy::CPeParticle>()->SetVelocity(pemaths::CPeVector3(0, -entity1->GetComponent<pephy::CPeParticle>()->GetVelocity().GetY(), 0));
 		//}
 
 
@@ -69,7 +69,7 @@ namespace pedemo {
 		sphere3.SetPos(entity3->m_transform.GetPosition().GetX(), entity3->m_transform.GetPosition().GetY(), entity3->m_transform.GetPosition().GetZ());
 		sphere3.SetScale(0.5);
 
-		
+		printf("Y positions: %.3f, %.3f, %.3f", entity1->m_transform.GetPosition().GetY(), entity2->m_transform.GetPosition().GetY(), entity3->m_transform.GetPosition().GetY());
 		//sphere2.SetPos(std::sin(i*0.1), 0, 0);
 		i++;
 

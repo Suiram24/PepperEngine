@@ -37,7 +37,14 @@ namespace engine {
 
 		double CPeParticle::GetMass() const
 		{
-			return 1 / m_massInverse;
+			if (m_massInverse > 0)
+			{
+				return 1 / m_massInverse;
+			}
+			else
+			{
+				return -1;
+			}
 		}
 
 		pemaths::CPeTransform& CPeParticle::GetTransform()

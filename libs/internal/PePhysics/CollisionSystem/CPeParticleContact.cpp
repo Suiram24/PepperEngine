@@ -79,8 +79,20 @@ namespace engine {
 			double mA = m_particleA->GetMass();
 			double mB = m_particleB->GetMass();
 
-			m_particleA->SetPosition(m_particleA->GetTransform().GetPosition() + (m_contactNormal * (d * mB / (mA + mB))));
-			m_particleB->SetPosition(m_particleB->GetTransform().GetPosition() - (m_contactNormal * (d * mA / (mA + mB))));
+			if (mA != -1 && mB != -1)
+			{
+				m_particleA->SetPosition(m_particleA->GetTransform().GetPosition() + (m_contactNormal * (d * mB / (mA + mB))));
+				m_particleB->SetPosition(m_particleB->GetTransform().GetPosition() - (m_contactNormal * (d * mA / (mA + mB))));
+			}
+			else if (mA == -1)
+			{
+				m_particleB->SetPosition(m_particleB->GetTransform().GetPosition() - (m_contactNormal * d));
+			}
+			else if (mB == -1)
+			{
+				m_particleA->SetPosition(m_particleA->GetTransform().GetPosition() + (m_contactNormal * d));
+			}
+
 		}
 
 		bool CPeParticleContact::IsContactAtRest(double p_timeStep) const

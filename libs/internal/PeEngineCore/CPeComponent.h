@@ -40,8 +40,8 @@ namespace engine {
 				m_isActive = true;
 			}
 
-			void SetActive(bool p_active);
-			bool IsActive() const;
+			virtual void SetActive(bool p_active);
+			virtual bool IsActive() const;
 
 			CPeEntity& GetOwner() const;
 
