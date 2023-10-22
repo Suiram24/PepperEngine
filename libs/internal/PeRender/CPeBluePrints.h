@@ -26,6 +26,23 @@ namespace vk {
         virtual void AddModel(ModelObject& object) = 0;
         virtual void RemoveModel(ModelObject& object) = 0;
     };
+
+    class GenericViewManager {
+    public:
+        virtual void rotateAroundX(float angle) = 0;
+        virtual void rotateAroundY(float angle) = 0;
+        virtual void rotateAroundZ(float angle) = 0;
+
+        virtual void goForwardX(float distance) = 0;
+        virtual void goForwardY(float distance) = 0;
+        virtual void goForwardZ(float distance) = 0;
+
+        virtual void goForward(float fistance) = 0;
+        virtual void goRight(float fistance) = 0;
+        virtual void goUp(float fistance) = 0;
+
+        virtual void submitViewMatrix() = 0;
+    }; 
 }
 
 #endif

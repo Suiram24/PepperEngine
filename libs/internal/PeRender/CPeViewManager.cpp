@@ -10,7 +10,7 @@
 
 vk::ViewManager::ViewManager(vk::GenericRenderer& renderer) :
 	up(glm::vec3(0.0f, 1.0f, 0.0f)),
-	eye(glm::vec3(2.0f, 2.0f, 2.0f)),
+	eye(glm::vec3(2.0f, 0.0f, 0.0f)),
 	center(glm::vec3(0.0f, 0.0f, 0.0f)),
 	viewMatrix(glm::lookAt(eye, center, up)),
 	renderer(renderer)
@@ -43,18 +43,60 @@ void vk::ViewManager::rotateAroundZ(float angle)
 	changeCameraOrientation(newCenter.x, newCenter.y, newCenter.z);
 }
 
+void vk::ViewManager::goForward(float distance) {
+	glm::vec3 direction = center - eye;
+	direction.y = 0;
+	direction = glm::normalize(direction)*distance;
+	changeCameraPosition(eye.x + direction.x, eye.y, eye.z + direction.z);
+}
+
+void vk::ViewManager::goRight(float distance) {
+	glm::vec3 direction = center - eye;
+	direction.y = 0;
+	direction = glm::normalize(direction) * distance;
+	direction = glm::rotateY(direction, -glm::pi<float>() / 2);
+	changeCameraPosition(eye.x + direction.x, eye.y, eye.z + direction.z);
+}
+
+void vk::ViewManager::goUp(float distance) {
+	changeCameraPosition(eye.x, eye.y + distance, eye.z);
+}
+
+void vk::ViewManager::goForwardX(float distance)
+{
+	changeCameraPosition(eye.x + distance, eye.y, eye.z);
+}
+
+void vk::ViewManager::goForwardY(float distance)
+{
+	changeCameraPosition(eye.x, eye.y + distance, eye.z);
+}
+
+void vk::ViewManager::goForwardZ(float distance)
+{
+	changeCameraPosition(eye.x, eye.y, eye.z + distance);
+}
+
+void vk::ViewManager::submitViewMatrix()
+{
+	renderer.setViewMatrix(viewMatrix);
+}
+
+
+
 void vk::ViewManager::changeCameraOrientation(float centerX, float centerY, float centerZ)
 {
 	center = glm::vec3(centerX, centerY, centerZ);
 	//std::cout << "x: " << centerX << "; y: " << centerY << "; z: " << centerZ << std::endl;
 	viewMatrix = glm::lookAt(eye,center,up);
-	renderer.setViewMatrix(viewMatrix);
 }
 
 void vk::ViewManager::changeCameraPosition(float eyeX, float eyeY, float eyeZ)
 {
+	glm::vec3 distance = center - eye;
 	eye = glm::vec3(eyeX, eyeY, eyeZ);
-	center += eye;
+	//std::cout << "eye x : " << eye.x << ";eye y : " << eye.y << ";eye z : " << eye.z << std::endl;
+	//std::cout << "center x : " << center.x << ";center y : " << center.y << ";center z : " << center.z << std::endl;
+	center = eye + distance;
 	viewMatrix = glm::lookAt(eye,center,up);
-	renderer.setViewMatrix(viewMatrix);
 }

@@ -14,6 +14,7 @@
 #include "libs/internal/PeMaths/PeMaths.h"
 #include "libs/internal/PePhysics/PePhysics.h"
 #include "libs/internal/PeRender/CPeViewManager.h"
+#include "libs/internal/PeRender/CPeCameraController.h"
 
 #include <cstdio>        // printf, fprintf
 #include <stdlib.h>
@@ -39,6 +40,13 @@ int main(int, char**)
 
     vk::CPeVulkanRenderer renderer;
     vk::ViewManager view(renderer);
+
+    // Setup controls
+    controls::CameraController& hexmap = controls::CameraController::getInstance();
+    controls::CameraController::setViewManager(view);
+    glfwSetCursorPosCallback(window, controls::CameraController::cursorPositionCallback);
+    glfwSetKeyCallback(window, controls::CameraController::keyCallback);
+
     engine::render::CPeImGuiRenderer& imguiRenderer = engine::render::CPeImGuiRenderer::getInstance();
     imguiRenderer.SetupInterface();
     renderer.init(window);
@@ -50,7 +58,7 @@ int main(int, char**)
 
     float i = 0.f;
     model2.SetScale(0.5f);
-    model2.SetPos(0, -1, -1);
+    //model2.SetPos(0, -1, -1);
 
     // Main loop
     while (!glfwWindowShouldClose(window))
@@ -59,10 +67,11 @@ int main(int, char**)
         //model2.SetPos(std::sin(i), 0, 0);
         //model2.SetScale(std::abs(std::sin(i)) * 2);
         glfwPollEvents();
+        controls::CameraController::getKeyboardInputs(window);
         renderer.beginDrawFrame();
         imguiRenderer.RenderInterface();
         renderer.endDrawFrame();
-        view.rotateAroundY(0.05f);
+        //view.rotateAroundY(0.05f);
         
         i += 0.1f;
       /*
