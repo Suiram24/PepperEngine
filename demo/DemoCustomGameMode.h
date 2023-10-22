@@ -7,6 +7,9 @@
 #include "..\Libs\internal\PeEngineCore\PeEngineCore.h"
 #include "..\Libs\internal\PePhysics\PePhysics.h"
 
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+
 #include <optional>
 
 namespace pedemo {

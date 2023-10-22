@@ -15,7 +15,7 @@ namespace engine {
 			pemaths::CPeVector3 v = p_particule.GetVelocity();
 			double norm = v.GetNorm();
 
-			p_particule.AddForce(v.NormalizeVector() * -(m_k1 * norm + m_k2 * norm * norm));
+			p_particule.AddForce(v.NormalizeVector() * -(m_k1 * norm + m_k2 * norm * norm) * p_timeStep);
 		}
 	}
 }

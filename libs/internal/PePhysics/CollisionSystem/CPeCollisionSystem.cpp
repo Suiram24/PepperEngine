@@ -42,7 +42,7 @@ namespace engine {
 			m_oneTimeContacts.clear();
 		}
 		
-		void CPeCollisionSystem::UpdateCollision(double p_timeStep, std::vector<CPeParticle*> p_particles)
+		void CPeCollisionSystem::UpdateCollision(double p_timeStep, std::vector<CPeParticle*>* p_particles)
 		{
 			DetectCollions(p_particles);
 			ResolveCollisions(p_timeStep);
@@ -54,18 +54,18 @@ namespace engine {
 			m_permanentContacts.push_back(p_contact);
 		}
 
-		void CPeCollisionSystem::DetectCollions(std::vector<CPeParticle*> p_particles)
+		void CPeCollisionSystem::DetectCollions(std::vector<CPeParticle*>* p_particles)
 		{
-			int nbParticles = p_particles.size();
+			int nbParticles = p_particles->size();
 			
 			for (int i = 0; i < nbParticles; i++)
 			{
 				for (int j = i+1; j < nbParticles; j++)
 				{
-					double dist = CPeParticleContact::DistanceBetweenParticle(*p_particles[i], *p_particles[j]);
+					double dist = CPeParticleContact::DistanceBetweenParticle(*(*p_particles)[i], *(*p_particles)[j]);
 					if (dist < 0)
 					{
-						CPeParticleContact* newContact = new CPeParticleContact(p_particles[i], p_particles[j]);
+						CPeParticleContact* newContact = new CPeParticleContact((*p_particles)[i], (*p_particles)[j]);
 						m_oneTimeContacts.push_back(newContact);
 					}
 				}

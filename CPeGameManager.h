@@ -1,7 +1,7 @@
 #ifndef PEENGINE_CPEGAMEMANAGER_H
 #define PEENGINE_CPEGAMEMANAGER_H
 
-#include "libs/internal/PeRender/CPeVulkanRenderer.h"
+#include "libs/internal/PeRender/PeRender.h"
 //#include "libs/internal/PeMaths/PeMaths.h"
 #include "libs/internal/PePhysics/PePhysics.h"
 
@@ -56,6 +56,7 @@ namespace engine
 	private:
 
 		void PhysicUpdate(double p_deltaTime);
+		void CollisionUpdate(double m_timeStep);
 
 		void AllocateObjectsPool();
 		void FreeObjectsPool();

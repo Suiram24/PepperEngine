@@ -1,5 +1,8 @@
 #include "CPeGameManager.h"
 
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+
 namespace engine {
 
 	void CPeGameManager::SetGameMode(CPeGameMode* p_gameMode)
@@ -23,9 +26,17 @@ namespace engine {
 
 		m_window = glfwCreateWindow(vk::WIDTH, vk::HEIGHT, "Vulkan", nullptr, nullptr);
 
+		vk::ViewManager view(m_renderer);
+
+		// Setup controls
+		controls::CameraController& hexmap = controls::CameraController::getInstance();
+		controls::CameraController::setViewManager(view);
+		glfwSetCursorPosCallback(m_window, controls::CameraController::cursorPositionCallback);
+		glfwSetKeyCallback(m_window, controls::CameraController::keyCallback);
+
 		//vk::CPeVulkanRenderer renderer;
-		engine::render::CPeImGuiRenderer& imguiRenderer = engine::render::CPeImGuiRenderer::getInstance();
-		imguiRenderer.SetupInterface();
+		//engine::render::CPeImGuiRenderer& imguiRenderer = engine::render::CPeImGuiRenderer::getInstance();
+		//imguiRenderer.SetupInterface();
 		m_renderer.init(m_window);
 
 		//
@@ -40,6 +51,8 @@ namespace engine {
 		while (!glfwWindowShouldClose(m_window))
 		{
 			glfwPollEvents();
+			controls::CameraController::getKeyboardInputs(m_window);
+
 			m_renderer.beginDrawFrame();
 
 
@@ -60,12 +73,38 @@ namespace engine {
 		while (totalTime > m_timeStep)
 		{
 			m_forceSystem->Update(m_timeStep);
+			CollisionUpdate(m_timeStep);
+
+
 			totalTime -= m_timeStep;
 		}
 
 		m_UncomputedTimeLeft = totalTime;
 
 		
+	}
+
+	void CPeGameManager::CollisionUpdate(double p_timeStep)
+	{
+		//
+		// Todo: avoid this
+		std::vector<engine::physics::CPeParticle*> particles;
+		pecore::CPeEntity* entity = m_entityPool->First();
+		for (size_t i = 0; i < m_entityPool->Size(); i++)
+		{
+			if (entity->GetComponent<engine::physics::CPeColliderComponent>() != nullptr)
+			{
+				engine::physics::CPeParticle* part = entity->GetComponent<engine::physics::CPeParticle>();
+				if (part != nullptr)
+				{
+					particles.push_back(part);
+				}
+			}
+		}
+
+		engine::physics::CPeCollisionSystem::GetInstance().UpdateCollision(p_timeStep, &particles);
+
+
 	}
 
 	void CPeGameManager::AllocateObjectsPool()

@@ -10,7 +10,6 @@
 #include <vector>
 #include <optional>
 #include <string>
-#include "CPeRenderer.h"
 
 namespace vk {
 

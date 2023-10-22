@@ -57,8 +57,19 @@ namespace engine {
 			void Initialise(const pemaths::CPeTransform& p_transform);
 			bool IsActive();
 
-			//template<class T>
-			//T* GetComponent<T>() const;
+			template<class T>
+			T* GetComponent() const
+			{
+				for (size_t i =0; i < consts::maxComponentsPerEntity; i++)
+				{
+					T* pointer = static_cast<T*>(m_components[i].m_component);
+					if (pointer != nullptr)
+					{
+						return pointer;
+					}
+				}
+				return nullptr;
+			}
 
 
 			void AddComponent(CPeComponent* p_component);

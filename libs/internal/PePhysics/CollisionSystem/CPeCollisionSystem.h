@@ -23,19 +23,19 @@ namespace engine {
 			int m_solverIteration;
 
 		public:
-			CPeCollisionSystem()
-				: m_oneTimeContacts(std::vector<CPeParticleContact*>())
-				, m_permanentContacts(std::vector<CPeParticleContact*>())
-				, m_solverIteration(2)
+
+			static CPeCollisionSystem& GetInstance()
 			{
-			}
+				static CPeCollisionSystem instance;
+				return instance;
+			}	
 
 			/**
 			 * @brief Detect the contacts and resolve te collisions.
 			 * @param p_timeStep The time of simulation in second.
 			 * @param p_particles A vector of the particles with a CPeColliderComponent.
 			*/
-			void UpdateCollision(double p_timeStep, std::vector<CPeParticle*> p_particles);
+			void UpdateCollision(double p_timeStep, std::vector<CPeParticle*>* p_particles);
 
 			/**
 			 * @brief Register a permanent contact.
@@ -45,11 +45,19 @@ namespace engine {
 
 		private:
 
+			CPeCollisionSystem()
+				: m_oneTimeContacts(std::vector<CPeParticleContact*>())
+				, m_permanentContacts(std::vector<CPeParticleContact*>())
+				, m_solverIteration(2)
+			{
+			}
+
+
 			/**
 			 * @brief Detect the new collisions.
 			 * @param p_particles A vector of the particles with a CPeColliderComponent.
 			*/
-			void DetectCollions(std::vector<CPeParticle*> p_particles);
+			void DetectCollions(std::vector<CPeParticle*>* p_particles);
 
 			/**
 			 * @brief Resolve both type of collisions.

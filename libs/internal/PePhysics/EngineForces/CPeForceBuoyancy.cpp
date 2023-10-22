@@ -24,11 +24,11 @@ namespace engine {
 			}
 			else if (d > 1) 
 			{ 
-				p_particule.AddForce(yNorm * (m_volume * m_liquidDensity));
+				p_particule.AddForce(yNorm * (m_volume * m_liquidDensity) * p_timeStep);
 			}
 			else 
 			{
-				p_particule.AddForce(yNorm * (d * m_volume * m_liquidDensity));
+				p_particule.AddForce(yNorm * (d * m_volume * m_liquidDensity) * p_timeStep);
 			}
 
 			

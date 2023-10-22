@@ -14,12 +14,7 @@ namespace engine {
 		void CPeForceAnchoredSpring::Compute(CPeParticle& p_particule, double p_timeStep) const
 		{
 			pemaths::CPeVector3 d = m_anchor - p_particule.GetTransform().GetPosition();
-			double n = d.GetNorm();
-			if (n > m_restLength)
-			{
-				d = d *  ((n - m_restLength) / n) * m_k * p_timeStep;
-			}
-			p_particule.AddForce(d);
+			p_particule.AddForce(d.NormalizeVector() * (m_k * (d.GetNorm() - m_restLength)) * p_timeStep);
 			return;
 		}
 
