@@ -5,6 +5,7 @@ add_library(
 	CPeGraphicalVertex.h	CPeGraphicalVertex.cpp
 	CPeGraphicalObjects.h	CPeGraphicalObjects.cpp
 	SphereMesh.h			SphereMesh.cpp
+	PlaneMesh.h				PlaneMesh.cpp
 	CPeViewManager.h		CPeViewManager.cpp
 	CPeCameraController.h	CPeCameraController.cpp
 	CPeBluePrints.h
