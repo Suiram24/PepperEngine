@@ -32,6 +32,8 @@ namespace vk {
         virtual void rotateAroundX(float angle) = 0;
         virtual void rotateAroundY(float angle) = 0;
         virtual void rotateAroundZ(float angle) = 0;
+        virtual void rotateAroundAxis(float angle, float x, float y, float z) = 0;
+        virtual void rotateUpDown(float angle) = 0;
 
         virtual void goForwardX(float distance) = 0;
         virtual void goForwardY(float distance) = 0;

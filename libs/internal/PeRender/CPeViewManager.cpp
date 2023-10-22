@@ -6,7 +6,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/rotate_vector.hpp>
-//#include <iostream>
+#include <iostream>
 
 vk::ViewManager::ViewManager(vk::GenericRenderer& renderer) :
 	up(glm::vec3(0.0f, 1.0f, 0.0f)),
@@ -41,6 +41,27 @@ void vk::ViewManager::rotateAroundZ(float angle)
 	float norm = glm::length(center - eye);
 	glm::vec3 newCenter = newDirection * norm + eye;
 	changeCameraOrientation(newCenter.x, newCenter.y, newCenter.z);
+}
+
+void vk::ViewManager::rotateAroundAxis(float angle, float x, float y, float z) {
+	glm::vec3 direction = glm::normalize(center - eye);
+	glm::mat4 rotMat = glm::rotate<float>(angle,glm::vec3(x, y, z));
+	glm::vec3 newDirection = glm::vec3(rotMat * glm::vec4(direction,1.0f));
+
+	if (std::abs(glm::dot(glm::normalize(newDirection), glm::vec3(0.0f, 1.0f, 0.0f))) <= 0.90f) {
+		float norm = glm::length(center - eye);
+		glm::vec3 newCenter = newDirection * norm + eye;
+		std::cout << "Change orientation : x: " << newDirection.x << "; y : " << newDirection.y << ";z : " << newDirection.z << std::endl;
+		changeCameraOrientation(newCenter.x, newCenter.y, newCenter.z);
+	}
+}
+
+void vk::ViewManager::rotateUpDown(float angle) {
+	glm::vec3 direction = center - eye;
+	direction.y = 0;
+	direction = glm::normalize(direction);
+	direction = glm::rotateY(direction, glm::pi<float>() / 2);
+	rotateAroundAxis(angle, direction.x, direction.y, direction.z);
 }
 
 void vk::ViewManager::goForward(float distance) {
