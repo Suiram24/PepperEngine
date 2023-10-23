@@ -93,16 +93,16 @@ La majeure partie du code a été déplacée dans la librairie PeRender, et les 
 
  ## Boucle de jeu
 
- Afin de simplifier l'utilisation du moteur, il a été décidé de mettre en place les classes CPeGameManager et CPeGamemode. La boucle de jeu (dont la mise à jour de la physique) est géré par le GameManager, qui appelle le code du jeu contenue dans le GameMode qui lui a été passé.
+ Afin de simplifier l'utilisation du moteur, il a été décidé de mettre en place les classes CPeGameManager et CPeGamemode. La boucle de jeu (dont la mise à jour de la physique) est gérée par le GameManager, qui appelle le code du jeu contenu dans le GameMode qui lui a été passé.
  L'intégralité du code de la démo est donc compris dans la classe DemoCustomGameMode.
 
-Afin de permettre une plus grande liberté d'utilisation et de découpler les fonctionnalité, ce qui facilitera la maintenance, il a été décidé de mettre en place un Entity-Component-System.  
+Afin de permettre une plus grande liberté d'utilisation et de découpler les fonctionnalités, ce qui facilitera la maintenance, il a été décidé de mettre en place un Entity-Component-System.  
 Afin d'optimiser cela, toutes les entitées, composannts, ainsi que les forces sont poolés de façon contigue dans la mémoire, en utilisant le template CPeObjectPool.  
-Cela permet à la fois d'éviter la fragmentation de la mémoire, ainsi que d'optimiser l'itération sur les composants qui seront donc tous cote à coté dans la mémoire.
+Cela permet à la fois d'éviter la fragmentation de la mémoire, ainsi que d'optimiser l'itération sur les composants qui seront donc tous côte à côte dans la mémoire.
 
 ## Timesteps et Intégration
 
-L'aglorythme d'update des forces est assez simple: on récupère le deltatime depuis la dernière frame, puis on simule autant d'itération que possible sans dépasser le temps de la frame.    
+L'aglorithme d'update des forces est assez simple: on récupère le deltatime depuis la dernière frame, puis on simule autant d'itération que possible sans dépasser le temps de la frame.    
 La variable m_UncomputedTimeLeft permet de récuperer le temps restant pour le rattraper à la prochaine frame.
 
 ```cpp
@@ -119,7 +119,7 @@ void CPeGameManager::PhysicUpdate(double p_deltaTime)
 		m_UncomputedTimeLeft = totalTime;		
 	}
 ```
-Pour l'intégration, nous avons chois d'effectuer une intégration semi-explicite d'Euler après avoir calculé le vecteur de somme des forces, afin d'avoir une simulation plus stable:
+Pour l'intégration, nous avons fait le choix d'effectuer une intégration semie-explicite d'Euler après avoir calculé le vecteur de somme des forces, afin d'avoir une simulation plus stable:
 
 ```cpp
 		void CPeParticle::UpdatePrecisely(double p_timeStep) {
@@ -183,13 +183,13 @@ Pour ce faire, nous avons utilisé la solution proposée dans ce tutoriel :
  >
  > par [Moritz Gooth](https://github.com/Mori-TM)
 
- Cette solution proposait notamment d'utiliser des matrices modèle passées en tant que variables uniformes aux deux shaders.
- On passe ainsi une matrice modèle pour chaque objet afin que celui-ci dispose d'une position différentes dans la scène. On a
+ Cette solution proposait notamment d'utiliser des matrices Modèle passées en tant que variables uniformes aux deux shaders.
+ On passe ainsi une matrice modèle pour chaque objet afin que celui-ci dispose d'une position différente dans la scène. On a
  obtenu le résultat suivant.
 
  ![Plusieurs objets sur la même scène](pictures/double-objets.png)
 
- On a profité de cette avancée pour gérer la position et l'chelle de chaque objet pour obtenir un résult comme celui-ci :
+ On a profité de cette avancée pour gérer la position et l'échelle de chaque objet pour obtenir un résult comme celui-ci :
 
 | ![Alt text](pictures/small-ball.png) | ![Alt text](pictures/big-ball.png) |
 |--------------------------------------|------------------------------------|
@@ -206,7 +206,7 @@ Nous avons ensuite conçu un système de navigation inspiré par celui du jeu vi
 explicitées ci-dessous :
 
 | Action                                | Commande/Bouton (QWERTY) | Commande/Bouton (AZERTY) |
-| ------------------------------------- | ------------------------ | ---------------------    |
+| ------------------------------------- | ------------------------ | ------------------------ |
 | Activer les déplacements de la caméra | M ou Escape (QWERTY)     | , ou Escape (AZERTY)     |
 | Aller vers l'avant                    | W                        | Z                        |
 | Aller vers l'arrière                  | S                        | S                        |
@@ -219,14 +219,15 @@ explicitées ci-dessous :
 | Regarder à gauche                     | Souris vers la gauche    | Souris vers la gauche    |
 | Regarder à droite                     | Souris vers la droite    | Souris vers la droite    |
 
-- Afin de réaliser les calculs de rotation et déplacement dans cette partie graphique, nous avon sutilisé la bibliothèque **glm**. Elle nous a permis de récupérer uen interface déjà existante pour la matrice de Vue notamment.
+- Afin de réaliser les calculs de rotation et déplacement dans cette partie graphique, nous avons utilisé la bibliothèque **glm**. Elle nous a permis de récupérer uen interface déjà existante pour la matrice de Vue notamment.
 - Afin de récupérer les Inputs de l'utilisateur, nous avons utilisé la bibliothèque **glfw** que nous utilisions déjà pour afficher la fenêtre dans laquelle s'affiche Vulkan. 
 
 ## Démonstration (Blob)
 
 Dans cette démonstration, on peut se déplacer pour observer les entitées, ainsi que déplacer l'entitée maitresse du blob avec l'interface ImGUI (activez/désactivez les déplacements de la caméra pour interargire avec l'UI).
 
-Des entitées secondaires sont reliées à l'entitée maitresse par des ressorts, et rebondissent sur les entité à masse infinie et sans grvaité qui servent de sol.
-Une force de flotaison est simulé quand des entitées tombent en dessous de la hauteur 0.
+Des entitées secondaires sont reliées à l'entitée maitresse par des ressorts, et rebondissent sur les entité à masse infinie et sans gravité qui servent de sol.
+Une dernière entité est reliée à l'une des deux entités secondaires avec une corde.
+Une force de flottaison est simulée quand des entitées tombent en dessous de la hauteur 0.
 
  
