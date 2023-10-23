@@ -46,7 +46,7 @@ namespace pedemo {
 		virtual void GameEnd();
 	protected:
 	private:
-
+		void LoadLevel();
 
 
 	public:
