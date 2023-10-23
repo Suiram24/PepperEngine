@@ -100,8 +100,47 @@ Afin de permettre une plus grande liberté d'utilisation et de découpler les fo
 Afin d'optimiser cela, toutes les entitées, composannts, ainsi que les forces sont poolés de façon contigue dans la mémoire, en utilisant le template CPeObjectPool.  
 Cela permet à la fois d'éviter la fragmentation de la mémoire, ainsi que d'optimiser l'itération sur les composants qui seront donc tous cote à coté dans la mémoire.
 
+## Timesteps et Intégration
 
- ## Partie Forces
+L'aglorythme d'update des forces est assez simple: on récupère le deltatime depuis la dernière frame, puis on simule autant d'itération que possible sans dépasser le temps de la frame.    
+La variable m_UncomputedTimeLeft permet de récuperer le temps restant pour le rattraper à la prochaine frame.
+
+```cpp
+void CPeGameManager::PhysicUpdate(double p_deltaTime)
+	{
+		double totalTime = m_UncomputedTimeLeft + p_deltaTime;
+		while (totalTime > m_timeStep)
+		{
+			m_forceSystem->Update(m_timeStep);
+			CollisionUpdate(m_timeStep);
+			totalTime -= m_timeStep;
+		}
+
+		m_UncomputedTimeLeft = totalTime;		
+	}
+```
+Pour l'intégration, nous avons chois d'effectuer une intégration semi-explicite d'Euler après avoir calculé le vecteur de somme des forces, afin d'avoir une simulation plus stable:
+
+```cpp
+		void CPeParticle::UpdatePrecisely(double p_timeStep) {
+			UpdateAcceleration(p_timeStep);
+			UpdateVelocity(p_timeStep);
+			UpdatePositionPrecisely(p_timeStep);
+			m_sumForces = pemaths::CPeVector3(0, 0, 0);
+		}
+```
+Ces articles de blogs nous on été utile dans ces décisions:
+
+ > **[Gaffer on Games, Integration Basics](https://gafferongames.com/post/integration_basics/)**
+ >
+ > par Glenn Fielder
+
+  > **[Gaffer on Games, Fix Your Timestep!](https://gafferongames.com/post/fix_your_timestep/)**
+ >
+ > par Glenn Fielder
+
+
+## Partie Forces
 
 
 Pour la gestion des forces, nous avons suivi la suggestion du cours pour :
@@ -111,6 +150,7 @@ Pour la gestion des forces, nous avons suivi la suggestion du cours pour :
 
 Nous n'avons pas fait de forceGenerator, mais un singleton ForceSystem qui permet de créer les différentes forces, de les associer à des particules et qui fait la mise à jour de la boucle de physique propre aux forces.
 
+![Schéma de l'architecture du système de force](image-1.png)
 
 ## Partie Collision
 
