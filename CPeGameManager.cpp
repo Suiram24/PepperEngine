@@ -79,14 +79,10 @@ namespace engine {
 		{
 			m_forceSystem->Update(m_timeStep);
 			CollisionUpdate(m_timeStep);
-
-
 			totalTime -= m_timeStep;
 		}
 
-		m_UncomputedTimeLeft = totalTime;
-
-		
+		m_UncomputedTimeLeft = totalTime;		
 	}
 
 	void CPeGameManager::CollisionUpdate(double p_timeStep)

@@ -60,7 +60,8 @@ namespace pedemo {
 
 		//colliderSystem->CreateCableBetween(particleComp1, particleComp2, 0.999, 3);
 		//colliderSystem->CreateCableBetween(particleComp2, particleComp3, 0.999, 3);
-		//colliderSystem->CreateCableBetween(particleComp3, particleComp1, 0.999, 3);
+		colliderSystem->CreateCableBetween(particleComp2, particleComp3, 0.999, 3);
+		//colliderSystem->CreateRodBetween(particleComp2, particleComp3, 0.999, 3);
 
 		//pephy::CPeForceSpring* spring1 = forceSystem->CreateForceSpring(particleComp2, 10, 3);
 		//pephy::CPeForceSpring* spring2 = forceSystem->CreateForceSpring(particleComp3, 10, 3);
@@ -138,7 +139,7 @@ namespace pedemo {
 
 		ImGui::Begin("Controls");
 
-		ImGui::DragFloat3("Sphere position", pos,0.1, -5, 5, "%.2f");
+		ImGui::DragFloat3("Sphere position", pos,0.1, -8, 8, "%.2f");
 
 		ImGui::End();
 

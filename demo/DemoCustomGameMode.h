@@ -26,6 +26,7 @@ namespace pedemo {
 			, entity1(nullptr)
 			, entity2(nullptr)
 			, entity3(nullptr)
+			, entity4(nullptr)
 		{
 		}
 

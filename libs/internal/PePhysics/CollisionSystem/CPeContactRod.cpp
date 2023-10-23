@@ -1,4 +1,5 @@
 #include "CPeContactRod.h"
+#include <math.h>
 
 namespace engine {
 	namespace physics {
@@ -7,13 +8,9 @@ namespace engine {
 		{
 			double dist = CPeParticleContact::DistanceBetweenParticle(*m_particleA, *m_particleB);
 
-			if ((dist - m_length) > 0.01)
+			if (abs(dist - m_length) > 0.01)
 			{
-				return -m_separatingSpeed;
-			}
-			if ((dist - m_length) <  - 0.01)
-			{
-				return m_separatingSpeed;
+				return -abs(m_separatingSpeed);
 			}
 			return 0.;
 		}
