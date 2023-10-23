@@ -91,6 +91,16 @@ La majeure partie du code a été déplacée dans la librairie PeRender, et les 
 
  # Phase 2
 
+ ## Boucle de jeu
+
+ Afin de simplifier l'utilisation du moteur, il a été décidé de mettre en place les classes CPeGameManager et CPeGamemode. La boucle de jeu (dont la mise à jour de la physique) est géré par le GameManager, qui appelle le code du jeu contenue dans le GameMode qui lui a été passé.
+ L'intégralité du code de la démo est donc compris dans la classe DemoCustomGameMode.
+
+Afin de permettre une plus grande liberté d'utilisation et de découpler les fonctionnalité, ce qui facilitera la maintenance, il a été décidé de mettre en place un Entity-Component-System.  
+Afin d'optimiser cela, toutes les entitées, composannts, ainsi que les forces sont poolés de façon contigue dans la mémoire, en utilisant le template CPeObjectPool.  
+Cela permet à la fois d'éviter la fragmentation de la mémoire, ainsi que d'optimiser l'itération sur les composants qui seront donc tous cote à coté dans la mémoire.
+
+
  ## Partie Forces
 
 
@@ -99,19 +109,29 @@ Pour la gestion des forces, nous avons suivi la suggestion du cours pour :
 - la création d'une interface Force qui contient une fonction Compute qui prend en argument le pas de temps et un pointeur sur la particule qui doit recevoir la valeur.
 
 
-Nous n'avons pas fait de forceGenerator, mais un singleton ForceSystem qui permet de créer les différentes forces, de les associées à des particules et qui fait la mise à jour de la boucle de physique propre aux forces.
+Nous n'avons pas fait de forceGenerator, mais un singleton ForceSystem qui permet de créer les différentes forces, de les associer à des particules et qui fait la mise à jour de la boucle de physique propre aux forces.
 
 
 ## Partie Collision
 
 
 Le système de collisions est inspiré de notre système de forces.
-Nous avons créé un ColliderComponent qui est attaché aux entités pouvant subir des collisions. Celui-ci contient de plus un rayon de collision.
-La classe ParticleContact contient toutes les informations sur le contact entre deux particules et les méthodes pour résoudre ce contact.
-Les classes de câble et tige (CPeContactCable et CPeContactRod) modifie les comportements de base des ParticleContact.
-L'implémentation de la tige nous pose encore problème : son comportement est le bon sur certains de nos tests, mais nous n'arrivons pas à garantir sa consistance.
+Nous avons créé un ColliderComponent qui est attaché aux entités pouvant subir des collisions. Celui-ci contient de plus un rayon de collision.  
+La classe ParticleContact contient toutes les informations sur le contact entre deux particules et les méthodes pour résoudre ce contact.  
+Les classes de câble et tige (CPeContactCable et CPeContactRod) modifie les comportements de base des ParticleContact.  
+L'implémentation de la tige nous pose encore problème : son comportement est le bon sur certains de nos tests, mais nous n'arrivons pas à garantir sa consistance.  
 La gestion globale des collisions est confié au singleton CPeCollisionSystem. Nous avons choisis de différencier les contacts permanents (tige et câble) des contacts de collision. Ces derniers sont détectés à chaque pas de temps puis on résout tous les contacts un à un.
 La gestion des contacts au repos nous a fait reprendre notre bibliothèque mathématique pour y ajouter une méthode de calcul de projection d'un vecteur sur un autre (pour projeter la vecteur gravité sur la vélocité d'une particule).
 
+## Partie Rendu
+
+La mise en place de vulkan nous posant toujours un certain nombre de difficultés, nous ne pouvons utiliser qu'une seule texture, mais nous sommes capable de nous déplacer avec la caméra (activer/désactiver avec échap ou M) pour observer les objets (dont nous devons modifier la position à la main dans la démonstration car le MeshComponent n'est pas encore prêt).
+
+## Démonstration (Blob)
+
+Dans cette démonstration, on peut se déplacer pour observer les entitées, ainsi que déplacer l'entitée maitresse du blob avec l'interface ImGUI (activez/désactivez les déplacements de la caméra pour interargire avec l'UI).
+
+Des entitées secondaires sont reliées à l'entitée maitresse par des ressorts, et rebondissent sur les entité à masse infinie et sans grvaité qui servent de sol.
+Une force de flotaison est simulé quand des entitées tombent en dessous de la hauteur 0.
 
 
