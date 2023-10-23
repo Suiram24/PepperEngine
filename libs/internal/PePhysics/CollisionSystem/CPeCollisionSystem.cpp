@@ -93,8 +93,12 @@ namespace engine {
 					double dist = CPeParticleContact::DistanceBetweenParticle(*(*p_particles)[i], *(*p_particles)[j]);
 					if (dist < 0)
 					{
-						CPeParticleContact* newContact = new CPeParticleContact((*p_particles)[i], (*p_particles)[j]);
-						m_oneTimeContacts.push_back(newContact);
+						if ((*p_particles)[i]->GetMassInverse() != 0 || (*p_particles)[j]->GetMassInverse() != 0)
+						{
+							CPeParticleContact* newContact = new CPeParticleContact((*p_particles)[i], (*p_particles)[j]);
+							m_oneTimeContacts.push_back(newContact);
+						}
+						
 					}
 				}
 			}

@@ -43,18 +43,18 @@ namespace pedemo {
 		entity3 = &engine::CPeGameManager::getInstance().CreateEntity();
 		entity4 = &engine::CPeGameManager::getInstance().CreateEntity();
 
-		entity1->m_transform.SetPosition(pemaths::CPeVector3(0, 8, -0.1));
-		entity2->m_transform.SetPosition(pemaths::CPeVector3(0.1, 6, 0.2));
-		entity3->m_transform.SetPosition(pemaths::CPeVector3(-1, 6, -1));
+		entity1->m_transform.SetPosition(pemaths::CPeVector3(2, 2, -0.1));
+		entity2->m_transform.SetPosition(pemaths::CPeVector3(-1, 2, -3));
+		entity3->m_transform.SetPosition(pemaths::CPeVector3(-1, 2, -1));
 		entity4->m_transform.SetPosition(pemaths::CPeVector3(0, 1, 0));
 
-		pephy::CPeParticle* particleComp1 = forceSystem->CreateParticleComponent(entity1);
-		pephy::CPeParticle* particleComp2 = forceSystem->CreateParticleComponent(entity2);
-		pephy::CPeParticle* particleComp3 = forceSystem->CreateParticleComponent(entity3/*, 0, 0, pemaths::CPeVector3()*/);
+		pephy::CPeParticle* particleComp1 = forceSystem->CreateParticleComponent(entity1, 3);
+		pephy::CPeParticle* particleComp2 = forceSystem->CreateParticleComponent(entity2, 3);
+		pephy::CPeParticle* particleComp3 = forceSystem->CreateParticleComponent(entity3, 3/*, 0, 0, pemaths::CPeVector3()*/);
 		pephy::CPeParticle* particleComp4 = forceSystem->CreateParticleComponent(entity4, 0, 0, pemaths::CPeVector3());
 
 		pephy::CPeColliderComponent* colliderComp1 = colliderSystem->CreateColliderComponent(entity1, 0.5);
-		pephy::CPeColliderComponent* colliderComp2 = colliderSystem->CreateColliderComponent(entity2, 0.5);
+		pephy::CPeColliderComponent* colliderComp2 = colliderSystem->CreateColliderComponent(entity2, 1);
 		pephy::CPeColliderComponent* colliderComp3 = colliderSystem->CreateColliderComponent(entity3, 0.5);
 		pephy::CPeColliderComponent* colliderComp4 = colliderSystem->CreateColliderComponent(entity4, 0.5);
 
@@ -62,11 +62,13 @@ namespace pedemo {
 		//colliderSystem->CreateCableBetween(particleComp2, particleComp3, 0.999, 3);
 		//colliderSystem->CreateCableBetween(particleComp3, particleComp1, 0.999, 3);
 
-		pephy::CPeForceSpring* spring1 = forceSystem->CreateForceSpring(particleComp2, 100, 3);
-		pephy::CPeForceSpring* spring2 = forceSystem->CreateForceSpring(particleComp3, 100, 3);
-		pephy::CPeForceSpring* spring3 = forceSystem->CreateForceSpring(particleComp1, 100, 3);
+		//pephy::CPeForceSpring* spring1 = forceSystem->CreateForceSpring(particleComp2, 10, 3);
+		//pephy::CPeForceSpring* spring2 = forceSystem->CreateForceSpring(particleComp3, 10, 3);
+		//pephy::CPeForceSpring* spring3 = forceSystem->CreateForceSpring(particleComp1, 10, 3);
 
-		pephy::CPeForceSpring* spring4 = forceSystem->CreateForceSpring(particleComp4, 100, 3);
+		pephy::CPeForceSpring* spring4 = forceSystem->CreateForceSpring(particleComp4, 10, 3);
+		pephy::CPeForceBuoyancy* water = forceSystem->CreateForceBuoyancy(0.5, 0.52, 0, 10);
+		pephy::CPeForceDrag* air = forceSystem->CreateForceDrag(1,2);
 
 		//forceSystem->AddForceToParticle(spring1, particleComp1, -1);
 		//forceSystem->AddForceToParticle(spring2, particleComp2, -1);
@@ -76,7 +78,13 @@ namespace pedemo {
 		forceSystem->AddForceToParticle(spring4, particleComp2, -1);
 		//forceSystem->AddForceToParticle(spring4, particleComp3, -1);
 
-		colliderSystem->CreateCableBetween(particleComp2, particleComp3, 0.999, 2);
+		forceSystem->AddForceToParticle(water, particleComp1, -1);
+		forceSystem->AddForceToParticle(water, particleComp2, -1);
+		forceSystem->AddForceToParticle(water, particleComp3, -1);
+
+		//forceSystem->AddForceToParticle(air, particleComp2, -1);
+
+		//colliderSystem->CreateRodBetween(particleComp2, particleComp3, 0.999, 2);
 
 
 		//Setup ground
@@ -116,7 +124,7 @@ namespace pedemo {
 		sphere1.SetScale(0.5);
 
 		sphere2.SetPos(entity2->m_transform.GetPosition().GetX(), entity2->m_transform.GetPosition().GetY(), entity2->m_transform.GetPosition().GetZ());
-		sphere2.SetScale(0.5);
+		sphere2.SetScale(1);
 
 		sphere3.SetPos(entity3->m_transform.GetPosition().GetX(), entity3->m_transform.GetPosition().GetY(), entity3->m_transform.GetPosition().GetZ());
 		sphere3.SetScale(0.5);
