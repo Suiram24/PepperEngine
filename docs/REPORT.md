@@ -31,7 +31,7 @@ La majeure partie du code a été déplacée dans la librairie PeRender, et les 
 
  > **[Vulkan Tutorial](https:,,vulkan-tutorial.com,)**
  >
- > par [Alexander Overvoorde](https:,,www.linkedin.com,in,overv,?originalSubdomain=nl)
+ > par [Alexander Overvoorde](https://www.linkedin.com/in/overv/?originalSubdomain=nl)
 
 
  Afin de nous aider à intégrer ImGUI avec Vulkan, nous avons utilisé le tutoriel ci-dessous :
@@ -39,7 +39,7 @@ La majeure partie du code a été déplacée dans la librairie PeRender, et les 
 
  > **[Vulkan ImGUI](https:,,frguthmann.github.io,posts,vulkan_imgui,)**
  >
- > par [François Guthmann](https:,,www.linkedin.com,in,frguthmann,?originalSubdomain=fr)
+ > par [François Guthmann](https://www.linkedin.com/in/frguthmann/?originalSubdomain=fr)
 
 
  La partie graphique avec Vulkan est particulièrement complexe. Nous n'avions pour la plupart que quelques connaissances sommaires en pipeline de rendu et l'utilisation de Vulkan n'a pas rendu les choses aisées. 
@@ -123,9 +123,64 @@ L'implémentation de la tige nous pose encore problème : son comportement est l
 La gestion globale des collisions est confié au singleton CPeCollisionSystem. Nous avons choisis de différencier les contacts permanents (tige et câble) des contacts de collision. Ces derniers sont détectés à chaque pas de temps puis on résout tous les contacts un à un.
 La gestion des contacts au repos nous a fait reprendre notre bibliothèque mathématique pour y ajouter une méthode de calcul de projection d'un vecteur sur un autre (pour projeter la vecteur gravité sur la vélocité d'une particule).
 
-## Partie Rendu
+## Partie Graphique
 
-La mise en place de vulkan nous posant toujours un certain nombre de difficultés, nous ne pouvons utiliser qu'une seule texture, mais nous sommes capable de nous déplacer avec la caméra (activer/désactiver avec échap ou M) pour observer les objets (dont nous devons modifier la position à la main dans la démonstration car le MeshComponent n'est pas encore prêt).
+### Compatibilité avec ImGUI
+
+Dans la phase 1, nous n'avions pas réussi à mettre en place Vulkan avec ImGUI. Dans cette version nous avons réussi à faire
+cohabiter les deux systèmes. Nous nous sommes aidés du tutoriel suivant :
+
+ > **[Advanced vulkan rendering tutorial | imgui | Part 1](https://www.youtube.com/watch?v=6isbso_GmUk&t=3s&ab_channel=MoriTM)**
+ >
+ > par [Moritz Gooth](https://github.com/Mori-TM)
+
+### Gestion de plusieurs modèles
+
+Une fois qu'ImGUI était mis en place, nous avons fait en sorte de pouvoir utiliser plusieurs modèles sur une même scène.
+Pour ce faire, nous avons utilisé la solution proposée dans ce tutoriel :
+
+ > **[Advanced vulkan rendering tutorial | multiple models | push constants | Part 3](https://www.youtube.com/watch?v=8AXTNMMWBGg&ab_channel=MoriTM)**
+ >
+ > par [Moritz Gooth](https://github.com/Mori-TM)
+
+ Cette solution proposait notamment d'utiliser des matrices modèle passées en tant que variables uniformes aux deux shaders.
+ On passe ainsi une matrice modèle pour chaque objet afin que celui-ci dispose d'une position différentes dans la scène. On a
+ obtenu le résultat suivant.
+
+ ![Plusieurs objets sur la même scène](pictures/double-objets.png)
+
+ On a profité de cette avancée pour gérer la position et l'chelle de chaque objet pour obtenir un résult comme celui-ci :
+
+| ![Alt text](pictures/small-ball.png) | ![Alt text](pictures/big-ball.png) |
+|--------------------------------------|------------------------------------|
+| Objet d'échelle 1/2                  | Objet d'échelle 2                  |
+ 
+### Gestion de la caméra
+
+Maintenant que les modèles et l'interface étaient relativement indépendants par rapport à l'engin graphique, nous pouvions
+ajouter une gestion simple de la caméra. Cette dernière repose sur la manipulation de la matrice de Vue de l'engin graphique.
+
+Nous avons d'abord conçu une petite interface `CPEViewManager` qui permet d'intéragir plus facilement avec la matrice de Vue.
+
+Nous avons ensuite conçu un système de navigation inspiré par celui du jeu vidéo Minecraft. Les consignes pour se déplacer sont
+explicitées ci-dessous :
+
+| Action                                | Commande/Bouton (QWERTY) | Commande/Bouton (AZERTY) |
+| ------------------------------------- | ------------------------ | ---------------------    |
+| Activer les déplacements de la caméra | M ou Escape (QWERTY)     | , ou Escape (AZERTY)     |
+| Aller vers l'avant                    | W                        | Z                        |
+| Aller vers l'arrière                  | S                        | S                        |
+| Aller vers la gauche                  | A                        | Q                        |
+| Aller vers la droite                  | D                        | D                        |
+| Monter                                | Espace                   | Espace                   |
+| Descendre                             | Shift                    | Shift                    |
+| Regarder vers le haut                 | Souris vers l'avant      | Souris vers l'avant      |
+| Regarder vers le bas                  | Souris vers l'arrière    | Souris vers l'arrière    |
+| Regarder à gauche                     | Souris vers la gauche    | Souris vers la gauche    |
+| Regarder à droite                     | Souris vers la droite    | Souris vers la droite    |
+
+- Afin de réaliser les calculs de rotation et déplacement dans cette partie graphique, nous avon sutilisé la bibliothèque **glm**. Elle nous a permis de récupérer uen interface déjà existante pour la matrice de Vue notamment.
+- Afin de récupérer les Inputs de l'utilisateur, nous avons utilisé la bibliothèque **glfw** que nous utilisions déjà pour afficher la fenêtre dans laquelle s'affiche Vulkan. 
 
 ## Démonstration (Blob)
 
@@ -134,4 +189,4 @@ Dans cette démonstration, on peut se déplacer pour observer les entitées, ain
 Des entitées secondaires sont reliées à l'entitée maitresse par des ressorts, et rebondissent sur les entité à masse infinie et sans grvaité qui servent de sol.
 Une force de flotaison est simulé quand des entitées tombent en dessous de la hauteur 0.
 
-
+ 
