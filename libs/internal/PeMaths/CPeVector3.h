@@ -159,6 +159,15 @@ namespace engine
 
 			}
 		};
+
+		/**
+		 * @brief Define the operator 'multiplication' for a double and a CPeVector3.
+		 * 
+		 * @param p_scalar A double to multipliate by the vector
+		 * @param vector CPeVector3& to duplicate with the scalar
+		 * @return CPeVector3 - Result of the multiplication
+		 */
+		CPeVector3 operator*(double p_scalar, const CPeVector3& vector);
 	}
 }
 
