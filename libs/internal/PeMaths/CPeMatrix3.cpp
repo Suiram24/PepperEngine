@@ -1,12 +1,12 @@
 #include <cstdio>
 
-#include "CPeMatrice3.h"
+#include "CPeMatrix3.h"
 
 
 namespace engine {
 	namespace maths {
 		
-		void CPeMatrice3::Set(unsigned int p_i, unsigned int p_j, double p_value)
+		void CPeMatrix3::Set(unsigned int p_i, unsigned int p_j, double p_value)
 		{
 			if (p_i > 2 || p_j > 2)
 			{
@@ -15,7 +15,7 @@ namespace engine {
 			m_matrice[p_i * 3 + p_j] = p_value;
 		}
 
-		double CPeMatrice3::Get(unsigned int p_i, unsigned int p_j) const
+		double CPeMatrix3::Get(unsigned int p_i, unsigned int p_j) const
 		{
 			if (p_i > 2 || p_j > 2)
 			{
@@ -24,9 +24,9 @@ namespace engine {
 			return m_matrice[p_i * 3 + p_j];
 		}
 
-		CPeMatrice3 CPeMatrice3::operator*(const CPeMatrice3& p_matrice) const
+		CPeMatrix3 CPeMatrix3::operator*(const CPeMatrix3& p_matrice) const
 		{
-			CPeMatrice3 multMatrice = CPeMatrice3();
+			CPeMatrix3 multMatrice = CPeMatrix3();
 			for (int i = 0; i < 3; i++)
 			{
 				for (int j = 0; j < 3; j++)
@@ -42,9 +42,9 @@ namespace engine {
 			return multMatrice;
 		}
 
-		CPeMatrice3 CPeMatrice3::operator+(const CPeMatrice3& p_matrice) const
+		CPeMatrix3 CPeMatrix3::operator+(const CPeMatrix3& p_matrice) const
 		{
-			CPeMatrice3 addMatrice = CPeMatrice3();
+			CPeMatrix3 addMatrice = CPeMatrix3();
 			for (int i = 0; i < 3; i++)
 			{
 				for (int j = 0; j < 3; j++)
@@ -55,9 +55,9 @@ namespace engine {
 			return addMatrice;
 		}
 
-		CPeMatrice3 CPeMatrice3::operator-(const CPeMatrice3& p_matrice) const
+		CPeMatrix3 CPeMatrix3::operator-(const CPeMatrix3& p_matrice) const
 		{
-			CPeMatrice3 subMatrice = CPeMatrice3();
+			CPeMatrix3 subMatrice = CPeMatrix3();
 			for (int i = 0; i < 3; i++)
 			{
 				for (int j = 0; j < 3; j++)
@@ -68,7 +68,7 @@ namespace engine {
 			return subMatrice;
 		}
 
-		void CPeMatrice3::operator=(const CPeMatrice3& p_matrice)
+		void CPeMatrix3::operator=(const CPeMatrix3& p_matrice)
 		{
 			m_matrice[0] = p_matrice.Get(0, 0);
 			m_matrice[1] = p_matrice.Get(0, 1);
@@ -83,9 +83,9 @@ namespace engine {
 			m_matrice[8] = p_matrice.Get(2, 2);
 		}
 
-		CPeMatrice3 CPeMatrice3::Transpose() const
+		CPeMatrix3 CPeMatrix3::Transpose() const
 		{
-			CPeMatrice3 transposeMatrice = CPeMatrice3();
+			CPeMatrix3 transposeMatrice = CPeMatrix3();
 			for (int i = 0; i < 3; i++)
 			{
 				for (int j = 0; j < 3; j++)
@@ -97,7 +97,7 @@ namespace engine {
 			return transposeMatrice;
 		}
 
-		double CPeMatrice3::Determinant() const
+		double CPeMatrix3::Determinant() const
 		{
 			/*
 				    ( a b c )
@@ -114,19 +114,19 @@ namespace engine {
 			return det;
 		}
 
-		bool CPeMatrice3::IsInversible() const
+		bool CPeMatrix3::IsInversible() const
 		{
 			return (abs(Determinant()) > 0.001); //to prevent double imprecision
 		}
 
-		CPeMatrice3 CPeMatrice3::Inverse() const
+		CPeMatrix3 CPeMatrix3::Inverse() const
 		{
 			if (!IsInversible())
 			{
 				throw std::invalid_argument("You cannot inverse a matrice of determinant 0.");
 			}
 
-			CPeMatrice3 inverseMatrice = CPeMatrice3();
+			CPeMatrix3 inverseMatrice = CPeMatrix3();
 
 			double det = Determinant();
 
@@ -152,7 +152,7 @@ namespace engine {
 			return inverseMatrice * (1/det);
 		}
 
-		void CPeMatrice3::printMatrice() const
+		void CPeMatrix3::printMatrice() const
 		{
 			std::printf("	| %lf %lf %lf |\n	| %lf %lf %lf |\n	| %lf %lf %lf |\n\n",
 				m_matrice[0],m_matrice[1],m_matrice[2],
@@ -161,19 +161,19 @@ namespace engine {
 			);
 		}
 
-		CPeMatrice3 CPeMatrice3::operator*(const CPeVector3& p_vector) const
+		CPeVector3 CPeMatrix3::operator*(const CPeVector3& p_vector) const
 		{
-			CPeMatrice3 multMatrice = CPeMatrice3(
-				p_vector.GetX() * this->Get(0, 0), p_vector.GetY() * this->Get(0, 1), p_vector.GetZ() * this->Get(0, 2),
-				p_vector.GetX() * this->Get(1, 0), p_vector.GetY() * this->Get(1, 1), p_vector.GetZ() * this->Get(1, 2),
-				p_vector.GetX() * this->Get(2, 0), p_vector.GetY() * this->Get(2, 1), p_vector.GetZ() * this->Get(2, 2)
+			CPeVector3 mult= CPeVector3(
+				p_vector.GetX() * this->Get(0, 0) + p_vector.GetY() * this->Get(0, 1) + p_vector.GetZ() * this->Get(0, 2),
+				p_vector.GetX() * this->Get(1, 0) + p_vector.GetY() * this->Get(1, 1) + p_vector.GetZ() * this->Get(1, 2),
+				p_vector.GetX() * this->Get(2, 0) + p_vector.GetY() * this->Get(2, 1) + p_vector.GetZ() * this->Get(2, 2)
 			);
-			return multMatrice;
+			return mult;
 		}
 
-		CPeMatrice3 CPeMatrice3::operator*(double p_number) const
+		CPeMatrix3 CPeMatrix3::operator*(double p_number) const
 		{
-			CPeMatrice3 multMatrice = CPeMatrice3(
+			CPeMatrix3 multMatrice = CPeMatrix3(
 				p_number * this->Get(0, 0), p_number * this->Get(0, 1), p_number * this->Get(0, 2),
 				p_number * this->Get(1, 0), p_number * this->Get(1, 1), p_number * this->Get(1, 2),
 				p_number * this->Get(2, 0), p_number * this->Get(2, 1), p_number * this->Get(2, 2)
