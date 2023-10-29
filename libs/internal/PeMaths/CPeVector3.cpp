@@ -114,5 +114,17 @@ namespace engine {
 			printf("x: %lf; y: %lf; z: %lf\n", GetX(), GetY(), GetZ());
 		}
 
+		void CPeVector3::SetX(double p_x)
+		{
+			m_x = p_x;
+		}
+		void CPeVector3::SetY(double p_y)
+		{
+			m_y = p_y;
+		}
+		void CPeVector3::SetZ(double p_z)
+		{
+			m_z = p_z;
+		}
 	}
 }

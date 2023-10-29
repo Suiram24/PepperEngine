@@ -141,6 +141,10 @@ namespace engine
 			*/
 			double GetZ() const;
 
+			void SetX(double p_x);
+			void SetY(double p_y);
+			void SetZ(double p_z);
+
 			/**
 			 * @brief Compute the distance to an other vector.
 			 *
