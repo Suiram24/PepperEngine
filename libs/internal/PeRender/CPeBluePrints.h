@@ -3,6 +3,7 @@
 
 #include <vulkan/vulkan.h>
 #include <glm/glm.hpp>
+#include <string>
 
 namespace vk {
     class ModelObject {        
@@ -16,7 +17,10 @@ namespace vk {
 
     class TextureObject {
     public:
+        std::string texturePath;
         bool loaded;
+
+        //TextureObject(GenericRenderer& renderer, std::string texturePath);
 
         virtual void Load() = 0;
         virtual VkDescriptorSet& GetTextureDescriptorSet() = 0;
@@ -36,7 +40,7 @@ namespace vk {
         virtual VkDescriptorSetLayout& getTextureDescriptorSetlayout() = 0;
 
         virtual void AddModel(ModelObject& object) = 0;
-        virtual void AddTexture(TextureObject& object) = 0;
+        virtual TextureObject& AddTexture(std::string texture) = 0;
 
         virtual void RemoveModel(ModelObject& object) = 0;
     };
