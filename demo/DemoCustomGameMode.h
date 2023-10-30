@@ -3,7 +3,7 @@
 
 #include "..\CPeGameMode.h"
 #include "..\CPeGameManager.h"
-#include "..\libs\internal\PeRender\SphereMesh.h"
+#include "..\libs\internal\PeRender\PeRender.h"
 #include "..\Libs\internal\PeEngineCore\PeEngineCore.h"
 #include "..\Libs\internal\PePhysics\PePhysics.h"
 
@@ -53,6 +53,7 @@ namespace pedemo {
 	private:
 		pephy::CPeForceSystem* forceSystem;
 		pephy::CPeCollisionSystem* colliderSystem;
+		std::vector<vk::CPeTexture*> textures;
 		//std::optional<vk::SphereMesh> sphere1;
 		//std::optional<vk::SphereMesh> sphere2;
 		int i;
