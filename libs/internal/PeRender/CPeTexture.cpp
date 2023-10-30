@@ -18,6 +18,7 @@ vk::CPeTexture::CPeTexture(GenericRenderer& renderer, std::string texturePath) :
     texturePath(texturePath.c_str())
 {
     renderer.AddTexture(*this);
+    Load();
 }
 
 void vk::CPeTexture::Destroy() {
