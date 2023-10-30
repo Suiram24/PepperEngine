@@ -28,8 +28,13 @@ namespace engine {
         {
         }
 
-        CPeQuaternion::CPeQuaternion(const CPeQuaternion &q) :
-            m_value({q.m_value[0],q.m_value[1],q.m_value[2],q.m_value[3]})
+        CPeQuaternion::CPeQuaternion(const CPeVector3 &axis, float angle)
+        {
+            CPeVector3 normalizedAxis = axis.NormalizeVector();
+            *this = CPeQuaternion(std::cos(angle/2),std::sin(angle/2)*normalizedAxis);
+        }
+
+        CPeQuaternion::CPeQuaternion(const CPeQuaternion &q) : m_value({q.m_value[0], q.m_value[1], q.m_value[2], q.m_value[3]})
         {
         }
 
@@ -99,8 +104,9 @@ namespace engine {
 
         CPeQuaternion &CPeQuaternion::RotateByVector(const CPeVector3 &vector)
         {
+            double angle = vector.GetNorm();
             CPeVector3 rotationVector = vector.NormalizeVector();
-            CPeQuaternion rotationQuaternion(0,rotationVector);
+            CPeQuaternion rotationQuaternion(vector, angle);
             *this *= rotationQuaternion;
             return *this;
         }

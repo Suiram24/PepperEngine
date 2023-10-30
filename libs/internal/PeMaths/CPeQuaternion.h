@@ -31,7 +31,7 @@ namespace engine
              * 
              */
             CPeQuaternion();
-            /**
+         /**
              * @brief Construct a new CPeQuaternion object
              * 
              * @param w float - real part of the quaternion
@@ -48,6 +48,14 @@ namespace engine
              * @param v CPeVector3& - imaginary part of the quaternion
              */
             CPeQuaternion(float w, const CPeVector3& v);
+
+                        /**
+             * @brief Construct a new CPeQuaternion object with and axis-angle rotation
+             * 
+             * @param axis sNormalized axis of the rotation
+             * @param angle the angle of the rotation
+             */
+            CPeQuaternion(const CPeVector3& axis, float angle);
 
             /**
              * @brief Construct a new CPeQuaternion object by copy
