@@ -10,8 +10,10 @@
 namespace vk {
     class CPeTexture : public TextureObject {
     public:
-        const char* texturePath;
+        std::string texturePath;
         bool loaded = false;
+
+        CPeTexture* createTextureObject(vk::GenericRenderer& renderer, std::string texturePath);
 
         CPeTexture(vk::GenericRenderer& renderer,  std::string texturePath);
 

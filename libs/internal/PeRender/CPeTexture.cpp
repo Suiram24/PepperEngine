@@ -6,6 +6,10 @@
 #include <stb_image.h>
 #include <stdexcept>
 
+vk::CPeTexture* vk::CPeTexture::createTextureObject(vk::GenericRenderer& renderer, std::string texturePath)
+{
+    return new CPeTexture(renderer, texturePath);
+}
 
 vk::CPeTexture::CPeTexture(GenericRenderer& renderer, std::string texturePath) :
     device(renderer.getDevice()),
@@ -15,9 +19,8 @@ vk::CPeTexture::CPeTexture(GenericRenderer& renderer, std::string texturePath) :
     descriptorPool(renderer.getDescriptorPool()),
     uniformDescriptorSetLayout(renderer.getUniformDescriptorSetlayout()),
     textureDescriptorSetLayout(renderer.getTextureDescriptorSetlayout()),
-    texturePath(texturePath.c_str())
+    texturePath(texturePath)
 {
-    renderer.AddTexture(*this);
     Load();
 }
 
@@ -30,7 +33,7 @@ void vk::CPeTexture::Destroy() {
 }
 
 void vk::CPeTexture::Load() {
-    createTextureImage(texturePath);
+    createTextureImage(texturePath.c_str());
     createTextureImageView();
     createTextureSampler();
     createTextureDescriptorSet();
