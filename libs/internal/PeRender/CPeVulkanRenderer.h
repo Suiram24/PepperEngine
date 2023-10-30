@@ -3,6 +3,7 @@
 
 #include "CPeGraphicalVertex.h"
 #include "CPeBluePrints.h"
+#include "CPeTexture.h"
 
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
@@ -66,13 +67,14 @@ namespace vk {
 
         void RemoveModel(ModelObject& object);
 
-        void AddTexture(TextureObject& object);
+        CPeTexture& AddTexture(std::string texture);
 
         void SetNearPlan(float distance);
 
         void SetFarPlan(float distance);
 
     private:
+
         glm::mat4* viewMatrix;
         GLFWwindow* window;
 
@@ -133,7 +135,9 @@ namespace vk {
         float farPlan = 10.0f;
 
         std::vector<ModelObject*> graphicalObjects;
-        std::vector<TextureObject*> textureObjects;
+        std::vector<CPeTexture*> textureObjects;
+
+        CPeTexture* isTextureInVector(std::string texture);
 
         static void framebufferResizeCallback(GLFWwindow* window, int width, int height);
 

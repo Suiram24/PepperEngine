@@ -120,6 +120,30 @@ void vk::CPeVulkanRenderer::init()
     initImGui();
 }
 
+vk::CPeTexture* vk::CPeVulkanRenderer::isTextureInVector(std::string texture)
+{
+    for (auto registeredTexture : textureObjects) {
+        if (registeredTexture->texturePath.compare(texture)) {
+            return registeredTexture;
+        }
+    }
+    return nullptr;
+}
+
+
+vk::CPeTexture& vk::CPeVulkanRenderer::AddTexture(std::string texture)
+{
+    vk::CPeTexture* textureObject = isTextureInVector(texture);
+    if (textureObject != nullptr) {
+        return *textureObject;
+    }
+    else {
+        textureObject = new CPeTexture(*this, texture);
+        textureObjects.push_back(textureObject);
+    }
+    return *textureObject;
+}
+
 void vk::CPeVulkanRenderer::init(GLFWwindow *window)
 {
     this->window = window;
@@ -796,14 +820,6 @@ void vk::CPeVulkanRenderer::RemoveModel(ModelObject& object) {
     }
 }
 
-void vk::CPeVulkanRenderer::AddTexture(TextureObject& object)
-{
-    if (!object.loaded) {
-        object.Load();
-    }
-    textureObjects.push_back(&object);
-}
-
 void vk::CPeVulkanRenderer::DestroyModels()
 {
     for (auto& model : graphicalObjects) {
@@ -815,6 +831,7 @@ void vk::CPeVulkanRenderer::DestroyTextures()
 {
     for (auto& texture : textureObjects) {
         texture->Destroy();
+        delete texture;
     }
 }
 
