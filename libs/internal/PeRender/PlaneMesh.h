@@ -7,7 +7,8 @@
 namespace vk {
 	class PlaneMesh : public vk::ModelWatcher {
 	public:
-		PlaneMesh(vk::GenericRenderer& renderer, TextureObject& texture);
+		PlaneMesh(vk::GenericRenderer& renderer, std::string texture);
+		PlaneMesh(vk::GenericRenderer& renderer);
 
 		void operator=(PlaneMesh const& plane);
 	private:

@@ -7,7 +7,8 @@
 namespace vk {
 	class SphereMesh : public vk::ModelWatcher {
 	public:
-        SphereMesh(vk::GenericRenderer& renderer, TextureObject& texture);
+        SphereMesh(vk::GenericRenderer& renderer, std::string texture);
+        SphereMesh(vk::GenericRenderer& renderer);
 
 		void operator=(SphereMesh const& sphere);
 	private:
