@@ -4,7 +4,7 @@
 #include <tiny_obj_loader.h>
 #include<stdexcept>
 
-vk::ModelWatcher::ModelWatcher(vk::GenericRenderer& renderer, std::string modelPath, TextureObject& texture) :
+vk::ModelWatcher::ModelWatcher(vk::GenericRenderer& renderer, std::string modelPath, std::string texture) :
     device(renderer.getDevice()),
     physicalDevice(renderer.getPhysicalDevice()),
     commandPool(renderer.getCommandPool()),
@@ -13,7 +13,24 @@ vk::ModelWatcher::ModelWatcher(vk::GenericRenderer& renderer, std::string modelP
     pos(glm::vec3(0.f, 0.f, 0.f)),
     scale(glm::vec3(1.f)),
     translationVector(glm::vec3(0.f, 0.f, 0.f)),
-    texture(texture),
+    texture(renderer.AddTexture(texture)),
+    indexBuffer(VK_NULL_HANDLE),
+    vertexBuffer(VK_NULL_HANDLE)
+{
+    Load();
+    renderer.AddModel(*this);
+}
+
+vk::ModelWatcher::ModelWatcher(vk::GenericRenderer& renderer, std::string modelPath) :
+    device(renderer.getDevice()),
+    physicalDevice(renderer.getPhysicalDevice()),
+    commandPool(renderer.getCommandPool()),
+    graphicsQueue(renderer.getGraphicsQueue()),
+    modelPath(modelPath.c_str()),
+    pos(glm::vec3(0.f, 0.f, 0.f)),
+    scale(glm::vec3(1.f)),
+    translationVector(glm::vec3(0.f, 0.f, 0.f)),
+    texture(renderer.AddTexture(DEFAULT_TEXTURE)),
     indexBuffer(VK_NULL_HANDLE),
     vertexBuffer(VK_NULL_HANDLE)
 {
