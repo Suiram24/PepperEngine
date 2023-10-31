@@ -183,9 +183,7 @@ void vk::CPeVulkanRenderer::initVulkan() {
     createUniformBuffers();
     createDescriptorPool();
     createDescriptorSets();
-    for (auto& texture : textureObjects) {
-        texture->Load();
-    }
+    AddTexture(DEBUG_TEXTURE_PATH);
     createCommandBuffers();
     createSyncObjects();
 }
