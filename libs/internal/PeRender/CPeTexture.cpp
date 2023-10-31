@@ -6,11 +6,6 @@
 #include <stb_image.h>
 #include <stdexcept>
 
-vk::CPeTexture* vk::CPeTexture::createTextureObject(vk::GenericRenderer& renderer, std::string texturePath)
-{
-    return new CPeTexture(renderer, texturePath);
-}
-
 vk::CPeTexture::CPeTexture(GenericRenderer& renderer, std::string texturePath) :
     device(renderer.getDevice()),
     physicalDevice(renderer.getPhysicalDevice()),
@@ -456,6 +451,7 @@ void vk::CPeTexture::createTextureDescriptorSet()
     allocInfo.descriptorPool = descriptorPool;
     allocInfo.descriptorSetCount = 1;
     allocInfo.pSetLayouts = &textureDescriptorSetLayout;
+
 
     if (vkAllocateDescriptorSets(device, &allocInfo, &descriptorSet) != VK_SUCCESS) {
         throw std::runtime_error("failed to allocate descriptor sets!");
