@@ -21,9 +21,6 @@ namespace pedemo {
 		forceSystem = &pephy::CPeForceSystem::GetInstance();
 		colliderSystem = &pephy::CPeCollisionSystem::GetInstance();
 
-		textures.push_back(new vk::CPeTexture(*m_renderer, "textures/debug_texture.png"));
-		textures.push_back(new vk::CPeTexture(*m_renderer, "textures/minecraft.png"));
-
 		entity1 = &engine::CPeGameManager::getInstance().CreateEntity();
 		entity2 = &engine::CPeGameManager::getInstance().CreateEntity();
 		entity3 = &engine::CPeGameManager::getInstance().CreateEntity();
@@ -42,7 +39,7 @@ namespace pedemo {
 		float gridSize = 7;
 		for (int i = 0; i < gridSize; ++i) {
 			for (int j = 0; j < gridSize; ++j) {
-				planes.push_back(new vk::PlaneMesh(*m_renderer, *textures[1]));
+				planes.push_back(new vk::PlaneMesh(*m_renderer));
 				planes.back()->SetPos((j - gridSize / 2) * 1 + centerX, centerY, (i - gridSize / 2) * 1 + centerZ);
 			}
 		}
@@ -58,9 +55,9 @@ namespace pedemo {
 		static pephy::CPeColliderComponent colliderComp3(*entity3, 0.5);
 
 		DrawImGuiInterface();
-		static vk::SphereMesh sphere1(*m_renderer, *textures[0]);
-		static vk::SphereMesh sphere2(*m_renderer, *textures[0]);
-		static vk::SphereMesh sphere3(*m_renderer, *textures[0]);
+		static vk::SphereMesh sphere1(*m_renderer);
+		static vk::SphereMesh sphere2(*m_renderer);
+		static vk::SphereMesh sphere3(*m_renderer);
 		
 
 		//if (entity1->m_transform.GetPosition().GetY() < 0)

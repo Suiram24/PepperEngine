@@ -53,7 +53,6 @@ namespace pedemo {
 	private:
 		pephy::CPeForceSystem* forceSystem;
 		pephy::CPeCollisionSystem* colliderSystem;
-		std::vector<vk::CPeTexture*> textures;
 		//std::optional<vk::SphereMesh> sphere1;
 		//std::optional<vk::SphereMesh> sphere2;
 		int i;
