@@ -126,5 +126,11 @@ namespace engine {
 		{
 			m_z = p_z;
 		}
-	}
+	
+    CPeVector3 operator*(double p_scalar, const CPeVector3 &vector)
+    {
+      return vector*p_scalar;
+    }
+
+  }
 }
