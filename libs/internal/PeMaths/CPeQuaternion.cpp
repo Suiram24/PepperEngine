@@ -137,5 +137,24 @@ namespace engine {
         {
             return q*scalar;
         }
+
+        CPeMatrix3 CPeQuaternion::ToMatrix3() const
+        {
+            double w = m_value[0];
+            double x = m_value[1];
+            double y = m_value[2];
+            double z = m_value[3];
+            CPeMatrix3 mat(
+                1 - (2*y*y + 2*z*z), 2*x*y + 2*z*w, 2*x*z - 2*y*w,
+                2*x*y - 2*z*w, 1 - (2*x*x +2*z*z), 2*y*z + 2*x*w,
+                2*x*z + 2*y*w, 2*y*z - 2*x*w, 1 - (2*x*x + 2*y*y)
+            );
+            return mat;
+        }
+
+        CPeMatrix4 CPeQuaternion::ToMatrix4() const
+        {
+            return CPeMatrix4(ToMatrix3());
+        }
     }
 }

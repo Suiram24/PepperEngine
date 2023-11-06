@@ -2,6 +2,8 @@
 #define CPEMATHS_CPEQUATERNION_H
 
 #include "CPeVector3.h"
+#include "CPeMatrix3.h"
+#include "CPeMatrix4.h"
 
 namespace engine
 {
@@ -169,6 +171,17 @@ namespace engine
              */
             float GetAngle() const;
 
+            /**
+             * @brief Return the matrix 3x3 version of the quaternion.
+             * @return CPeMatrix3 version of your CPeQuaternion.
+             */
+            CPeMatrix3 ToMatrix3() const;
+
+            /**
+            * @brief Return the matrix 3x4 version of the quaternion.
+            * @return CPeMatrix3 version of your CPeQuaternion.
+            */
+            CPeMatrix4 ToMatrix4() const;
         protected:
         };
 
@@ -180,6 +193,7 @@ namespace engine
          * @return CPeQuaternion - Result of the multiplication
          */
         CPeQuaternion operator*(float scalar, const CPeQuaternion& q);
+
     }
 }
 
