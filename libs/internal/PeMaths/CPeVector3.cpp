@@ -114,5 +114,10 @@ namespace engine {
 			printf("x: %lf; y: %lf; z: %lf\n", GetX(), GetY(), GetZ());
 		}
 
-	}
+        CPeVector3 operator*(double p_scalar, const CPeVector3 &vector)
+        {
+            return vector*p_scalar;
+        }
+
+    }
 }
