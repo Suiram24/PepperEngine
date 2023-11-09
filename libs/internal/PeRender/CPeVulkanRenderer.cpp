@@ -123,7 +123,7 @@ void vk::CPeVulkanRenderer::init()
 vk::CPeTexture* vk::CPeVulkanRenderer::isTextureInVector(std::string texture)
 {
     for (auto registeredTexture : textureObjects) {
-        if (registeredTexture->texturePath.compare(texture)) {
+        if (registeredTexture->texturePath == texture) {
             return registeredTexture;
         }
     }
