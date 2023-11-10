@@ -129,6 +129,24 @@ namespace engine {
 			 * @param p_forceValue The value of the force to be applied on the particule.
 			*/
 			virtual void AddForce(const pemaths::CPeVector3& p_forceValue) = 0;
+
+			/**
+			 * @brief Add force to this physical object at a specific point in space.
+			 * This value is added to the force accumulator and the torque accumulator.
+			 * 
+			 * @param p_forceValue CPeVector3 - force to apply in N
+			 * @param worldPoint CPeVector3 - Point in global world to apply the force
+			 */
+			virtual void AddForceAtPoint(const pemaths::CPeVector3& p_forceValue, const pemaths::CPeVector3& worldPoint) = 0;
+
+			/**
+			 * @brief Add force to this physical object at a specific point in local space.
+			 * This value is added to the force accumulator and the torque accumulator.
+			 * 
+			 * @param p_forceValue CPeVector3 - force to apply in N
+			 * @param localPoint CPeVector3 - Point in local world to apply the force
+			 */
+			virtual void AddForceAtBodyPoint(const pemaths::CPeVector3& p_forceValue, const pemaths::CPeVector3& localPoint) = 0;
 		};
 	}
 }

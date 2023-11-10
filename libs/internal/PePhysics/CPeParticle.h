@@ -5,6 +5,7 @@
 
 #include "../PeMaths/PeMaths.h"
 #include "../PeEngineCore/PeEngineCore.h"
+#include "CPePhysicalObject.h"
 
 
 
@@ -17,12 +18,12 @@ namespace engine {
 		/**
 		 * @brief A simple implementation of a particle in standard Newton's Physics applied to video games. All units use SI.
 		*/
-		class CPeParticle : public pecore::CPeComponent {
+		class CPeParticle : public CPePhysicalObject {
 			//Fields
 		private:
 			pemaths::CPeVector3 m_velocity;// in m/s
 			
-			pemaths::CPeVector3 m_acceleration;// in m/s²
+			pemaths::CPeVector3 m_acceleration;// in m/sï¿½
 
 			double m_massInverse;// in kg
 
@@ -37,31 +38,8 @@ namespace engine {
 			
 			//TODO: Remove deprecated functions and constructors
 
-			CPeParticle(pecore::CPeEntity& p_owner, double p_massInverse, double p_damping)//Deprecated
-				: CPeComponent(p_owner)
-				, m_velocity(pemaths::CPeVector3(0., 0., 0.))
-				, m_acceleration(pemaths::CPeVector3(0., 0., 0.))
-				, m_massInverse(p_massInverse)
-				, m_damping(p_damping)
-				, m_gravity(pemaths::CPeVector3(0., -10., 0.))
-				, m_sumForces(pemaths::CPeVector3(0., 0., 0.))
-			{
-			}
-			
-			CPeParticle(pecore::CPeEntity& p_owner, double p_massInverse)//Deprecated
-				: CPeComponent(p_owner)
-				, m_velocity(pemaths::CPeVector3(0., 0., 0.))
-				, m_acceleration(pemaths::CPeVector3(0., 0., 0.))
-				, m_massInverse(p_massInverse)
-				, m_damping(0.999)
-				, m_gravity(pemaths::CPeVector3(0., -10., 0.))
-				, m_sumForces(pemaths::CPeVector3(0.,0.,0.))
-			{
-			}
-
-			CPeParticle()
-				: CPeComponent()
-				, m_velocity(pemaths::CPeVector3(0., 0., 0.))
+			CPeParticle() :
+				m_velocity(pemaths::CPeVector3(0., 0., 0.))
 				, m_acceleration(pemaths::CPeVector3(0., 0., 0.))
 				, m_massInverse(0)
 				, m_damping(0)
@@ -97,7 +75,7 @@ namespace engine {
 
 			/**
 			 * @brief Accessor for m_acceleration.
-			 * @return m_acceleration (m/s²).
+			 * @return m_acceleration (m/sï¿½).
 			*/
 			const pemaths::CPeVector3& GetAcceleration() const;
 
@@ -127,7 +105,7 @@ namespace engine {
 
 			/**
 			 * @brief Setter for m_acceleration.
-			 * @param p_acceleration A new acceleration value for the particle in m/s².
+			 * @param p_acceleration A new acceleration value for the particle in m/sï¿½.
 			*/
 			void SetAcceleration(const pemaths::CPeVector3& p_acceleration);
 
@@ -161,6 +139,10 @@ namespace engine {
 			 * @param p_forceValue The value of the force to be applied on the particule.
 			*/
 			void AddForce(const pemaths::CPeVector3& p_forceValue);
+
+			void AddForceAtPoint(const pemaths::CPeVector3& p_forceValue, const pemaths::CPeVector3& worldPoint);
+
+			void AddForceAtBodyPoint(const pemaths::CPeVector3& p_forceValue, const pemaths::CPeVector3& localPoint);
 
 		private:
 			
