@@ -2,14 +2,13 @@
 #define CPERIGIDBODY_CPERIGIDBODY_H
 
 #include "../PeMaths/PeMaths.h"
-#include "../PeEngineCore/PeEngineCore.h"
+#include "CPePhysicalObject.h"
 
 namespace pemaths = engine::maths;
-namespace pecore = engine::core;
 
 namespace engine {
 	namespace physics {
-        class CPeRigidBody : public pecore::CPeComponent {
+        class CPeRigidBody : public CPePhysicalObject {
         private:
             float inverseMass;
             float linearDampling;
