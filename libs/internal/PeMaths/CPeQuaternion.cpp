@@ -154,7 +154,8 @@ namespace engine {
 
         CPeMatrix4 CPeQuaternion::ToMatrix4() const
         {
-            return CPeMatrix4(ToMatrix3());
+            double translation[3] = {0,0,0};
+            return CPeMatrix4(ToMatrix3(), translation);
         }
     }
 }
