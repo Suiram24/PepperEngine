@@ -156,5 +156,14 @@ namespace engine {
 			m_sumForces += p_forceValue;
 		}
 
-	}
+        void CPeParticle::AddForceAtPoint(const pemaths::CPeVector3 &p_forceValue, const pemaths::CPeVector3 &worldPoint)
+        {
+			AddForce(p_forceValue);
+        }
+
+        void CPeParticle::AddForceAtBodyPoint(const pemaths::CPeVector3 &p_forceValue, const pemaths::CPeVector3 &localPoint)
+        {
+			AddForce(p_forceValue);
+        }
+    }
 }

@@ -44,6 +44,14 @@ namespace engine
 				m_translation[2] = p_translation[2];
 			}
 
+			CPeMatrix4(const CPeMatrix3& p_matrice, CPeVector3& p_translation)
+				: m_matrice(p_matrice)
+			{
+				m_translation[0] = p_translation.GetX();
+				m_translation[1] = p_translation.GetY();
+				m_translation[2] = p_translation.GetZ();
+			}
+
 			CPeMatrix4(double a0, double a1, double a2, double a3, double a4, double a5, double a6, double a7, double a8, double a9, double a10, double a11)
 				: m_matrice(a0, a1, a2, a3, a4, a5, a6, a7, a8)
 			{

@@ -7,7 +7,15 @@ namespace engine {
 			return m_position;
 		}
 
-		const CPeVector3& CPeTransform::GetOrientation() const
+        CPeVector3 CPeTransform::GetPositionPoint(const CPeVector3& p_localPoint)
+        {
+			UpdateTransformMatrix();
+			if (!m_transformMatrix.IsInversible()) return CPeVector3(0,0,0); 
+			CPeVector3 globalPoint = m_transformMatrix.Inverse()*p_localPoint;
+            return globalPoint;
+        }
+
+        const CPeQuaternion& CPeTransform::GetOrientation() const
 		{
 			return m_orientation;
 		}
@@ -22,12 +30,17 @@ namespace engine {
 			m_position = p_position;
 		}
 
-		void CPeTransform::SetOrientation(const CPeVector3& p_orientation)
+		void CPeTransform::SetOrientation(const CPeQuaternion& p_orientation)
 		{
 			m_orientation = p_orientation;
 		}
 
-		void CPeTransform::SetSize(const CPeVector3& p_size)
+        void CPeTransform::UpdateTransformMatrix()
+        {
+			m_transformMatrix = CPeMatrix4(m_orientation.ToMatrix3(),m_position);
+        }
+
+        void CPeTransform::SetSize(const CPeVector3& p_size)
 		{
 			m_size = p_size;
 		}
