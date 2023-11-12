@@ -16,17 +16,18 @@ namespace engine {
 
 			p_owner->AddComponent(this);
 		}
-		void CPeParticle::Initialise(pecore::CPeEntity& p_owner, double p_massInverse)
+
+		void CPeParticle::Initialise(pecore::CPeEntity* p_owner, double p_massInverse)
 		{
 			m_isActive = true;
-			m_owner = &p_owner;
+			m_owner = p_owner;
 			m_velocity = pemaths::CPeVector3(0., 0., 0.);
 			m_acceleration = pemaths::CPeVector3(0., 0., 0.);
 			m_massInverse = p_massInverse;
 			m_damping = 0.999;
 			m_sumForces = pemaths::CPeVector3(0., 0., 0.);
 
-			p_owner.AddComponent(this);
+			p_owner->AddComponent(this);
 		}
 
 

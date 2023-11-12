@@ -3,7 +3,6 @@ link_directories(libs/internal/PeMaths)
 
 add_library(PePhysics	PePhysics.h 
 						"CPeForceSystem.h"						"CPeForceSystem.cpp"
-						CPePhysicalObject.h						CPePhysicalObject.cpp
 						"CPeParticle.h"							"CPeParticle.cpp"
 						CPeRigidBody.h							CPeRigidBody.cpp
 						"CPeForce.h"							"CPeForce.cpp" 

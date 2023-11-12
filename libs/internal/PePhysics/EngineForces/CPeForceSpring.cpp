@@ -13,7 +13,7 @@ namespace engine {
 		}
 
         void CPeForceSpring::Initialise(
-			CPePhysicalObject *p_other,
+			CPeParticle *p_other,
 			pemaths::CPeVector3 p_otherLocalAnchor,
 			float p_k,
 			float p_restLength

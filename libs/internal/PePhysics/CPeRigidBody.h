@@ -2,29 +2,26 @@
 #define CPERIGIDBODY_CPERIGIDBODY_H
 
 #include "../PeMaths/PeMaths.h"
-#include "CPePhysicalObject.h"
+#include "CPeParticle.h"
 
 namespace pemaths = engine::maths;
 
 namespace engine {
 	namespace physics {
-        class CPeRigidBody : public CPePhysicalObject {
+        class CPeRigidBody : public CPeParticle {
         private:
-            float inverseMass;
-            float linearDampling;
-            pemaths::CPeVector3 position;
-            pemaths::CPeVector3 velocity;
+            double m_angularDamping;
 
-            pemaths::CPeQuaternion orientation;
+            pemaths::CPeVector3 m_angularVelocity;
 
-            pemaths::CPeVector3 angularVelocity;
+            pemaths::CPeVector3 m_sumTorques;
 
-            pemaths::CPeMatrix4 transformMatrix;
-        public:
             /**
-             * @brief .Modify position, orientation & velocities
-             */
-            void Integrate(float p_timeStep);
+             * @brief Compute the new angular velocity and orientation.
+             * @param p_timeStep The time step to integrate in second.
+            */
+            void UpdateAngle(double p_timeStep);
+
             /**
              * @brief Call each frame to compute transformMatrix & normalize the orientation.
              */

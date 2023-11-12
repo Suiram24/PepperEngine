@@ -5,9 +5,6 @@
 
 #include "../PeMaths/PeMaths.h"
 #include "../PeEngineCore/PeEngineCore.h"
-#include "CPePhysicalObject.h"
-
-
 
 namespace pemaths = engine::maths;
 namespace pecore = engine::core;
@@ -18,7 +15,7 @@ namespace engine {
 		/**
 		 * @brief A simple implementation of a particle in standard Newton's Physics applied to video games. All units use SI.
 		*/
-		class CPeParticle : public CPePhysicalObject {
+		class CPeParticle : public pecore::CPeComponent {
 			//Fields
 		private:
 			pemaths::CPeVector3 m_velocity;// in m/s
@@ -36,10 +33,9 @@ namespace engine {
 			//Methods
 		public:
 			
-			//TODO: Remove deprecated functions and constructors
-
 			CPeParticle() :
-				m_velocity(pemaths::CPeVector3(0., 0., 0.))
+				CPeComponent()
+				, m_velocity(pemaths::CPeVector3(0., 0., 0.))
 				, m_acceleration(pemaths::CPeVector3(0., 0., 0.))
 				, m_massInverse(0)
 				, m_damping(0)
@@ -49,7 +45,7 @@ namespace engine {
 
 			void Initialise(pecore::CPeEntity* p_owner, double p_massInverse, double p_damping, pemaths::CPeVector3 p_gravity);
 
-			void Initialise(pecore::CPeEntity& p_owner, double p_massInverse);//Deprecated
+			void Initialise(pecore::CPeEntity* p_owner, double p_massInverse);
 
 			/**
 			 * @brief Accessor for m_massInverse.
@@ -140,8 +136,22 @@ namespace engine {
 			*/
 			void AddForce(const pemaths::CPeVector3& p_forceValue);
 
+			/**
+			 * @brief Add force to this physical object at a specific point in space.
+			 * This value is added to the force accumulator and the torque accumulator.
+			 *
+			 * @param p_forceValue CPeVector3 - force to apply in N
+			 * @param worldPoint CPeVector3 - Point in global world to apply the force
+			 */
 			void AddForceAtPoint(const pemaths::CPeVector3& p_forceValue, const pemaths::CPeVector3& worldPoint);
 
+			/**
+			 * @brief Add force to this physical object at a specific point in local space.
+			 * This value is added to the force accumulator and the torque accumulator.
+			 *
+			 * @param p_forceValue CPeVector3 - force to apply in N
+			 * @param localPoint CPeVector3 - Point in local world to apply the force
+			 */
 			void AddForceAtBodyPoint(const pemaths::CPeVector3& p_forceValue, const pemaths::CPeVector3& localPoint);
 
 		private:
