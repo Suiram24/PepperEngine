@@ -26,12 +26,12 @@ namespace engine {
 			CPeTransform(
 				const CPeVector3& p_position,
 				const CPeQuaternion& p_orientation,
-				const CPeMatrix4& p_transfromMatrix,
+				const CPeMatrix4& p_transformMatrix,
 				const CPeVector3& p_size
 			) :
 				m_position(p_position),
 				m_orientation(p_orientation),
-				m_transformMatrix(p_transfromMatrix),
+				m_transformMatrix(p_transformMatrix),
 				m_size(p_size)
 			{
 			}

@@ -121,7 +121,7 @@ namespace engine {
 			 * @brief Compute the new acceleration, velocity and position with precision.
 			 * @param p_timeStep The time step to integrate in second.
 			*/
-			void UpdatePrecisely(double p_timeStep);
+			virtual void UpdatePrecisely(double p_timeStep);
 
 			/**
 			 * @brief Update the sum of all forces applied on the particule. Deprecated, forces should use AddForce instead.
@@ -143,7 +143,7 @@ namespace engine {
 			 * @param p_forceValue CPeVector3 - force to apply in N
 			 * @param worldPoint CPeVector3 - Point in global world to apply the force
 			 */
-			void AddForceAtPoint(const pemaths::CPeVector3& p_forceValue, const pemaths::CPeVector3& worldPoint);
+			virtual void AddForceAtPoint(const pemaths::CPeVector3& p_forceValue, const pemaths::CPeVector3& worldPoint);
 
 			/**
 			 * @brief Add force to this physical object at a specific point in local space.
@@ -152,9 +152,9 @@ namespace engine {
 			 * @param p_forceValue CPeVector3 - force to apply in N
 			 * @param localPoint CPeVector3 - Point in local world to apply the force
 			 */
-			void AddForceAtBodyPoint(const pemaths::CPeVector3& p_forceValue, const pemaths::CPeVector3& localPoint);
+			virtual void AddForceAtBodyPoint(const pemaths::CPeVector3& p_forceValue, const pemaths::CPeVector3& localPoint);
 
-		private:
+		protected:
 			
 			/**
 			 * @brief Compute the new acceleration based on all forces.

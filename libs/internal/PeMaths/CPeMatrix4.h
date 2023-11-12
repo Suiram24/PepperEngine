@@ -140,6 +140,8 @@ namespace engine
 			*/
 			CPeVector3 operator*(const CPeVector3& p_vector) const;
 
+			CPeMatrix3 ToMatrix3() const;
+
 		};
 
 

@@ -131,5 +131,14 @@ namespace engine {
 			return mult;
 		}
 
+		CPeMatrix3 CPeMatrix4::ToMatrix3() const
+		{
+			CPeMatrix3 mat = CPeMatrix3(
+				Get(0, 0), Get(0, 1), Get(0, 2),
+				Get(1, 0), Get(1, 1), Get(1, 2),
+				Get(2, 0), Get(2, 1), Get(2, 2)
+			);
+			return mat;
+		}
 	}
 }
