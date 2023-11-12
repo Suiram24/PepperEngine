@@ -73,6 +73,12 @@ namespace engine {
 			CPeVector3 GetPositionPoint(const CPeVector3& p_localPoint);
 
 			/**
+			 * @brief Get targeted point global coordinates in local coordinates
+			 *
+			 */
+			CPeVector3 GetPositionPointInLocal(const CPeVector3& p_globalPoint) const;
+
+			/**
 			 * @brief Accessor for m_orientation.
 			 * @return m_orientation.
 			*/
@@ -83,6 +89,8 @@ namespace engine {
 			 * @return m_size.
 			*/
 			const CPeVector3& GetSize() const;
+
+			CPeMatrix4 GetTransformMatrix() const;
 
 			/**
 			 * @brief Setter for m_position.

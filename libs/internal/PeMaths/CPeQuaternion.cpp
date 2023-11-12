@@ -67,6 +67,18 @@ namespace engine {
             this->m_value[3] += q2.m_value[3];
             return *this;
         }
+        
+        CPeQuaternion CPeQuaternion::operator+(const CPeQuaternion& q2) const
+        {
+            CPeQuaternion quaternion(
+                m_value[0] + q2.m_value[0],
+                m_value[1] + q2.m_value[1],
+                m_value[2] + q2.m_value[2],
+                m_value[3] + q2.m_value[3]
+            );
+            return quaternion;
+        }
+
 
         CPeQuaternion CPeQuaternion::operator*(float scalar) const
         {

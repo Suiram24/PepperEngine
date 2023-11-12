@@ -98,6 +98,8 @@ namespace engine
              */
             CPeQuaternion& operator+=(const CPeQuaternion& q2);
 
+            CPeQuaternion operator+(const CPeQuaternion& q2) const;
+
             /**
              * @brief Product by a scalar
              * 

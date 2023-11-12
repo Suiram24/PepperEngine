@@ -15,6 +15,11 @@ namespace engine {
             return globalPoint;
         }
 
+		CPeVector3 CPeTransform::GetPositionPointInLocal(const CPeVector3& p_globalPoint) const
+		{
+			return m_transformMatrix * p_globalPoint;
+		}
+
         const CPeQuaternion& CPeTransform::GetOrientation() const
 		{
 			return m_orientation;
@@ -24,6 +29,12 @@ namespace engine {
 		{
 			return m_size;
 		}
+
+		CPeMatrix4 CPeTransform::GetTransformMatrix() const
+		{
+			return m_transformMatrix;
+		}
+
 
 		void CPeTransform::SetPosition(const CPeVector3& p_position)
 		{
