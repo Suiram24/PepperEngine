@@ -1,4 +1,5 @@
 #include "CPeTransform.h"
+#include <cassert>
 
 namespace engine {
 	namespace maths {
@@ -9,14 +10,15 @@ namespace engine {
 
         CPeVector3 CPeTransform::GetPositionPoint(const CPeVector3& p_localPoint)
         {
-			UpdateTransformMatrix();
-			if (!m_transformMatrix.IsInversible()) return CPeVector3(0,0,0); 
-			CPeVector3 globalPoint = m_transformMatrix.Inverse()*p_localPoint;
-            return globalPoint;
+            return m_transformMatrix * p_localPoint;
         }
 
 		CPeVector3 CPeTransform::GetPositionPointInLocal(const CPeVector3& p_globalPoint) const
 		{
+			if (!m_transformMatrix.IsInversible()) {
+				assert("Matrix is not inversible",false);
+				return CPeVector3(0, 0, 0);
+			}
 			return m_transformMatrix * p_globalPoint;
 		}
 
