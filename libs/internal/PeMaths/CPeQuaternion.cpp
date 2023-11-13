@@ -3,7 +3,7 @@
 #include <cstdio>
 namespace engine {
     namespace maths {
-        float CPeQuaternion::GetNorm()
+        double CPeQuaternion::GetNorm()
         {
             return std::sqrt(
                 m_value[0]*m_value[0] + 
@@ -18,17 +18,17 @@ namespace engine {
         {
         }
 
-        CPeQuaternion::CPeQuaternion(float w, float x, float y, float z) : 
+        CPeQuaternion::CPeQuaternion(double w, double x, double y, double z) : 
             m_value{w,x,y,z}
         {
         }
 
-        CPeQuaternion::CPeQuaternion(float w, const CPeVector3 &v) : 
+        CPeQuaternion::CPeQuaternion(double w, const CPeVector3 &v) : 
             m_value{w,v.GetX(),v.GetY(),v.GetZ()}
         {
         }
 
-        CPeQuaternion::CPeQuaternion(const CPeVector3 &axis, float angle)
+        CPeQuaternion::CPeQuaternion(const CPeVector3 &axis, double angle)
         {
             CPeVector3 normalizedAxis = axis.NormalizeVector();
             *this = CPeQuaternion(std::cos(angle/2),std::sin(angle/2)*normalizedAxis);
@@ -44,14 +44,14 @@ namespace engine {
             return *this;
         }
 
-        CPeQuaternion CPeQuaternion::operator/(const float &scalar) const
+        CPeQuaternion CPeQuaternion::operator/(const double &scalar) const
         {
             CPeQuaternion q(*this);
             q /= scalar;
             return q;
         }
 
-        CPeQuaternion &CPeQuaternion::operator/=(const float &scalar)
+        CPeQuaternion &CPeQuaternion::operator/=(const double &scalar)
         {
             for(int i = 0; i < 4; ++i) {
                 m_value[i] /= scalar;
@@ -80,14 +80,14 @@ namespace engine {
         }
 
 
-        CPeQuaternion CPeQuaternion::operator*(float scalar) const
+        CPeQuaternion CPeQuaternion::operator*(double scalar) const
         {
             CPeQuaternion q(*this);
             q *= scalar;
             return q;
         }
 
-        CPeQuaternion &CPeQuaternion::operator*=(float scalar)
+        CPeQuaternion &CPeQuaternion::operator*=(double scalar)
         {
             this->m_value[0] *= scalar;
             this->m_value[1] *= scalar;
@@ -98,7 +98,7 @@ namespace engine {
 
         CPeQuaternion CPeQuaternion::operator*(const CPeQuaternion &q2) const
         {
-            float re_q1 = this->GetRealPart(), re_q2 = q2.GetRealPart();
+            double re_q1 = this->GetRealPart(), re_q2 = q2.GetRealPart();
             CPeVector3 im_q1 = this->GetImaginaryPart();
             CPeVector3 im_q2 = q2.GetImaginaryPart();
             return CPeQuaternion(
@@ -112,6 +112,7 @@ namespace engine {
         CPeQuaternion &CPeQuaternion::operator*=(const CPeQuaternion &q2)
         {
             *this = *this * q2;
+            return *this;
         }
 
         CPeQuaternion &CPeQuaternion::RotateByVector(const CPeVector3 &vector)
@@ -123,14 +124,14 @@ namespace engine {
             return *this;
         }
 
-        CPeQuaternion &CPeQuaternion::UpdateByAngularVelocity(const CPeVector3 &rotation, float duration)
+        CPeQuaternion &CPeQuaternion::UpdateByAngularVelocity(const CPeVector3 &rotation, double duration)
         {
             CPeQuaternion rotationQuaternion(0,rotation);
             *this += duration/2 * rotationQuaternion * (*this);
             return *this;
         }
 
-        float CPeQuaternion::GetRealPart() const
+        double CPeQuaternion::GetRealPart() const
         {
             return m_value[0];
         }
@@ -140,12 +141,12 @@ namespace engine {
             return CPeVector3(m_value[1],m_value[2],m_value[3]);
         }
 
-        float CPeQuaternion::GetAngle() const
+        double CPeQuaternion::GetAngle() const
         {
             return 2*std::acos(m_value[0]);
         }
 
-        CPeQuaternion operator*(float scalar, const CPeQuaternion &q)
+        CPeQuaternion operator*(double scalar, const CPeQuaternion &q)
         {
             return q*scalar;
         }
