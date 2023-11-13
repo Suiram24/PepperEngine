@@ -14,17 +14,17 @@ namespace engine {
         }
 
         CPeQuaternion::CPeQuaternion() : 
-            m_value({0.0f,0.0f,0.0f,0.0f})
+            m_value{0.0f,0.0f,0.0f,0.0f}
         {
         }
 
         CPeQuaternion::CPeQuaternion(float w, float x, float y, float z) : 
-            m_value({w,x,y,z})
+            m_value{w,x,y,z}
         {
         }
 
         CPeQuaternion::CPeQuaternion(float w, const CPeVector3 &v) : 
-            m_value({w,v.GetX(),v.GetY(),v.GetZ()})
+            m_value{w,v.GetX(),v.GetY(),v.GetZ()}
         {
         }
 
@@ -34,7 +34,7 @@ namespace engine {
             *this = CPeQuaternion(std::cos(angle/2),std::sin(angle/2)*normalizedAxis);
         }
 
-        CPeQuaternion::CPeQuaternion(const CPeQuaternion &q) : m_value({q.m_value[0], q.m_value[1], q.m_value[2], q.m_value[3]})
+        CPeQuaternion::CPeQuaternion(const CPeQuaternion &q) : m_value{q.m_value[0], q.m_value[1], q.m_value[2], q.m_value[3]}
         {
         }
 
