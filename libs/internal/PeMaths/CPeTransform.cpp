@@ -16,7 +16,7 @@ namespace engine {
 		CPeVector3 CPeTransform::GetPositionPointInLocal(const CPeVector3& p_globalPoint) const
 		{
 			if (!m_transformMatrix.IsInversible()) {
-				assert("Matrix is not inversible",false);
+				assert("Matrix is not inversible" && false);
 				return CPeVector3(0, 0, 0);
 			}
 			return m_transformMatrix * p_globalPoint;
