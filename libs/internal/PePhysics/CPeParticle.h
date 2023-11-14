@@ -6,8 +6,6 @@
 #include "../PeMaths/PeMaths.h"
 #include "../PeEngineCore/PeEngineCore.h"
 
-
-
 namespace pemaths = engine::maths;
 namespace pecore = engine::core;
 
@@ -22,7 +20,7 @@ namespace engine {
 		private:
 			pemaths::CPeVector3 m_velocity;// in m/s
 			
-			pemaths::CPeVector3 m_acceleration;// in m/s²
+			pemaths::CPeVector3 m_acceleration;// in m/sï¿½
 
 			double m_massInverse;// in kg
 
@@ -35,32 +33,8 @@ namespace engine {
 			//Methods
 		public:
 			
-			//TODO: Remove deprecated functions and constructors
-
-			CPeParticle(pecore::CPeEntity& p_owner, double p_massInverse, double p_damping)//Deprecated
-				: CPeComponent(p_owner)
-				, m_velocity(pemaths::CPeVector3(0., 0., 0.))
-				, m_acceleration(pemaths::CPeVector3(0., 0., 0.))
-				, m_massInverse(p_massInverse)
-				, m_damping(p_damping)
-				, m_gravity(pemaths::CPeVector3(0., -10., 0.))
-				, m_sumForces(pemaths::CPeVector3(0., 0., 0.))
-			{
-			}
-			
-			CPeParticle(pecore::CPeEntity& p_owner, double p_massInverse)//Deprecated
-				: CPeComponent(p_owner)
-				, m_velocity(pemaths::CPeVector3(0., 0., 0.))
-				, m_acceleration(pemaths::CPeVector3(0., 0., 0.))
-				, m_massInverse(p_massInverse)
-				, m_damping(0.999)
-				, m_gravity(pemaths::CPeVector3(0., -10., 0.))
-				, m_sumForces(pemaths::CPeVector3(0.,0.,0.))
-			{
-			}
-
-			CPeParticle()
-				: CPeComponent()
+			CPeParticle() :
+				CPeComponent()
 				, m_velocity(pemaths::CPeVector3(0., 0., 0.))
 				, m_acceleration(pemaths::CPeVector3(0., 0., 0.))
 				, m_massInverse(0)
@@ -71,7 +45,7 @@ namespace engine {
 
 			void Initialise(pecore::CPeEntity* p_owner, double p_massInverse, double p_damping, pemaths::CPeVector3 p_gravity);
 
-			void Initialise(pecore::CPeEntity& p_owner, double p_massInverse);//Deprecated
+			void Initialise(pecore::CPeEntity* p_owner, double p_massInverse);
 
 			/**
 			 * @brief Accessor for m_massInverse.
@@ -97,7 +71,7 @@ namespace engine {
 
 			/**
 			 * @brief Accessor for m_acceleration.
-			 * @return m_acceleration (m/s²).
+			 * @return m_acceleration (m/sï¿½).
 			*/
 			const pemaths::CPeVector3& GetAcceleration() const;
 
@@ -127,7 +101,7 @@ namespace engine {
 
 			/**
 			 * @brief Setter for m_acceleration.
-			 * @param p_acceleration A new acceleration value for the particle in m/s².
+			 * @param p_acceleration A new acceleration value for the particle in m/sï¿½.
 			*/
 			void SetAcceleration(const pemaths::CPeVector3& p_acceleration);
 
@@ -147,7 +121,7 @@ namespace engine {
 			 * @brief Compute the new acceleration, velocity and position with precision.
 			 * @param p_timeStep The time step to integrate in second.
 			*/
-			void UpdatePrecisely(double p_timeStep);
+			virtual void UpdatePrecisely(double p_timeStep);
 
 			/**
 			 * @brief Update the sum of all forces applied on the particule. Deprecated, forces should use AddForce instead.
@@ -162,7 +136,25 @@ namespace engine {
 			*/
 			void AddForce(const pemaths::CPeVector3& p_forceValue);
 
-		private:
+			/**
+			 * @brief Add force to this physical object at a specific point in space.
+			 * This value is added to the force accumulator and the torque accumulator.
+			 *
+			 * @param p_forceValue CPeVector3 - force to apply in N
+			 * @param worldPoint CPeVector3 - Point in global world to apply the force
+			 */
+			virtual void AddForceAtPoint(const pemaths::CPeVector3& p_forceValue, const pemaths::CPeVector3& worldPoint);
+
+			/**
+			 * @brief Add force to this physical object at a specific point in local space.
+			 * This value is added to the force accumulator and the torque accumulator.
+			 *
+			 * @param p_forceValue CPeVector3 - force to apply in N
+			 * @param localPoint CPeVector3 - Point in local world to apply the force
+			 */
+			virtual void AddForceAtBodyPoint(const pemaths::CPeVector3& p_forceValue, const pemaths::CPeVector3& localPoint);
+
+		protected:
 			
 			/**
 			 * @brief Compute the new acceleration based on all forces.

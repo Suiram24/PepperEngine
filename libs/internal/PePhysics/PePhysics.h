@@ -5,6 +5,7 @@
 
 #include "../PeMaths/PeMaths.h"
 #include "CPeParticle.h"
+#include "CPeRigidBody.h"
 #include "CPeForce.h"
 #include "CPeForceSystem.h"
 

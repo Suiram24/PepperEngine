@@ -3,6 +3,7 @@
 
 #include "../PeMaths/PeMaths.h"
 #include "CPeParticle.h"
+#include "CPeRigidBody.h"
 
 namespace pemaths = engine::maths;
 

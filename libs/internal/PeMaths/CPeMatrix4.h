@@ -44,6 +44,14 @@ namespace engine
 				m_translation[2] = p_translation[2];
 			}
 
+			CPeMatrix4(const CPeMatrix3& p_matrice, CPeVector3& p_translation)
+				: m_matrice(p_matrice)
+			{
+				m_translation[0] = p_translation.GetX();
+				m_translation[1] = p_translation.GetY();
+				m_translation[2] = p_translation.GetZ();
+			}
+
 			CPeMatrix4(double a0, double a1, double a2, double a3, double a4, double a5, double a6, double a7, double a8, double a9, double a10, double a11)
 				: m_matrice(a0, a1, a2, a3, a4, a5, a6, a7, a8)
 			{
@@ -56,11 +64,17 @@ namespace engine
 			{
 				for (int i = 0; i < 3; i++)
 				{
-					for (int j = 0; j < 4; j++)
+					for (int j = 0; j < 3; j++)
+
 					{
 						m_matrice.Set(i, j, p_matrice.Get(i, j));
 					}
 				}
+        
+				m_translation[0] = p_matrice.Get(0, 3);
+				m_translation[1] = p_matrice.Get(1, 3);
+				m_translation[2] = p_matrice.Get(2, 3);
+
 			}
 
 			/**
@@ -131,6 +145,8 @@ namespace engine
 			* @return  A new CPeVector3.
 			*/
 			CPeVector3 operator*(const CPeVector3& p_vector) const;
+
+			CPeMatrix3 ToMatrix3() const;
 
 		};
 

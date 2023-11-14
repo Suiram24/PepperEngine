@@ -16,7 +16,7 @@ namespace engine
         class CPeQuaternion {
         private:
             /// @brief Values w, x, y & z of the quaternion
-            float m_value[4];
+            double m_value[4];
         public:
         protected:
 
@@ -24,9 +24,9 @@ namespace engine
             /**
              * @brief Compute the norm of the quaternion
              * 
-             * @return float - Norm of the
+             * @return double - Norm of the
              */
-            float GetNorm();
+            double GetNorm();
         public: 
             /**
              * @brief Construct a new CPeQuaternion object
@@ -36,20 +36,20 @@ namespace engine
          /**
              * @brief Construct a new CPeQuaternion object
              * 
-             * @param w float - real part of the quaternion
-             * @param x float - i part of the quaternion
-             * @param y float - j part of the quaternion
-             * @param z float - k part of the quaternion
+             * @param w double - real part of the quaternion
+             * @param x double - i part of the quaternion
+             * @param y double - j part of the quaternion
+             * @param z double - k part of the quaternion
              */
-            CPeQuaternion(float w, float x, float y, float z);
+            CPeQuaternion(double w, double x, double y, double z);
 
             /**
              * @brief Construct a new CPeQuaternion object
              * 
-             * @param w float - real part of the qauternion
+             * @param w double - real part of the qauternion
              * @param v CPeVector3& - imaginary part of the quaternion
              */
-            CPeQuaternion(float w, const CPeVector3& v);
+            CPeQuaternion(double w, const CPeVector3& v);
 
                         /**
              * @brief Construct a new CPeQuaternion object with and axis-angle rotation
@@ -57,7 +57,7 @@ namespace engine
              * @param axis sNormalized axis of the rotation
              * @param angle the angle of the rotation
              */
-            CPeQuaternion(const CPeVector3& axis, float angle);
+            CPeQuaternion(const CPeVector3& axis, double angle);
 
             /**
              * @brief Construct a new CPeQuaternion object by copy
@@ -77,18 +77,18 @@ namespace engine
             /**
              * @brief Division by a scalar
              * 
-             * @param scalar float element to divide by
+             * @param scalar double element to divide by
              * @return CPeQuaternion - Result of the division
              */
-            CPeQuaternion operator/(const float& scalar) const;
+            CPeQuaternion operator/(const double& scalar) const;
 
             /**
              * @brief Auto division by a scalar
              * 
-             * @param scalar float element to divide by
+             * @param scalar double element to divide by
              * @return CPeQuaternion& - Modified quaternion
              */
-            CPeQuaternion& operator/=(const float& scalar);
+            CPeQuaternion& operator/=(const double& scalar);
 
             /**
              * @brief Auto addition by another quaternion
@@ -98,21 +98,23 @@ namespace engine
              */
             CPeQuaternion& operator+=(const CPeQuaternion& q2);
 
+            CPeQuaternion operator+(const CPeQuaternion& q2) const;
+
             /**
              * @brief Product by a scalar
              * 
-             * @param scalar float scalar to multiply the quaternion with
+             * @param scalar double scalar to multiply the quaternion with
              * @return CPeQuaternion - Result of the multiplication
              */
-            CPeQuaternion operator*(float scalar) const;
+            CPeQuaternion operator*(double scalar) const;
 
             /**
              * @brief Auto product by a scalar
              * 
-             * @param scalar float scalar to multiply the quaternion with
+             * @param scalar double scalar to multiply the quaternion with
              * @return CPeQuaternion - Modified Quaternion
              */
-            CPeQuaternion& operator*=(float scalar);
+            CPeQuaternion& operator*=(double scalar);
 
             /**
              * @brief Quaternion product
@@ -143,17 +145,17 @@ namespace engine
              * specific period of time to apply it
              * 
              * @param rotation CPeVector3& representing the angular rotation
-             * @param duration float representing the time to apply the angular speed
+             * @param duration double representing the time to apply the angular speed
              * @return CPeQuaternion& - Modified rotation
              */
-            CPeQuaternion& UpdateByAngularVelocity(const CPeVector3& rotation, float duration);
+            CPeQuaternion& UpdateByAngularVelocity(const CPeVector3& rotation, double duration);
 
             /**
              * @brief Get the Real Part of the quaternion
              * 
-             * @return float - Real part of the quaternion (w)
+             * @return double - Real part of the quaternion (w)
              */
-            float GetRealPart() const;
+            double GetRealPart() const;
 
 
             /**
@@ -167,9 +169,9 @@ namespace engine
              * @brief Get the Angle represented by the quaternion.
              * It only works if the quaternion represents a rotation.
              * 
-             * @return float - Angle represented by the rotation quaternion.
+             * @return double - Angle represented by the rotation quaternion.
              */
-            float GetAngle() const;
+            double GetAngle() const;
 
             /**
              * @brief Return the matrix 3x3 version of the quaternion.
@@ -178,21 +180,25 @@ namespace engine
             CPeMatrix3 ToMatrix3() const;
 
             /**
+
             * @brief Return the matrix 3x4 version of the quaternion.
             * @return CPeMatrix3 version of your CPeQuaternion.
             */
             CPeMatrix4 ToMatrix4() const;
+          
         protected:
         };
 
         /**
          * @brief Quaternion product by a scalar
          * 
-         * @param scalar float Scalar to multiply the quaternion with
+         * @param scalar double Scalar to multiply the quaternion with
          * @param q CPeQuaternion& Quaternion to multiply
          * @return CPeQuaternion - Result of the multiplication
          */
-        CPeQuaternion operator*(float scalar, const CPeQuaternion& q);
+
+        CPeQuaternion operator*(double scalar, const CPeQuaternion& q);
+
 
     }
 }
