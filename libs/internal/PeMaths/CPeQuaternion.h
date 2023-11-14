@@ -180,10 +180,12 @@ namespace engine
             CPeMatrix3 ToMatrix3() const;
 
             /**
+
             * @brief Return the matrix 3x4 version of the quaternion.
             * @return CPeMatrix3 version of your CPeQuaternion.
             */
             CPeMatrix4 ToMatrix4() const;
+          
         protected:
         };
 
@@ -194,7 +196,9 @@ namespace engine
          * @param q CPeQuaternion& Quaternion to multiply
          * @return CPeQuaternion - Result of the multiplication
          */
+
         CPeQuaternion operator*(double scalar, const CPeQuaternion& q);
+
 
     }
 }

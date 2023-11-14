@@ -3,7 +3,7 @@
 
 #include "..\CPeGameMode.h"
 #include "..\CPeGameManager.h"
-#include "..\libs\internal\PeRender\SphereMesh.h"
+#include "..\libs\internal\PeRender\PeRender.h"
 #include "..\Libs\internal\PeEngineCore\PeEngineCore.h"
 #include "..\Libs\internal\PePhysics\PePhysics.h"
 

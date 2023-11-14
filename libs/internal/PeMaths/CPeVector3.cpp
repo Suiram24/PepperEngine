@@ -114,7 +114,6 @@ namespace engine {
 			printf("x: %lf; y: %lf; z: %lf\n", GetX(), GetY(), GetZ());
 		}
 
-
 		void CPeVector3::SetX(double p_x)
 		{
 			m_x = p_x;
@@ -128,9 +127,11 @@ namespace engine {
 			m_z = p_z;
 		}
 
-        CPeVector3 operator*(double p_scalar, const CPeVector3 &vector)
-        {
-            return vector*p_scalar;
-        }
+    CPeVector3 operator*(double p_scalar, const CPeVector3 &vector)
+    {
+        return vector*p_scalar;
     }
+
+
+  }
 }
