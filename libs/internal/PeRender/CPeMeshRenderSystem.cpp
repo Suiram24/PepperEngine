@@ -5,9 +5,9 @@ namespace engine {
 
 		CPeMeshComponent* CPeMeshRenderSystem::CreateMeshComponent(pecore::CPeEntity* p_owner, vk::GenericRenderer& renderer, std::string texture)
 		{
-			CPeMeshComponent c = new CPeMeshComponent(p_owner, render, texture);
+			CPeMeshComponent* c = new CPeMeshComponent(p_owner, renderer, texture);
 			m_meshComponentPool.push_back(c);
-			return &c;
+			return c;
 		}
 
 		void CPeMeshRenderSystem::AllocateObjectsPool()
@@ -19,7 +19,7 @@ namespace engine {
 		void CPeMeshRenderSystem::FreeObjectsPool()
 		{
 			//Temp work 
-			for (CPeMeshComponent c : m_meshComponentPool)
+			for (CPeMeshComponent* c : m_meshComponentPool)
 			{
 				delete c;
 			}
@@ -28,9 +28,9 @@ namespace engine {
 
 		void CPeMeshRenderSystem::Update()
 		{
-			for (CPeMeshComponent c : m_meshComponentPool)
+			for (CPeMeshComponent* c : m_meshComponentPool)
 			{
-				c.UpdateTransformMatrix();
+				c->UpdateTransformMatrix();
 			}
 
 		}

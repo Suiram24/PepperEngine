@@ -53,7 +53,7 @@ namespace engine {
 		private:
 			
 			//TODO: make this an object pool (may need to work on vk modelwatcher)
-			std::vector<CPeMeshComponent> m_meshComponentPool; 
+			std::vector<CPeMeshComponent*> m_meshComponentPool; 
 
 
 		};
