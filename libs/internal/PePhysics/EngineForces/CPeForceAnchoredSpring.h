@@ -26,12 +26,12 @@ namespace engine {
 			{
 
 			}
-
+ 
 			void Initialise(const pemaths::CPeVector3& p_anchor, float p_k, float p_restLength);
 			void Initialise(const pemaths::CPeVector3& p_anchor, const pemaths::CPeVector3& p_localAnchor, float p_k, float p_restLength);
 
-			void Compute(CPeParticle* p_particule, double p_timeStep) const;
-			void Compute(CPeRigidBody* p_rigidBody, double p_timeStep) const;
+			void Compute(CPeParticle& p_particule, double p_timeStep) const;
+			void Compute(CPeRigidBody& p_rigidBody, double p_timeStep) const;
 		};
 	}
 }

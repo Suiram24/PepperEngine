@@ -26,19 +26,19 @@ namespace engine {
 			m_restLength = p_restLength;
 		}
 
-		void CPeForceAnchoredSpring::Compute(CPeParticle* p_particule, double p_timeStep) const
+		void CPeForceAnchoredSpring::Compute(CPeParticle& p_particule, double p_timeStep) const
 		{
-			pemaths::CPeVector3 d = m_anchor - p_particule->GetTransform().GetPosition();
-			p_particule->AddForce(d.NormalizeVector() * (m_k * (d.GetNorm() - m_restLength)) * p_timeStep);
+			pemaths::CPeVector3 d = m_anchor - p_particule.GetTransform().GetPosition();
+			p_particule.AddForce(d.NormalizeVector() * (m_k * (d.GetNorm() - m_restLength)) * p_timeStep);
 			return;
 		}
 
-		void CPeForceAnchoredSpring::Compute(CPeRigidBody* p_rigidBody, double p_timeStep) const
+		void CPeForceAnchoredSpring::Compute(CPeRigidBody& p_rigidBody, double p_timeStep) const
 		{
-			pemaths::CPeVector3 v_globalRigidBodyAnchor = p_rigidBody->GetTransform().GetPositionPoint(m_anchor);
+			pemaths::CPeVector3 v_globalRigidBodyAnchor = p_rigidBody.GetTransform().GetPositionPoint(m_anchor);
 
 			pemaths::CPeVector3 d = m_anchor - v_globalRigidBodyAnchor;
-			p_rigidBody->AddForceAtBodyPoint(d.NormalizeVector() * (m_k * (d.GetNorm() - m_restLength)) * p_timeStep, m_localAnchor);
+			p_rigidBody.AddForceAtBodyPoint(d.NormalizeVector() * (m_k * (d.GetNorm() - m_restLength)) * p_timeStep, m_localAnchor);
 			return;
 		}
 
