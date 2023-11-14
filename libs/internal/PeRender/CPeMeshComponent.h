@@ -26,9 +26,9 @@ namespace engine {
 			//Methods
 		public:
 			
-			CPeMeshComponent(pecore::CPeEntity* p_owner, vk::GenericRenderer& renderer, std::string texture)
+			CPeMeshComponent(pecore::CPeEntity* p_owner, vk::GenericRenderer& renderer, std::string model, std::string texture)
 				: CPeComponent(*p_owner)
-				, m_modelWatcher(renderer, texture)
+				, m_modelWatcher(renderer, model, texture)
 			{
 				p_owner->AddComponent(this);
 			}

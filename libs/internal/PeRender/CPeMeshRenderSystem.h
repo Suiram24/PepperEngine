@@ -33,7 +33,7 @@ namespace engine {
 
 			
 
-			CPeMeshComponent* CreateMeshComponent(pecore::CPeEntity* p_owner, vk::GenericRenderer& renderer, std::string texture);
+			CPeMeshComponent* CreateMeshComponent(pecore::CPeEntity* p_owner, vk::GenericRenderer& renderer, std::string model, std::string texture);
 
 
 			void Update();

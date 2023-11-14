@@ -20,6 +20,7 @@ namespace pedemo {
 		i = 0;
 		forceSystem = &pephy::CPeForceSystem::GetInstance();
 		colliderSystem = &pephy::CPeCollisionSystem::GetInstance();
+		meshRenderSystem = &engine::render::CPeMeshRenderSystem::GetInstance();
 
 		LoadLevel();
 
@@ -27,30 +28,13 @@ namespace pedemo {
 
 	void DemoCustomGameMode::GameUpdate()
 	{
-		//static pephy::CPeColliderComponent colliderComp1(*entity1, 0.5);
-		//static pephy::CPeColliderComponent colliderComp2(*entity2, 0.5);
-		//static pephy::CPeColliderComponent colliderComp3(*entity3, 0.5);
 
 		DrawImGuiInterface();
-		static vk::SphereMesh sphere1(*m_renderer);
-		static vk::SphereMesh sphere2(*m_renderer);
-		static vk::SphereMesh sphere3(*m_renderer);
-		static vk::SphereMesh sphere4(*m_renderer);
+
 		static float pos[3] = { entity4->m_transform.GetPosition().GetX(), entity4->m_transform.GetPosition().GetY(), entity4->m_transform.GetPosition().GetZ() };
 		static float min[3] = { -5,1,-5 };
 		static float max[3] = { 5,10,5 };
 
-		sphere1.SetPos(entity1->m_transform.GetPosition().GetX(), entity1->m_transform.GetPosition().GetY(), entity1->m_transform.GetPosition().GetZ());
-		sphere1.SetScale(0.5);
-
-		sphere2.SetPos(entity2->m_transform.GetPosition().GetX(), entity2->m_transform.GetPosition().GetY(), entity2->m_transform.GetPosition().GetZ());
-		sphere2.SetScale(1);
-
-		sphere3.SetPos(entity3->m_transform.GetPosition().GetX(), entity3->m_transform.GetPosition().GetY(), entity3->m_transform.GetPosition().GetZ());
-		sphere3.SetScale(0.5);
-
-		sphere4.SetPos(entity4->m_transform.GetPosition().GetX(), entity4->m_transform.GetPosition().GetY(), entity4->m_transform.GetPosition().GetZ());
-		sphere4.SetScale(0.5);
     
 		//printf("Y positions: %.3f, %.3f, %.3f", entity1->m_transform.GetPosition().GetY(), entity2->m_transform.GetPosition().GetY(), entity3->m_transform.GetPosition().GetY());
 		//sphere2.SetPos(std::sin(i*0.1), 0, 0);
@@ -87,9 +71,9 @@ namespace pedemo {
 				forceSystem->CreateParticleComponent(floorEntities[i][j], 0, 0, pemaths::CPeVector3());
 				colliderSystem->CreateColliderComponent(floorEntities[i][j], 0.5);
 
-				spheres.push_back(new vk::SphereMesh(*m_renderer));
-				spheres.back()->SetPos(i - 5, 0, j - 5);
-				spheres.back()->SetScale(0.5);
+				//floorEntities[i][j]->m_transform.SetSize(pemaths::CPeVector3(0.5, 0.5, 0.5));
+
+				meshRenderSystem->CreateMeshComponent(floorEntities[i][j], *m_renderer, "models/plane.obj", "textures/debug_texture.png");
 			}
 		}
 
@@ -103,6 +87,11 @@ namespace pedemo {
 		entity3->m_transform.SetPosition(pemaths::CPeVector3(-1, 2, -1));
 		entity4->m_transform.SetPosition(pemaths::CPeVector3(0, 1, 0));
 
+		entity1->m_transform.SetSize(pemaths::CPeVector3(0.5, 0.5, 0.5));
+		entity2->m_transform.SetSize(pemaths::CPeVector3(1, 1, 1));
+		entity3->m_transform.SetSize(pemaths::CPeVector3(0.5, 0.5, 0.5));
+		entity4->m_transform.SetSize(pemaths::CPeVector3(0.5, 0.5, 0.5));
+
 		pephy::CPeParticle* particleComp1 = forceSystem->CreateParticleComponent(entity1, 3);
 		pephy::CPeParticle* particleComp2 = forceSystem->CreateParticleComponent(entity2, 3);
 		pephy::CPeParticle* particleComp3 = forceSystem->CreateParticleComponent(entity3, 3/*, 0, 0, pemaths::CPeVector3()*/);
@@ -112,6 +101,12 @@ namespace pedemo {
 		pephy::CPeColliderComponent* colliderComp2 = colliderSystem->CreateColliderComponent(entity2, 1);
 		pephy::CPeColliderComponent* colliderComp3 = colliderSystem->CreateColliderComponent(entity3, 0.5);
 		pephy::CPeColliderComponent* colliderComp4 = colliderSystem->CreateColliderComponent(entity4, 0.5);
+
+
+		meshRenderSystem->CreateMeshComponent(entity1, *m_renderer, "models/sphere.obj", "textures/minecraft.png");
+		meshRenderSystem->CreateMeshComponent(entity2, *m_renderer, "models/sphere.obj", "textures/minecraft.png");
+		meshRenderSystem->CreateMeshComponent(entity3, *m_renderer, "models/sphere.obj", "textures/minecraft.png");
+		meshRenderSystem->CreateMeshComponent(entity4, *m_renderer, "models/sphere.obj", "textures/minecraft.png");
 
 		//colliderSystem->CreateCableBetween(particleComp1, particleComp2, 0.999, 3);
 		//colliderSystem->CreateCableBetween(particleComp2, particleComp3, 0.999, 3);

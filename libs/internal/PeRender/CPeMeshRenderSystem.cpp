@@ -3,9 +3,9 @@
 namespace engine {
 	namespace render {
 
-		CPeMeshComponent* CPeMeshRenderSystem::CreateMeshComponent(pecore::CPeEntity* p_owner, vk::GenericRenderer& renderer, std::string texture)
+		CPeMeshComponent* CPeMeshRenderSystem::CreateMeshComponent(pecore::CPeEntity* p_owner, vk::GenericRenderer& renderer, std::string model, std::string texture)
 		{
-			CPeMeshComponent* c = new CPeMeshComponent(p_owner, renderer, texture);
+			CPeMeshComponent* c = new CPeMeshComponent(p_owner, renderer, model, texture);
 			m_meshComponentPool.push_back(c);
 			return c;
 		}
