@@ -16,9 +16,9 @@ namespace engine {
 		CPeVector3 CPeVector3::operator+(const CPeVector3& p_vector) const
 		{
 			CPeVector3 sumVector = CPeVector3(
-				this->GetX() + p_vector.GetX(),
-				this->GetY() + p_vector.GetY(),
-				this->GetZ() + p_vector.GetZ());
+				m_x + p_vector.GetX(),
+				m_y + p_vector.GetY(),
+				m_z + p_vector.GetZ());
 			return sumVector;
 		}
 
@@ -33,9 +33,9 @@ namespace engine {
 		CPeVector3 CPeVector3::operator-(const CPeVector3& p_vector) const
 		{
 			CPeVector3 subVector = CPeVector3(
-				this->GetX() - p_vector.GetX(),
-				this->GetY() - p_vector.GetY(),
-				this->GetZ() - p_vector.GetZ());
+				m_x - p_vector.GetX(),
+				m_y - p_vector.GetY(),
+				m_z - p_vector.GetZ());
 			
 			return subVector;
 		}
@@ -59,16 +59,16 @@ namespace engine {
 
 		const double CPeVector3::GetNorm() const
 		{
-			return sqrt(pow(this->GetX(), 2) + pow(this->GetY(), 2) + pow(this->GetZ(), 2));
+			return sqrt(m_x * m_x + m_y * m_y + m_z * m_z);
 		}
 
 		CPeVector3 CPeVector3::NormalizeVector() const
 		{
 			double norm = this->GetNorm();
 			CPeVector3 normVector = CPeVector3(
-				this->GetX() / norm,
-				this->GetY() / norm,
-				this->GetZ() / norm);
+				m_x / norm,
+				m_y / norm,
+				m_z / norm);
 			return normVector;
 		}
 
@@ -114,5 +114,23 @@ namespace engine {
 			printf("x: %lf; y: %lf; z: %lf\n", GetX(), GetY(), GetZ());
 		}
 
-	}
+		void CPeVector3::SetX(double p_x)
+		{
+			m_x = p_x;
+		}
+		void CPeVector3::SetY(double p_y)
+		{
+			m_y = p_y;
+		}
+		void CPeVector3::SetZ(double p_z)
+		{
+			m_z = p_z;
+		}
+	
+    CPeVector3 operator*(double p_scalar, const CPeVector3 &vector)
+    {
+      return vector*p_scalar;
+    }
+
+  }
 }

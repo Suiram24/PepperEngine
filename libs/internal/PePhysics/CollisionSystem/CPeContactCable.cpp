@@ -1,4 +1,5 @@
 #include "CPeContactCable.h"
+#include <math.h>
 
 namespace engine {
 	namespace physics {
@@ -20,10 +21,15 @@ namespace engine {
 
 			if (dist > m_maxLength)
 			{
-				return -m_separatingSpeed;
+				return - abs(m_separatingSpeed);
 			}
+
 		}
 
+		bool CPeContactCable::IsContactAtRest(double p_timeStep) const
+		{
+			return false;
+		}
 
 
 	}

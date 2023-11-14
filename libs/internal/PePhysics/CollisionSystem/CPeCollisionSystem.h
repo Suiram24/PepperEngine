@@ -7,7 +7,10 @@
 #include "CPeContactRod.h"
 #include "CPeContactCable.h"
 
-namespace engine {
+namespace engine 
+{
+	class CPeGameManager;
+
 	namespace physics {
 
 		namespace consts
@@ -29,7 +32,11 @@ namespace engine {
 			// number of iteration for the solver
 			int m_solverIteration;
 
+			pecore::CPeObjectPool<CPeColliderComponent, 4 * pecore::consts::maxEntityNumber>* m_collidersPool;
+
 		public:
+
+			friend class engine::CPeGameManager;
 
 			static CPeCollisionSystem& GetInstance()
 			{
@@ -44,7 +51,8 @@ namespace engine {
 			*/
 			void UpdateCollision(double p_timeStep, std::vector<CPeParticle*>* p_particles);
 
-		
+			CPeColliderComponent* CreateColliderComponent(pecore::CPeEntity* p_owner, double p_radius = 1);
+
 
 			/**
 			 * @brief Add a permanent rod contact between two particles.
@@ -70,8 +78,12 @@ namespace engine {
 				: m_oneTimeContacts(std::vector<CPeParticleContact*>())
 				, m_permanentContacts(std::vector<CPeParticleContact*>())
 				, m_solverIteration(consts::nbIterationCollider)
+				, m_collidersPool(nullptr)
 			{
 			}
+
+			void AllocateObjectsPool();
+			void FreeObjectsPool();
 
 
 			/**

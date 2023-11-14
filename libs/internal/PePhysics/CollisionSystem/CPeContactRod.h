@@ -32,7 +32,10 @@ namespace engine {
 			double GetSeparatingSpeed() const;
 
 		protected:
+			double ComputePenetration() const;
 			pemaths::CPeVector3 ComputeContactNormal() const;
+			bool IsContactAtRest(double p_timeStep) const;
+
 		};
 	}
 }

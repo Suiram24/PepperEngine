@@ -48,6 +48,22 @@ namespace engine {
 			ResolveCollisions(p_timeStep);
 		}
 
+		CPeColliderComponent* CPeCollisionSystem::CreateColliderComponent(pecore::CPeEntity* p_owner, double p_radius /*= 1*/)
+		{
+			return &m_collidersPool->Create(p_owner, p_radius);
+		}
+
+
+		void CPeCollisionSystem::AllocateObjectsPool()
+		{
+			m_collidersPool = new pecore::CPeObjectPool<CPeColliderComponent, 4 * pecore::consts::maxEntityNumber>();
+		}
+
+		void CPeCollisionSystem::FreeObjectsPool()
+		{
+			delete m_collidersPool;
+		}
+
 
 		void CPeCollisionSystem::AddPermanentContact(CPeParticleContact* p_contact)
 		{
@@ -77,8 +93,12 @@ namespace engine {
 					double dist = CPeParticleContact::DistanceBetweenParticle(*(*p_particles)[i], *(*p_particles)[j]);
 					if (dist < 0)
 					{
-						CPeParticleContact* newContact = new CPeParticleContact((*p_particles)[i], (*p_particles)[j]);
-						m_oneTimeContacts.push_back(newContact);
+						if ((*p_particles)[i]->GetMassInverse() != 0 || (*p_particles)[j]->GetMassInverse() != 0)
+						{
+							CPeParticleContact* newContact = new CPeParticleContact((*p_particles)[i], (*p_particles)[j]);
+							m_oneTimeContacts.push_back(newContact);
+						}
+						
 					}
 				}
 			}

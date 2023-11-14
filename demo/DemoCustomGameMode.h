@@ -26,6 +26,7 @@ namespace pedemo {
 			, entity1(nullptr)
 			, entity2(nullptr)
 			, entity3(nullptr)
+			, entity4(nullptr)
 		{
 		}
 
@@ -45,7 +46,7 @@ namespace pedemo {
 		virtual void GameEnd();
 	protected:
 	private:
-
+		void LoadLevel();
 
 
 	public:
@@ -60,6 +61,9 @@ namespace pedemo {
 		pecore::CPeEntity* entity1;
 		pecore::CPeEntity* entity2;
 		pecore::CPeEntity* entity3;
+		pecore::CPeEntity* entity4;
+
+		pecore::CPeEntity* floorEntities[10][10];
 
 
 

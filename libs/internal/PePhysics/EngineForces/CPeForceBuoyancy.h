@@ -9,7 +9,7 @@ namespace engine {
 	namespace physics {
 		class CPeForceBuoyancy : public CPeForce {
 		private:
-			float m_immersionDepth;// depth for a total immersion of the particle in m
+			float m_immersionDepth;// depth for half immersion of the particle in m (particle "radius")
 			float m_volume;//particle volume in m**3
 			float m_liquidLevel;// in m
 			float m_liquidDensity;// in kg/m**3

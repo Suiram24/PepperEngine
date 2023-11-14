@@ -3,29 +3,29 @@
 namespace engine {
 	namespace physics {
 
-		CPeParticle& CPeForceSystem::CreateParticleComponent(pecore::CPeEntity* p_owner, double p_massInverse /*= 1*/, double p_damping /*= 0.999*/, pemaths::CPeVector3 p_gravity/* = pemaths::CPeVector3(0, -10, 0)*/)
+		CPeParticle* CPeForceSystem::CreateParticleComponent(pecore::CPeEntity* p_owner, double p_massInverse /*= 1*/, double p_damping /*= 0.999*/, pemaths::CPeVector3 p_gravity/* = pemaths::CPeVector3(0, -10, 0)*/)
 		{
-			return m_particlePool->Create(p_owner, p_massInverse, p_damping, p_gravity);
+			return &m_particlePool->Create(p_owner, p_massInverse, p_damping, p_gravity);
 		}
 
-		CPeForceDrag& CPeForceSystem::CreateForceDrag(float p_k1, float p_k2)
+		CPeForceDrag* CPeForceSystem::CreateForceDrag(float p_k1, float p_k2)
 		{
-			return m_dragPool->Create(p_k1, p_k2);
+			return &m_dragPool->Create(p_k1, p_k2);
 		}
 
-		CPeForceAnchoredSpring& CPeForceSystem::CreateForceAnchoredSpring(const pemaths::CPeVector3& p_anchor, float p_k, float p_restLength)
+		CPeForceAnchoredSpring* CPeForceSystem::CreateForceAnchoredSpring(const pemaths::CPeVector3& p_anchor, float p_k, float p_restLength)
 		{
-			return m_anchoredSpringPool->Create(p_anchor, p_k, p_restLength);
+			return &m_anchoredSpringPool->Create(p_anchor, p_k, p_restLength);
 		}
 
-		CPeForceSpring& CPeForceSystem::CreateForceSpring(CPeParticle& p_other, float p_k, float p_restLength)
+		CPeForceSpring* CPeForceSystem::CreateForceSpring(CPeParticle* p_other, float p_k, float p_restLength)
 		{
-			return m_springPool->Create(p_other, p_k, p_restLength);
+			return &m_springPool->Create(p_other, p_k, p_restLength);
 		}
 
-		CPeForceBuoyancy& CPeForceSystem::CreateForceBuoyancy(float p_immersionDepth, float p_volume, float p_liquidLevel, float p_liquidDensity /*= 1*/)
+		CPeForceBuoyancy* CPeForceSystem::CreateForceBuoyancy(float p_immersionDepth, float p_volume, float p_liquidLevel, float p_liquidDensity /*= 1*/)
 		{
-			return m_buoyancyPool->Create(p_immersionDepth, p_volume, p_liquidLevel, p_liquidDensity);
+			return &m_buoyancyPool->Create(p_immersionDepth, p_volume, p_liquidLevel, p_liquidDensity);
 		}
 
 		bool CPeForceSystem::AddForceToParticle(CPeForce* p_force, CPeParticle* p_particle, double p_lifespan /*= -1*/)

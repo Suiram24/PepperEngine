@@ -167,7 +167,7 @@ namespace engine {
 			/**
 			 * @brief Compute the new acceleration based on all forces.
 			*/
-			void UpdateAcceleration();
+			void UpdateAcceleration(double p_timeStep);
 
 			/**
 			 * @brief Compute the new velocity.

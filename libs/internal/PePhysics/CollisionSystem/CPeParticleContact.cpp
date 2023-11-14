@@ -78,8 +78,11 @@ namespace engine {
 			double d = m_penetration;
 			double mA = m_particleA->GetMass();
 			double mB = m_particleB->GetMass();
-
-			if (mA != -1 && mB != -1)
+			if (mA == -1 && mB == -1)
+			{
+				return;
+			}
+			else if (mA != -1 && mB != -1)
 			{
 				m_particleA->SetPosition(m_particleA->GetTransform().GetPosition() + (m_contactNormal * (d * mB / (mA + mB))));
 				m_particleB->SetPosition(m_particleB->GetTransform().GetPosition() - (m_contactNormal * (d * mA / (mA + mB))));

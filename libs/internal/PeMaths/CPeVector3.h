@@ -141,6 +141,10 @@ namespace engine
 			*/
 			double GetZ() const;
 
+			void SetX(double p_x);
+			void SetY(double p_y);
+			void SetZ(double p_z);
+
 			/**
 			 * @brief Compute the distance to an other vector.
 			 *
@@ -159,6 +163,15 @@ namespace engine
 
 			}
 		};
+
+		/**
+		 * @brief Define the operator 'multiplication' for a double and a CPeVector3.
+		 * 
+		 * @param p_scalar A double to multipliate by the vector
+		 * @param vector CPeVector3& to duplicate with the scalar
+		 * @return CPeVector3 - Result of the multiplication
+		 */
+		CPeVector3 operator*(double p_scalar, const CPeVector3& vector);
 	}
 }
 

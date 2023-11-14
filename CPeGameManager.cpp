@@ -34,6 +34,9 @@ namespace engine {
 		glfwSetCursorPosCallback(m_window, controls::CameraController::cursorPositionCallback);
 		glfwSetKeyCallback(m_window, controls::CameraController::keyCallback);
 
+		view.changeCameraPosition(-5, 10, -5);
+		view.changeCameraOrientation(0,0,0);
+
 		//vk::CPeVulkanRenderer renderer;
 		//engine::render::CPeImGuiRenderer& imguiRenderer = engine::render::CPeImGuiRenderer::getInstance();
 		//imguiRenderer.SetupInterface();
@@ -76,14 +79,10 @@ namespace engine {
 		{
 			m_forceSystem->Update(m_timeStep);
 			CollisionUpdate(m_timeStep);
-
-
 			totalTime -= m_timeStep;
 		}
 
-		m_UncomputedTimeLeft = totalTime;
-
-		
+		m_UncomputedTimeLeft = totalTime;		
 	}
 
 	void CPeGameManager::CollisionUpdate(double p_timeStep)
@@ -119,6 +118,7 @@ namespace engine {
 	{
 		m_entityPool = new pecore::CPeObjectPool<pecore::CPeEntity, pecore::consts::maxEntityNumber>();
 		m_forceSystem->AllocateObjectsPool();
+		m_collisionSystem->AllocateObjectsPool();
 	}
 
 	void CPeGameManager::FreeObjectsPool()

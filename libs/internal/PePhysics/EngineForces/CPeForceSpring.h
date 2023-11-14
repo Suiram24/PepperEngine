@@ -23,7 +23,7 @@ namespace engine {
 
 			}
 
-			void Initialise(CPeParticle& p_other, float p_k, float p_restLength);
+			void Initialise(CPeParticle* p_other, float p_k, float p_restLength);
 
 			void Compute(CPeParticle& p_particule, double p_timeStep) const;
 		};

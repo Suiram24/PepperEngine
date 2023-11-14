@@ -14,7 +14,9 @@ namespace engine {
 
 		void CPeForceBuoyancy::Compute(CPeParticle& p_particule, double p_timeStep) const
 		{
-			float d = (p_particule.GetTransform().GetPosition().GetY() - m_liquidLevel - m_immersionDepth) / (2 * m_immersionDepth);
+			double y = p_particule.GetTransform().GetPosition().GetY();
+			//float d = (p_particule.GetTransform().GetPosition().GetY() - m_liquidLevel - m_immersionDepth) / (2 * m_immersionDepth);
+			double d = m_liquidLevel - (y - m_immersionDepth) / (2* m_immersionDepth);
 
 			pemaths::CPeVector3 yNorm = pemaths::CPeVector3(0., 1., 0.);
 			

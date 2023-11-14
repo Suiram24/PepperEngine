@@ -15,10 +15,10 @@ namespace vk {
 		glm::vec3 center;
 
 
-		void changeCameraOrientation(float centerX, float centerY, float centerZ);
 	public:
 		ViewManager(GenericRenderer& renderer);
 
+		void changeCameraOrientation(float centerX, float centerY, float centerZ);
 		void changeCameraPosition(float eyeX, float eyeY, float eyeZ);
 		void rotateAroundX(float angle);
 		void rotateAroundY(float angle);
