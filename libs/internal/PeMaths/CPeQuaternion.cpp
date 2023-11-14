@@ -40,7 +40,10 @@ namespace engine {
 
         CPeQuaternion &CPeQuaternion::operator=(const CPeQuaternion &q)
         {
-            *this = CPeQuaternion(q);
+            m_value[0] = q.m_value[0];
+            m_value[1] = q.m_value[1];
+            m_value[2] = q.m_value[2];
+            m_value[3] = q.m_value[3];
             return *this;
         }
 

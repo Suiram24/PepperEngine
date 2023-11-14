@@ -87,11 +87,15 @@ namespace engine {
 		{
 			for (int i = 0; i < 3; i++)
 			{
-				for (int j = 0; j < 4; j++)
+				for (int j = 0; j < 3; j++)
 				{
 					m_matrice.Set(i, j, p_matrice.Get(i, j));
 				}
 			}
+
+			m_translation[0] = p_matrice.Get(0, 3);
+			m_translation[1] = p_matrice.Get(1, 3);
+			m_translation[2] = p_matrice.Get(2, 3);
 		}
 
 		bool CPeMatrix4::IsInversible() const
