@@ -12,11 +12,11 @@ namespace vk {
     public:
         glm::vec3 pos;
         glm::vec3 scale;
-        
 
         const char* modelPath;
         bool loaded = false;
 
+        ModelWatcher(vk::GenericRenderer& renderer, std::string modelPath, std::string texture);
         ModelWatcher(vk::GenericRenderer& renderer, std::string modelPath);
 
         void Load(const char* path);
@@ -26,6 +26,9 @@ namespace vk {
         void SetPos(float x, float y, float z);
         void SetScale(float s);
     private:
+        const std::string DEFAULT_TEXTURE = "textures/debug_texture.png";
+
+        TextureObject& texture;
         std::vector<vk::Vertex> vertices;
         std::vector<uint32_t> indices;
         VkBuffer vertexBuffer;

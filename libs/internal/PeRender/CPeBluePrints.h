@@ -3,16 +3,29 @@
 
 #include <vulkan/vulkan.h>
 #include <glm/glm.hpp>
+#include <string>
 
 namespace vk {
     class ModelObject {        
     public:
         bool loaded;
 
-        virtual void Load(const char* path) = 0;
         virtual void Load() = 0;
         virtual void Destroy() = 0;
         virtual void Render(VkCommandBuffer commandBuffer, VkPipelineLayout& pipelineLayout) = 0;
+    };
+
+    class TextureObject {
+    public:
+        std::string texturePath;
+        bool loaded;
+
+        //TextureObject(GenericRenderer& renderer, std::string texturePath);
+
+        virtual void Load() = 0;
+        virtual VkDescriptorSet& GetTextureDescriptorSet() = 0;
+        virtual void Free() = 0;
+        virtual void Destroy() = 0;
     };
 
     class GenericRenderer {
@@ -22,8 +35,13 @@ namespace vk {
         virtual VkPhysicalDevice& getPhysicalDevice() = 0;
         virtual VkCommandPool& getCommandPool() = 0;
         virtual VkQueue& getGraphicsQueue() = 0;
+        virtual VkDescriptorPool& getDescriptorPool() = 0;
+        virtual VkDescriptorSetLayout& getUniformDescriptorSetlayout() = 0;
+        virtual VkDescriptorSetLayout& getTextureDescriptorSetlayout() = 0;
 
         virtual void AddModel(ModelObject& object) = 0;
+        virtual TextureObject& AddTexture(std::string texture) = 0;
+
         virtual void RemoveModel(ModelObject& object) = 0;
     };
 

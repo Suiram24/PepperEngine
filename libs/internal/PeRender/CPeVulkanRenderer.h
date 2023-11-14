@@ -3,6 +3,7 @@
 
 #include "CPeGraphicalVertex.h"
 #include "CPeBluePrints.h"
+#include "CPeTexture.h"
 
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
@@ -17,7 +18,7 @@ namespace vk {
     const uint32_t HEIGHT = 600;
 
     const std::string MODEL_PATH = "models/viking_room.obj";
-    const std::string TEXTURE_PATH = "textures/viking_room.png";
+    const std::string DEBUG_TEXTURE_PATH = "textures/debug_texture.png";
 
     const int MAX_FRAMES_IN_FLIGHT = 2;
 
@@ -57,17 +58,23 @@ namespace vk {
         VkPhysicalDevice& getPhysicalDevice();
         VkCommandPool& getCommandPool();
         VkQueue& getGraphicsQueue();
+        VkDescriptorPool& getDescriptorPool();
+        VkDescriptorSetLayout& getUniformDescriptorSetlayout();
+        VkDescriptorSetLayout& getTextureDescriptorSetlayout();
 
         // Models methods
         void AddModel(ModelObject& object);
 
         void RemoveModel(ModelObject& object);
 
+        CPeTexture& AddTexture(std::string texture);
+
         void SetNearPlan(float distance);
 
         void SetFarPlan(float distance);
 
     private:
+
         glm::mat4* viewMatrix;
         GLFWwindow* window;
 
@@ -89,7 +96,8 @@ namespace vk {
         std::vector<VkFramebuffer> swapChainFramebuffers;
 
         VkRenderPass renderPass;
-        VkDescriptorSetLayout descriptorSetLayout;
+        VkDescriptorSetLayout uniformDescriptorSetLayout;
+        VkDescriptorSetLayout textureDescriptorSetLayout;
         VkPipelineLayout pipelineLayout;
         VkPipeline graphicsPipeline;
 
@@ -103,11 +111,6 @@ namespace vk {
         VkDeviceMemory colorImageMemory;
         VkImageView colorImageView;
 
-        VkImage textureImage;
-        VkDeviceMemory textureImageMemory;
-        VkImageView textureImageView;
-        VkSampler textureSampler;
-
         std::vector<VkBuffer> uniformBuffers;
         std::vector<VkDeviceMemory> uniformBuffersMemory;
         std::vector<void*> uniformBuffersMapped;
@@ -117,7 +120,6 @@ namespace vk {
 
         std::vector<VkCommandBuffer> commandBuffers;
 
-        uint32_t mipLevels;
 
         VkSampleCountFlagBits msaaSamples = VK_SAMPLE_COUNT_1_BIT;
 
@@ -133,6 +135,9 @@ namespace vk {
         float farPlan = 10.0f;
 
         std::vector<ModelObject*> graphicalObjects;
+        std::vector<CPeTexture*> textureObjects;
+
+        CPeTexture* isTextureInVector(std::string texture);
 
         static void framebufferResizeCallback(GLFWwindow* window, int width, int height);
 
@@ -175,6 +180,8 @@ namespace vk {
         // Models functions
 
         void DestroyModels();
+
+        void DestroyTextures();
 
         void RenderModels(VkCommandBuffer commandBuffer, VkPipelineLayout& pipelineLayout);
 

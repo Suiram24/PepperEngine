@@ -51,7 +51,7 @@ namespace pedemo {
 
 		sphere4.SetPos(entity4->m_transform.GetPosition().GetX(), entity4->m_transform.GetPosition().GetY(), entity4->m_transform.GetPosition().GetZ());
 		sphere4.SetScale(0.5);
-
+    
 		//printf("Y positions: %.3f, %.3f, %.3f", entity1->m_transform.GetPosition().GetY(), entity2->m_transform.GetPosition().GetY(), entity3->m_transform.GetPosition().GetY());
 		//sphere2.SetPos(std::sin(i*0.1), 0, 0);
 		//i++;
