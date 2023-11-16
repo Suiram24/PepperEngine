@@ -41,21 +41,30 @@ namespace engine {
 		void CPeTransform::SetPosition(const CPeVector3& p_position)
 		{
 			m_position = p_position;
+			UpdateTransformMatrix();
 		}
 
 		void CPeTransform::SetOrientation(const CPeQuaternion& p_orientation)
 		{
 			m_orientation = p_orientation;
+			UpdateTransformMatrix();
 		}
 
         void CPeTransform::UpdateTransformMatrix()
         {
 			m_transformMatrix = CPeMatrix4(m_orientation.ToMatrix3(),m_position);
+			m_transformMatrix = m_transformMatrix * CPeMatrix4(
+				m_size.GetX(),	.0,				.0,
+				.0,				m_size.GetY(),	.0,
+				.0,				.0,				m_size.GetZ(),
+				.0,				.0,				.0
+				);
         }
 
         void CPeTransform::SetSize(const CPeVector3& p_size)
 		{
 			m_size = p_size;
+			UpdateTransformMatrix();
 		}
 	}
 }

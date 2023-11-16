@@ -74,7 +74,6 @@ namespace engine {
             UpdatePositionPrecisely(p_timeStep);
             UpdateOrientation(p_timeStep);
 
-            GetTransform().UpdateTransformMatrix();
             UpdateInertia();
 
             UpdateAcceleration(p_timeStep);

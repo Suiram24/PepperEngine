@@ -26,14 +26,14 @@ namespace engine {
 			CPeTransform(
 				const CPeVector3& p_position,
 				const CPeQuaternion& p_orientation,
-				const CPeMatrix4& p_transformMatrix,
 				const CPeVector3& p_size
 			) :
 				m_position(p_position),
 				m_orientation(p_orientation),
-				m_transformMatrix(p_transformMatrix),
+				m_transformMatrix(1,0,0,0,1,0,0,0,1,0,0,0),
 				m_size(p_size)
 			{
+				UpdateTransformMatrix();
 			}
 
 			CPeTransform(const CPeVector3& p_position) :
@@ -42,6 +42,7 @@ namespace engine {
 				m_transformMatrix(1,0,0,0,1,0,0,0,1,0,0,0),
 				m_size(CPeVector3(1., 1., 1.))
 			{
+				UpdateTransformMatrix();
 			}
 
 			CPeTransform(double p_x, double p_y, double p_z) :
@@ -50,6 +51,7 @@ namespace engine {
 				m_transformMatrix(1,0,0,0,1,0,0,0,1,0,0,0),
 				m_size(CPeVector3(1., 1., 1.))
 			{
+				UpdateTransformMatrix();
 			}
 
 			CPeTransform() :
@@ -58,6 +60,7 @@ namespace engine {
 				m_transformMatrix(1,0,0,0,1,0,0,0,1,0,0,0),
 				m_size(CPeVector3(1., 1., 1.))
 			{
+				UpdateTransformMatrix();
 			}
 
 			/**
@@ -104,17 +107,20 @@ namespace engine {
 			*/
 			void SetOrientation(const CPeQuaternion& p_orientation);
 
-			/**
-			 * @brief Update transform matrix with the current position & orientation
-			 * 
-			 */
-			void UpdateTransformMatrix();
+
 
 			/**
 			 * @brief Setter for m_size.
 			 * @param The new size.
 			*/
 			void SetSize(const CPeVector3& p_size);
+
+		private:
+			/**
+				* @brief Update transform matrix with the current position, orientation & size
+				*
+			*/
+			void UpdateTransformMatrix();
 
 		};
 	}

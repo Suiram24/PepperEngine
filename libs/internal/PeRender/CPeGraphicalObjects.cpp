@@ -12,6 +12,7 @@ vk::ModelWatcher::ModelWatcher(vk::GenericRenderer& renderer, std::string modelP
     modelPath(modelPath.c_str()),
     pos(glm::vec3(0.f, 0.f, 0.f)),
     scale(glm::vec3(1.f)),
+    tMatrix(glm::mat4(0.f)),
     translationVector(glm::vec3(0.f, 0.f, 0.f)),
     texture(renderer.AddTexture(texture)),
     indexBuffer(VK_NULL_HANDLE),
@@ -29,6 +30,7 @@ vk::ModelWatcher::ModelWatcher(vk::GenericRenderer& renderer, std::string modelP
     modelPath(modelPath.c_str()),
     pos(glm::vec3(0.f, 0.f, 0.f)),
     scale(glm::vec3(1.f)),
+    tMatrix(glm::mat4(0.f)),
     translationVector(glm::vec3(0.f, 0.f, 0.f)),
     texture(renderer.AddTexture(DEFAULT_TEXTURE)),
     indexBuffer(VK_NULL_HANDLE),
@@ -56,8 +58,11 @@ void vk::ModelWatcher::Load() {
 void vk::ModelWatcher::Render(VkCommandBuffer commandBuffer, VkPipelineLayout& pipelineLayout) {
     vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 1, 1, &texture.GetTextureDescriptorSet(), 0, nullptr);
 
-    glm::mat4 transform = glm::translate(glm::mat4(1.0), pos);
-    transform = glm::scale(transform, scale);
+    //glm::mat4 transform = glm::translate(glm::mat4(1.0), pos);
+    //transform = glm::scale(transform, scale);
+
+    glm::mat4 transform = tMatrix;
+   
     vkCmdPushConstants(commandBuffer, pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(glm::mat4), &transform);
 
     VkBuffer vertexBuffers[] = { vertexBuffer };
@@ -75,6 +80,11 @@ void vk::ModelWatcher::SetPos(float x, float y, float z) {
 
 void vk::ModelWatcher::SetScale(float s) {
     scale = glm::vec3(s);
+}
+
+void vk::ModelWatcher::SetTransformMatrix(glm::mat4 const& transformMatrix)
+{
+    tMatrix = transformMatrix;
 }
 
 void vk::ModelWatcher::loadModel(const char* path) {
