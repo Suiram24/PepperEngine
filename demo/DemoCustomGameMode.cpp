@@ -35,7 +35,8 @@ namespace pedemo {
 		static float min[3] = { -5,1,-5 };
 		static float max[3] = { 5,10,5 };
 
-    
+		static int i;
+		++i;
 		//printf("Y positions: %.3f, %.3f, %.3f", entity1->m_transform.GetPosition().GetY(), entity2->m_transform.GetPosition().GetY(), entity3->m_transform.GetPosition().GetY());
 		//sphere2.SetPos(std::sin(i*0.1), 0, 0);
 		//i++;
@@ -45,6 +46,8 @@ namespace pedemo {
 		ImGui::DragFloat3("Sphere position", pos,0.1, -8, 8, "%.2f");
 
 		ImGui::End();
+
+		entity2->m_transform.SetOrientation(pemaths::CPeQuaternion(pemaths::CPeVector3(1,1,0),i*0.05));
 
 		entity4->m_transform.SetPosition(pemaths::CPeVector3(pos[0], pos[1], pos[2]));
 
@@ -88,7 +91,7 @@ namespace pedemo {
 		entity4->m_transform.SetPosition(pemaths::CPeVector3(0, 1, 0));
 
 		entity1->m_transform.SetSize(pemaths::CPeVector3(0.5, 0.5, 0.5));
-		entity2->m_transform.SetSize(pemaths::CPeVector3(1, 1, 1));
+		entity2->m_transform.SetSize(pemaths::CPeVector3(1.5, 2, 1));
 		entity3->m_transform.SetSize(pemaths::CPeVector3(0.5, 0.5, 0.5));
 		entity4->m_transform.SetSize(pemaths::CPeVector3(0.5, 0.5, 0.5));
 
@@ -103,10 +106,10 @@ namespace pedemo {
 		pephy::CPeColliderComponent* colliderComp4 = colliderSystem->CreateColliderComponent(entity4, 0.5);
 
 
-		meshRenderSystem->CreateMeshComponent(entity1, *m_renderer, "models/sphere.obj", "textures/minecraft.png");
-		meshRenderSystem->CreateMeshComponent(entity2, *m_renderer, "models/sphere.obj", "textures/minecraft.png");
-		meshRenderSystem->CreateMeshComponent(entity3, *m_renderer, "models/sphere.obj", "textures/minecraft.png");
-		meshRenderSystem->CreateMeshComponent(entity4, *m_renderer, "models/sphere.obj", "textures/minecraft.png");
+		meshRenderSystem->CreateMeshComponent(entity1, *m_renderer, "models/sphere.obj", "textures/viking_room.png");
+		meshRenderSystem->CreateMeshComponent(entity2, *m_renderer, "models/sphere.obj", "textures/viking_room.png");
+		meshRenderSystem->CreateMeshComponent(entity3, *m_renderer, "models/sphere.obj", "textures/viking_room.png");
+		meshRenderSystem->CreateMeshComponent(entity4, *m_renderer, "models/viking_room.obj", "textures/viking_room.png");
 
 		//colliderSystem->CreateCableBetween(particleComp1, particleComp2, 0.999, 3);
 		//colliderSystem->CreateCableBetween(particleComp2, particleComp3, 0.999, 3);
