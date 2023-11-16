@@ -5,7 +5,6 @@ namespace engine {
 
 		void CPeMeshComponent::UpdateTransformMatrix()
 		{	
-			//m_owner->m_transform.UpdateTransformMatrix();
 			pemaths::CPeMatrix4 peTMatrix = m_owner->m_transform.GetTransformMatrix();
 
 			glm::mat4 glmTMatrix = glm::mat4(

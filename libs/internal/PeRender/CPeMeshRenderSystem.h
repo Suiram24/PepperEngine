@@ -17,7 +17,7 @@ namespace engine {
 		
 		 
 		/**
-		 * @brief A class for Newton's Physics forces.
+		 * @brief The singleton that manage the MeshComponents (create and update them)
 		*/
 		class CPeMeshRenderSystem {
 	public:
@@ -32,10 +32,18 @@ namespace engine {
 			}
 
 			
-
+			/**
+			 * @brief Create a mesh component and attach it to it's owner
+			 * @param p_owner: entity that will own this component
+			 * @param renderer: the renderer that will render the model
+			 * @param model: the local path of the model file
+			 * @param texture: the local path of the texture file
+			*/
 			CPeMeshComponent* CreateMeshComponent(pecore::CPeEntity* p_owner, vk::GenericRenderer& renderer, std::string model, std::string texture);
 
-
+			/**
+			 * @brief Update the transform matrix of the model watchers for all the mesh components
+			*/
 			void Update();
 
 		protected:
