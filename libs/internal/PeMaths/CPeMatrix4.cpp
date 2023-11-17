@@ -12,24 +12,45 @@ namespace engine {
 			{
 				throw std::invalid_argument("You cannot set values outside of the 3x4 matrice.");
 			}
+ 
 			if (p_j == 3)
 			{
 				m_translation[p_i] = p_value;
 			}
-			m_matrice.Set(p_i, p_j, p_value);
+			else
+			{
+				m_matrice.Set(p_i, p_j, p_value);
+			}
+			
 		}
 
 		double CPeMatrix4::Get(unsigned int p_i, unsigned int p_j) const
 		{
-			if (p_i > 2 || p_j > 3)
+			if (p_i > 3 || p_j > 3)
 			{
-				throw std::invalid_argument("You cannot get values outside of the 3x4 matrice.");
+				throw std::invalid_argument("You cannot get values outside of the 4x4 matrice.");
 			}
-			if (p_j == 3)
+
+			if (p_i == 3)//Hardcoded last line of the model matrix to save memory
+			{
+				if (p_j == 3)
+				{
+					return 1.0;
+				}
+				else
+				{
+					return .0;
+				}
+			}
+			else if (p_j == 3)
 			{
 				return m_translation[p_i];
 			}
-			return m_matrice.Get(p_i,p_j);
+			else
+			{
+				return m_matrice.Get(p_i, p_j);
+			}
+			
 		}
 
 		CPeMatrix4 CPeMatrix4::operator*(const CPeMatrix4& p_matrice) const
@@ -42,7 +63,7 @@ namespace engine {
 					double sum = 0;
 					for (int k = 0; k < 3; k++)
 					{
-						sum += this->m_matrice.Get(i, k) * p_matrice.Get(k, j);
+						sum += this->Get(i, k) * p_matrice.Get(k, j);
 					}
 					multMatrice.Set(i, j, sum);
 				}
@@ -50,7 +71,7 @@ namespace engine {
 				double tmp = 0;
 				for (int l = 0; l < 4; l++)
 				{
-					tmp += this->m_matrice.Get(i, l) * p_matrice.Get(l, 3);
+					tmp += this->Get(i, l) * p_matrice.Get(l, 3);
 				}
 				multMatrice.Set(i, 3, tmp);
 			}

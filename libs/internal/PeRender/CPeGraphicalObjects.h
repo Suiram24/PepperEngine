@@ -10,8 +10,9 @@
 namespace vk {
     class ModelWatcher: public ModelObject {
     public:
-        glm::vec3 pos;
-        glm::vec3 scale;
+        glm::vec3 pos; //deprecated
+        glm::vec3 scale; //deprecated
+        glm::mat4 tMatrix; // model transform matrix
 
         const char* modelPath;
         bool loaded = false;
@@ -23,8 +24,9 @@ namespace vk {
         void Load();
         void Destroy();
         void Render(VkCommandBuffer commandBuffer, VkPipelineLayout& pipelineLayout);
-        void SetPos(float x, float y, float z);
-        void SetScale(float s);
+        void SetPos(float x, float y, float z); //deprecated (doesn't work anymore)
+        void SetScale(float s); //deprecated (doesn't work anymore)
+        void SetTransformMatrix(glm::mat4 const& transformMatrix);
     private:
         const std::string DEFAULT_TEXTURE = "textures/debug_texture.png";
 

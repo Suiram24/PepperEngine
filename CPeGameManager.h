@@ -44,6 +44,7 @@ namespace engine
 		{
 			m_forceSystem = &engine::physics::CPeForceSystem::GetInstance();
 			m_collisionSystem = &engine::physics::CPeCollisionSystem::GetInstance();
+			m_meshRenderSystem = &engine::render::CPeMeshRenderSystem::GetInstance();
 			AllocateObjectsPool();		
 		}
 
@@ -71,6 +72,7 @@ namespace engine
 		vk::CPeVulkanRenderer m_renderer;
 		engine::physics::CPeForceSystem* m_forceSystem;
 		engine::physics::CPeCollisionSystem* m_collisionSystem;
+		engine::render::CPeMeshRenderSystem* m_meshRenderSystem;
 
 	
 		//

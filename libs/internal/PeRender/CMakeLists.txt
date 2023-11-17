@@ -1,6 +1,8 @@
 link_directories(libs/external/Vulkan/Include)
 add_library(
 	PeRender
+	CPeMeshComponent.h		CPeMeshComponent.cpp
+	CPeMeshRenderSystem.h	CPeMeshRenderSystem.cpp
 	CpeVulkanRenderer.h		CpeVulkanRenderer.cpp
 	CPeGraphicalVertex.h	CPeGraphicalVertex.cpp
 	CPeGraphicalObjects.h	CPeGraphicalObjects.cpp

@@ -65,6 +65,8 @@ namespace engine {
 
 			PhysicUpdate(ImGui::GetIO().DeltaTime);
 
+			m_meshRenderSystem->Update();
+
 			m_renderer.endDrawFrame();
 		}
 
@@ -119,12 +121,15 @@ namespace engine {
 		m_entityPool = new pecore::CPeObjectPool<pecore::CPeEntity, pecore::consts::maxEntityNumber>();
 		m_forceSystem->AllocateObjectsPool();
 		m_collisionSystem->AllocateObjectsPool();
+		m_meshRenderSystem->AllocateObjectsPool();
 	}
 
 	void CPeGameManager::FreeObjectsPool()
 	{
 		delete m_entityPool;
 		m_forceSystem->FreeObjectsPool();
+		m_collisionSystem->FreeObjectsPool();
+		m_meshRenderSystem->FreeObjectsPool();
 	}
 
 	pecore::CPeEntity& CPeGameManager::CreateEntity(const pemaths::CPeTransform& p_transform)
