@@ -8,10 +8,8 @@ namespace pedemo {
 		ImGuiIO io = ImGui::GetIO();
 
 		ImGui::Begin("Debug");
-		//ImGui::Text("Framerate : %.1f", ImGui::GetIO().Framerate());
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
 
-		//ImGui::Text("DeltaTime : %.3f", ImGui::GetIO().DeltaTime());
 		ImGui::End();
 	}
 
@@ -37,9 +35,6 @@ namespace pedemo {
 
 		static int i;
 		++i;
-		//printf("Y positions: %.3f, %.3f, %.3f", entity1->m_transform.GetPosition().GetY(), entity2->m_transform.GetPosition().GetY(), entity3->m_transform.GetPosition().GetY());
-		//sphere2.SetPos(std::sin(i*0.1), 0, 0);
-		//i++;
 
 		ImGui::Begin("Controls");
 
@@ -47,12 +42,7 @@ namespace pedemo {
 
 		ImGui::End();
 
-		//entity2->m_transform.SetOrientation(pemaths::CPeQuaternion(pemaths::CPeVector3(1, 1, 0), i * 0.05));
-
 		entity4->m_transform.SetPosition(pemaths::CPeVector3(pos[0], pos[1], pos[2]));
-
-
-
 	}
 
 	void DemoPhase3::GameEnd()
@@ -111,26 +101,13 @@ namespace pedemo {
 		meshRenderSystem->CreateMeshComponent(entity3, *m_renderer, "models/sphere.obj", "textures/viking_room.png");
 		meshRenderSystem->CreateMeshComponent(entity4, *m_renderer, "models/viking_room.obj", "textures/viking_room.png");
 
-		//colliderSystem->CreateCableBetween(particleComp1, particleComp2, 0.999, 3);
-		//colliderSystem->CreateCableBetween(particleComp2, particleComp3, 0.999, 3);
-		colliderSystem->CreateCableBetween(rigidbodyComp2, rigidbodyComp3, 0.999, 3);
-		//colliderSystem->CreateRodBetween(particleComp2, particleComp3, 0.999, 3);
-
-		//pephy::CPeForceSpring* spring1 = forceSystem->CreateForceSpring(particleComp2, 10, 3);
-		//pephy::CPeForceSpring* spring2 = forceSystem->CreateForceSpring(particleComp3, 10, 3);
-		//pephy::CPeForceSpring* spring3 = forceSystem->CreateForceSpring(particleComp1, 10, 3);
-
-		pephy::CPeForceSpring* spring4 = forceSystem->CreateForceSpring(rigidbodyComp4, 10, 3);
+		pephy::CPeForceSpring* spring1 = forceSystem->CreateForceSpring(rigidbodyComp4, 10, 3);
+		pephy::CPeForceSpring* spring2 = forceSystem->CreateForceSpring(rigidbodyComp4, 10, 3, pemaths::CPeVector3(1,0,0));
 		pephy::CPeForceBuoyancy* water = forceSystem->CreateForceBuoyancy(0.5, 0.52, 0, 10);
 		pephy::CPeForceDrag* air = forceSystem->CreateForceDrag(1, 2);
 
-		//forceSystem->AddForceToParticle(spring1, particleComp1, -1);
-		//forceSystem->AddForceToParticle(spring2, particleComp2, -1);
-		//forceSystem->AddForceToParticle(spring3, particleComp3, -1);
-
-		forceSystem->AddForceToParticle(spring4, rigidbodyComp1, -1);
-		forceSystem->AddForceToParticle(spring4, rigidbodyComp2, -1);
-		//forceSystem->AddForceToParticle(spring4, particleComp3, -1);
+		forceSystem->AddForceToParticle(spring1, rigidbodyComp1, -1);
+		forceSystem->AddForceToParticle(spring2, rigidbodyComp2, -1);
 
 		forceSystem->AddForceToParticle(water, rigidbodyComp1, -1);
 		forceSystem->AddForceToParticle(water, rigidbodyComp2, -1);
