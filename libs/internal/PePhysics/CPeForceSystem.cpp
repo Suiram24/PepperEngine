@@ -20,24 +20,24 @@ namespace engine {
 		}
 
 
-		CPeForceDrag* CPeForceSystem::CreateForceDrag(float p_k1, float p_k2)
+		CPeForceDrag* CPeForceSystem::CreateForceDrag(float p_k1, float p_k2, pemaths::CPeVector3 p_appPoint)
 		{
-			return &m_dragPool->Create(p_k1, p_k2);
+			return &m_dragPool->Create(p_k1, p_k2, p_appPoint);
 		}
 
-		CPeForceAnchoredSpring* CPeForceSystem::CreateForceAnchoredSpring(const pemaths::CPeVector3& p_anchor, float p_k, float p_restLength)
+		CPeForceAnchoredSpring* CPeForceSystem::CreateForceAnchoredSpring(const pemaths::CPeVector3& p_anchor, float p_k, float p_restLength, pemaths::CPeVector3 p_bodyAnchor)
 		{
-			return &m_anchoredSpringPool->Create(p_anchor, p_k, p_restLength);
+			return &m_anchoredSpringPool->Create(p_anchor, p_k, p_restLength, p_bodyAnchor);
 		}
 
-		CPeForceSpring* CPeForceSystem::CreateForceSpring(CPeParticle* p_other, float p_k, float p_restLength)
+		CPeForceSpring* CPeForceSystem::CreateForceSpring(CPeParticle* p_other, float p_k, float p_restLength, pemaths::CPeVector3 p_bodyAnchor, pemaths::CPeVector3 p_otherLocalAnchor)
 		{
-			return &m_springPool->Create(p_other, p_k, p_restLength);
+			return &m_springPool->Create(p_other, p_k, p_restLength, p_bodyAnchor, p_otherLocalAnchor);
 		}
 
-		CPeForceBuoyancy* CPeForceSystem::CreateForceBuoyancy(float p_immersionDepth, float p_volume, float p_liquidLevel, float p_liquidDensity /*= 1*/)
+		CPeForceBuoyancy* CPeForceSystem::CreateForceBuoyancy(float p_immersionDepth, float p_volume, float p_liquidLevel, float p_liquidDensity /*= 1*/, pemaths::CPeVector3 p_appPoint)
 		{
-			return &m_buoyancyPool->Create(p_immersionDepth, p_volume, p_liquidLevel, p_liquidDensity);
+			return &m_buoyancyPool->Create(p_immersionDepth, p_volume, p_liquidLevel, p_liquidDensity, p_appPoint);
 		}
 
 		bool CPeForceSystem::AddForceToParticle(CPeForce* p_force, CPeParticle* p_particle, double p_lifespan /*= -1*/)

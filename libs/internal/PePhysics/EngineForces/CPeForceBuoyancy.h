@@ -25,7 +25,7 @@ namespace engine {
 
 			}
 
-			void Initialise(float p_immersionDepth, float p_volume, float p_liquidLevel, float p_liquidDensity);
+			void Initialise(float p_immersionDepth, float p_volume, float p_liquidLevel, float p_liquidDensity, pemaths::CPeVector3 p_appPoint = pemaths::CPeVector3());
 
 			void Compute(CPeParticle& p_particule, double p_timeStep) const;
 		};

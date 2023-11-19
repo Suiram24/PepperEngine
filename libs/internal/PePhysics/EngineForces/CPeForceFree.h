@@ -10,13 +10,11 @@ namespace engine {
 		class CPeForceFree : public CPeForce {
 		private:
 			pemaths::CPeVector3 m_forceValue;
-			pemaths::CPeVector3 m_globalPosition;
 
 		public:
 			CPeForceFree()
 				: CPeForce()
 				, m_forceValue(pemaths::CPeVector3(0, 0, 0))
-				, m_globalPosition(pemaths::CPeVector3(0, 0, 0))
 			{
 
 			}
@@ -25,9 +23,9 @@ namespace engine {
 			 * needs to be applied.
 			 * 
 			 * @param p_forceValue CPeVector3 - Values of the force
-			 * @param p_appPoint CPeVector3 - Point where the force must apply
+			 * @param p_appPoint CPeVector3 - Local point where the force must apply
 			 */
-			void Initialise(pemaths::CPeVector3 p_forceValue, pemaths::CPeVector3 p_appPoint);
+			void Initialise(pemaths::CPeVector3 p_forceValue, pemaths::CPeVector3 p_appPoint = pemaths::CPeVector3());
 
 			/**
 			 * @brief Define force by its direction vector, its magnitude and the point
@@ -35,9 +33,9 @@ namespace engine {
 			 *
 			 * @param p_direction CPeVector3 - Direction of the force. The vector does not need to be normalized.
 			 * @param p_magnitude float - Magnitude of the force vector.
-			 * @param p_appPoint CPeVector3 - Point where the force must apply.
+			 * @param p_appPoint CPeVector3 - Local point where the force must apply.
 			 */
-			void Initialise(pemaths::CPeVector3 p_direction, float p_magnitude, pemaths::CPeVector3 p_appPoint);
+			void Initialise(pemaths::CPeVector3 p_direction, float p_magnitude, pemaths::CPeVector3 p_appPoint = pemaths::CPeVector3());
 
 			/**
 			 * @brief Compute the force for the targeted particle object.
