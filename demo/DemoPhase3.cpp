@@ -96,7 +96,7 @@ namespace pedemo {
 		pephy::CPeColliderComponent* colliderComp4 = colliderSystem->CreateColliderComponent(entity4, 0.5);
 
 
-		meshRenderSystem->CreateMeshComponent(entity1, *m_renderer, "models/sphere.obj", "textures/viking_room.png");
+		meshRenderSystem->CreateMeshComponent(entity1, *m_renderer, "models/companion_cube_simple.obj", "textures/viking_room.png");
 		meshRenderSystem->CreateMeshComponent(entity2, *m_renderer, "models/sphere.obj", "textures/viking_room.png");
 		meshRenderSystem->CreateMeshComponent(entity3, *m_renderer, "models/sphere.obj", "textures/viking_room.png");
 		meshRenderSystem->CreateMeshComponent(entity4, *m_renderer, "models/viking_room.obj", "textures/viking_room.png");
