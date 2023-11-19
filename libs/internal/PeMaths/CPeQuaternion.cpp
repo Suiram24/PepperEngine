@@ -154,6 +154,24 @@ namespace engine {
             return q*scalar;
         }
 
+        double CPeQuaternion::GetNorm() const
+        {
+            return std::sqrt(
+                m_value[0] * m_value[0] +
+                m_value[1] * m_value[1] +
+                m_value[2] * m_value[2] +
+                m_value[3] * m_value[3]
+            );
+        }
+
+        CPeQuaternion CPeQuaternion::Normalize() const
+        {
+            double norm = GetNorm();
+            CPeQuaternion normalizedQ = CPeQuaternion(*this);
+            normalizedQ *= 1.0f/norm;
+            return normalizedQ;
+        }
+
         CPeMatrix3 CPeQuaternion::ToMatrix3() const
         {
             double w = m_value[0];
