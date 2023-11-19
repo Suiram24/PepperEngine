@@ -8,18 +8,6 @@ namespace engine {
 			return &m_particlePool->Create(p_owner, p_massInverse, p_damping, p_gravity);
 		}
 
-		CPeRigidBody* CPeForceSystem::CreateRigidBodyComponent(
-			pecore::CPeEntity* p_owner,
-			double p_massInverse,
-			double p_damping,
-			pemaths::CPeVector3 p_gravity,
-			double angular_dampling
-		)
-		{
-			return &m_rigidbodyPool->Create(p_owner, p_massInverse, p_damping, p_gravity, angular_dampling);
-		}
-
-
 		CPeForceDrag* CPeForceSystem::CreateForceDrag(float p_k1, float p_k2)
 		{
 			return &m_dragPool->Create(p_k1, p_k2);
@@ -45,18 +33,6 @@ namespace engine {
 			if (p_force != nullptr && p_particle != nullptr)
 			{
 				m_registry->Create(p_force, p_particle, p_lifespan);
-			}
-			else
-			{
-				return false;
-			}
-		}
-
-		bool CPeForceSystem::AddForceAtPoint(CPeForce* p_force, CPeRigidBody* p_rigidBody, pemaths::CPeVector3 localPoint, double p_lifespan)
-		{
-			if (p_force != nullptr && p_rigidBody != nullptr)
-			{
-				m_registry->Create(p_force, p_rigidBody, p_lifespan);
 			}
 			else
 			{
@@ -109,16 +85,6 @@ namespace engine {
 				}
 				partIt++;
 			}
-			
-			CPeRigidBody* rigIt = m_rigidbodyPool->First();
-			for (size_t  i = 0; i < m_rigidbodyPool->Size(); i++)
-			{
-				if (rigIt->IsActive())
-				{
-					rigIt->UpdatePrecisely(p_timeStep);
-				}
-				rigIt++;
-			}
 
 		}
 
@@ -134,7 +100,6 @@ namespace engine {
 			m_buoyancyPool = new pecore::CPeObjectPool<CPeForceBuoyancy, pecore::consts::maxEntityNumber>();
 
 			m_particlePool = new pecore::CPeObjectPool<CPeParticle, pecore::consts::maxEntityNumber>();
-			m_rigidbodyPool = new pecore::CPeObjectPool <CPeRigidBody, pecore::consts::maxEntityNumber>();
 		}
 
 		void CPeForceSystem::FreeObjectsPool()
@@ -147,7 +112,6 @@ namespace engine {
 			delete m_buoyancyPool;
 
 			delete m_particlePool;
-			delete m_rigidbodyPool;
 		}
 	}
 }
