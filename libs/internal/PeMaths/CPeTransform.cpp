@@ -19,7 +19,7 @@ namespace engine {
 				assert("Matrix is not inversible" && false);
 				return CPeVector3(0, 0, 0);
 			}
-			return m_transformMatrix * p_globalPoint;
+			return m_transformMatrix.Inverse() * p_globalPoint;
 		}
 
         const CPeQuaternion& CPeTransform::GetOrientation() const
