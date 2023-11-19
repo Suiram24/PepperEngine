@@ -76,7 +76,7 @@ namespace pedemo {
 		entity4 = &engine::CPeGameManager::getInstance().CreateEntity();
 
 		entity1->m_transform.SetPosition(pemaths::CPeVector3(2, 2, -0.1));
-		entity2->m_transform.SetPosition(pemaths::CPeVector3(-1, 2, -3));
+		entity2->m_transform.SetPosition(pemaths::CPeVector3(2, 2, -4));
 		entity3->m_transform.SetPosition(pemaths::CPeVector3(-1, 2, -1));
 		entity4->m_transform.SetPosition(pemaths::CPeVector3(0, 2, 0));
 
@@ -101,13 +101,22 @@ namespace pedemo {
 		meshRenderSystem->CreateMeshComponent(entity3, *m_renderer, "models/sphere.obj", "textures/viking_room.png");
 		meshRenderSystem->CreateMeshComponent(entity4, *m_renderer, "models/viking_room.obj", "textures/viking_room.png");
 
-		pephy::CPeForceSpring* spring1 = forceSystem->CreateForceSpring(rigidbodyComp4, 10, 3);
-		pephy::CPeForceSpring* spring2 = forceSystem->CreateForceSpring(rigidbodyComp4, 10, 3, pemaths::CPeVector3(1,0,0));
+		pephy::CPeForceFree* free1 = forceSystem->CreateForceFree(pemaths::CPeVector3(0.01, 0, 0.01), pemaths::CPeVector3(0, -1, 0));
+		pephy::CPeForceFree* free2 = forceSystem->CreateForceFree(pemaths::CPeVector3(-0.01, 0, -0.01), pemaths::CPeVector3(0, 1, 0));
+
+
+		pephy::CPeForceSpring* spring1 = forceSystem->CreateForceSpring(rigidbodyComp4, 10, 3, pemaths::CPeVector3(1, 0, 0));
+		//pephy::CPeForceSpring* spring2 = forceSystem->CreateForceSpring(rigidbodyComp4, 10, 3, pemaths::CPeVector3(1, 0, 0));
+		pephy::CPeForceSpring* spring3 = forceSystem->CreateForceSpring(rigidbodyComp4, 10, 3, pemaths::CPeVector3(1,0,0));
 		pephy::CPeForceBuoyancy* water = forceSystem->CreateForceBuoyancy(0.5, 0.52, 0, 10);
 		pephy::CPeForceDrag* air = forceSystem->CreateForceDrag(1, 2);
 
+		forceSystem->AddForceToParticle(free1, rigidbodyComp2, -1);
+		forceSystem->AddForceToParticle(free2, rigidbodyComp2, -1);
+
 		forceSystem->AddForceToParticle(spring1, rigidbodyComp1, -1);
-		forceSystem->AddForceToParticle(spring2, rigidbodyComp2, -1);
+		//forceSystem->AddForceToParticle(spring2, rigidbodyComp2, -1);
+		forceSystem->AddForceToParticle(spring3, rigidbodyComp3, -1);
 
 		forceSystem->AddForceToParticle(water, rigidbodyComp1, -1);
 		forceSystem->AddForceToParticle(water, rigidbodyComp2, -1);

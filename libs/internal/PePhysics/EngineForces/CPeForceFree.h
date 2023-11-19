@@ -40,7 +40,7 @@ namespace engine {
 			/**
 			 * @brief Compute the force for the targeted particle object.
 			 */
-			void Compute(CPeParticle* p_particle, double p_timeStep) const;
+			void Compute(CPeParticle& p_particule, double p_timeStep) const;
 		};
 	}
 }
