@@ -53,7 +53,7 @@ namespace engine {
         void CPeTransform::UpdateTransformMatrix()
         {
 			CPeMatrix4 position = CPeMatrix4(CPeMatrix3::Identity(), m_position);
-			CPeMatrix4 orientation = CPeMatrix4(m_orientation.ToMatrix3(), CPeVector3());
+			CPeMatrix4 orientation = CPeMatrix4(m_orientation.Normalize().ToMatrix3(), CPeVector3());
 			CPeMatrix4 scale = CPeMatrix4(
 				m_size.GetX(), .0, .0,
 				.0, m_size.GetY(), .0,
