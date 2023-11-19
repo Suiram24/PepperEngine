@@ -19,5 +19,10 @@ namespace engine {
 		{
 			p_particle.AddForceAtBodyPoint(m_forceValue, m_appPoint);
 		}
+
+		void CPeForceFree::ChangeValue(pemaths::CPeVector3 p_forceValue)
+		{
+			m_forceValue = p_forceValue;
+		}
 	}
 }

@@ -41,6 +41,8 @@ namespace engine {
 			 * @brief Compute the force for the targeted particle object.
 			 */
 			void Compute(CPeParticle& p_particule, double p_timeStep) const;
+
+			void ChangeValue(pemaths::CPeVector3 p_forceValue);
 		};
 	}
 }
