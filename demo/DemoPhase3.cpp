@@ -80,12 +80,14 @@ namespace pedemo {
 		entity3->m_transform.SetPosition(pemaths::CPeVector3(-1, 2, -1));
 		entity4->m_transform.SetPosition(pemaths::CPeVector3(0, 2, 0));
 
-		entity1->m_transform.SetSize(pemaths::CPeVector3(0.5, 0.5, 0.5));
+		entity1->m_transform.SetSize(pemaths::CPeVector3(1, 2, 2));
 		entity2->m_transform.SetSize(pemaths::CPeVector3(1.5, 2, 1));
 		entity3->m_transform.SetSize(pemaths::CPeVector3(0.5, 0.5, 0.5));
 		entity4->m_transform.SetSize(pemaths::CPeVector3(0.5, 0.5, 0.5));
 
 		pephy::CPeRigidBody* rigidbodyComp1 = forceSystem->CreateRigidBodyComponent(entity1, 3);
+		rigidbodyComp1->SetCubeInertia(1, 2, 2);
+
 		pephy::CPeRigidBody* rigidbodyComp2 = forceSystem->CreateRigidBodyComponent(entity2, 3);
 		pephy::CPeRigidBody* rigidbodyComp3 = forceSystem->CreateRigidBodyComponent(entity3, 3/*, 0, 0, pemaths::CPeVector3()*/);
 		pephy::CPeParticle* rigidbodyComp4 = forceSystem->CreateParticleComponent(entity4, 0, 0, pemaths::CPeVector3());

@@ -231,3 +231,8 @@ Une dernière entité est reliée à l'une des deux entités secondaires avec un
 Une force de flottaison est simulée quand des entitées tombent en dessous de la hauteur 0.
 
  
+ # Phase 3
+
+ ## Rigidbody
+
+ ## Forces
