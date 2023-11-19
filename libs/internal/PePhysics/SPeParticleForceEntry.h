@@ -13,6 +13,7 @@ namespace engine {
 		{
 			CPeForce* m_force;
 			CPeParticle* m_particle;
+			pemaths::CPeVector3 m_localPoint;
 			double m_lifeSpan; //-1 for infinite, so must be set to 0 if lifeSpan-dt <0 to make lifespan = 0 inactive
 
 			SPeParticleForceEntry()
@@ -27,6 +28,13 @@ namespace engine {
 			{
 				m_force = p_force;
 				m_particle = p_particle;
+				m_lifeSpan = p_lifeSpan;
+			}
+
+			void Initialise(CPeForce* p_force, CPeRigidBody* p_rigidBody, double p_lifeSpan = -1)
+			{
+				m_force = p_force;
+				m_particle = p_rigidBody;
 				m_lifeSpan = p_lifeSpan;
 			}
 

@@ -38,6 +38,7 @@ namespace engine {
 			
 
 			CPeParticle* CreateParticleComponent(pecore::CPeEntity* p_owner, double p_massInverse = 1, double p_damping = 0.999, pemaths::CPeVector3 p_gravity = pemaths::CPeVector3(0, -10, 0));
+			CPeRigidBody* CreateRigidBodyComponent(pecore::CPeEntity* p_owner, double p_massInverse = 1, double p_damping = 0.999, pemaths::CPeVector3 p_gravity = pemaths::CPeVector3(0, -10, 0), double angular_dampling = 0.999);
 			
 			CPeForceDrag* CreateForceDrag(float p_k1, float p_k2);
 			CPeForceAnchoredSpring* CreateForceAnchoredSpring(const pemaths::CPeVector3& p_anchor, float p_k, float p_restLength);
@@ -45,6 +46,7 @@ namespace engine {
 			CPeForceBuoyancy* CreateForceBuoyancy(float p_immersionDepth, float p_volume, float p_liquidLevel, float p_liquidDensity = 1);
 
 			bool AddForceToParticle(CPeForce* p_force, CPeParticle* p_particle, double p_lifespan = -1);
+			bool AddForceAtPoint(CPeForce* p_force, CPeRigidBody* p_rigidBody, pemaths::CPeVector3 localPoint, double p_lifespan = -1);
 
 			void Update(double p_timeStep);
 
@@ -77,6 +79,7 @@ namespace engine {
 			pecore::CPeObjectPool<CPeForceBuoyancy, pecore::consts::maxEntityNumber>* m_buoyancyPool;
 
 			pecore::CPeObjectPool<CPeParticle, pecore::consts::maxEntityNumber>* m_particlePool;
+			pecore::CPeObjectPool<CPeRigidBody, pecore::consts::maxEntityNumber>* m_rigidbodyPool;
 
 		};
 	}
