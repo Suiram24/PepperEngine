@@ -11,11 +11,14 @@ namespace engine {
             transform.SetOrientation(transform.GetOrientation() + ((p_timeStep / 2.0f) * w * transform.GetOrientation()));
         }
 
-        void CPeRigidBody::UpdateInertia()
+        void CPeRigidBody::UpdateInertia() //TODO: Delete
         {
+            return;
             pemaths::CPeMatrix3 worldMatrix = GetTransform().GetTransformMatrix().ToMatrix3();
             if (worldMatrix.IsInversible()) {
                 m_inertiaInverse = worldMatrix * m_inertiaInverse * worldMatrix.Inverse();
+                //if (isinf(m_inertiaInverse.Get(0,0))) 
+
             }
             else {
                 std::cout << "Inertia has not been updated!" << std::endl;
@@ -24,8 +27,13 @@ namespace engine {
 
         void CPeRigidBody::UpdateAngularAcceleration()
         {
-            m_angularAcceleration = m_inertiaInverse * m_sumTorques;
-        }
+            //
+            //Change Inertia from local to world
+            pemaths::CPeMatrix3 worldMatrix = GetTransform().GetTransformMatrix().ToMatrix3();
+            pemaths::CPeMatrix3 intertiaInverseWorld = worldMatrix * m_inertiaInverse * worldMatrix.Inverse();
+
+            m_angularAcceleration = intertiaInverseWorld * m_sumTorques;
+        } 
 
         void CPeRigidBody::UpdateAngularVelocity(double p_timeStep)
         {
@@ -80,7 +88,7 @@ namespace engine {
             UpdatePositionPrecisely(p_timeStep);
             UpdateOrientation(p_timeStep);
 
-            UpdateInertia();
+            //UpdateInertia();
 
             UpdateAcceleration(p_timeStep);
             UpdateAngularAcceleration();
