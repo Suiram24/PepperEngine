@@ -231,3 +231,46 @@ Une dernière entité est reliée à l'une des deux entités secondaires avec un
 Une force de flottaison est simulée quand des entitées tombent en dessous de la hauteur 0.
 
  
+ # Phase 3
+
+ ## Mathématiques
+
+ ### Les Quaternions
+
+ Nous avons implémenté les quaternions comme indiqué dans le cours. Nous avons rajouté des méthodes au quaternion afin de depouvoir obtenir la norme et l'angle représéneté par le quaternion.
+ Nous avons encore ajouté des méthodes pour normaliser le quaternion et changer le quaternion en matrice. Ces méthodes permettent de passer de la simple orientation d'u objet à sa position compl_te dans l'espace.
+
+ ### Les Matrice
+
+ Pour tester le discriminant de nos matrices 3x3, on utilise une précision de 1e-12.
+ Nos matrice 4x3 contiennent une matrice 3x3 ainsi qu'un Vecteur3.
+
+ ## Rigidbody
+
+ Nous avons choisi de baser notre classe CPeRigidbody sur la classe CPeParticule.
+ Cela permet à notre système physique d'utiliser de façon transparente ces nouveaux objets.
+ De plus toute l'implémentation de la physique linéaire est conservée.
+ Nous avons rendu virtuelle la méthode de mise à jour de la physique pour la redéfinir dans le rigidbody pour inclure par exemple les torques.
+ Deux nouvelles méthodes sont ajoutées pour appliquer des forces sur des points en coordonnées locales ou globales.
+ Le comportement par défaut, dans CPeParticle est d'appliquer la force au centre de gravité comme précédemment.
+
+ Notre problème principal a été de mettre à jour l'inertie inverse à chaque frame à partir de la frame précédente. 
+ A cause de cela l'inertie était croissante et produisait rapidement des NaN.
+
+ Pour choisir l'inertie statique de l'objet nous avons défini 3 méthodes pour : un cuboïde, une sphère et un cylindre.
+
+
+ ## Forces
+
+ Nous avons modifié les forces pour qu'elles s'appliquent en un point donné dans le repère de l'objet, au lieu de s'appliquer à l'origine de l'objet. 
+ Il n'a donc pas été necessaire de modifier les forces en dehors de ce changement de fonction, qui applique la force à un point donné pour les rigidbody et à l'origine pour les particules 
+
+ Nous avons également rajouté une force libre qui peut être appliquée en n'importe quel point de l'espace avec une nomre définie par le programmeur.
+
+## Mesh component
+
+Jusqu'a présent, il fallait instancier à la main dans la boucle de jeu des objets capable d'être rendu à l'écran, et modifier leur tailler et position dans la même boucle de jeu. Cela n'était évidement ni pratique d'utilisation, ni optimisé, et compliquait la tache pour la gestion des rotation.   
+Un mesh comonent a donc été crée afin de résoudre ce problème. Il récupère directement la matrice transformation de l'entité auquel il est rattaché et la transmet au VulkanRender via le ModelWatcher qu'il possède.   
+En plus d'automatiser le rendu des meshs, le component permet également de déterminer la texture et le modèle à l'instanciation plutot que de devoir le hardcoder dans une classe.
+
+ Nous avons également rajouté une force libre qui peut être appliquée en n'importe quel point de l'espace avec une norme définie par le programmeur.

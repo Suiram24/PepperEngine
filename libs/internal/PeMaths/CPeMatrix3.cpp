@@ -5,6 +5,14 @@
 
 namespace engine {
 	namespace maths {
+
+		CPeMatrix3 CPeMatrix3::Identity() {
+			return CPeMatrix3(
+				1.0f, 0, 0,
+				0, 1.0f, 0,
+				0, 0, 1.0f
+			);
+		}
 		
 		void CPeMatrix3::Set(unsigned int p_i, unsigned int p_j, double p_value)
 		{
@@ -116,7 +124,8 @@ namespace engine {
 
 		bool CPeMatrix3::IsInversible() const
 		{
-			return (abs(Determinant()) > 0.001); //to prevent double imprecision
+			double det = abs(Determinant());
+			return (det > 1e-12); //to prevent double imprecision
 		}
 
 		CPeMatrix3 CPeMatrix3::Inverse() const

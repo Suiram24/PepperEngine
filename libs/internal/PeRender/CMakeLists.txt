@@ -8,6 +8,7 @@ add_library(
 	CPeGraphicalObjects.h	CPeGraphicalObjects.cpp
 	CPeTexture.h			CPeTexture.cpp
 	SphereMesh.h			SphereMesh.cpp
+	CuboidMesh.h			CuboidMesh.cpp
 	PlaneMesh.h				PlaneMesh.cpp
 	CPeViewManager.h		CPeViewManager.cpp
 	CPeCameraController.h	CPeCameraController.cpp

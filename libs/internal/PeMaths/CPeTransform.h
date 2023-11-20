@@ -82,6 +82,11 @@ namespace engine {
 			CPeVector3 GetPositionPointInLocal(const CPeVector3& p_globalPoint) const;
 
 			/**
+			 * .
+			 */
+			CPeVector3 GetVectorInLocal(const CPeVector3& p_globalVector) const;
+
+			/**
 			 * @brief Accessor for m_orientation.
 			 * @return m_orientation.
 			*/

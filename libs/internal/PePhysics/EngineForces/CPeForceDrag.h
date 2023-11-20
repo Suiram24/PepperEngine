@@ -21,7 +21,7 @@ namespace engine {
 
 			}
 
-			void Initialise(float p_k1, float p_k2);
+			void Initialise(float p_k1, float p_k2, pemaths::CPeVector3 p_appPoint = pemaths::CPeVector3());
 
 			void Compute(CPeParticle& p_particule, double p_timeStep) const;
 		};

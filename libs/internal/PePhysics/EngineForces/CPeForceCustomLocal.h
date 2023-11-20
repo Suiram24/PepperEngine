@@ -1,5 +1,5 @@
-#ifndef PEPHYSICS_CPEFORCEFREE_H
-#define PEPHYSICS_CPEFORCEFREE_H
+#ifndef PEPHYSICS_CPEFORCECUSTOMLOCA_H
+#define PEPHYSICS_CPEFORCECUSTOMLOCAL_H
 
 #include "..\CPeForce.h"
 
@@ -7,12 +7,12 @@ namespace pemaths = engine::maths;
 
 namespace engine {
 	namespace physics {
-		class CPeForceFree : public CPeForce {
+		class CPeForceCustomLocal : public CPeForce {
 		private:
 			pemaths::CPeVector3 m_forceValue;
 
 		public:
-			CPeForceFree()
+			CPeForceCustomLocal()
 				: CPeForce()
 				, m_forceValue(pemaths::CPeVector3(0, 0, 0))
 			{

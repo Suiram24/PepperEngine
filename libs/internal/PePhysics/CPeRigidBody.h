@@ -22,9 +22,9 @@ namespace engine {
 
             void UpdateOrientation(double p_timeStep);
 
-            void UpdateInertia();
+            void UpdateInertia();//TODO: Delete
 
-            void UpdateAngularAcceleration();
+            void UpdateAngularAcceleration(double p_timeStep);
 
             void UpdateAngularVelocity(double p_timeStep);
             

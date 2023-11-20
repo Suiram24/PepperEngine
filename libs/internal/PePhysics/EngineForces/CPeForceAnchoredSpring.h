@@ -11,7 +11,7 @@ namespace engine {
 		class CPeForceAnchoredSpring : public CPeForce {
 		private:
 			pemaths::CPeVector3 m_anchor;
-			pemaths::CPeVector3 m_localAnchor;
+			pemaths::CPeVector3 m_bodyAnchor;
 
 			float m_k; 
 			float m_restLength;
@@ -20,18 +20,16 @@ namespace engine {
 			CPeForceAnchoredSpring()
 				: CPeForce()
 				, m_anchor(pemaths::CPeVector3())
-				, m_localAnchor(pemaths::CPeVector3())
+				, m_bodyAnchor(pemaths::CPeVector3())
 				, m_k(0)
 				, m_restLength(0)
 			{
 
 			}
  
-			void Initialise(const pemaths::CPeVector3& p_anchor, float p_k, float p_restLength);
-			void Initialise(const pemaths::CPeVector3& p_anchor, const pemaths::CPeVector3& p_localAnchor, float p_k, float p_restLength);
+			void Initialise(const pemaths::CPeVector3& p_anchor, float p_k, float p_restLength, pemaths::CPeVector3 p_bodyAnchor = pemaths::CPeVector3());
 
 			void Compute(CPeParticle& p_particule, double p_timeStep) const;
-			void Compute(CPeRigidBody& p_rigidBody, double p_timeStep) const;
 		};
 	}
 }

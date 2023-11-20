@@ -1,4 +1,5 @@
 #include "CPeRigidBody.h"
+#include <iostream>
 
 namespace engine {
 	namespace physics {
@@ -7,19 +8,32 @@ namespace engine {
             pemaths::CPeTransform& transform = GetTransform();
             pemaths::CPeQuaternion w(0, m_angularVelocity.GetX(), m_angularVelocity.GetY(), m_angularVelocity.GetZ());
 
-            transform.SetOrientation(transform.GetOrientation() + ((p_timeStep / 2) * w * transform.GetOrientation()));
+            transform.SetOrientation(transform.GetOrientation() + ((p_timeStep / 2.0f) * w * transform.GetOrientation()));
         }
 
-        void CPeRigidBody::UpdateInertia()
+        void CPeRigidBody::UpdateInertia() //TODO: Delete
         {
+            return;
             pemaths::CPeMatrix3 worldMatrix = GetTransform().GetTransformMatrix().ToMatrix3();
-            m_inertiaInverse = worldMatrix * m_inertiaInverse * worldMatrix.Inverse();
+            if (worldMatrix.IsInversible()) {
+                m_inertiaInverse = worldMatrix * m_inertiaInverse * worldMatrix.Inverse();
+                //if (isinf(m_inertiaInverse.Get(0,0))) 
+
+            }
+            else {
+                std::cout << "Inertia has not been updated!" << std::endl;
+            }
         }
 
-        void CPeRigidBody::UpdateAngularAcceleration()
+        void CPeRigidBody::UpdateAngularAcceleration(double p_timeStep)
         {
-            m_angularAcceleration = m_inertiaInverse * m_sumTorques;
-        }
+            //
+            //Change Inertia from local to world
+            pemaths::CPeMatrix3 worldMatrix = GetTransform().GetTransformMatrix().ToMatrix3();
+            pemaths::CPeMatrix3 intertiaInverseWorld = worldMatrix * m_inertiaInverse * worldMatrix.Inverse();
+
+            m_angularAcceleration = intertiaInverseWorld * (m_sumTorques * (1/ p_timeStep));
+        } 
 
         void CPeRigidBody::UpdateAngularVelocity(double p_timeStep)
         {
@@ -34,7 +48,7 @@ namespace engine {
 
         void CPeRigidBody::SetSphereInertia(double p_radius)
         {
-            double value = 2 / 5 * GetMass() * p_radius * p_radius;
+            double value = 2.0f / 5.0f * GetMass() * p_radius * p_radius;
             m_inertiaInverse = pemaths::CPeMatrix3(
                 value,0,0,
                 0,value,0,
@@ -43,9 +57,9 @@ namespace engine {
 
         void CPeRigidBody::SetCubeInertia(double p_dx, double p_dy, double p_dz)
         {
-            double value1 = 1/12 * GetMass() * (p_dy * p_dy + p_dz * p_dz);
-            double value2 = 1/12 * GetMass() * (p_dx * p_dx + p_dz * p_dz);
-            double value3 = 1/12 * GetMass() * (p_dx * p_dx + p_dy * p_dy);
+            double value1 = 1.0f/12.0f * GetMass() * (p_dy * p_dy + p_dz * p_dz);
+            double value2 = 1.0f/12.0f * GetMass() * (p_dx * p_dx + p_dz * p_dz);
+            double value3 = 1.0f/12.0f * GetMass() * (p_dx * p_dx + p_dy * p_dy);
             m_inertiaInverse = pemaths::CPeMatrix3(
                 value1, 0, 0,
                 0, value2, 0,
@@ -54,8 +68,8 @@ namespace engine {
 
         void CPeRigidBody::SetCylinderInertia(double p_height, double p_radius)
         {
-            double value1 = 1 / 12 * GetMass() * p_height * p_height + 1 / 4 * GetMass() * p_radius * p_radius;
-            double value2 = 1/2 * GetMass() * p_radius * p_radius;
+            double value1 = 1.0f / 12.0f * GetMass() * p_height * p_height + 1.0f / 4.0f * GetMass() * p_radius * p_radius;
+            double value2 = 1.0f/2.0f * GetMass() * p_radius * p_radius;
             m_inertiaInverse = pemaths::CPeMatrix3(
                 value1, 0, 0,
                 0, value2, 0,
@@ -71,16 +85,18 @@ namespace engine {
 
         void CPeRigidBody::UpdatePrecisely(double p_timeStep)
         {
-            UpdatePositionPrecisely(p_timeStep);
-            UpdateOrientation(p_timeStep);
+           
 
-            UpdateInertia();
+            //UpdateInertia();
 
             UpdateAcceleration(p_timeStep);
-            UpdateAngularAcceleration();
+            UpdateAngularAcceleration(p_timeStep);
 
             UpdateVelocity(p_timeStep);
             UpdateAngularVelocity(p_timeStep);
+
+            UpdatePositionPrecisely(p_timeStep);
+            UpdateOrientation(p_timeStep);
 
             ClearAccumulators();
         }
@@ -94,7 +110,8 @@ namespace engine {
         void CPeRigidBody::AddForceAtBodyPoint(const pemaths::CPeVector3& p_forceValue, const pemaths::CPeVector3& localPoint)
         {
             AddForce(p_forceValue);
-            m_sumTorques += pemaths::CPeVector3::CrossProduct(localPoint, p_forceValue);
+            m_sumTorques += pemaths::CPeVector3::CrossProduct(GetTransform().GetPositionPoint(localPoint)-GetTransform().GetPosition(), p_forceValue);
+            return;
         }
 	}
 }

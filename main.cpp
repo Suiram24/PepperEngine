@@ -9,14 +9,19 @@
 ///////////////////////////////////////////////////////////////////////
 
 
-#include "demo/DemoCustomGameMode.h"
+//#include "demo/DemoCustomGameMode.h"
+#include "demo/DemoPhase3.h"
+#include "demo/DemoDoublePendulum.h"
 #include "CPeGameManager.h"
 
 // Main code
 int main(int, char**)
 {
 
-    engine::CPeGameMode* myGameMode = &pedemo::DemoCustomGameMode();
+    //engine::CPeGameMode* myGameMode = &pedemo::DemoPhase3();
+    engine::CPeGameMode* myGameMode = &pedemo::DemoDoublePendulum();
+
+
     engine::CPeGameManager::getInstance().SetGameMode(myGameMode);
     engine::CPeGameManager::getInstance().StartGame();
 

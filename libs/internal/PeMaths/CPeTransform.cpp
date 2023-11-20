@@ -19,7 +19,13 @@ namespace engine {
 				assert("Matrix is not inversible" && false);
 				return CPeVector3(0, 0, 0);
 			}
-			return m_transformMatrix * p_globalPoint;
+			return m_transformMatrix.Inverse() * p_globalPoint;
+		}
+
+		CPeVector3 CPeTransform::GetVectorInLocal(const CPeVector3& p_globalVector) const
+		{
+			CPeMatrix3 rotationMatrix = m_orientation.ToMatrix3();
+			return rotationMatrix * p_globalVector;
 		}
 
         const CPeQuaternion& CPeTransform::GetOrientation() const
@@ -52,13 +58,18 @@ namespace engine {
 
         void CPeTransform::UpdateTransformMatrix()
         {
-			m_transformMatrix = CPeMatrix4(m_orientation.ToMatrix3(),m_position);
-			m_transformMatrix = m_transformMatrix * CPeMatrix4(
-				m_size.GetX(),	.0,				.0,
-				.0,				m_size.GetY(),	.0,
-				.0,				.0,				m_size.GetZ(),
-				.0,				.0,				.0
-				);
+			CPeMatrix4 position = CPeMatrix4(CPeMatrix3::Identity(), m_position);
+			CPeMatrix4 orientation = CPeMatrix4(m_orientation.Normalize().ToMatrix3(), CPeVector3());
+			CPeMatrix4 scale = CPeMatrix4(
+				m_size.GetX(), .0, .0,
+				.0, m_size.GetY(), .0,
+				.0, .0, m_size.GetZ(),
+				.0, .0, .0
+			);
+
+			//m_transformMatrix = scale*(orientation*position);
+			m_transformMatrix = position*orientation*scale;
+			
         }
 
         void CPeTransform::SetSize(const CPeVector3& p_size)

@@ -174,6 +174,20 @@ namespace engine
             double GetAngle() const;
 
             /**
+             * @brief Bget norm of the quaternion.
+             * 
+             * @return double - The norm of the quaternion.
+             */
+            double GetNorm() const;
+
+            /**
+             * @brief Create a normalize quaternion from the targeted quaternion.
+             * 
+             * @return Normalized quaternion.
+             */
+            CPeQuaternion Normalize() const;
+
+            /**
              * @brief Return the matrix 3x3 version of the quaternion.
              * @return CPeMatrix3 version of your CPeQuaternion.
              */

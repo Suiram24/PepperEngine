@@ -8,24 +8,46 @@ namespace engine {
 			return &m_particlePool->Create(p_owner, p_massInverse, p_damping, p_gravity);
 		}
 
-		CPeForceDrag* CPeForceSystem::CreateForceDrag(float p_k1, float p_k2)
+		CPeRigidBody* CPeForceSystem::CreateRigidBodyComponent(
+			pecore::CPeEntity* p_owner,
+			double p_massInverse,
+			double p_damping,
+			pemaths::CPeVector3 p_gravity,
+			double angular_dampling
+		)
 		{
-			return &m_dragPool->Create(p_k1, p_k2);
+			return &m_rigidbodyPool->Create(p_owner, p_massInverse, p_damping, p_gravity, angular_dampling);
 		}
 
-		CPeForceAnchoredSpring* CPeForceSystem::CreateForceAnchoredSpring(const pemaths::CPeVector3& p_anchor, float p_k, float p_restLength)
+
+		CPeForceDrag* CPeForceSystem::CreateForceDrag(float p_k1, float p_k2, pemaths::CPeVector3 p_appPoint)
 		{
-			return &m_anchoredSpringPool->Create(p_anchor, p_k, p_restLength);
+			return &m_dragPool->Create(p_k1, p_k2, p_appPoint);
 		}
 
-		CPeForceSpring* CPeForceSystem::CreateForceSpring(CPeParticle* p_other, float p_k, float p_restLength)
+		CPeForceAnchoredSpring* CPeForceSystem::CreateForceAnchoredSpring(const pemaths::CPeVector3& p_anchor, float p_k, float p_restLength, pemaths::CPeVector3 p_bodyAnchor)
 		{
-			return &m_springPool->Create(p_other, p_k, p_restLength);
+			return &m_anchoredSpringPool->Create(p_anchor, p_k, p_restLength, p_bodyAnchor);
 		}
 
-		CPeForceBuoyancy* CPeForceSystem::CreateForceBuoyancy(float p_immersionDepth, float p_volume, float p_liquidLevel, float p_liquidDensity /*= 1*/)
+		CPeForceSpring* CPeForceSystem::CreateForceSpring(CPeParticle* p_other, float p_k, float p_restLength, pemaths::CPeVector3 p_bodyAnchor, pemaths::CPeVector3 p_otherLocalAnchor)
 		{
-			return &m_buoyancyPool->Create(p_immersionDepth, p_volume, p_liquidLevel, p_liquidDensity);
+			return &m_springPool->Create(p_other, p_k, p_restLength, p_bodyAnchor, p_otherLocalAnchor);
+		}
+
+		CPeForceBuoyancy* CPeForceSystem::CreateForceBuoyancy(float p_immersionDepth, float p_volume, float p_liquidLevel, float p_liquidDensity /*= 1*/, pemaths::CPeVector3 p_appPoint)
+		{
+			return &m_buoyancyPool->Create(p_immersionDepth, p_volume, p_liquidLevel, p_liquidDensity, p_appPoint);
+		}
+
+		CPeForceFree* CPeForceSystem::CreateForceFree(pemaths::CPeVector3 p_forceValue, pemaths::CPeVector3 p_appPoint)
+		{
+			return &m_freePool->Create(p_forceValue, p_appPoint);
+		}
+
+		CPeForceCustomLocal* CPeForceSystem::CreateForceCustomLocal(pemaths::CPeVector3 p_forceValue, pemaths::CPeVector3 p_appPoint)
+		{
+			return &m_customLocalPool->Create(p_forceValue, p_appPoint);
 		}
 
 		bool CPeForceSystem::AddForceToParticle(CPeForce* p_force, CPeParticle* p_particle, double p_lifespan /*= -1*/)
@@ -33,6 +55,18 @@ namespace engine {
 			if (p_force != nullptr && p_particle != nullptr)
 			{
 				m_registry->Create(p_force, p_particle, p_lifespan);
+			}
+			else
+			{
+				return false;
+			}
+		}
+
+		bool CPeForceSystem::AddForceAtPoint(CPeForce* p_force, CPeRigidBody* p_rigidBody, pemaths::CPeVector3 localPoint, double p_lifespan)
+		{
+			if (p_force != nullptr && p_rigidBody != nullptr)
+			{
+				m_registry->Create(p_force, p_rigidBody, p_lifespan);
 			}
 			else
 			{
@@ -85,6 +119,16 @@ namespace engine {
 				}
 				partIt++;
 			}
+			
+			CPeRigidBody* rigIt = m_rigidbodyPool->First();
+			for (size_t  i = 0; i < m_rigidbodyPool->Size(); i++)
+			{
+				if (rigIt->IsActive())
+				{
+					rigIt->UpdatePrecisely(p_timeStep);
+				}
+				rigIt++;
+			}
 
 		}
 
@@ -98,8 +142,11 @@ namespace engine {
 			m_anchoredSpringPool = new pecore::CPeObjectPool<CPeForceAnchoredSpring, pecore::consts::maxEntityNumber>();
 			m_springPool = new pecore::CPeObjectPool<CPeForceSpring, pecore::consts::maxEntityNumber>();
 			m_buoyancyPool = new pecore::CPeObjectPool<CPeForceBuoyancy, pecore::consts::maxEntityNumber>();
+			m_freePool = new pecore::CPeObjectPool<CPeForceFree, pecore::consts::maxEntityNumber>();
+			m_customLocalPool = new pecore::CPeObjectPool<CPeForceCustomLocal, pecore::consts::maxEntityNumber>();
 
 			m_particlePool = new pecore::CPeObjectPool<CPeParticle, pecore::consts::maxEntityNumber>();
+			m_rigidbodyPool = new pecore::CPeObjectPool <CPeRigidBody, pecore::consts::maxEntityNumber>();
 		}
 
 		void CPeForceSystem::FreeObjectsPool()
@@ -110,8 +157,11 @@ namespace engine {
 			delete m_anchoredSpringPool;
 			delete m_springPool;
 			delete m_buoyancyPool;
+			delete m_freePool;
+			delete m_customLocalPool;
 
 			delete m_particlePool;
+			delete m_rigidbodyPool;
 		}
 	}
 }

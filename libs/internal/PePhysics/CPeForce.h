@@ -20,8 +20,9 @@ namespace engine {
 
 			//Methods
 		public:
-			CPeForce()
+			CPeForce(pemaths::CPeVector3 p_appPoint = pemaths::CPeVector3())
 				: m_isActive(false)
+				, m_appPoint(p_appPoint)
 			{
 
 			}
@@ -38,6 +39,8 @@ namespace engine {
 		public:
 		protected:
 			bool m_isActive;
+			pemaths::CPeVector3 m_appPoint;
+
 		private:
 
 			

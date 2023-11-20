@@ -30,11 +30,9 @@ namespace engine {
 
 			}
 
-			void Initialise(CPeParticle* p_other, float p_k, float p_restLength);
-			void Initialise(CPeRigidBody* p_other, pemaths::CPeVector3 p_otherLocalAnchor, float p_k, float p_restLength);
+			void Initialise(CPeParticle* p_other, float p_k, float p_restLength, pemaths::CPeVector3 p_bodyAnchor = pemaths::CPeVector3(), pemaths::CPeVector3 p_otherLocalAnchor = pemaths::CPeVector3());
 
 			void Compute(CPeParticle& p_particle, double p_timeStep) const;
-			void Compute(CPeRigidBody& p_rigidBody, double p_timeStep) const;
 		};
 	}
 }
