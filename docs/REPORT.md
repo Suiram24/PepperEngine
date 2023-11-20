@@ -233,6 +233,11 @@ Une force de flottaison est simulée quand des entitées tombent en dessous de l
  
  # Phase 3
 
+ ## Matrice
+
+ Pour tester le discriminant de nos matrices 3x3, on utilise une précision de 1e-12.
+ Nos matrice 4x4 contiennent une matrice 3x3 ainsi qu'un Vecteur3.
+
  ## Rigidbody
 
  Nous avons choisi de baser notre classe CPeRigidbody sur la classe CPeParticule.
