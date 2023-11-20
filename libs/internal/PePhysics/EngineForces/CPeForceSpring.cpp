@@ -24,8 +24,12 @@ namespace engine {
 			pemaths::CPeVector3 globalBodyAnchor = p_particle.GetTransform().GetPositionPoint(m_bodyAnchor);
 			
 			pemaths::CPeVector3 d = globalOtherAnchor - globalBodyAnchor;
-			p_particle.AddForceAtBodyPoint(d.NormalizeVector() * (m_k * (d.GetNorm() - m_restLength)) * p_timeStep, m_bodyAnchor);
-			m_other->AddForceAtBodyPoint(d.NormalizeVector() * (-m_k * (d.GetNorm() - m_restLength)) * p_timeStep, m_otherBodyAnchor);
+			if (d.GetNorm() > 0.00001)
+			{
+				p_particle.AddForceAtBodyPoint(d.NormalizeVector() * (m_k * (d.GetNorm() - m_restLength)) * p_timeStep, m_bodyAnchor);
+				m_other->AddForceAtBodyPoint(d.NormalizeVector() * (-m_k * (d.GetNorm() - m_restLength)) * p_timeStep, m_otherBodyAnchor);
+			}
+			
 		}
 
 		

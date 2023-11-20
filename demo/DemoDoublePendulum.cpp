@@ -68,13 +68,13 @@ namespace pedemo {
 
 		entity1->m_transform.SetPosition(pemaths::CPeVector3(0, 6, 0));
 		entity2->m_transform.SetPosition(pemaths::CPeVector3(3.5, 6, 0));
-		entity3->m_transform.SetPosition(pemaths::CPeVector3(10, 6, 0));
+		entity3->m_transform.SetPosition(pemaths::CPeVector3(8.5, 6, 0));
 
 		entity1->m_transform.SetSize(pemaths::CPeVector3(1, 1, 1));
 		entity2->m_transform.SetSize(pemaths::CPeVector3(1, 1, 1));
 		entity3->m_transform.SetSize(pemaths::CPeVector3(3, 0.5, 1));
 
-		pephy::CPeRigidBody* rigidbodyComp1 = forceSystem->CreateRigidBodyComponent(entity1, 0, 0, pemaths::CPeVector3(0,0,0));
+		pephy::CPeRigidBody* rigidbodyComp1 = forceSystem->CreateRigidBodyComponent(entity1, 0, 0.999, pemaths::CPeVector3(0,0,0));
 		pephy::CPeRigidBody* rigidbodyComp2 = forceSystem->CreateRigidBodyComponent(entity2, 1);
 		pephy::CPeRigidBody* rigidbodyComp3 = forceSystem->CreateRigidBodyComponent(entity3, 10);
 
@@ -88,7 +88,7 @@ namespace pedemo {
 
 
 		pephy::CPeForceSpring* spring1 = forceSystem->CreateForceSpring(rigidbodyComp1, 10, 3, pemaths::CPeVector3(-0.5f, 0, 0));
-		pephy::CPeForceSpring* spring2 = forceSystem->CreateForceSpring(rigidbodyComp3, 10, 3, pemaths::CPeVector3(0.5f, 0, 0), pemaths::CPeVector3(-1.5f, 0, 0));
+		pephy::CPeForceSpring* spring2 = forceSystem->CreateForceSpring(rigidbodyComp3, 1, 3, pemaths::CPeVector3(0.5f, 0, 0), pemaths::CPeVector3(-1.5f, 0, 0));
 ;
 
 		forceSystem->AddForceToParticle(spring1, rigidbodyComp2, -1);
