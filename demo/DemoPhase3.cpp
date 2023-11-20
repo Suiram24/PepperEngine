@@ -29,7 +29,12 @@ namespace pedemo {
 
 		DrawImGuiInterface3();
 
-		static float pos[3] = { entity4->m_transform.GetPosition().GetX(), entity4->m_transform.GetPosition().GetY(), entity4->m_transform.GetPosition().GetZ() };
+		static float pos[3] = { 
+			entity4->m_transform.GetPosition().GetX(),
+			entity4->m_transform.GetPosition().GetY(),
+			entity4->m_transform.GetPosition().GetZ()
+		};
+		static float forceMagnitude = 0;
 		static float min[3] = { -5,1,-5 };
 		static float max[3] = { 5,10,5 };
 
@@ -37,11 +42,15 @@ namespace pedemo {
 		++i;
 
 		ImGui::Begin("Controls");
+		//ImGui::SetNextWindowSize(ImVec2(10, 10));
 
 		ImGui::DragFloat3("Sphere position", pos, 0.1, -8, 8, "%.2f");
+		ImGui::SliderFloat("Force magnitude applied on ogive", &forceMagnitude, 0, 0.5f);
 
 		ImGui::End();
 
+		freeEditable1->ChangeValue(forceMagnitude * pemaths::CPeVector3(1, 0, 1));
+		freeEditable2->ChangeValue(-forceMagnitude * pemaths::CPeVector3(1, 0, 1));
 		entity4->m_transform.SetPosition(pemaths::CPeVector3(pos[0], pos[1], pos[2]));
 	}
 
@@ -77,19 +86,21 @@ namespace pedemo {
 
 		entity1->m_transform.SetPosition(pemaths::CPeVector3(2, 2, -0.1));
 		entity2->m_transform.SetPosition(pemaths::CPeVector3(2, 2, -4));
-		entity3->m_transform.SetPosition(pemaths::CPeVector3(-1, 2, -1));
+		entity3->m_transform.SetPosition(pemaths::CPeVector3(4, 2, -1));
 		entity4->m_transform.SetPosition(pemaths::CPeVector3(0, 2, 0));
 
-		entity1->m_transform.SetSize(pemaths::CPeVector3(1, 2, 2));
+		//entity1->m_transform.SetSize(pemaths::CPeVector3(1, 1 2));
 		entity2->m_transform.SetSize(pemaths::CPeVector3(1.5, 2, 1));
 		entity3->m_transform.SetSize(pemaths::CPeVector3(0.5, 0.5, 0.5));
 		entity4->m_transform.SetSize(pemaths::CPeVector3(0.5, 0.5, 0.5));
 
-		pephy::CPeRigidBody* rigidbodyComp1 = forceSystem->CreateRigidBodyComponent(entity1, 3);
-		rigidbodyComp1->SetCubeInertia(1, 2, 2);
+		pephy::CPeRigidBody* rigidbodyComp1 = forceSystem->CreateRigidBodyComponent(entity1, 1.0f/2);
+		//rigidbodyComp1->SetCubeInertia(1, 2, 2);
+		rigidbodyComp1->SetCubeInertia(1, 1, 1);
 
 		pephy::CPeRigidBody* rigidbodyComp2 = forceSystem->CreateRigidBodyComponent(entity2, 3);
 		pephy::CPeRigidBody* rigidbodyComp3 = forceSystem->CreateRigidBodyComponent(entity3, 3/*, 0, 0, pemaths::CPeVector3()*/);
+		rigidbodyComp3->SetCubeInertia(0.5f, 0.5f, 0.5f);
 		pephy::CPeParticle* rigidbodyComp4 = forceSystem->CreateParticleComponent(entity4, 0, 0, pemaths::CPeVector3());
 
 		pephy::CPeColliderComponent* colliderComp1 = colliderSystem->CreateColliderComponent(entity1, 0.5);
@@ -100,16 +111,24 @@ namespace pedemo {
 
 		meshRenderSystem->CreateMeshComponent(entity1, *m_renderer, "models/companion_cube_simple.obj", "textures/viking_room.png");
 		meshRenderSystem->CreateMeshComponent(entity2, *m_renderer, "models/sphere.obj", "textures/viking_room.png");
-		meshRenderSystem->CreateMeshComponent(entity3, *m_renderer, "models/sphere.obj", "textures/viking_room.png");
+		//meshRenderSystem->CreateMeshComponent(entity3, *m_renderer, "models/sphere.obj", "textures/viking_room.png");
+		meshRenderSystem->CreateMeshComponent(entity3, *m_renderer, "models/companion_cube_simple.obj", "textures/viking_room.png");
 		meshRenderSystem->CreateMeshComponent(entity4, *m_renderer, "models/viking_room.obj", "textures/viking_room.png");
 
 		pephy::CPeForceFree* free1 = forceSystem->CreateForceFree(pemaths::CPeVector3(0.01, 0, 0.01), pemaths::CPeVector3(0, -1, 0));
 		pephy::CPeForceFree* free2 = forceSystem->CreateForceFree(pemaths::CPeVector3(-0.01, 0, -0.01), pemaths::CPeVector3(0, 1, 0));
 
+		freeEditable1 = forceSystem->CreateForceFree(
+			pemaths::CPeVector3(0, 0, 0), pemaths::CPeVector3(0, -1, 0)
+		);
+		freeEditable2 = forceSystem->CreateForceFree(
+			pemaths::CPeVector3(0, 0, 0), pemaths::CPeVector3(0, 1, 0)
+		);
 
-		pephy::CPeForceSpring* spring1 = forceSystem->CreateForceSpring(rigidbodyComp4, 10, 3, pemaths::CPeVector3(1, 0, 0));
+
+		pephy::CPeForceSpring* spring1 = forceSystem->CreateForceSpring(rigidbodyComp4, 6, 3, pemaths::CPeVector3(0.5f, 0.5f, 0.5f));
 		//pephy::CPeForceSpring* spring2 = forceSystem->CreateForceSpring(rigidbodyComp4, 10, 3, pemaths::CPeVector3(1, 0, 0));
-		pephy::CPeForceSpring* spring3 = forceSystem->CreateForceSpring(rigidbodyComp4, 10, 3, pemaths::CPeVector3(1,0,0));
+		//pephy::CPeForceSpring* spring3 = forceSystem->CreateForceSpring(rigidbodyComp4, 10, 3, pemaths::CPeVector3(1,0,0));
 		pephy::CPeForceBuoyancy* water = forceSystem->CreateForceBuoyancy(0.5, 0.52, 0, 10);
 		pephy::CPeForceDrag* air = forceSystem->CreateForceDrag(1, 2);
 
@@ -117,8 +136,11 @@ namespace pedemo {
 		forceSystem->AddForceToParticle(free2, rigidbodyComp2, -1);
 
 		forceSystem->AddForceToParticle(spring1, rigidbodyComp1, -1);
+
+		forceSystem->AddForceToParticle(freeEditable1, rigidbodyComp3, -1);
+		forceSystem->AddForceToParticle(freeEditable2, rigidbodyComp3, -1);
 		//forceSystem->AddForceToParticle(spring2, rigidbodyComp2, -1);
-		forceSystem->AddForceToParticle(spring3, rigidbodyComp3, -1);
+		//forceSystem->AddForceToParticle(spring3, rigidbodyComp3, -1);
 
 		forceSystem->AddForceToParticle(water, rigidbodyComp1, -1);
 		forceSystem->AddForceToParticle(water, rigidbodyComp2, -1);

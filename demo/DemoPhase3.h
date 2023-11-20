@@ -64,6 +64,9 @@ namespace pedemo {
 		pecore::CPeEntity* entity3;
 		pecore::CPeEntity* entity4;
 
+		pephy::CPeForceFree* freeEditable1;
+		pephy::CPeForceFree* freeEditable2;
+
 		pecore::CPeEntity* floorEntities[10][10];
 
 
