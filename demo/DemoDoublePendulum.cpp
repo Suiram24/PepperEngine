@@ -15,7 +15,6 @@ namespace pedemo {
 
 	void DemoDoublePendulum::GameStart()
 	{
-		i = 0;
 		forceSystem = &pephy::CPeForceSystem::GetInstance();
 		colliderSystem = &pephy::CPeCollisionSystem::GetInstance();
 		meshRenderSystem = &engine::render::CPeMeshRenderSystem::GetInstance();
@@ -26,31 +25,7 @@ namespace pedemo {
 
 	void DemoDoublePendulum::GameUpdate()
 	{
-
 		DrawImGuiInterface4();
-
-		//static float pos[3] = { 
-		//	entity4->m_transform.GetPosition().GetX(),
-		//	entity4->m_transform.GetPosition().GetY(),
-		//	entity4->m_transform.GetPosition().GetZ()
-		//};
-		static float forceMagnitude = 0;
-		static float min[3] = { -5,1,-5 };
-		static float max[3] = { 5,10,5 };
-
-		static int i;
-		++i;
-
-		ImGui::Begin("Controls");
-		//ImGui::SetNextWindowSize(ImVec2(10, 10));
-
-		//ImGui::DragFloat3("Sphere position", pos, 0.1, -8, 8, "%.2f");
-		ImGui::SliderFloat("Force magnitude applied on ogive", &forceMagnitude, 0, 0.5f);
-
-		ImGui::End();
-
-
-		//entity4->m_transform.SetPosition(pemaths::CPeVector3(pos[0], pos[1], pos[2]));
 	}
 
 	void DemoDoublePendulum::GameEnd()
@@ -74,9 +49,9 @@ namespace pedemo {
 		entity2->m_transform.SetSize(pemaths::CPeVector3(1, 1, 1));
 		entity3->m_transform.SetSize(pemaths::CPeVector3(3, 0.5, 1));
 
-		pephy::CPeRigidBody* rigidbodyComp1 = forceSystem->CreateRigidBodyComponent(entity1, 0, 0.999, pemaths::CPeVector3(0,0,0));
-		pephy::CPeRigidBody* rigidbodyComp2 = forceSystem->CreateRigidBodyComponent(entity2, 1);
-		pephy::CPeRigidBody* rigidbodyComp3 = forceSystem->CreateRigidBodyComponent(entity3, 10);
+		pephy::CPeRigidBody* rigidbodyComp1 = forceSystem->CreateRigidBodyComponent(entity1, 0, 1, pemaths::CPeVector3(0,0,0));
+		pephy::CPeRigidBody* rigidbodyComp2 = forceSystem->CreateRigidBodyComponent(entity2, 1, 1);
+		pephy::CPeRigidBody* rigidbodyComp3 = forceSystem->CreateRigidBodyComponent(entity3, 10, 1);
 
 		rigidbodyComp1->SetCubeInertia(1, 1, 1);
 		rigidbodyComp2->SetSphereInertia(1);

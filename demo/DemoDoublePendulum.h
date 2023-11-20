@@ -23,6 +23,9 @@ namespace pedemo {
 	public:
 		DemoDoublePendulum()
 			: engine::CPeGameMode()
+			, forceSystem(nullptr)
+			, colliderSystem(nullptr)
+			, meshRenderSystem(nullptr)
 			, entity1(nullptr)
 			, entity2(nullptr)
 			, entity3(nullptr)
@@ -54,7 +57,6 @@ namespace pedemo {
 		pephy::CPeForceSystem* forceSystem;
 		pephy::CPeCollisionSystem* colliderSystem;
 		engine::render::CPeMeshRenderSystem* meshRenderSystem;
-		int i;
 
 		pecore::CPeEntity* entity1;
 		pecore::CPeEntity* entity2;
