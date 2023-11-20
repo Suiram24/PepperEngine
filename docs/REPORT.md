@@ -235,4 +235,19 @@ Une force de flottaison est simulée quand des entitées tombent en dessous de l
 
  ## Rigidbody
 
+ Nous avons choisi de baser notre classe CPeRigidbody sur la classe CPeParticule.
+ Cela permet à notre système physique d'utiliser de façon transparente ces nouveaux objets.
+ De plus toute l'implémentation de la physique linéaire est conservée.
+ Nous avons rendu virtuelle la méthode de mise à jour de la physique pour la redéfinir dans le rigidbody pour inclure par exemple les torques.
+ Deux nouvelles méthodes sont ajoutées pour appliquer des forces sur des points en coordonnées locales ou globales.
+ Le comportement par défaut, dans CPeParticle est d'appliquer la force au centre de gravité comme précédemment.
+
+ Notre problème principal a été de mettre à jour l'inertie inverse à chaque frame à partir de la frame précédente. 
+ A cause de cela l'inertie était croissante et produisait rapidement des NaN.
+
+ Pour choisir l'inertie statique de l'objet nous avons défini 3 méthodes pour : un cuboïde, une sphère et un cylindre.
+
+
  ## Forces
+
+ Nous avons modifié les forces pour qu'elles s'appliquent en un point donné dans le repère de l'objet.
