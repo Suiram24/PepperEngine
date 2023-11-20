@@ -11,6 +11,7 @@ add_library(PePhysics	PePhysics.h
 						"EngineForces/CPeForceAnchoredSpring.h"		"EngineForces/CPeForceAnchoredSpring.cpp" 
 						"EngineForces/CPeForceBuoyancy.h"			"EngineForces/CPeForceBuoyancy.cpp" 
 						"EngineForces/CPeForceFree.cpp" 			"EngineForces/CPeForceFree.h"
+						"EngineForces/CPeForceCustomLocal.cpp"		"EngineForces/CPeForceCustomLocal.h"
 						"SPeParticleForceEntry.h"
 						"CollisionSystem/CPeCollisionSystem.h" 		"CollisionSystem/CPeCollisionSystem.cpp"
 						"CollisionSystem/CPeParticleContact.h" 		"CollisionSystem/CPeParticleContact.cpp"

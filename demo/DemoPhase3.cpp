@@ -1,4 +1,5 @@
 #include "DemoPhase3.h"
+#include <time.h>
 
 
 namespace pedemo {
@@ -37,6 +38,11 @@ namespace pedemo {
 		static float forceMagnitude = 0;
 		static float min[3] = { -5,1,-5 };
 		static float max[3] = { 5,10,5 };
+		static float cooldown = 0.3f;
+		static time_t lastClick = time(nullptr);
+		
+
+		static pemaths::CPeVector3 doubleForceApplied(0, 1, 0);
 
 		static int i;
 		++i;
@@ -45,12 +51,22 @@ namespace pedemo {
 		//ImGui::SetNextWindowSize(ImVec2(10, 10));
 
 		ImGui::DragFloat3("Sphere position", pos, 0.1, -8, 8, "%.2f");
-		ImGui::SliderFloat("Force magnitude applied on ogive", &forceMagnitude, 0, 0.5f);
+		ImGui::SliderFloat("Force magnitude applied on ogive", &forceMagnitude, 0, 1);
+		
+		if (ImGui::Button("Apply force", ImVec2(200, 50)) && time(nullptr) - lastClick > cooldown) {
+			freeEditable1 = forceSystem->CreateForceCustomLocal(
+				forceMagnitude * doubleForceApplied, pemaths::CPeVector3(1, 0, 0)
+			);
+			freeEditable2 = forceSystem->CreateForceCustomLocal(
+				-forceMagnitude * doubleForceApplied, pemaths::CPeVector3(-1, 0, 0)
+			);
+			forceSystem->AddForceToParticle(freeEditable1, entity3->GetComponent<pephy::CPeRigidBody>(), 0.2f);
+			forceSystem->AddForceToParticle(freeEditable2, entity3->GetComponent<pephy::CPeRigidBody>(), 0.2f);
+			lastClick = time(nullptr);
+		}
 
 		ImGui::End();
 
-		freeEditable1->ChangeValue(forceMagnitude * pemaths::CPeVector3(1, 0, 1));
-		freeEditable2->ChangeValue(-forceMagnitude * pemaths::CPeVector3(1, 0, 1));
 		entity4->m_transform.SetPosition(pemaths::CPeVector3(pos[0], pos[1], pos[2]));
 	}
 
@@ -86,17 +102,17 @@ namespace pedemo {
 
 		entity1->m_transform.SetPosition(pemaths::CPeVector3(2, 2, -0.1));
 		entity2->m_transform.SetPosition(pemaths::CPeVector3(2, 2, -4));
-		entity3->m_transform.SetPosition(pemaths::CPeVector3(4, 2, -1));
+		entity3->m_transform.SetPosition(pemaths::CPeVector3(6, 2, -1));
 		entity4->m_transform.SetPosition(pemaths::CPeVector3(0, 2, 0));
 
-		//entity1->m_transform.SetSize(pemaths::CPeVector3(1, 1 2));
+		entity1->m_transform.SetSize(pemaths::CPeVector3(1, 2, 2));
 		entity2->m_transform.SetSize(pemaths::CPeVector3(1.5, 2, 1));
 		entity3->m_transform.SetSize(pemaths::CPeVector3(0.5, 0.5, 0.5));
 		entity4->m_transform.SetSize(pemaths::CPeVector3(0.5, 0.5, 0.5));
 
 		pephy::CPeRigidBody* rigidbodyComp1 = forceSystem->CreateRigidBodyComponent(entity1, 1.0f/2);
-		//rigidbodyComp1->SetCubeInertia(1, 2, 2);
-		rigidbodyComp1->SetCubeInertia(1, 1, 1);
+		rigidbodyComp1->SetCubeInertia(1, 2, 2);
+		//rigidbodyComp1->SetCubeInertia(1, 1, 1);
 
 		pephy::CPeRigidBody* rigidbodyComp2 = forceSystem->CreateRigidBodyComponent(entity2, 3);
 		pephy::CPeRigidBody* rigidbodyComp3 = forceSystem->CreateRigidBodyComponent(entity3, 3/*, 0, 0, pemaths::CPeVector3()*/);
@@ -118,13 +134,6 @@ namespace pedemo {
 		pephy::CPeForceFree* free1 = forceSystem->CreateForceFree(pemaths::CPeVector3(0.01, 0, 0.01), pemaths::CPeVector3(0, -1, 0));
 		pephy::CPeForceFree* free2 = forceSystem->CreateForceFree(pemaths::CPeVector3(-0.01, 0, -0.01), pemaths::CPeVector3(0, 1, 0));
 
-		freeEditable1 = forceSystem->CreateForceFree(
-			pemaths::CPeVector3(0, 0, 0), pemaths::CPeVector3(0, -1, 0)
-		);
-		freeEditable2 = forceSystem->CreateForceFree(
-			pemaths::CPeVector3(0, 0, 0), pemaths::CPeVector3(0, 1, 0)
-		);
-
 
 		pephy::CPeForceSpring* spring1 = forceSystem->CreateForceSpring(rigidbodyComp4, 6, 3, pemaths::CPeVector3(0.5f, 0.5f, 0.5f));
 		//pephy::CPeForceSpring* spring2 = forceSystem->CreateForceSpring(rigidbodyComp4, 10, 3, pemaths::CPeVector3(1, 0, 0));
@@ -137,8 +146,6 @@ namespace pedemo {
 
 		forceSystem->AddForceToParticle(spring1, rigidbodyComp1, -1);
 
-		forceSystem->AddForceToParticle(freeEditable1, rigidbodyComp3, -1);
-		forceSystem->AddForceToParticle(freeEditable2, rigidbodyComp3, -1);
 		//forceSystem->AddForceToParticle(spring2, rigidbodyComp2, -1);
 		//forceSystem->AddForceToParticle(spring3, rigidbodyComp3, -1);
 

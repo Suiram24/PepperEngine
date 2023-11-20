@@ -11,6 +11,7 @@
 #include "EngineForces/CPeForceDrag.h"
 #include "EngineForces/CPeForceSpring.h"
 #include "EngineForces/CPeForceFree.h"
+#include "EngineForces/CPeForceCustomLocal.h"
 
 namespace pemaths = engine::maths;
 namespace pecore = engine::core;
@@ -46,6 +47,7 @@ namespace engine {
 			CPeForceSpring* CreateForceSpring(CPeParticle* p_other, float p_k, float p_restLength, pemaths::CPeVector3 p_bodyAnchor = pemaths::CPeVector3(), pemaths::CPeVector3 p_otherLocalAnchor = pemaths::CPeVector3());
 			CPeForceBuoyancy* CreateForceBuoyancy(float p_immersionDepth, float p_volume, float p_liquidLevel, float p_liquidDensity = 1, pemaths::CPeVector3 p_appPoint = pemaths::CPeVector3());
 			CPeForceFree* CreateForceFree(pemaths::CPeVector3 p_forceValue, pemaths::CPeVector3 p_appPoint = pemaths::CPeVector3());
+			CPeForceCustomLocal* CreateForceCustomLocal(pemaths::CPeVector3 p_forceValue, pemaths::CPeVector3 p_appPoint = pemaths::CPeVector3());
 
 			bool AddForceToParticle(CPeForce* p_force, CPeParticle* p_particle, double p_lifespan = -1);
 			bool AddForceAtPoint(CPeForce* p_force, CPeRigidBody* p_rigidBody, pemaths::CPeVector3 localPoint, double p_lifespan = -1);
@@ -61,6 +63,7 @@ namespace engine {
 				, m_springPool(nullptr)
 				, m_buoyancyPool(nullptr)
 				, m_freePool(nullptr)
+				, m_customLocalPool(nullptr)
 				, m_particlePool(nullptr)
 				, m_rigidbodyPool(nullptr)
 			{
@@ -82,6 +85,7 @@ namespace engine {
 			pecore::CPeObjectPool<CPeForceSpring, pecore::consts::maxEntityNumber>* m_springPool;
 			pecore::CPeObjectPool<CPeForceBuoyancy, pecore::consts::maxEntityNumber>* m_buoyancyPool;
 			pecore::CPeObjectPool<CPeForceFree, pecore::consts::maxEntityNumber>* m_freePool;
+			pecore::CPeObjectPool<CPeForceCustomLocal, pecore::consts::maxEntityNumber>* m_customLocalPool;
 
 			pecore::CPeObjectPool<CPeParticle, pecore::consts::maxEntityNumber>* m_particlePool;
 			pecore::CPeObjectPool<CPeRigidBody, pecore::consts::maxEntityNumber>* m_rigidbodyPool;

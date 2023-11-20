@@ -22,6 +22,12 @@ namespace engine {
 			return m_transformMatrix.Inverse() * p_globalPoint;
 		}
 
+		CPeVector3 CPeTransform::GetVectorInLocal(const CPeVector3& p_globalVector) const
+		{
+			CPeMatrix3 rotationMatrix = m_orientation.ToMatrix3();
+			return rotationMatrix * p_globalVector;
+		}
+
         const CPeQuaternion& CPeTransform::GetOrientation() const
 		{
 			return m_orientation;

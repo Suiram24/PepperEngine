@@ -243,7 +243,7 @@ Une force de flottaison est simulée quand des entitées tombent en dessous de l
  ### Les Matrice
 
  Pour tester le discriminant de nos matrices 3x3, on utilise une précision de 1e-12.
- Nos matrice 4x4 contiennent une matrice 3x3 ainsi qu'un Vecteur3.
+ Nos matrice 4x3 contiennent une matrice 3x3 ainsi qu'un Vecteur3.
 
  ## Rigidbody
 
@@ -273,3 +273,4 @@ Jusqu'a présent, il fallait instancier à la main dans la boucle de jeu des obj
 Un mesh comonent a donc été crée afin de résoudre ce problème. Il récupère directement la matrice transformation de l'entité auquel il est rattaché et la transmet au VulkanRender via le ModelWatcher qu'il possède.   
 En plus d'automatiser le rendu des meshs, le component permet également de déterminer la texture et le modèle à l'instanciation plutot que de devoir le hardcoder dans une classe.
 
+ Nous avons également rajouté une force libre qui peut être appliquée en n'importe quel point de l'espace avec une norme définie par le programmeur.
