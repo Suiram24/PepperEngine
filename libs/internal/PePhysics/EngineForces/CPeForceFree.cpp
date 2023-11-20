@@ -17,7 +17,7 @@ namespace engine {
 
 		void CPeForceFree::Compute(CPeParticle& p_particle, double p_timeStep) const
 		{
-			p_particle.AddForceAtBodyPoint(m_forceValue, m_appPoint);
+			p_particle.AddForceAtBodyPoint(m_forceValue * p_timeStep, m_appPoint);
 		}
 
 		void CPeForceFree::ChangeValue(pemaths::CPeVector3 p_forceValue)

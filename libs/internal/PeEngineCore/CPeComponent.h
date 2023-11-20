@@ -24,7 +24,7 @@ namespace engine {
 				: m_owner(&p_owner)
 				, m_isActive(true)
 			{
-				p_owner.AddComponent(this);
+				//p_owner.AddComponent(this);
 			}
 
 			CPeComponent()

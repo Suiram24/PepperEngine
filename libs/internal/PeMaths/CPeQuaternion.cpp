@@ -174,14 +174,26 @@ namespace engine {
 
         CPeMatrix3 CPeQuaternion::ToMatrix3() const
         {
-            double w = m_value[0];
-            double x = m_value[1];
-            double y = m_value[2];
-            double z = m_value[3];
+            // Teacher formula
+            //double w = m_value[0];
+            //double x = m_value[1];
+            //double y = m_value[2];
+            //double z = m_value[3];
+            //CPeMatrix3 mat(
+            //    1 - (2*y*y + 2*z*z), 2*x*y + 2*z*w, 2*x*z - 2*y*w,
+            //    2*x*y - 2*z*w, 1 - (2*x*x +2*z*z), 2*y*z + 2*x*w,
+            //    2*x*z + 2*  y*w, 2*y*z - 2*x*w, 1 - (2*x*x + 2*y*y)
+            //);
+
+            //Wikipedia formula
+            double r = m_value[0];
+            double i = m_value[1];
+            double j = m_value[2];
+            double k = m_value[3];
             CPeMatrix3 mat(
-                1 - (2*y*y + 2*z*z), 2*x*y + 2*z*w, 2*x*z - 2*y*w,
-                2*x*y - 2*z*w, 1 - (2*x*x +2*z*z), 2*y*z + 2*x*w,
-                2*x*z + 2*y*w, 2*y*z - 2*x*w, 1 - (2*x*x + 2*y*y)
+                    1 - (2*j*j + 2*k*k), 2*i*j - 2*k*r, 2*i*k + 2*j*r,
+                    2*i*j + 2*k*r, 1 - (2*i*i +2*k*k), 2*j*k - 2*i*r,
+                    2*i*k - 2* j*r, 2*j*k + 2*i*r, 1 - (2*i*i + 2*j*j)
             );
             return mat;
         }

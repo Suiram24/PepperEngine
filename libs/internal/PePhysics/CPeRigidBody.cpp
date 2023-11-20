@@ -25,14 +25,14 @@ namespace engine {
             }
         }
 
-        void CPeRigidBody::UpdateAngularAcceleration()
+        void CPeRigidBody::UpdateAngularAcceleration(double p_timeStep)
         {
             //
             //Change Inertia from local to world
             pemaths::CPeMatrix3 worldMatrix = GetTransform().GetTransformMatrix().ToMatrix3();
             pemaths::CPeMatrix3 intertiaInverseWorld = worldMatrix * m_inertiaInverse * worldMatrix.Inverse();
 
-            m_angularAcceleration = intertiaInverseWorld * m_sumTorques;
+            m_angularAcceleration = intertiaInverseWorld * (m_sumTorques * (1/ p_timeStep));
         } 
 
         void CPeRigidBody::UpdateAngularVelocity(double p_timeStep)
@@ -85,16 +85,18 @@ namespace engine {
 
         void CPeRigidBody::UpdatePrecisely(double p_timeStep)
         {
-            UpdatePositionPrecisely(p_timeStep);
-            UpdateOrientation(p_timeStep);
+           
 
             //UpdateInertia();
 
             UpdateAcceleration(p_timeStep);
-            UpdateAngularAcceleration();
+            UpdateAngularAcceleration(p_timeStep);
 
             UpdateVelocity(p_timeStep);
             UpdateAngularVelocity(p_timeStep);
+
+            UpdatePositionPrecisely(p_timeStep);
+            UpdateOrientation(p_timeStep);
 
             ClearAccumulators();
         }
@@ -108,7 +110,8 @@ namespace engine {
         void CPeRigidBody::AddForceAtBodyPoint(const pemaths::CPeVector3& p_forceValue, const pemaths::CPeVector3& localPoint)
         {
             AddForce(p_forceValue);
-            m_sumTorques += pemaths::CPeVector3::CrossProduct(localPoint, p_forceValue);
+            m_sumTorques += pemaths::CPeVector3::CrossProduct(GetTransform().GetPositionPoint(localPoint)-GetTransform().GetPosition(), p_forceValue);
+            return;
         }
 	}
 }
