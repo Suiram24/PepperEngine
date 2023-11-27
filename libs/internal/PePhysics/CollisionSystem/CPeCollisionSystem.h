@@ -2,16 +2,21 @@
 #define CPECOLLISIONSYSTEM_CPECOLLISIONSYSTEM_H
 
 #include <vector>
-#include "CPeParticleContact.h"
 #include "CPeColliderComponent.h"
-#include "CPeContactRod.h"
-#include "CPeContactCable.h"
+#include "../CPeRigidBody.h"
+
 
 namespace engine 
 {
 	class CPeGameManager;
 
 	namespace physics {
+		struct SPeContactInfos{
+			pemaths::CPeVector3 contactPoint;
+			pemaths::CPeVector3 normal;
+			CPeRigidBody* obj1;
+			CPeRigidBody* obj2;
+		};
 
 		namespace consts
 		{
@@ -23,11 +28,6 @@ namespace engine
 		*/
 		class CPeCollisionSystem {
 		private:
-			// vector of detected contacts
-			std::vector<CPeParticleContact*> m_oneTimeContacts;
-
-			// vector of permanent contacts
-			std::vector<CPeParticleContact*> m_permanentContacts;
 
 			// number of iteration for the solver
 			int m_solverIteration;
@@ -75,9 +75,10 @@ namespace engine
 		private:
 
 			CPeCollisionSystem()
-				: m_oneTimeContacts(std::vector<CPeParticleContact*>())
-				, m_permanentContacts(std::vector<CPeParticleContact*>())
-				, m_solverIteration(consts::nbIterationCollider)
+				: 
+				/*m_oneTimeContacts(std::vector<CPeParticleContact*>())
+				, m_permanentContacts(std::vector<CPeParticleContact*>())*/
+				m_solverIteration(consts::nbIterationCollider)
 				, m_collidersPool(nullptr)
 			{
 			}
@@ -90,7 +91,7 @@ namespace engine
 			* @brief Register a permanent contact.
 			* @param p_contact The contact to register.
 			*/
-			void AddPermanentContact(CPeParticleContact* p_contact);
+			//void AddPermanentContact(CPeParticleContact* p_contact);
 
 			/**
 			 * @brief Detect the new collisions.

@@ -14,9 +14,11 @@ add_library(PePhysics	PePhysics.h
 						"EngineForces/CPeForceCustomLocal.cpp"		"EngineForces/CPeForceCustomLocal.h"
 						"SPeParticleForceEntry.h"
 						"CollisionSystem/CPeCollisionSystem.h" 		"CollisionSystem/CPeCollisionSystem.cpp"
-						"CollisionSystem/CPeParticleContact.h" 		"CollisionSystem/CPeParticleContact.cpp"
+						 		
 						"CollisionSystem/CPeColliderComponent.h" 	"CollisionSystem/CPeColliderComponent.cpp"
-						"CollisionSystem/CPeContactRod.h"			"CollisionSystem/CPeContactRod.cpp"
-						"CollisionSystem/CPeContactCable.h"			"CollisionSystem/CPeContactCable.cpp")
+									
+									 "CollisionSystem/CPePrimitiveShape.cpp" "CollisionSystem/CPePrimitiveShape.h"
+						CollisionSystem/CPeKDTree.h					CollisionSystem/CPeKDTree.cpp
+)
 
 target_link_libraries(PePhysics PeEngineCore PeMaths)
