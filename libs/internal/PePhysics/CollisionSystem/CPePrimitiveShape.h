@@ -27,6 +27,8 @@ namespace engine {
 
 			pemaths::CPeMatrix4 GetWorldTransform(pecore::CPeEntity& p_owner);
 
+			pemaths::CPeVector3 GetWorldPosition();
+
 		protected:
 			virtual void GotAbstracted() = 0;
 		};
