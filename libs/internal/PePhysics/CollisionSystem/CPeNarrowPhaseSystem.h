@@ -14,6 +14,7 @@ namespace engine
 		*/
 		class CPeNarrowPhaseSystem {
 		private:
+			const double DOUBLE_MAX = 1000000;
 
 		public:
 
@@ -29,13 +30,12 @@ namespace engine
 			 * @param CPePrimitiveShape the first primitive.
 			 * @param CPePrimitiveShape the second primitive.
 			 * @param SPeContactInfos the contact info to fill.
-			 * @return true if a contact was generated, false if not.
 			*/
-			bool GenerateContacts(const CPeSpherePrimitiveShape& p_sphere1, const CPeSpherePrimitiveShape& p_sphere2, SPeContactInfos* data);
-			bool GenerateContacts(const CPeSpherePrimitiveShape& p_sphere, const CPePlanePrimitiveShape& p_plane, SPeContactInfos* data);
-			bool GenerateContacts(const CPeBoxPrimitiveShape& p_box, const CPePlanePrimitiveShape& p_plane, SPeContactInfos* data);
-			bool GenerateContacts(const CPeBoxPrimitiveShape& p_box, const CPeSpherePrimitiveShape& p_sphere, SPeContactInfos* data);
-			bool GenerateContacts(const CPeBoxPrimitiveShape& p_box1, const CPeBoxPrimitiveShape& p_box2, SPeContactInfos* data);
+			void GenerateContacts(const CPeSpherePrimitiveShape& p_sphere1, const CPeSpherePrimitiveShape& p_sphere2, std::vector<SPeContactInfos*>* datas);
+			void GenerateContacts(const CPeSpherePrimitiveShape& p_sphere, const CPePlanePrimitiveShape& p_plane, std::vector<SPeContactInfos*>* datas);
+			void GenerateContacts(const CPeBoxPrimitiveShape& p_box, const CPePlanePrimitiveShape& p_plane, std::vector<SPeContactInfos*>* datas);
+			void GenerateContacts(const CPeBoxPrimitiveShape& p_box, const CPeSpherePrimitiveShape& p_sphere, std::vector<SPeContactInfos*>* datas);
+			void GenerateContacts(const CPeBoxPrimitiveShape& p_box1, const CPeBoxPrimitiveShape& p_box2, std::vector<SPeContactInfos*>* datas);
 			
 		private:
 
@@ -43,7 +43,7 @@ namespace engine
 			{
 			}
 
-
+			pemaths::CPeVector3 GetContactPoint(const pemaths::CPeVector3& axisOne, const pemaths::CPeVector3& axisTwo, const pemaths::CPeVector3& pointOnEdgeOne, const pemaths::CPeVector3& pointOnEdgeTwo) const;
 		};
 	}
 }

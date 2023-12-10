@@ -16,6 +16,8 @@ namespace engine {
 		private:
 			pemaths::CPeTransform m_shapeTransform;
 
+			pecore::CPeEntity& m_owner;
+
 		public:
 
 			/**
@@ -25,7 +27,7 @@ namespace engine {
 			{
 			}
 
-			pemaths::CPeMatrix4 GetWorldTransform(pecore::CPeEntity& p_owner);
+			pemaths::CPeMatrix4 GetWorldTransform();
 
 			pemaths::CPeVector3 GetWorldPosition();
 

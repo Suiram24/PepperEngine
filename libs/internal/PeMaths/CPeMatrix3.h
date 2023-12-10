@@ -159,6 +159,10 @@ namespace engine
 			 * @return  A new CPeMatrix3.
 			*/
 			CPeMatrix3 operator*(double p_number) const;
+
+			CPeVector3 GetAxis1() const;
+			CPeVector3 GetAxis2() const;
+			CPeVector3 GetAxis3() const;
 		};
 
 		
