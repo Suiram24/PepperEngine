@@ -16,6 +16,8 @@ add_library(PePhysics	PePhysics.h
 						"CollisionSystem/CPeCollisionSystem.h" 		"CollisionSystem/CPeCollisionSystem.cpp"
 						"CollisionSystem/CPeParticleContact.h" 		"CollisionSystem/CPeParticleContact.cpp"
 						"CollisionSystem/CPeColliderComponent.h" 	"CollisionSystem/CPeColliderComponent.cpp"
+						"CollisionSystem/CPeShape.h" 				"CollisionSystem/CPeShape.cpp"
+						"CollisionSystem/CPeShapeSphere.h" 			"CollisionSystem/CPeShapeSphere.cpp"
 						"CollisionSystem/CPeContactRod.h"			"CollisionSystem/CPeContactRod.cpp"
 						"CollisionSystem/CPeContactCable.h"			"CollisionSystem/CPeContactCable.cpp")
 
