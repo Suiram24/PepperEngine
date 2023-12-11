@@ -189,5 +189,24 @@ namespace engine {
 			);
 			return multMatrice;
 		}
+
+		CPeVector3 CPeMatrix3::GetAxis1() const
+		{
+			CPeVector3 axis = CPeVector3(Get(0, 0), Get(1, 0), Get(2, 0));
+			return axis;
+		}
+
+		CPeVector3 CPeMatrix3::GetAxis2() const
+		{
+			CPeVector3 axis = CPeVector3(Get(0, 1), Get(1, 1), Get(2, 1));
+			return axis;
+		}
+
+		CPeVector3 CPeMatrix3::GetAxis3() const
+		{
+			CPeVector3 axis = CPeVector3(Get(0, 2), Get(1, 2), Get(2, 2));
+			return axis;
+		}
+
 	}
 }

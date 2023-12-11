@@ -14,6 +14,7 @@ namespace engine
 		struct SPeContactInfos{
 			pemaths::CPeVector3 contactPoint;
 			pemaths::CPeVector3 normal;
+			double interpenetration;
 			CPeRigidBody* obj1;
 			CPeRigidBody* obj2;
 		};

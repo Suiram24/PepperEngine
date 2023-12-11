@@ -3,9 +3,9 @@
 namespace engine {
 	namespace physics {
 
-		pemaths::CPeMatrix4 CPePrimitiveShape::GetWorldTransform(pecore::CPeEntity& p_owner)
+		pemaths::CPeMatrix4 CPePrimitiveShape::GetWorldTransform()
 		{
-			return m_shapeTransform.GetTransformMatrix() * p_owner.m_transform.GetTransformMatrix();
+			return m_shapeTransform.GetTransformMatrix() * m_owner.m_transform.GetTransformMatrix();
 		}
 
 	}
