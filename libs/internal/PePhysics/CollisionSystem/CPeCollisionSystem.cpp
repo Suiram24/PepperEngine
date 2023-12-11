@@ -1,51 +1,59 @@
 #include <list>
 #include "CPeCollisionSystem.h"
+#include "CPeKDTree.h"
+#include "CPeNarrowPhaseSystem.h"
 
 namespace engine {
 	namespace physics {
 		
-		void CPeCollisionSystem::ResolveCollisions(double p_timeStep)
-		{
-			for (int k = 0; k < m_solverIteration; k++)
-			{
-				std::list<CPeParticleContact*> contacts;
-
-				for (int it = 0; it < m_oneTimeContacts.size(); it++)
-				{
-					contacts.push_front(m_oneTimeContacts[it]);
-				}
-
-				for (int it = 0; it < m_permanentContacts.size(); it++)
-				{
-					contacts.push_front(m_permanentContacts[it]);
-				}
-
-				contacts.sort(CPeParticleContact::CompareContactSeparationSpeed); 
-				while (!contacts.empty())
-				{
-					CPeParticleContact* cont = contacts.front();
-					contacts.pop_front();
-
-					if (cont->GetSeparatingSpeed() > 0)
-					{
-						break;
-					}
-
-					cont->Resolve(p_timeStep);
-				}
-			}
-
-			for (int it = 0; it < m_oneTimeContacts.size(); it++)
-			{
-				delete m_oneTimeContacts[it];
-			}
-			m_oneTimeContacts.clear();
-		}
 		
 		void CPeCollisionSystem::UpdateCollision(double p_timeStep, std::vector<CPeParticle*>* p_particles)
 		{
-			DetectCollions(p_particles);
-			ResolveCollisions(p_timeStep);
+			//Get all colliders
+			std::vector<CPeColliderComponent*> collidersList = std::vector<CPeColliderComponent*>();
+			for (int i = 0; i < p_particles->size(); i++)
+			{
+				CPeColliderComponent* collider = (*p_particles)[i]->GetOwner().GetComponent<CPeColliderComponent>();
+				if (collider != nullptr)
+				{
+					collidersList.push_back(collider);
+				}
+			}
+
+			// Broad phase
+			CPeKDTree tree = CPeKDTree(X, collidersList);
+
+			std::vector<std::pair<CPeColliderComponent*, CPeColliderComponent*>> possibleCollisions = tree.GetPossibleCollisions();
+
+			// Narrow phase
+			CPeNarrowPhaseSystem narrowPhase = CPeNarrowPhaseSystem::GetInstance();
+
+			std::vector<SPeContactInfos*> contactInfosList = std::vector<SPeContactInfos*>();
+
+			for (int k = 0; k < possibleCollisions.size(); k++)
+			{
+				std::vector<CPePrimitiveShape*>* shapeList1 = possibleCollisions[k].first->GetPrimitives();
+				std::vector<CPePrimitiveShape*>* shapeList2 = possibleCollisions[k].second->GetPrimitives();
+
+				for (int i = 0; i < shapeList1->size(); i++)
+				{
+					for (int j = 0; j < shapeList2->size(); j++)
+					{
+						narrowPhase.GenerateContacts((*shapeList1)[i], (*shapeList2)[j], &contactInfosList);
+					}
+				}
+			}
+
+			// Resolution
+
+			//TODO call resolution system on contactInfoList
+
+			//FREE
+			for (int k = 0; k < contactInfosList.size(); k++)
+			{
+				delete(contactInfosList[k]);
+			}
+			contactInfosList.clear()
 		}
 
 		CPeColliderComponent* CPeCollisionSystem::CreateColliderComponent(pecore::CPeEntity* p_owner, double p_radius /*= 1*/)
@@ -63,46 +71,5 @@ namespace engine {
 		{
 			delete m_collidersPool;
 		}
-
-
-		void CPeCollisionSystem::AddPermanentContact(CPeParticleContact* p_contact)
-		{
-			m_permanentContacts.push_back(p_contact);
-		}
-
-		void CPeCollisionSystem::CreateRodBetween(CPeParticle* p_particleA, CPeParticle* p_particleB, double p_restitution, double p_length)
-		{
-			CPeContactRod* rod = new CPeContactRod(p_particleA, p_particleB, p_restitution, p_length);
-			AddPermanentContact(rod);
-		}
-
-		void CPeCollisionSystem::CreateCableBetween(CPeParticle* p_particleA, CPeParticle* p_particleB, double p_restitution, double p_maxLength)
-		{
-			CPeContactCable* cable = new CPeContactCable(p_particleA, p_particleB, p_restitution, p_maxLength);
-			AddPermanentContact(cable);
-		}
-
-		void CPeCollisionSystem::DetectCollions(std::vector<CPeParticle*>* p_particles)
-		{
-			int nbParticles = p_particles->size();
-			
-			for (int i = 0; i < nbParticles; i++)
-			{
-				for (int j = i+1; j < nbParticles; j++)
-				{
-					double dist = CPeParticleContact::DistanceBetweenParticle(*(*p_particles)[i], *(*p_particles)[j]);
-					if (dist < 0)
-					{
-						if ((*p_particles)[i]->GetMassInverse() != 0 || (*p_particles)[j]->GetMassInverse() != 0)
-						{
-							CPeParticleContact* newContact = new CPeParticleContact((*p_particles)[i], (*p_particles)[j]);
-							m_oneTimeContacts.push_back(newContact);
-						}
-						
-					}
-				}
-			}
-		}
-
 	}
 }

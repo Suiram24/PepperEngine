@@ -30,7 +30,7 @@ namespace engine {
 			int m_contenSizeMax;
 		public:
 		public:
-			CPeKDTree(EPeDimension p_dimensionAlong, std::vector<CPeColliderComponent*> p_objects, int p_contentSizeMax = 3);
+			CPeKDTree(EPeDimension p_dimensionAlong, std::vector<CPeColliderComponent*>& p_objects, int p_contentSizeMax = 3);
 
 			std::vector<std::pair<CPeColliderComponent*, CPeColliderComponent*>> GetPossibleCollisions();
 

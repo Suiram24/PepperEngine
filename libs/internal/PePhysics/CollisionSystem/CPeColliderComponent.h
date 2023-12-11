@@ -44,6 +44,8 @@ namespace engine {
 			 * @return true if object is used, false otherwise
 			*/
 			bool isActive() const;
+
+			std::vector<CPePrimitiveShape*>* GetPrimitives();
 		};
 	}
 }
