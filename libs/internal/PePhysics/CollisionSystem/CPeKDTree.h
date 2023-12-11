@@ -4,6 +4,7 @@
 #include "../../PeEngineCore/PeEngineCore.h"
 #include "../CPeParticle.h"
 #include "CPeColliderComponent.h"
+#include "CPeSpherePrimitiveShape.h"
 #include <utility>
 
 namespace pecore = engine::core;
