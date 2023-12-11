@@ -4,6 +4,9 @@
 #include <vector>
 #include "CPeColliderComponent.h"
 #include "CPePrimitiveShape.h"
+#include "CPeSpherePrimitiveShape.h"
+#include "CPePlanePrimitiveShape.h"
+#include "CPeBoxPrimitiveShape.h"
 #include "CPeCollisionSystem.h"
 
 namespace engine

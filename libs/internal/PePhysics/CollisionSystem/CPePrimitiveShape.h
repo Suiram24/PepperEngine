@@ -10,26 +10,24 @@ namespace engine {
 	namespace physics {
 
 		/**
-		 * @brief A class for objects that perform collisions.
+		 * @brief A class for primitive shapes of objects that perform collisions.
 		*/
 		class CPePrimitiveShape {
-		private:
+		protected:
 			pemaths::CPeTransform m_shapeTransform;
 
-			pecore::CPeEntity& m_owner;
+			const pecore::CPeEntity& m_owner;
 
 		public:
 
-			/**
-			 * @brief default constructor, shouldn't be used outside of CPeObjectPool. 
-			*/
-			CPePrimitiveShape()
+			CPePrimitiveShape(const pecore::CPeEntity& p_owner):
+				m_owner(p_owner)
 			{
 			}
 
-			pemaths::CPeMatrix4 GetWorldTransform();
+			pemaths::CPeMatrix4 GetWorldTransform() const;
 
-			pemaths::CPeVector3 GetWorldPosition();
+			pemaths::CPeVector3 GetWorldPosition() const;
 
 		protected:
 			virtual void GotAbstracted() = 0;
