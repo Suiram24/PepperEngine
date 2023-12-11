@@ -119,7 +119,7 @@ namespace engine {
 					leftVector.insert(leftVector.end(), toAddLeft.begin(), toAddLeft.end());
 				}
 
-				if (rightVector.size() != leftVector.size()) {
+				if (rightVector.size() != m_content.size() && leftVector.size() != m_content.size()) {
 					EPeDimension newDim = static_cast<EPeDimension>((static_cast<int>(m_divisionDim) + 1) % 3);
 
 					m_leftChild = new CPeKDTree(newDim, leftVector);
