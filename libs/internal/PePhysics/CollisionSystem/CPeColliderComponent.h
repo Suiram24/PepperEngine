@@ -26,6 +26,11 @@ namespace engine {
 				: CPeComponent()
 			{
 			}
+			/**
+			 * @brief Get the global enveloping volume.
+			 * @returns CPeSpherePrimitiveShape& - The global enveloping volume (a sphere).
+			 */
+			CPeSpherePrimitiveShape& GetGlobalVolume();
 			
 			/**
 			 * @brief Initialise the component. Used by object pool
