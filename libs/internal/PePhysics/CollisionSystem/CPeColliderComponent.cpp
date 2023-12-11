@@ -22,10 +22,15 @@ namespace engine {
 		{
 			return false;
 		}
+
 		CPeSpherePrimitiveShape& CPeColliderComponent::GetGlobalVolume() {
 			return *m_enclosingShape;
 		}
 
+		std::vector<CPePrimitiveShape*>* CPeColliderComponent::GetPrimitives()
+		{
+			return nullptr;
+		}
 
 	}
 }
