@@ -23,7 +23,7 @@ namespace engine
 
 			static CPeCollisionResolutionSystem& GetInstance()
 			{
-				static CPeCollisionResolution instance;
+				static CPeCollisionResolutionSystem instance;
 				return instance;
 			}
 
@@ -32,7 +32,7 @@ namespace engine
 
 			CPeCollisionResolutionSystem() {};
 
-			ResolveCollisions(std::vector<SPeContactInfos*> p_contacts, double p_timeStep);
+			void ResolveCollisions(std::vector<SPeContactInfos*> p_contacts, double p_timeStep);
 
 			
 		};

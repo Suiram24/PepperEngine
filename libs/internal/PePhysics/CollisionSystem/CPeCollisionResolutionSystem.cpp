@@ -1,10 +1,12 @@
-#include "CPeNarrowPhaseSystem.h"
+#include "CPeCollisionResolutionSystem.h"
 
 namespace engine
 {
 	namespace physics {
 		void CPeCollisionResolutionSystem::ResolveCollisions(std::vector<SPeContactInfos*> p_contacts, double p_timeStep)
 		{
+			/*
+			
 			for (int k = 0; k < m_solverIteration; k++)
 			{
 				std::list<CPeParticleContact*> contacts;
@@ -39,6 +41,8 @@ namespace engine
 				delete m_oneTimeContacts[it];
 			}
 			m_oneTimeContacts.clear();
+			*/
+			
 		}
 
 	}
