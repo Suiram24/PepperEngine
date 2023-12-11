@@ -3,6 +3,7 @@
 
 #include "../../PeEngineCore/PeEngineCore.h"
 #include "CPePrimitiveShape.h"
+#include "CPeSpherePrimitiveShape.h"
 
 namespace pecore = engine::core;
 
@@ -14,7 +15,7 @@ namespace engine {
 		*/
 		class CPeColliderComponent : public pecore::CPeComponent {
 		private:
-			CPePrimitiveShape* m_enclosingShape;
+			CPeSpherePrimitiveShape* m_enclosingShape;
 			std::vector<CPePrimitiveShape*> m_narrowShapes;
 
 		public:
@@ -26,6 +27,11 @@ namespace engine {
 				: CPeComponent()
 			{
 			}
+			/**
+			 * @brief Get the global enveloping volume.
+			 * @returns CPeSpherePrimitiveShape& - The global enveloping volume (a sphere).
+			 */
+			CPeSpherePrimitiveShape& GetGlobalVolume();
 			
 			/**
 			 * @brief Initialise the component. Used by object pool

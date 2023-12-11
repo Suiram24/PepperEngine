@@ -11,7 +11,8 @@ namespace engine {
 			m_rightChild(nullptr),
 			m_content(p_objects),
 			m_divisionDim(p_dimensionAlong),
-			m_contenSizeMax(p_contentSizeMax)
+			m_contenSizeMax(p_contentSizeMax),
+			m_value(0.0F)
 		{
 			divideSpace();
 		}
@@ -75,24 +76,56 @@ namespace engine {
 				// TODO : inspect if the objects are correctly detected even if they are really near
 				//		  from each other.
 
+				switch (m_divisionDim) {
+				case X:
+					m_value = m_content[medianIndex]->GetOwner().m_transform.GetPosition().GetX();
+					break;
+				case Y:
+					m_value = m_content[medianIndex]->GetOwner().m_transform.GetPosition().GetY();
+					break;
+				case Z:
+					m_value = m_content[medianIndex]->GetOwner().m_transform.GetPosition().GetZ();
+					break;
+				}
+
 				auto firstLeft = m_content.begin();
 				auto lastLeft = m_content.begin() + medianIndex;
+				std::vector<CPeColliderComponent*> leftVector(firstLeft, lastLeft);
 
 				auto firstRight = m_content.begin() + medianIndex;
 				auto lastRight = m_content.end();
+				std::vector<CPeColliderComponent*> rightVector(firstRight, lastRight);
 
-				// FOR loop sur liste de gauche pour vérifier ceux qui sont aussi à droite
-				// TDOD
-				// FOR loop sur liste de droite pour vérifier ceuxi qui sont auss à gauche
-				// TODO
+				// FOR loop on the left list to verify if they're also in the right part.
+				std::vector<CPeColliderComponent*> toAddRight;
+				for (auto i = firstLeft; i != lastLeft-1; ++i) {
+					if (IntersectKDPlane((*i)->GetGlobalVolume())) {
+						toAddRight.push_back(*i);
+					}
+				}
 
-				EPeDimension newDim = static_cast<EPeDimension>((static_cast<int>(m_divisionDim) + 1) % 3);
+				// FOR loop on the right list to verify if they're also in the left part.
+				std::vector<CPeColliderComponent*> toAddLeft;
+				for (auto& i = firstRight+1; i != lastRight; ++i) {
+					if (IntersectKDPlane((*i)->GetGlobalVolume())) {
+						toAddLeft.push_back(*i);
+					}
+				}
+				
+				if (!toAddRight.empty()) {
+					rightVector.insert(rightVector.end(), toAddRight.begin(), toAddRight.end());
+				}
+				if (!toAddLeft.empty()) {
+					leftVector.insert(leftVector.end(), toAddLeft.begin(), toAddLeft.end());
+				}
 
-				m_leftChild = new CPeKDTree(newDim, std::vector<CPeColliderComponent*>(firstLeft, lastLeft));
-				m_rightChild = new CPeKDTree(newDim, std::vector<CPeColliderComponent*>(firstRight, lastRight));
+				if (rightVector.size() != m_content.size() && leftVector.size() != m_content.size()) {
+					EPeDimension newDim = static_cast<EPeDimension>((static_cast<int>(m_divisionDim) + 1) % 3);
+
+					m_leftChild = new CPeKDTree(newDim, leftVector);
+					m_rightChild = new CPeKDTree(newDim, rightVector);
+				}
 			}
-
-
 		}
 
 		void CPeKDTree::GetLeaves(std::vector<CPeKDTree*>* p_leaves)
@@ -119,6 +152,14 @@ namespace engine {
 					}
 				}
 			}
+		}
+
+		bool CPeKDTree::IntersectKDPlane(const CPeSpherePrimitiveShape& p_collider) const {
+			double distCenterPlane = std::abs(p_collider.GetWorldPosition() - m_value);
+			if (distCenterPlane <= p_collider.GetRadius()) {
+				return true;
+			}
+			return false;
 		}
 
 

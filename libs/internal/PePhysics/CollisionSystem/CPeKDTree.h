@@ -4,6 +4,7 @@
 #include "../../PeEngineCore/PeEngineCore.h"
 #include "../CPeParticle.h"
 #include "CPeColliderComponent.h"
+#include "CPeSpherePrimitiveShape.h"
 #include <utility>
 
 namespace pecore = engine::core;
@@ -27,6 +28,7 @@ namespace engine {
 			CPeKDTree* m_rightChild;
 			std::vector<CPeColliderComponent*> m_content;
 			EPeDimension m_divisionDim;
+			double m_value;
 			int m_contenSizeMax;
 		public:
 		public:
@@ -41,6 +43,8 @@ namespace engine {
 			void GetLeaves(std::vector<CPeKDTree*>* p_leaves);
 
 			std::vector<std::pair<CPeColliderComponent*, CPeColliderComponent*>> GetNodeCollisions();
+
+			bool IntersectKDPlane(const CPeSpherePrimitiveShape& p_collider) const;
 		};
 
 		class ComparatorX {
