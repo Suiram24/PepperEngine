@@ -6,7 +6,7 @@
 
 namespace engine {
 	namespace physics {
-		CPeKDTree::CPeKDTree(EPeDimension p_dimensionAlong, std::vector<CPeColliderComponent*> p_objects, int p_contentSizeMax):
+		CPeKDTree::CPeKDTree(EPeDimension p_dimensionAlong, std::vector<CPeColliderComponent*>& p_objects, int p_contentSizeMax):
 			m_leftChild(nullptr),
 			m_rightChild(nullptr),
 			m_content(p_objects),
@@ -47,27 +47,30 @@ namespace engine {
 
 		void engine::physics::CPeKDTree::divideSpace()
 		{
+			ComparatorX compX;
+			ComparatorY compY;
+			ComparatorZ compZ;
 			if (m_content.size() > m_contenSizeMax) {
 				switch (m_divisionDim) {
 				case X:
 					std::sort(
 						m_content.begin(),
 						m_content.end(),
-						ComparatorX::operator()
+						compX
 					);
 					break;
 				case Y:
 					std::sort(
 						m_content.begin(),
 						m_content.end(),
-						ComparatorY::operator()
+						compY
 					);
 					break;
 				case Z:
 					std::sort(
 						m_content.begin(),
 						m_content.end(),
-						ComparatorZ::operator()
+						compZ
 					);
 					break;
 				}
@@ -152,10 +155,22 @@ namespace engine {
 					}
 				}
 			}
+			return pairs;
 		}
 
 		bool CPeKDTree::IntersectKDPlane(const CPeSpherePrimitiveShape& p_collider) const {
-			double distCenterPlane = std::abs(p_collider.GetWorldPosition() - m_value);
+			double distCenterPlane = 0.0f;
+			switch (m_divisionDim) {
+			case X:
+				distCenterPlane = std::abs(p_collider.GetWorldPosition().GetX() - m_value);
+				break;
+			case Y:
+				distCenterPlane = std::abs(p_collider.GetWorldPosition().GetY() - m_value);
+				break;
+			case Z:
+				distCenterPlane = std::abs(p_collider.GetWorldPosition().GetZ() - m_value);
+				break;
+			}
 			if (distCenterPlane <= p_collider.GetRadius()) {
 				return true;
 			}

@@ -113,7 +113,7 @@ namespace pedemo {
 
 		//colliderSystem->CreateCableBetween(particleComp1, particleComp2, 0.999, 3);
 		//colliderSystem->CreateCableBetween(particleComp2, particleComp3, 0.999, 3);
-		colliderSystem->CreateCableBetween(particleComp2, particleComp3, 0.999, 3);
+		//colliderSystem->CreateCableBetween(particleComp2, particleComp3, 0.999, 3);
 		//colliderSystem->CreateRodBetween(particleComp2, particleComp3, 0.999, 3);
 
 		//pephy::CPeForceSpring* spring1 = forceSystem->CreateForceSpring(particleComp2, 10, 3);

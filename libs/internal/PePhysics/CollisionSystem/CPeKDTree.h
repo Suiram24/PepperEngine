@@ -32,18 +32,50 @@ namespace engine {
 			int m_contenSizeMax;
 		public:
 		public:
+			/**
+			 * @brief Construct a new CPeKDTree.
+			 * 
+			 * @param p_dimensionAlong EPeDimension - Dimension to start the partitioning along
+			 * @param p_objects vector<CPeColliderComponent> - Colliders of objects to consider
+			 * @param p_contentSizeMax int - maximal size value to stop the generation of childs
+			 */
 			CPeKDTree(EPeDimension p_dimensionAlong, std::vector<CPeColliderComponent*>& p_objects, int p_contentSizeMax = 3);
 
+			/**
+			 * @brief Get the Possible Collisions listed by the KD tree
+			 * 
+			 * @return vector<pair<CPeColliderComponent*, CPeColliderComponent*>> pair of colliders representing the possible collisions 
+			 */
 			std::vector<std::pair<CPeColliderComponent*, CPeColliderComponent*>> GetPossibleCollisions();
 
 			~CPeKDTree();
 		private:
+			/**
+			 * @brief Divide space to create the childs of a KD Tree
+			 */
 			void divideSpace();
 
+			/**
+			 * @brief Get the leaves of the KD-Tree
+			 * 
+			 * @param p_leaves vector<CPeKDTree*>* - ALl leaves of the KD Tree collected
+			 */
 			void GetLeaves(std::vector<CPeKDTree*>* p_leaves);
 
+			/**
+			 * @brief Get all possible collisions for a specific KD Tree node.
+			 * 
+			 * @return vector<pair<CPeColliderComponent*, CPeColliderComponent*>> All possible collisions for the targeted node
+			 */
 			std::vector<std::pair<CPeColliderComponent*, CPeColliderComponent*>> GetNodeCollisions();
 
+			/**
+			 * @brief Compute if the sphere collider intersect the KD plane
+			 * 
+			 * @param p_collider CPeSpherePrimitiveShape& - sphere collider to check
+			 * @return true if the collider intersect the KD plane
+			 * @return false otherwise
+			 */
 			bool IntersectKDPlane(const CPeSpherePrimitiveShape& p_collider) const;
 		};
 

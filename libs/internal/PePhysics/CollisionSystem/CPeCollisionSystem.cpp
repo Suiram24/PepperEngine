@@ -53,7 +53,7 @@ namespace engine {
 			{
 				delete(contactInfosList[k]);
 			}
-			contactInfosList.clear()
+			contactInfosList.clear();
 		}
 
 		CPeColliderComponent* CPeCollisionSystem::CreateColliderComponent(pecore::CPeEntity* p_owner, double p_radius /*= 1*/)
