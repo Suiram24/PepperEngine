@@ -18,6 +18,8 @@ namespace engine {
 			CPeSpherePrimitiveShape* m_enclosingShape;
 			std::vector<CPePrimitiveShape*> m_narrowShapes;
 
+			
+
 		public:
 
 			/**

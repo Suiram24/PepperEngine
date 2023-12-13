@@ -3,6 +3,50 @@
 namespace engine
 {
 	namespace physics {
+			void CPeNarrowPhaseSystem::GenerateContacts(const CPePrimitiveShape& p_shape1, const CPePrimitiveShape& p_shape2, std::vector<SPeContactInfos*>* datas)
+			{
+				//Determine first shape type
+				CPeSpherePrimitiveShape* sphere1 = dynamic_cast<CPeSpherePrimitiveShape*>(p_shape1);
+				CPeBoxPrimitiveShape* box1 = dynamic_cast<CPeBoxPrimitiveShape*>(p_shape1);
+				CPePlanePrimitiveShape* plane1 = dynamic_cast<CPePlanePrimitiveShape*>(p_shape1);
+
+				EShapeTypes type1;
+				if (sphere1 != nullptr) { type1 = SPHERE; }
+				if (box1 != nullptr) { type1 = BOX; }
+				if (plane1 != nullptr){type1 = PLANE;}
+
+				//Determine second shape type
+				CPeSpherePrimitiveShape* sphere2 = dynamic_cast<CPeSpherePrimitiveShape*>(p_shape2);
+				CPeBoxPrimitiveShape* box2 = dynamic_cast<CPeBoxPrimitiveShape*>(p_shape2);
+				CPePlanePrimitiveShape* plane2 = dynamic_cast<CPePlanePrimitiveShape*>(p_shape2);
+
+				EShapeTypes type2;
+				if (sphere2 != nullptr) { type2 = SPHERE; }
+				if (box2 != nullptr) { type2 = BOX; }
+				if (plane2 != nullptr) { type2 = PLANE; }
+
+				switch (type1)
+				{
+				case SPHERE:
+					if (type2 == SPHERE) { GenerateContacts(sphere1, sphere2, datas); }
+					if (type2 == BOX) { GenerateContacts(box2, sphere1, datas); }
+					if (type2 == PLANE) { GenerateContacts(sphere1, plane2, datas); }
+					break;
+				case BOX:
+					if (type2 == SPHERE) { GenerateContacts(box1, sphere2, datas); }
+					if (type2 == BOX) { GenerateContacts(box1, box2, datas); }
+					if (type2 == PLANE) { GenerateContacts(box1, plane2, datas); }
+					break;
+				case PLANE:
+					if (type2 == SPHERE) { GenerateContacts(sphere2, plane1, datas); }
+					if (type2 == BOX) { GenerateContacts(box2, plane1, datas); }
+					break;
+				default:
+					break;
+				}
+			}
+
+
 			void CPeNarrowPhaseSystem::GenerateContacts(const CPeSpherePrimitiveShape& p_sphere1, const CPeSpherePrimitiveShape& p_sphere2, std::vector<SPeContactInfos*>* datas)
 			{
 				double r1 = p_sphere1.GetRadius();
