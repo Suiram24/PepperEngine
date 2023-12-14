@@ -16,11 +16,11 @@ namespace engine {
 		protected:
 			pemaths::CPeTransform m_shapeTransform;
 
-			pecore::CPeEntity& m_owner;
+			const pecore::CPeEntity& m_owner;
 
 		public:
 
-			CPePrimitiveShape(pecore::CPeEntity& p_owner):
+			CPePrimitiveShape(const pecore::CPeEntity& p_owner):
 				m_owner(p_owner)
 			{
 			}
@@ -29,7 +29,7 @@ namespace engine {
 
 			pemaths::CPeVector3 GetWorldPosition() const;
 
-			pecore::CPeEntity& GetOwningEntity() const;
+			const pecore::CPeEntity& GetOwningEntity() const;
 
 			
 		protected:
