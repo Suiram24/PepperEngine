@@ -21,6 +21,8 @@ namespace engine {
 			m_offset = p_offset;
 		}
 
-		void CPePlanePrimitiveShape::GotAbstracted() {}
+		EShapeTypes CPePlanePrimitiveShape::GetType() const {
+			return PLANE;
+		}
 	}
 }

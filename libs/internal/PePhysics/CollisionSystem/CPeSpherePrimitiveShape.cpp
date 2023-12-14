@@ -13,6 +13,8 @@ namespace engine {
 			m_radius = p_radius;
 		}
 
-		void CPeSpherePrimitiveShape::GotAbstracted() {}
+		EShapeTypes CPeSpherePrimitiveShape::GetType() const{
+			return SPHERE;
+		}
 	}
 }

@@ -25,8 +25,8 @@ namespace engine {
 
 			void SetHalfSize(pemaths::CPeVector3 p_halfsize);
 
+			EShapeTypes GetType() const;
 		protected:
-			void GotAbstracted();
 		};
 	}
 }

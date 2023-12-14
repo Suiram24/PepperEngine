@@ -8,40 +8,76 @@ namespace engine
 			void CPeNarrowPhaseSystem::GenerateContacts(const CPePrimitiveShape* p_shape1, const CPePrimitiveShape* p_shape2, std::vector<SPeContactInfos*>* datas)
 			{
 				//Determine first shape type
-				CPeSpherePrimitiveShape* sphere1 = dynamic_cast<CPeSpherePrimitiveShape*>(p_shape1);
-				CPeBoxPrimitiveShape* box1 = dynamic_cast<CPeBoxPrimitiveShape*>(p_shape1);
-				CPePlanePrimitiveShape* plane1 = dynamic_cast<CPePlanePrimitiveShape*>(p_shape1);
-
-				EShapeTypes type1;
-				if (sphere1 != nullptr) { type1 = SPHERE; }
-				if (box1 != nullptr) { type1 = BOX; }
-				if (plane1 != nullptr){type1 = PLANE;}
+				EShapeTypes type1 = p_shape1->GetType();
 
 				//Determine second shape type
-				CPeSpherePrimitiveShape* sphere2 = dynamic_cast<CPeSpherePrimitiveShape*>(p_shape2);
-				CPeBoxPrimitiveShape* box2 = dynamic_cast<CPeBoxPrimitiveShape*>(p_shape2);
-				CPePlanePrimitiveShape* plane2 = dynamic_cast<CPePlanePrimitiveShape*>(p_shape2);
 
-				EShapeTypes type2;
-				if (sphere2 != nullptr) { type2 = SPHERE; }
-				if (box2 != nullptr) { type2 = BOX; }
-				if (plane2 != nullptr) { type2 = PLANE; }
+				EShapeTypes type2 = p_shape2->GetType();
+				
 
 				switch (type1)
 				{
 				case SPHERE:
-					if (type2 == SPHERE) { GenContSphSph(sphere1, sphere2, datas); }
-					if (type2 == BOX) { GenContBoxSph(box2, sphere1, datas); }
-					if (type2 == PLANE) { GenContSphPla(sphere1, plane2, datas); }
+					if (type2 == SPHERE) { 
+						GenContSphSph(
+							dynamic_cast<const CPeSpherePrimitiveShape*>(p_shape1),
+							dynamic_cast<const CPeSpherePrimitiveShape*>(p_shape2),
+							datas
+						); 
+					}
+					else if (type2 == BOX) {
+						GenContBoxSph(
+							dynamic_cast<const CPeBoxPrimitiveShape*>(p_shape2),
+							dynamic_cast<const CPeSpherePrimitiveShape*>(p_shape1),
+							datas
+						);
+					}
+					else if (type2 == PLANE) { 
+						GenContSphPla(
+							dynamic_cast<const CPeSpherePrimitiveShape*>(p_shape1),
+							dynamic_cast<const CPePlanePrimitiveShape*>(p_shape2),
+							datas
+						);
+					}
 					break;
 				case BOX:
-					if (type2 == SPHERE) { GenContBoxSph(box1, sphere2, datas); }
-					if (type2 == BOX) { GenContBoxBox(box1, box2, datas); }
-					if (type2 == PLANE) { GenContBoxPla(box1, plane2, datas); }
+					if (type2 == SPHERE) {
+						GenContBoxSph(
+							dynamic_cast<const CPeBoxPrimitiveShape*>(p_shape1),
+							dynamic_cast<const CPeSpherePrimitiveShape*>(p_shape2),
+							datas
+						);
+					}
+					else if (type2 == BOX) {
+						GenContBoxBox(
+							dynamic_cast<const CPeBoxPrimitiveShape*>(p_shape1),
+							dynamic_cast<const CPeBoxPrimitiveShape*>(p_shape2),
+							datas
+						);
+					}
+					else if (type2 == PLANE) {
+						GenContBoxPla(
+							dynamic_cast<const CPeBoxPrimitiveShape*>(p_shape1),
+							dynamic_cast<const CPePlanePrimitiveShape*>(p_shape2),
+							datas
+						);
+					}
 					break;
 				case PLANE:
-					if (type2 == SPHERE) { GenContSphPla(sphere2, plane1, datas); }
-					if (type2 == BOX) { GenContBoxPla(box2, plane1, datas); }
+					if (type2 == SPHERE) {
+						GenContSphPla(
+							dynamic_cast<const CPeSpherePrimitiveShape*>(p_shape2),
+							dynamic_cast<const CPePlanePrimitiveShape*>(p_shape1),
+							datas
+						);
+					}
+					else if (type2 == BOX) {
+						GenContBoxPla(
+							dynamic_cast<const CPeBoxPrimitiveShape*>(p_shape2),
+							dynamic_cast<const CPePlanePrimitiveShape*>(p_shape1),
+							datas
+						); 
+					}
 					break;
 				default:
 					break;
@@ -109,14 +145,14 @@ namespace engine
 				double y = p_box->GetHalfSize().GetY();
 				double z = p_box->GetHalfSize().GetZ();
 
-				corners[0] = pos + pemaths::CPeVector( x,  y,  z);
-				corners[1] = pos + pemaths::CPeVector( x,  y, -z);
-				corners[2] = pos + pemaths::CPeVector( x, -y,  z);
-				corners[3] = pos + pemaths::CPeVector( x, -y, -z);
-				corners[4] = pos + pemaths::CPeVector(-x,  y,  z);
-				corners[5] = pos + pemaths::CPeVector(-x,  y, -z);
-				corners[6] = pos + pemaths::CPeVector(-x, -y,  z);
-				corners[7] = pos + pemaths::CPeVector(-x, -y, -z);
+				corners[0] = pos + pemaths::CPeVector3( x,  y,  z);
+				corners[1] = pos + pemaths::CPeVector3( x,  y, -z);
+				corners[2] = pos + pemaths::CPeVector3( x, -y,  z);
+				corners[3] = pos + pemaths::CPeVector3( x, -y, -z);
+				corners[4] = pos + pemaths::CPeVector3(-x,  y,  z);
+				corners[5] = pos + pemaths::CPeVector3(-x,  y, -z);
+				corners[6] = pos + pemaths::CPeVector3(-x, -y,  z);
+				corners[7] = pos + pemaths::CPeVector3(-x, -y, -z);
 
 				for (int i = 0; i < 8; i++)
 				{
@@ -206,7 +242,7 @@ namespace engine
 				{
 					for (int j = 0; j < 3; j++)
 					{
-						axis[6 + i * 3 + j] = pemaths::CPeVector3::CrossProduct(axis[i], axis[3 + j]).NormalizeVector();
+						axes[6 + i * 3 + j] = pemaths::CPeVector3::CrossProduct(axis[i], axis[3 + j]).NormalizeVector();
 					}
 				}
 
@@ -224,12 +260,12 @@ namespace engine
 					}
 
 					//Compute penetration on axis
-					double proj1 = max(
+					double proj1 = std::max(
 						pemaths::CPeVector3::ScalarProduct(axes[0] * p_box1->GetHalfSize().GetX(),axe),
 						pemaths::CPeVector3::ScalarProduct(axes[1] * p_box1->GetHalfSize().GetY(),axe),
 						pemaths::CPeVector3::ScalarProduct(axes[2] * p_box1->GetHalfSize().GetZ(),axe)
 					);
-					double proj2 = max(
+					double proj2 = std::max(
 						pemaths::CPeVector3::ScalarProduct(axes[3] * p_box2->GetHalfSize().GetX(), axe),
 						pemaths::CPeVector3::ScalarProduct(axes[4] * p_box2->GetHalfSize().GetY(), axe),
 						pemaths::CPeVector3::ScalarProduct(axes[5] * p_box2->GetHalfSize().GetZ(), axe)
@@ -252,12 +288,12 @@ namespace engine
 				}
 
 				
-				pemaths::CPeVector3 contactAxis = axis[bestCase];
+				pemaths::CPeVector3 contactAxis = axes[bestCase];
 				// Contact based on face axis
 				if (bestCase < 6)
 				{
-					const CPeBoxPrimitiveShape& one;
-					const CPeBoxPrimitiveShape& two;
+					CPeBoxPrimitiveShape& one;
+					CPeBoxPrimitiveShape& two;
 
 					if (pemaths::CPeVector3::ScalarProduct(contactAxis, toCenter) < 0)
 					{
@@ -267,21 +303,21 @@ namespace engine
 					pemaths::CPeVector3 vertex;
 
 					// Contact based on face axis of box two
-					if (best case < 3)
+					if (bestCase < 3)
 					{
 						one = p_box1;
 						two = p_box2;
 
 						vertex = two.GetHalfSize();
-						if (pemaths::CPeVector3::ScalarProduct(axis[3], contactAxis) < 0)
+						if (pemaths::CPeVector3::ScalarProduct(axes[3], contactAxis) < 0)
 						{
 							vertex.SetX(-vertex.GetX());
 						}
-						if (pemaths::CPeVector3::ScalarProduct(axis[4], contactAxis) < 0)
+						if (pemaths::CPeVector3::ScalarProduct(axes[4], contactAxis) < 0)
 						{
 							vertex.SetY(-vertex.GetY());
 						}
-						if (pemaths::CPeVector3::ScalarProduct(axis[5], contactAxis) < 0)
+						if (pemaths::CPeVector3::ScalarProduct(axes[5], contactAxis) < 0)
 						{
 							vertex.SetY(-vertex.GetY());
 						}
@@ -293,15 +329,15 @@ namespace engine
 						two = p_box1;
 
 						vertex = two.GetHalfSize();
-						if (pemaths::CPeVector3::ScalarProduct(axis[0], contactAxis) < 0)
+						if (pemaths::CPeVector3::ScalarProduct(axes[0], contactAxis) < 0)
 						{
 							vertex.SetX(-vertex.GetX());
 						}
-						if (pemaths::CPeVector3::ScalarProduct(axis[1], contactAxis) < 0)
+						if (pemaths::CPeVector3::ScalarProduct(axes[1], contactAxis) < 0)
 						{
 							vertex.SetY(-vertex.GetY());
 						}
-						if (pemaths::CPeVector3::ScalarProduct(axis[2], contactAxis) < 0)
+						if (pemaths::CPeVector3::ScalarProduct(axes[2], contactAxis) < 0)
 						{
 							vertex.SetY(-vertex.GetY());
 						}
@@ -333,7 +369,7 @@ namespace engine
 						{
 							pointOnEdge1[i] = 0;
 						}
-						else if (pemaths::CPeVector3::ScalarProduct(axis[i], contactAxis) > 0)
+						else if (pemaths::CPeVector3::ScalarProduct(axes[i], contactAxis) > 0)
 						{
 							pointOnEdge1[i] = -pointOnEdge1[i];
 						}
@@ -342,7 +378,7 @@ namespace engine
 						{
 							pointOnEdge2[i] = 0;
 						}
-						else if (pemaths::CPeVector3::ScalarProduct(axis[3+i], contactAxis) < 0)
+						else if (pemaths::CPeVector3::ScalarProduct(axes[3+i], contactAxis) < 0)
 						{
 							pointOnEdge2[i] = -pointOnEdge2[i];
 						}

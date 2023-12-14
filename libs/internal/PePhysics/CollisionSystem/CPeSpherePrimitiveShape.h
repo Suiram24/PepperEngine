@@ -24,8 +24,9 @@ namespace engine {
 			double GetRadius() const;
 			void SetRadius(double p_radius);
 
+
+			EShapeTypes GetType() const;
 		protected:
-			void GotAbstracted();
 		};
 	}
 }

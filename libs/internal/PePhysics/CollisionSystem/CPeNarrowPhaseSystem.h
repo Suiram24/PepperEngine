@@ -18,11 +18,6 @@ namespace engine
 		private:
 			const double DOUBLE_MAX = 1000000;
 
-			enum EShapeTypes
-			{
-				SPHERE, BOX, PLANE
-			};
-
 			
 		public:
 
