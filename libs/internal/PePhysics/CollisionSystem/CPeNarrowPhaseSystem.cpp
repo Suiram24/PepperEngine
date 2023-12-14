@@ -342,5 +342,39 @@ namespace engine
 				return	nearestPointOne * 0.5 + nearestPointTwo * 0.5;
 			}
 
+
+			bool CPeNarrowPhaseSystem::AddRigidbodyToContactInfos(SPeContactInfos* data, CPeColliderComponent& col1, CPeColliderComponent& col2)
+			{
+				CPeRigidBody* body1 = col1.GetOwner().GetComponent<CPeRigidBody>();
+				CPeRigidBody* body2 = col1.GetOwner().GetComponent<CPeRigidBody>();
+
+				if (body1 == nullptr || body1->GetMassInverse() == 0)
+				{
+					if (body2 == nullptr || body2->GetMassInverse() == 0)
+					{
+						return false;
+					}
+					else
+					{
+						data->obj1 = body2;
+						data->obj2 = nullptr;
+					}
+				}
+				else
+				{
+					data->obj1 = body1;
+					if (body2 == nullptr || body2->GetMassInverse() == 0)
+					{
+						data->obj2 = nullptr;
+					}
+					else
+					{
+						data->obj2 = body2;
+					}
+				}
+
+				return true;
+			}
+
 	}
 }
