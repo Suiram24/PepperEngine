@@ -18,7 +18,7 @@ namespace engine
 
 				size_t nbRigidbody = 2;
 
-				if (obj[2] == nullptr) //Second object has an infinite mass
+				if (obj[1] == nullptr) //Second object has an infinite mass
 				{
 					nbRigidbody = 1;
 				}
