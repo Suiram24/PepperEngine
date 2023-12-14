@@ -1,10 +1,11 @@
 #include "DemoBroadPhase.h"
 #include <time.h>
 #include "../libs/internal/PePhysics/CollisionSystem/CPeKDTree.h"
+#include <iostream>
 
 namespace pedemo {
 
-	void DrawImGuiInterface3()
+	void DrawImGuiInterfaceBroadPhase()
 	{
 		ImGuiIO io = ImGui::GetIO();
 
@@ -18,7 +19,7 @@ namespace pedemo {
 	{
 		i = 0;
 		forceSystem = &pephy::CPeForceSystem::GetInstance();
-		colliderSystem = &pephy::CPeCollisionSystem::GetInstance();
+		//colliderSystem = &pephy::CPeCollisionSystem::GetInstance();
 		meshRenderSystem = &engine::render::CPeMeshRenderSystem::GetInstance();
 
 		LoadLevel();
@@ -46,7 +47,7 @@ namespace pedemo {
 				floorEntities[i][j]->m_transform.SetPosition(pemaths::CPeVector3(i - 5, 0, j - 5));
 
 				forceSystem->CreateParticleComponent(floorEntities[i][j], 0, 0, pemaths::CPeVector3());
-				colliderSystem->CreateColliderComponent(floorEntities[i][j], 0.5);
+				//colliderSystem->CreateColliderComponent(floorEntities[i][j], 0.5);
 
 				//floorEntities[i][j]->m_transform.SetSize(pemaths::CPeVector3(0.5, 0.5, 0.5));
 
@@ -81,9 +82,42 @@ namespace pedemo {
 		colliders.push_back(entity3->GetComponent<pephy::CPeColliderComponent>());
 		colliders.push_back(entity4->GetComponent<pephy::CPeColliderComponent>());
 
-		// TODO : Créer un KD Tree avec la liste de collider en paramètre
+		// Créer un KD Tree avec la liste de collider en paramètre
+		pephy::CPeKDTree broadPhaseTree(pephy::EPeDimension::X, colliders);
 
-		// TODO : Checker les pairs
+		// Checker les pairs
+		auto possibleCollisions = broadPhaseTree.GetPossibleCollisions();
+
+		// Print pairs
+		for (auto& possibleCollision : possibleCollisions) {
+			std::cout << "pair: <";
+			if (&possibleCollision.first->GetOwner() == entity1) {
+				std::cout << "entity1";
+			}
+			else if (&possibleCollision.first->GetOwner() == entity2) {
+				std::cout << "entity2";
+			}
+			else if (&possibleCollision.first->GetOwner() == entity3) {
+				std::cout << "entity3";
+			}
+			else if (&possibleCollision.first->GetOwner() == entity4) {
+				std::cout << "entity4";
+			}
+			std::cout << ", ";
+			if (&possibleCollision.second->GetOwner() == entity1) {
+				std::cout << "entity1";
+			}
+			else if (&possibleCollision.second->GetOwner() == entity2) {
+				std::cout << "entity2";
+			}
+			else if (&possibleCollision.second->GetOwner() == entity3) {
+				std::cout << "entity3";
+			}
+			else if (&possibleCollision.second->GetOwner() == entity4) {
+				std::cout << "entity4";
+			}
+			std::cout << std::endl;
+		}
 	}
 
 
