@@ -3,6 +3,8 @@
 namespace engine
 {
 	namespace physics {
+		
+		
 			void CPeNarrowPhaseSystem::GenerateContacts(const CPePrimitiveShape* p_shape1, const CPePrimitiveShape* p_shape2, std::vector<SPeContactInfos*>* datas)
 			{
 				//Determine first shape type
@@ -45,6 +47,7 @@ namespace engine
 					break;
 				}
 			}
+		
 
 
 			void CPeNarrowPhaseSystem::GenContSphSph(const CPeSpherePrimitiveShape* p_sphere1, const CPeSpherePrimitiveShape* p_sphere2, std::vector<SPeContactInfos*>* datas)
