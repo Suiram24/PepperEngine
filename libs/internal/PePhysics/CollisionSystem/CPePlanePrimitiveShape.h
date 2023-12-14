@@ -12,11 +12,11 @@ namespace engine {
 		class CPePlanePrimitiveShape : public CPePrimitiveShape {
 		private:
 			pemaths::CPeVector3 m_normal;
-			pemaths::CPeVector3 m_offset;
+			double m_offset;
 
 		public:
 
-			CPePlanePrimitiveShape(const pecore::CPeEntity& p_owner, pemaths::CPeVector3 p_normal, pemaths::CPeVector3 p_offset) :
+			CPePlanePrimitiveShape(const pecore::CPeEntity& p_owner, pemaths::CPeVector3 p_normal, double p_offset) :
 				CPePrimitiveShape(p_owner),
 				m_normal(p_normal),
 				m_offset(p_offset)
@@ -24,10 +24,10 @@ namespace engine {
 			}
 
 			pemaths::CPeVector3 GetNormal() const;
-			pemaths::CPeVector3 GetOffset() const;
+			double GetOffset() const;
 
 			void SetNormal(pemaths::CPeVector3 p_normal);
-			void SetOffset(pemaths::CPeVector3 p_offset);
+			void SetOffset(double p_offset);
 
 		protected:
 			void GotAbstracted();

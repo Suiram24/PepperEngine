@@ -7,7 +7,7 @@ namespace engine {
 		{
 			return m_normal;
 		}
-		pemaths::CPeVector3 CPePlanePrimitiveShape::GetOffset() const
+		double CPePlanePrimitiveShape::GetOffset() const
 		{
 			return m_offset;
 		}
@@ -16,7 +16,7 @@ namespace engine {
 		{
 			m_normal = p_normal;
 		}
-		void CPePlanePrimitiveShape::SetOffset(pemaths::CPeVector3 p_offset)
+		void CPePlanePrimitiveShape::SetOffset(double p_offset)
 		{
 			m_offset = p_offset;
 		}

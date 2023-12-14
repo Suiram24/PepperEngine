@@ -64,6 +64,8 @@ namespace engine
 				data->normal = (p_sphere1.GetWorldPosition() - p_sphere2.GetWorldPosition()).NormalizeVector();
 				data->interpenetration = r1 + r2 - d;
 				data->contactPoint = p_sphere2.GetWorldPosition() + r2 * data->normal;
+				data->collider1 = p_sphere1.GetCollider();
+				data->collider2 = p_sphere2.GetCollider();
 
 				datas->push_back(data);
 			}
@@ -83,13 +85,49 @@ namespace engine
 				data->normal = p_plane.GetNormal();
 				data->interpenetration = d;
 				data->contactPoint = p_sphere.GetWorldPosition() - r * data->normal;
+				data->collider1 = p_sphere.GetCollider();
+				data->collider2 = p_plane.GetCollider();
 
 				datas->push_back(data);
 			}
 
 			void CPeNarrowPhaseSystem::GenerateContacts(const CPeBoxPrimitiveShape& p_box, const CPePlanePrimitiveShape& p_plane, std::vector<SPeContactInfos*>* datas)
 			{
-				
+				pemaths::CPeVector3 corners[8];
+				pemaths::CPeVector3 pos = p_box.GetWorldPosition();
+
+				double x = p_box.GetHalfSize().GetX();
+				double y = p_box.GetHalfSize().GetY();
+				double z = p_box.GetHalfSize().GetZ();
+
+				corners[0] = pos + pemaths::CPeVector( x,  y,  z);
+				corners[1] = pos + pemaths::CPeVector( x,  y, -z);
+				corners[2] = pos + pemaths::CPeVector( x, -y,  z);
+				corners[3] = pos + pemaths::CPeVector( x, -y, -z);
+				corners[4] = pos + pemaths::CPeVector(-x,  y,  z);
+				corners[5] = pos + pemaths::CPeVector(-x,  y, -z);
+				corners[6] = pos + pemaths::CPeVector(-x, -y,  z);
+				corners[7] = pos + pemaths::CPeVector(-x, -y, -z);
+
+				for (int i = 0; i < 8; i++)
+				{
+					double d = pemaths::CPeVector3::ScalarProduct(corners[i], p_plane.GetNormal()) - p_plane.GetOffset();
+
+					if (d > 0)
+					{
+						break;
+					}
+
+					SPeContactInfos* data = new SPeContactInfos();
+
+					data->normal = p_plane.GetNormal();
+					data->interpenetration = d;
+					data->contactPoint = corners[i];
+					data->collider1 = p_box.GetCollider();
+					data->collider2 = p_plane.GetCollider();
+
+					datas->push_back(data);
+				}
 			}
 
 			void CPeNarrowPhaseSystem::GenerateContacts(const CPeBoxPrimitiveShape& p_box, const CPeSpherePrimitiveShape& p_sphere, std::vector<SPeContactInfos*>* datas)
@@ -133,6 +171,8 @@ namespace engine
 				data->normal = (closestPoint - spherePos).NormalizeVector();
 				data->interpenetration = r - d;
 				data->contactPoint = spherePos + r * data->normal;
+				data->collider1 = p_box.GetCollider();
+				data->collider2 = p_sphere.GetCollider();
 
 				datas->push_back(data);
 			}
@@ -265,6 +305,8 @@ namespace engine
 					data->normal = contactAxis;
 					data->interpenetration = bestOverlap;
 					data->contactPoint = vertex;
+					data->collider1 = p_box1.GetCollider();
+					data->collider2 = p_box2.GetCollider();
 
 					datas->push_back(data);
 				}
@@ -317,6 +359,8 @@ namespace engine
 					data->normal = contactAxis;
 					data->interpenetration = bestOverlap;
 					data->contactPoint = getContactPoint(axis[oneAxisIndex], axis[3+twoAxisIndex], pointOnEdge1, pointOnEdge2);
+					data->collider1 = p_box1.GetCollider();
+					data->collider2 = p_box2.GetCollider();
 
 					datas->push_back(data);
 				}
