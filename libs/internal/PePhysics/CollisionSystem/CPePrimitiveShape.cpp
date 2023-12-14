@@ -13,9 +13,9 @@ namespace engine {
 			return GetWorldTransform() * pemaths::CPeVector3(0, 0, 0);
 		}
 
-		CPeColliderComponent* CPePrimitiveShape::GetCollider() const
+		CPeRigidBody* CPePrimitiveShape::GetRigidbody() const
 		{
-			return m_owner.GetComponent<CPeColliderComponent>();
+			return m_owner.GetComponent<CPeRigidBody>();
 		}
 	}
 }

@@ -27,7 +27,7 @@ namespace engine {
 			return *m_enclosingShape;
 		}
 
-		std::vector<CPePrimitiveShape*>& CPeColliderComponent::GetPrimitives() const
+		const std::vector<CPePrimitiveShape*>& CPeColliderComponent::GetPrimitives() const
 		{
 			return m_narrowShapes;
 		}

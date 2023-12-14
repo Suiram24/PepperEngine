@@ -2,14 +2,13 @@
 #define PEPHYSICS_CPEPRIMITIVESHAPE_H
 
 #include "../../PeEngineCore/PeEngineCore.h"
-#include "CPeColliderComponent.h"
+#include "../CPeRigidBody.h"
 
 namespace pecore = engine::core;
 namespace pemaths = engine::maths;
 
 namespace engine {
 	namespace physics {
-
 		/**
 		 * @brief A class for primitive shapes of objects that perform collisions.
 		*/
@@ -30,12 +29,10 @@ namespace engine {
 
 			pemaths::CPeVector3 GetWorldPosition() const;
 
-			CPeColliderComponent* GetCollider() const;
-
+			CPeRigidBody* GetRigidbody() const;
 		protected:
 			virtual void GotAbstracted() = 0;
 		};
 	}
 }
-
 #endif /* PEPHYSICS_CPEPRIMITIVESHAPE_H */

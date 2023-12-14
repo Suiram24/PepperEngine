@@ -9,16 +9,16 @@ namespace pecore = engine::core;
 
 namespace engine {
 	namespace physics {
+		class CPePrimitiveShape;
 
 		/**
 		 * @brief A class for objects that perform collisions.
 		*/
 		class CPeColliderComponent : public pecore::CPeComponent {
 		private:
+
 			CPeSpherePrimitiveShape* m_enclosingShape;
 			std::vector<CPePrimitiveShape*> m_narrowShapes;
-
-			
 
 		public:
 
@@ -53,7 +53,7 @@ namespace engine {
 			*/
 			bool isActive() const;
 
-			std::vector<CPePrimitiveShape*>& GetPrimitives() const;
+			const std::vector<CPePrimitiveShape*>& GetPrimitives() const;
 		};
 	}
 }

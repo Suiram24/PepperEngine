@@ -3,6 +3,8 @@
 
 #include <vector>
 #include "CPeColliderComponent.h"
+#include "../CPeRigidBody.h"
+#include "../CPeParticle.h"
 
 namespace engine 
 {
@@ -13,8 +15,8 @@ namespace engine
 			pemaths::CPeVector3 contactPoint;
 			pemaths::CPeVector3 normal;
 			double interpenetration;
-			CPeColliderComponent* collider1;
-			CPeColliderComponent* collider2;
+			CPeRigidBody* obj1;
+			CPeRigidBody* obj2;
 		};
 
 		namespace consts
