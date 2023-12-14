@@ -20,6 +20,6 @@ add_library(PePhysics	PePhysics.h
 						"CollisionSystem/CPePrimitiveShape.h"			"CollisionSystem/CPePrimitiveShape.cpp"
 						"CollisionSystem/CPeSpherePrimitiveShape.h"		"CollisionSystem/CPeSpherePrimitiveShape.cpp"
 						"CollisionSystem/CPePlanePrimitiveShape.h"		"CollisionSystem/CPePlanePrimitiveShape.cpp"
-						"CollisionSystem/CPeBoxPrimitiveShape.h"		"CollisionSystem/CPeBoxPrimitiveShape.cpp")
+						"CollisionSystem/CPeBoxPrimitiveShape.h"		"CollisionSystem/CPeBoxPrimitiveShape.cpp" "CollisionSystem/SPeContactInfos.h")
 
 target_link_libraries(PePhysics PeEngineCore PeMaths)

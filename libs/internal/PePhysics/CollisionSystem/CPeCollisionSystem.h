@@ -3,21 +3,15 @@
 
 #include <vector>
 #include "CPeColliderComponent.h"
-#include "../CPeRigidBody.h"
 #include "../CPeParticle.h"
+#include "SPeContactInfos.h"
 
 namespace engine 
 {
 	class CPeGameManager;
 
 	namespace physics {
-		struct SPeContactInfos{
-			pemaths::CPeVector3 contactPoint;
-			pemaths::CPeVector3 normal;
-			double interpenetration;
-			CPeRigidBody* obj1;
-			CPeRigidBody* obj2;
-		};
+		
 
 		namespace consts
 		{

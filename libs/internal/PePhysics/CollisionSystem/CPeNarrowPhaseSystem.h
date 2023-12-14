@@ -2,12 +2,11 @@
 #define CPENARROWPHASESYSTEM_CPENARROWPHASESYSTEM_H
 
 #include <vector>
-#include "CPeColliderComponent.h"
 #include "CPePrimitiveShape.h"
 #include "CPeSpherePrimitiveShape.h"
 #include "CPePlanePrimitiveShape.h"
 #include "CPeBoxPrimitiveShape.h"
-#include "CPeCollisionSystem.h"
+#include "SPeContactInfos.h"
 
 namespace engine
 {
