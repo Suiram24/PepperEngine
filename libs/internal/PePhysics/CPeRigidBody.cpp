@@ -46,6 +46,12 @@ namespace engine {
             m_sumTorques = pemaths::CPeVector3(0, 0, 0);
         }
 
+        pemaths::CPeMatrix3& CPeRigidBody::GetInverseInertia()
+        {
+            return m_inertiaInverse;
+        }
+
+
         void CPeRigidBody::SetSphereInertia(double p_radius)
         {
             double value = 2.0f / 5.0f * GetMass() * p_radius * p_radius;

@@ -30,6 +30,7 @@ namespace engine {
             
             void ClearAccumulators();
 
+            
            
         public:
             CPeRigidBody() :
@@ -54,6 +55,9 @@ namespace engine {
             void AddForceAtPoint(const pemaths::CPeVector3& p_forceValue, const pemaths::CPeVector3& worldPoint) override;
 
             void AddForceAtBodyPoint(const pemaths::CPeVector3& p_forceValue, const pemaths::CPeVector3& localPoint) override;
+
+            pemaths::CPeMatrix3& GetInverseInertia();
+
 
         };
     }

@@ -15,6 +15,12 @@ namespace engine
 		/**
 		 * @brief The class that detect contacts between primitive shapes. Provides contacts infos.
 		*/
+
+		namespace consts
+		{
+			constexpr double projectionAngularLimit = 0.2;
+		}
+
 		class CPeCollisionResolutionSystem {
 		private:
 			const double DOUBLE_MAX = 1000000;
@@ -33,6 +39,9 @@ namespace engine
 			CPeCollisionResolutionSystem() {};
 
 			void ResolveCollisions(std::vector<SPeContactInfos*> p_contacts, double p_timeStep);
+
+			static void ResolveInterpenetrations(std::vector<SPeContactInfos*> p_contacts, double p_timeStep);
+			static void ResolveImpulsions(std::vector<SPeContactInfos*> p_contacts, double p_timeStep);
 
 			
 		};
