@@ -56,7 +56,9 @@ namespace engine {
 
             void AddForceAtBodyPoint(const pemaths::CPeVector3& p_forceValue, const pemaths::CPeVector3& localPoint) override;
 
-            pemaths::CPeMatrix3& GetInverseInertia();
+            const pemaths::CPeMatrix3& GetInverseInertia() const;
+
+            const pemaths::CPeVector3& GetAngularVelocity() const;
 
 
         };

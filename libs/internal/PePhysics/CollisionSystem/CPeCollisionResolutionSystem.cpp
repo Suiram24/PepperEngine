@@ -65,7 +65,44 @@ namespace engine
 
 		void CPeCollisionResolutionSystem::ResolveImpulsions(std::vector<SPeContactInfos*> p_contacts, double p_timeStep)
 		{
+			for (SPeContactInfos* cInfo : p_contacts)
+			{
+				CPeRigidBody* obj[2] = { cInfo->obj1 , cInfo->obj2 };
+				pemaths::CPeVector3 cPoint = cInfo->contactPoint;
 
+				size_t nbRigidbody = 2;
+
+				if (obj[1] == nullptr) //Second object has an infinite mass
+				{
+					nbRigidbody = 1;
+				}
+
+				pemaths::CPeVector3 contactPointVector, pointVelocity, velocityPerUnitImpulse;
+				double k, e;
+				double linearVelDelta = .0;
+				double angularVelDelta = .0;
+
+				
+				e = 1;
+				for (size_t i = 0; i < nbRigidbody; i++)
+				{
+					e *= 0.99; //TODO: replace with elasticity
+					contactPointVector = cInfo->contactPoint - obj[i]->GetTransform().GetPosition() ;
+					pointVelocity = obj[i]->GetVelocity() + obj[i]->GetAngularVelocity() * contactPointVector.GetNorm();
+
+					linearVelDelta += obj[i]->GetMassInverse();
+					velocityPerUnitImpulse = pemaths::CPeVector3::CrossProduct(contactPointVector, cInfo->normal);
+					velocityPerUnitImpulse = obj[i]->GetInverseInertia() * velocityPerUnitImpulse;
+					velocityPerUnitImpulse = pemaths::CPeVector3::CrossProduct(velocityPerUnitImpulse, contactPointVector);
+
+					angularVelDelta = pemaths::CPeVector3::ScalarProduct(velocityPerUnitImpulse, cInfo->normal);
+
+				}
+
+				//k = (ob)
+
+
+			}
 
 		}
 
