@@ -64,10 +64,16 @@ namespace engine
 				data->normal = (p_sphere1->GetWorldPosition() - p_sphere2->GetWorldPosition()).NormalizeVector();
 				data->interpenetration = r1 + r2 - d;
 				data->contactPoint = p_sphere2->GetWorldPosition() + r2 * data->normal;
-				data->obj1 = p_sphere1->GetCollider();
-				data->obj2 = p_sphere2->GetCollider();
 
-				datas->push_back(data);
+				if (AddRigidbodyToContactInfos(data, p_sphere1->GetOwningEntity(), p_sphere2->GetOwningEntity()))
+				{
+					datas->push_back(data);
+				}
+
+				//data->obj1 = p_sphere1->GetCollider();
+				//data->obj2 = p_sphere2->GetCollider();
+
+				
 			}
 
 			void CPeNarrowPhaseSystem::GenContSphPla(const CPeSpherePrimitiveShape* p_sphere, const CPePlanePrimitiveShape* p_plane, std::vector<SPeContactInfos*>* datas)
@@ -387,10 +393,10 @@ namespace engine
 			}
 
 
-			bool CPeNarrowPhaseSystem::AddRigidbodyToContactInfos(SPeContactInfos* data, CPeColliderComponent& col1, CPeColliderComponent& col2)
+			bool CPeNarrowPhaseSystem::AddRigidbodyToContactInfos(SPeContactInfos* data, pecore::CPeEntity& entity1, pecore::CPeEntity& entity2)
 			{
-				CPeRigidBody* body1 = col1.GetOwner().GetComponent<CPeRigidBody>();
-				CPeRigidBody* body2 = col1.GetOwner().GetComponent<CPeRigidBody>();
+				CPeRigidBody* body1 = entity1.GetComponent<CPeRigidBody>();
+				CPeRigidBody* body2 = entity2.GetComponent<CPeRigidBody>();
 
 				if (body1 == nullptr || body1->GetMassInverse() == 0)
 				{

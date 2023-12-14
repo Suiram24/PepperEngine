@@ -13,6 +13,12 @@ namespace engine {
 			return GetWorldTransform() * pemaths::CPeVector3(0, 0, 0);
 		}
 
+		pecore::CPeEntity& CPePrimitiveShape::GetOwningEntity() const
+		{
+			return m_owner;
+		}
+
+
 		CPeRigidBody* CPePrimitiveShape::GetRigidbody() const
 		{
 			return m_owner.GetComponent<CPeRigidBody>();

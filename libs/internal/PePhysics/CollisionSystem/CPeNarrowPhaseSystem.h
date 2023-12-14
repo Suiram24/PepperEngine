@@ -48,7 +48,7 @@ namespace engine
 			void GenContBoxSph(const CPeBoxPrimitiveShape* p_box, const CPeSpherePrimitiveShape* p_sphere, std::vector<SPeContactInfos*>* datas);
 			void GenContBoxBox(const CPeBoxPrimitiveShape* p_box1, const CPeBoxPrimitiveShape* p_box2, std::vector<SPeContactInfos*>* datas);
 			
-			static bool AddRigidbodyToContactInfos(SPeContactInfos* data, CPeColliderComponent& col1, CPeColliderComponent& col2);
+			static bool AddRigidbodyToContactInfos(SPeContactInfos* data, pecore::CPeEntity& entity1, pecore::CPeEntity& entity2);
 
 
 			CPeNarrowPhaseSystem()
