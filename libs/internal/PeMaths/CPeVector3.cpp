@@ -62,6 +62,11 @@ namespace engine {
 			return sqrt(m_x * m_x + m_y * m_y + m_z * m_z);
 		}
 
+		const double CPeVector3::GetSquaredNorm() const
+		{
+			return m_x * m_x + m_y * m_y + m_z * m_z;
+		}
+
 		CPeVector3 CPeVector3::NormalizeVector() const
 		{
 			double norm = this->GetNorm();
