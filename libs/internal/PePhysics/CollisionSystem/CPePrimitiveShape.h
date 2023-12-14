@@ -2,6 +2,7 @@
 #define PEPHYSICS_CPEPRIMITIVESHAPE_H
 
 #include "../../PeEngineCore/PeEngineCore.h"
+#include "CPeColliderComponent.h"
 
 namespace pecore = engine::core;
 namespace pemaths = engine::maths;
@@ -28,6 +29,8 @@ namespace engine {
 			pemaths::CPeMatrix4 GetWorldTransform() const;
 
 			pemaths::CPeVector3 GetWorldPosition() const;
+
+			CPeColliderComponent* GetCollider() const;
 
 		protected:
 			virtual void GotAbstracted() = 0;

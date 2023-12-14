@@ -53,7 +53,7 @@ namespace engine {
 			*/
 			bool isActive() const;
 
-			std::vector<CPePrimitiveShape*>& GetPrimitives();
+			std::vector<CPePrimitiveShape*>& GetPrimitives() const;
 		};
 	}
 }
