@@ -32,14 +32,14 @@ namespace engine {
 
 			for (int k = 0; k < possibleCollisions.size(); k++)
 			{
-				std::vector<CPePrimitiveShape*>& shapeList1 = possibleCollisions[k].first->GetPrimitives();
-				std::vector<CPePrimitiveShape*>& shapeList2 = possibleCollisions[k].second->GetPrimitives();
+				const std::vector<CPePrimitiveShape*>& shapeList1 = possibleCollisions[k].first->GetPrimitives();
+				const std::vector<CPePrimitiveShape*>& shapeList2 = possibleCollisions[k].second->GetPrimitives();
 
 				for (int i = 0; i < shapeList1.size(); i++)
 				{
 					for (int j = 0; j < shapeList2.size(); j++)
 					{
-						narrowPhase.GenerateContacts(*shapeList1[i], *shapeList2[j], &contactInfosList);
+						narrowPhase.GenerateContacts(shapeList1[i], shapeList2[j], &contactInfosList);
 					}
 				}
 			}
