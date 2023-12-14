@@ -146,9 +146,9 @@ namespace engine {
 
 		std::vector<std::pair<CPeColliderComponent*, CPeColliderComponent*>> CPeKDTree::GetNodeCollisions() {
 			std::vector<std::pair<CPeColliderComponent*, CPeColliderComponent*>> pairs;
-			for (int i = 0; i < m_content.size(); ++i) {
-				for (int j = 0; j < m_content.size(); ++j) {
-					if (i != j) {
+			for (int i = 0; i < m_content.size()-1; ++i) {
+				for (int j = i+1; j < m_content.size(); ++j) {
+					if (IsBroadIntersection(m_content[i]->GetGlobalVolume(), m_content[j]->GetGlobalVolume())) {
 						pairs.push_back(
 							std::pair<CPeColliderComponent*, CPeColliderComponent*>(m_content[i], m_content[j])
 						);
@@ -174,6 +174,19 @@ namespace engine {
 			if (distCenterPlane <= p_collider.GetRadius()) {
 				return true;
 			}
+			return false;
+		}
+
+		bool CPeKDTree::IsBroadIntersection(const CPeSpherePrimitiveShape& p_collider1, const CPeSpherePrimitiveShape& p_collider2) const {
+			double radius1 = p_collider1.GetRadius();
+			double radius2 = p_collider2.GetRadius();
+
+			double sqRadius1 = radius1 * radius1;
+			double sqRadius2 = radius2 * radius2;
+
+			double sqDist = (p_collider1.GetWorldPosition() - p_collider2.GetWorldPosition()).GetSquaredNorm();
+
+			if (sqDist < sqRadius1 || sqDist < sqRadius2) return true;
 			return false;
 		}
 
