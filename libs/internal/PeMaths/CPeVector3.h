@@ -89,6 +89,12 @@ namespace engine
 			const double GetNorm() const;
 
 			/**
+			 * @brief Compute the squared norm of the CPeVector3.
+			 * @return A double.
+			*/
+			const double GetSquaredNorm() const;
+
+			/**
 			 * @brief Compute the normalize vector associated with 'this'.
 			 * @return A new CPeVector3.
 			*/
