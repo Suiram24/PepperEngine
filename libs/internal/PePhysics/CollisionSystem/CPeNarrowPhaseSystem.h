@@ -39,14 +39,14 @@ namespace engine
 			 * @param CPePrimitiveShape the second primitive.
 			 * @param SPeContactInfos the contact info to fill.
 			*/
-			void GenerateContacts(const CPePrimitiveShape& p_shape1, const CPePrimitiveShape& p_shape2, std::vector<SPeContactInfos*>* datas);
+			void GenerateContacts(const CPePrimitiveShape* p_shape1, const CPePrimitiveShape* p_shape2, std::vector<SPeContactInfos*>* datas);
 
 		private:
-			void GenerateContacts(const CPeSpherePrimitiveShape& p_sphere1, const CPeSpherePrimitiveShape& p_sphere2, std::vector<SPeContactInfos*>* datas);
-			void GenerateContacts(const CPeSpherePrimitiveShape& p_sphere, const CPePlanePrimitiveShape& p_plane, std::vector<SPeContactInfos*>* datas);
-			void GenerateContacts(const CPeBoxPrimitiveShape& p_box, const CPePlanePrimitiveShape& p_plane, std::vector<SPeContactInfos*>* datas);
-			void GenerateContacts(const CPeBoxPrimitiveShape& p_box, const CPeSpherePrimitiveShape& p_sphere, std::vector<SPeContactInfos*>* datas);
-			void GenerateContacts(const CPeBoxPrimitiveShape& p_box1, const CPeBoxPrimitiveShape& p_box2, std::vector<SPeContactInfos*>* datas);
+			void GenContSphSph(const CPeSpherePrimitiveShape* p_sphere1, const CPeSpherePrimitiveShape* p_sphere2, std::vector<SPeContactInfos*>* datas);
+			void GenContSphPla(const CPeSpherePrimitiveShape* p_sphere, const CPePlanePrimitiveShape* p_plane, std::vector<SPeContactInfos*>* datas);
+			void GenContBoxPla(const CPeBoxPrimitiveShape* p_box, const CPePlanePrimitiveShape* p_plane, std::vector<SPeContactInfos*>* datas);
+			void GenContBoxSph(const CPeBoxPrimitiveShape* p_box, const CPeSpherePrimitiveShape* p_sphere, std::vector<SPeContactInfos*>* datas);
+			void GenContBoxBox(const CPeBoxPrimitiveShape* p_box1, const CPeBoxPrimitiveShape* p_box2, std::vector<SPeContactInfos*>* datas);
 			
 
 			CPeNarrowPhaseSystem()

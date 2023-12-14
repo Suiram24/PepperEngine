@@ -39,7 +39,7 @@ namespace engine {
 				{
 					for (int j = 0; j < shapeList2.size(); j++)
 					{
-						narrowPhase.GenerateContacts(*shapeList1[i], *shapeList2[j], &contactInfosList);
+						narrowPhase.GenerateContacts(shapeList1[i], shapeList2[j], &contactInfosList);
 					}
 				}
 			}
