@@ -51,6 +51,14 @@ namespace engine {
             return m_inertiaInverse;
         }
 
+        pemaths::CPeMatrix3 CPeRigidBody::GetInverseInertiaWorld()
+        {
+            pemaths::CPeMatrix3 worldMatrix = GetTransform().GetTransformMatrix().ToMatrix3();
+            pemaths::CPeMatrix3 intertiaInverseWorld = worldMatrix * m_inertiaInverse * worldMatrix.Inverse();
+            return intertiaInverseWorld;
+        }
+
+
         const pemaths::CPeVector3& CPeRigidBody::GetAngularVelocity() const
         {
             return m_angularVelocity;

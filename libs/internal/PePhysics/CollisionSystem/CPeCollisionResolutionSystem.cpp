@@ -102,7 +102,7 @@ namespace engine
 					// Velocity change by unit impulse
 					deltaVelocity += obj[i]->GetMassInverse();
 					deltaWorld = pemaths::CPeVector3::CrossProduct(contactPointVector, cInfo->normal);
-					deltaWorld = obj[i]->GetInverseInertia() * deltaWorld; //TODO: replace by GetInverseInertiaWorld()
+					deltaWorld = obj[i]->GetInverseInertiaWorld() * deltaWorld; 
 					deltaWorld = pemaths::CPeVector3::CrossProduct(deltaWorld, contactPointVector);
 
 					deltaVelocity += pemaths::CPeVector3::ScalarProduct(deltaWorld, cInfo->normal);
@@ -135,7 +135,7 @@ namespace engine
 					contactPointVector = cInfo->contactPoint - obj[i]->GetTransform().GetPosition();
 
 					velocityChange = impulse * obj[i]->GetMassInverse();
-					rotationChange = obj[i]->GetInverseInertia() * pemaths::CPeVector3::CrossProduct(impulse, contactPointVector); //Same thing about world inertia
+					rotationChange = obj[i]->GetInverseInertiaWorld() * pemaths::CPeVector3::CrossProduct(impulse, contactPointVector);
 				
 					obj[i]->SetVelocity(obj[i]->GetVelocity() + velocityChange);
 					obj[i]->SetAngularVelocity(obj[i]->GetAngularVelocity() + rotationChange);
