@@ -27,7 +27,10 @@ namespace engine
 			// number of iteration for the solver
 			int m_solverIteration;
 
-			pecore::CPeObjectPool<CPeColliderComponent, 4 * pecore::consts::maxEntityNumber>* m_collidersPool;
+			//pecore::CPeObjectPool<CPeColliderComponent, pecore::consts::maxEntityNumber>* m_collidersPool;
+
+			std::vector<CPeSpherePrimitiveShape*> m_sphereShapesPool;
+			std::vector<CPeColliderComponent*> m_collidersPool;
 
 		public:
 
@@ -44,14 +47,17 @@ namespace engine
 			 * @param p_timeStep The time of simulation in second.
 			 * @param p_particles A vector of the particles with a CPeColliderComponent.
 			*/
-			void UpdateCollision(double p_timeStep, std::vector<CPeParticle*>* p_particles);
+			void UpdateCollision(double p_timeStep);
 
-			CPeColliderComponent* CreateColliderComponent(pecore::CPeEntity* p_owner, double p_radius = 1);
+			CPeColliderComponent* CreateColliderComponent(pecore::CPeEntity& p_owner, double p_radius = 1);
+
+			CPeSpherePrimitiveShape* CreateSphereShape(const pecore::CPeEntity& p_owner, double p_radius);
 		private:
 
 			CPeCollisionSystem()
 				: m_solverIteration(consts::nbIterationCollider)
-				, m_collidersPool(nullptr)
+				, m_sphereShapesPool()
+				, m_collidersPool()
 			{
 			}
 

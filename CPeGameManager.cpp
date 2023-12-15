@@ -91,27 +91,27 @@ namespace engine {
 	{
 		//
 		// Todo: avoid this
-		std::vector<engine::physics::CPeParticle*> particles;
-		pecore::CPeEntity* entity = m_entityPool->First();
-		for (size_t i = 0; i < m_entityPool->Size(); i++)
-		{
-			if (entity->IsActive())
-			{
-				if (entity->GetComponent<engine::physics::CPeColliderComponent>() != nullptr)
-				{
-					engine::physics::CPeParticle* part = entity->GetComponent<engine::physics::CPeParticle>();
-					if (part != nullptr)
-					{
-						particles.push_back(part);
-					}
-				}
-			}
-			
+		//std::vector<engine::physics::CPeParticle*> particles;
+		//pecore::CPeEntity* entity = m_entityPool->First();
+		//for (size_t i = 0; i < m_entityPool->Size(); i++)
+		//{
+		//	if (entity->IsActive())
+		//	{
+		//		if (entity->GetComponent<engine::physics::CPeColliderComponent>() != nullptr)
+		//		{
+		//			engine::physics::CPeParticle* part = entity->GetComponent<engine::physics::CPeParticle>();
+		//			if (part != nullptr)
+		//			{
+		//				particles.push_back(part);
+		//			}
+		//		}
+		//	}
+		//	
 
-			entity++;
-		}
+		//	entity++;
+		//}
 
-		engine::physics::CPeCollisionSystem::GetInstance().UpdateCollision(p_timeStep, &particles);
+		engine::physics::CPeCollisionSystem::GetInstance().UpdateCollision(p_timeStep);
 
 
 	}

@@ -25,8 +25,9 @@ namespace engine {
 			/**
 			 * @brief default constructor, shouldn't be used outside of CPeObjectPool. 
 			*/
-			CPeColliderComponent()
-				: CPeComponent()
+			CPeColliderComponent(pecore::CPeEntity& p_owner, CPeSpherePrimitiveShape* p_enclosingSphere)
+				: CPeComponent(p_owner)
+				, m_enclosingShape(p_enclosingSphere)
 			{
 			}
 			/**
@@ -54,6 +55,8 @@ namespace engine {
 			bool isActive() const;
 
 			const std::vector<CPePrimitiveShape*>& GetPrimitives() const;
+
+			void AddPrimitive(CPePrimitiveShape* p_primitive);
 		};
 	}
 }

@@ -1,5 +1,5 @@
-#ifndef DEMO_DEMOCUSTOMGAMEMODE_H
-#define DEMO_DEMOCUSTOMGAMEMODE_H
+#ifndef DEMO_COLLISIONSYSTEM_H
+#define DEMO_COLLISIONSYSTEM_H
 
 #include "..\CPeGameMode.h"
 #include "..\CPeGameManager.h"
@@ -10,23 +10,20 @@
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 
-#include <optional>
-
 namespace pedemo {
 	namespace pephy = engine::physics;
-	
+
 	/**
 		* @brief A class for basic components regarding the physics of a 3D elements.
 	*/
-	class DemoCustomGameMode: public engine::CPeGameMode
+	class DemoCollisionSystem : public engine::CPeGameMode
 	{
 	public:
-		DemoCustomGameMode()
+		DemoCollisionSystem()
 			: engine::CPeGameMode()
 			, entity1(nullptr)
 			, entity2(nullptr)
 			, entity3(nullptr)
-			, entity4(nullptr)
 		{
 		}
 
@@ -47,6 +44,8 @@ namespace pedemo {
 	protected:
 	private:
 		void LoadLevel();
+		void DrawImGuiInterface();
+
 
 
 	public:
@@ -55,21 +54,14 @@ namespace pedemo {
 		pephy::CPeForceSystem* forceSystem;
 		pephy::CPeCollisionSystem* colliderSystem;
 		engine::render::CPeMeshRenderSystem* meshRenderSystem;
-		//std::optional<vk::SphereMesh> sphere1;
-		//std::optional<vk::SphereMesh> sphere2;
-		int i;
 
 		pecore::CPeEntity* entity1;
 		pecore::CPeEntity* entity2;
 		pecore::CPeEntity* entity3;
-		pecore::CPeEntity* entity4;
-
-		pecore::CPeEntity* floorEntities[10][10];
-
 
 
 	};
-	
+
 }
 
-#endif /* DEMO_DEMOCUSTOMGAMEMODE_H */
+#endif /* DEMO_COLLISIONSYSTEM_H */

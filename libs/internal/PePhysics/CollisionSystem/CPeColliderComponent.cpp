@@ -32,5 +32,11 @@ namespace engine {
 			return m_narrowShapes;
 		}
 
+		void CPeColliderComponent::AddPrimitive(CPePrimitiveShape* p_primitive)
+		{
+			m_narrowShapes.push_back(p_primitive);
+		}
+
+
 	}
 }
