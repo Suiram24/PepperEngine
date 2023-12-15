@@ -306,8 +306,8 @@ namespace engine
 				// Contact based on face axis
 				if (bestCase < 6)
 				{
-					CPeBoxPrimitiveShape& one;
-					CPeBoxPrimitiveShape& two;
+					const CPeBoxPrimitiveShape* one;
+					const CPeBoxPrimitiveShape* two;
 
 					if (pemaths::CPeVector3::ScalarProduct(contactAxis, toCenter) < 0)
 					{
@@ -322,7 +322,7 @@ namespace engine
 						one = p_box1;
 						two = p_box2;
 
-						vertex = two.GetHalfSize();
+						vertex = two->GetHalfSize();
 						if (pemaths::CPeVector3::ScalarProduct(axes[3], contactAxis) < 0)
 						{
 							vertex.SetX(-vertex.GetX());
@@ -342,7 +342,7 @@ namespace engine
 						one = p_box2;
 						two = p_box1;
 
-						vertex = two.GetHalfSize();
+						vertex = two->GetHalfSize();
 						if (pemaths::CPeVector3::ScalarProduct(axes[0], contactAxis) < 0)
 						{
 							vertex.SetX(-vertex.GetX());
