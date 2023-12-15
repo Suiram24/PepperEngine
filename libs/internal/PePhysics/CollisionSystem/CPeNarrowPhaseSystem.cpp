@@ -3,48 +3,87 @@
 namespace engine
 {
 	namespace physics {
+		
+		
 			void CPeNarrowPhaseSystem::GenerateContacts(const CPePrimitiveShape* p_shape1, const CPePrimitiveShape* p_shape2, std::vector<SPeContactInfos*>* datas)
 			{
 				//Determine first shape type
-				const CPeSpherePrimitiveShape* sphere1 = dynamic_cast<const CPeSpherePrimitiveShape*>(p_shape1);
-				const CPeBoxPrimitiveShape* box1 = dynamic_cast<const CPeBoxPrimitiveShape*>(p_shape1);
-				const CPePlanePrimitiveShape* plane1 = dynamic_cast<const CPePlanePrimitiveShape*>(p_shape1);
-
-				EShapeTypes type1;
-				if (sphere1 != nullptr) { type1 = SPHERE; }
-				if (box1 != nullptr) { type1 = BOX; }
-				if (plane1 != nullptr){type1 = PLANE;}
+				EShapeTypes type1 = p_shape1->GetType();
 
 				//Determine second shape type
-				const CPeSpherePrimitiveShape* sphere2 = dynamic_cast<const CPeSpherePrimitiveShape*>(p_shape2);
-				const CPeBoxPrimitiveShape* box2 = dynamic_cast<const CPeBoxPrimitiveShape*>(p_shape2);
-				const CPePlanePrimitiveShape* plane2 = dynamic_cast<const CPePlanePrimitiveShape*>(p_shape2);
 
-				EShapeTypes type2;
-				if (sphere2 != nullptr) { type2 = SPHERE; }
-				if (box2 != nullptr) { type2 = BOX; }
-				if (plane2 != nullptr) { type2 = PLANE; }
+				EShapeTypes type2 = p_shape2->GetType();
+				
 
 				switch (type1)
 				{
 				case SPHERE:
-					if (type2 == SPHERE) { GenContSphSph(sphere1, sphere2, datas); }
-					if (type2 == BOX) { GenContBoxSph(box2, sphere1, datas); }
-					if (type2 == PLANE) { GenContSphPla(sphere1, plane2, datas); }
+					if (type2 == SPHERE) { 
+						GenContSphSph(
+							dynamic_cast<const CPeSpherePrimitiveShape*>(p_shape1),
+							dynamic_cast<const CPeSpherePrimitiveShape*>(p_shape2),
+							datas
+						); 
+					}
+					else if (type2 == BOX) {
+						GenContBoxSph(
+							dynamic_cast<const CPeBoxPrimitiveShape*>(p_shape2),
+							dynamic_cast<const CPeSpherePrimitiveShape*>(p_shape1),
+							datas
+						);
+					}
+					else if (type2 == PLANE) { 
+						GenContSphPla(
+							dynamic_cast<const CPeSpherePrimitiveShape*>(p_shape1),
+							dynamic_cast<const CPePlanePrimitiveShape*>(p_shape2),
+							datas
+						);
+					}
 					break;
 				case BOX:
-					if (type2 == SPHERE) { GenContBoxSph(box1, sphere2, datas); }
-					if (type2 == BOX) { GenContBoxBox(box1, box2, datas); }
-					if (type2 == PLANE) { GenContBoxPla(box1, plane2, datas); }
+					if (type2 == SPHERE) {
+						GenContBoxSph(
+							dynamic_cast<const CPeBoxPrimitiveShape*>(p_shape1),
+							dynamic_cast<const CPeSpherePrimitiveShape*>(p_shape2),
+							datas
+						);
+					}
+					else if (type2 == BOX) {
+						GenContBoxBox(
+							dynamic_cast<const CPeBoxPrimitiveShape*>(p_shape1),
+							dynamic_cast<const CPeBoxPrimitiveShape*>(p_shape2),
+							datas
+						);
+					}
+					else if (type2 == PLANE) {
+						GenContBoxPla(
+							dynamic_cast<const CPeBoxPrimitiveShape*>(p_shape1),
+							dynamic_cast<const CPePlanePrimitiveShape*>(p_shape2),
+							datas
+						);
+					}
 					break;
 				case PLANE:
-					if (type2 == SPHERE) { GenContSphPla(sphere2, plane1, datas); }
-					if (type2 == BOX) { GenContBoxPla(box2, plane1, datas); }
+					if (type2 == SPHERE) {
+						GenContSphPla(
+							dynamic_cast<const CPeSpherePrimitiveShape*>(p_shape2),
+							dynamic_cast<const CPePlanePrimitiveShape*>(p_shape1),
+							datas
+						);
+					}
+					else if (type2 == BOX) {
+						GenContBoxPla(
+							dynamic_cast<const CPeBoxPrimitiveShape*>(p_shape2),
+							dynamic_cast<const CPePlanePrimitiveShape*>(p_shape1),
+							datas
+						); 
+					}
 					break;
 				default:
 					break;
 				}
 			}
+		
 
 
 			void CPeNarrowPhaseSystem::GenContSphSph(const CPeSpherePrimitiveShape* p_sphere1, const CPeSpherePrimitiveShape* p_sphere2, std::vector<SPeContactInfos*>* datas)
@@ -267,8 +306,8 @@ namespace engine
 				// Contact based on face axis
 				if (bestCase < 6)
 				{
-					const CPeBoxPrimitiveShape* one;
-					const CPeBoxPrimitiveShape* two;
+					CPeBoxPrimitiveShape& one;
+					CPeBoxPrimitiveShape& two;
 
 					if (pemaths::CPeVector3::ScalarProduct(contactAxis, toCenter) < 0)
 					{
@@ -283,7 +322,7 @@ namespace engine
 						one = p_box1;
 						two = p_box2;
 
-						vertex = two->GetHalfSize();
+						vertex = two.GetHalfSize();
 						if (pemaths::CPeVector3::ScalarProduct(axes[3], contactAxis) < 0)
 						{
 							vertex.SetX(-vertex.GetX());
@@ -303,7 +342,7 @@ namespace engine
 						one = p_box2;
 						two = p_box1;
 
-						vertex = two->GetHalfSize();
+						vertex = two.GetHalfSize();
 						if (pemaths::CPeVector3::ScalarProduct(axes[0], contactAxis) < 0)
 						{
 							vertex.SetX(-vertex.GetX());

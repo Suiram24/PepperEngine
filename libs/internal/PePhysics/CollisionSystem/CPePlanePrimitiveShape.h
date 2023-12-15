@@ -29,8 +29,8 @@ namespace engine {
 			void SetNormal(pemaths::CPeVector3 p_normal);
 			void SetOffset(double p_offset);
 
+			EShapeTypes GetType() const;
 		protected:
-			void GotAbstracted();
 		};
 	}
 }

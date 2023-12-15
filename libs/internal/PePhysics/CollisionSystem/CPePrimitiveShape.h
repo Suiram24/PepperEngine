@@ -9,6 +9,11 @@ namespace pemaths = engine::maths;
 
 namespace engine {
 	namespace physics {
+		enum EShapeTypes
+		{
+			SPHERE, BOX, PLANE
+		};
+
 		/**
 		 * @brief A class for primitive shapes of objects that perform collisions.
 		*/
@@ -32,8 +37,8 @@ namespace engine {
 			const pecore::CPeEntity& GetOwningEntity() const;
 
 			
+			virtual EShapeTypes GetType() const = 0;
 		protected:
-			virtual void GotAbstracted() = 0;
 
 			CPeRigidBody* GetRigidbody() const; //deprecated
 		};

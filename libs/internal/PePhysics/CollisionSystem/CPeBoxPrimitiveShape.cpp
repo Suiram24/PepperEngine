@@ -13,6 +13,8 @@ namespace engine {
 			m_halfsize = p_halfsize;
 		}
 
-		void CPeBoxPrimitiveShape::GotAbstracted() {}
+		EShapeTypes CPeBoxPrimitiveShape::GetType() const{
+			return BOX;
+		}
 	}
 }
