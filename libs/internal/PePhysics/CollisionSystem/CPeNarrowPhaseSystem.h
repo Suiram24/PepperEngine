@@ -49,7 +49,7 @@ namespace engine
 			void GenContBoxBox(const CPeBoxPrimitiveShape* p_box1, const CPeBoxPrimitiveShape* p_box2, std::vector<SPeContactInfos*>* datas);
 			
 			static bool AddRigidbodyToContactInfos(SPeContactInfos* data, pecore::CPeEntity& entity1, pecore::CPeEntity& entity2);
-
+			 
 
 			CPeNarrowPhaseSystem()
 			{

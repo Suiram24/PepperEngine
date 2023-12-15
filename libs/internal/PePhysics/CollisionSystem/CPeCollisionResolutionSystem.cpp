@@ -72,15 +72,23 @@ namespace engine
 
 				size_t nbRigidbody = 2;
 
+				double SumMassInverse;
+
 				if (obj[1] == nullptr) //Second object has an infinite mass
 				{
 					nbRigidbody = 1;
+					SumMassInverse = obj[0]->GetMassInverse();
+				}
+				else
+				{
+					SumMassInverse = obj[0]->GetMassInverse() + obj[1]->GetMassInverse();
 				}
 
-				pemaths::CPeVector3 contactPointVector, pointVelocity, velocityPerUnitImpulse;
+				pemaths::CPeVector3 contactPointVector, pointVelocity, deltaWorld, velocity, contactVelocity;
 				double k, e;
-				double linearVelDelta = .0;
-				double angularVelDelta = .0;
+				//double linearVelDelta[2] = { .0 ,.0 };
+				//double angularVelDelta[2] = { .0 ,.0 };
+				double deltaVelocity = 0;
 
 				
 				e = 1;
@@ -90,16 +98,50 @@ namespace engine
 					contactPointVector = cInfo->contactPoint - obj[i]->GetTransform().GetPosition() ;
 					pointVelocity = obj[i]->GetVelocity() + obj[i]->GetAngularVelocity() * contactPointVector.GetNorm();
 
-					linearVelDelta += obj[i]->GetMassInverse();
-					velocityPerUnitImpulse = pemaths::CPeVector3::CrossProduct(contactPointVector, cInfo->normal);
-					velocityPerUnitImpulse = obj[i]->GetInverseInertia() * velocityPerUnitImpulse;
-					velocityPerUnitImpulse = pemaths::CPeVector3::CrossProduct(velocityPerUnitImpulse, contactPointVector);
+					//
+					// Velocity change by unit impulse
+					deltaVelocity += obj[i]->GetMassInverse();
+					deltaWorld = pemaths::CPeVector3::CrossProduct(contactPointVector, cInfo->normal);
+					deltaWorld = obj[i]->GetInverseInertia() * deltaWorld; //TODO: replace by GetInverseInertiaWorld()
+					deltaWorld = pemaths::CPeVector3::CrossProduct(deltaWorld, contactPointVector);
 
-					angularVelDelta = pemaths::CPeVector3::ScalarProduct(velocityPerUnitImpulse, cInfo->normal);
+					deltaVelocity += pemaths::CPeVector3::ScalarProduct(deltaWorld, cInfo->normal);
 
+					//
+					// Closing velocity (TODO: inverse for second body ?)
+					velocity += pemaths::CPeVector3::CrossProduct(obj[i]->GetAngularVelocity(), contactPointVector);
+					velocity += obj[i]->GetVelocity();
+
+					
 				}
 
-				//k = (ob)
+				//
+				// retrieve the velocity that is in the direction of the normal
+				contactVelocity = pemaths::CPeVector3::OrthographicProjection(velocity, cInfo->normal);
+
+				double desiredDeltaVelocity = -contactVelocity.GetNorm() * (1 + e);
+
+				//
+				//Calculating the impulse
+				pemaths::CPeVector3 impulse = cInfo->normal.NormalizeVector();
+				impulse = impulse * (desiredDeltaVelocity / deltaVelocity);
+
+				//
+				//Applying the impulse
+				pemaths::CPeVector3 velocityChange, rotationChange;
+
+				for (size_t i = 0; i < nbRigidbody; i++)
+				{
+					contactPointVector = cInfo->contactPoint - obj[i]->GetTransform().GetPosition();
+
+					velocityChange = impulse * obj[i]->GetMassInverse();
+					rotationChange = obj[i]->GetInverseInertia() * pemaths::CPeVector3::CrossProduct(impulse, contactPointVector); //Same thing about world inertia
+				
+					obj[i]->SetVelocity(obj[i]->GetVelocity() + velocityChange);
+					obj[i]->SetAngularVelocity(obj[i]->GetAngularVelocity() + rotationChange);
+
+					impulse = impulse * (-1); // inverse vector direction for second rigidbody if there is one
+				}
 
 
 			}
