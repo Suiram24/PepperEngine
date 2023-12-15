@@ -49,7 +49,8 @@ namespace engine
 					pemaths::CPeVector3 impulsePerMove = obj[i]->GetInverseInertia() * pemaths::CPeVector3::CrossProduct(localContactPoint, cInfo->normal);
 
 					pemaths::CPeQuaternion rot = obj[i]->GetTransform().GetOrientation();
-					rot.RotateByVector(angularMove * (impulsePerMove * (1 / angularInertia[i])));
+					double invAngIntertia = (angularInertia[i] == 0) ? 0 : (1/angularInertia[i]); //avoid dividing by 0
+					rot.RotateByVector(angularMove * (impulsePerMove * invAngIntertia));
 
 					obj[i]->GetTransform().SetOrientation(rot);
 					obj[i]->GetTransform().SetPosition(obj[i]->GetTransform().GetPosition() + (cInfo->normal * linearMove));
@@ -120,7 +121,8 @@ namespace engine
 				//
 				//Calculating the impulse
 				pemaths::CPeVector3 impulse = cInfo->normal.NormalizeVector();
-				impulse = impulse * (desiredDeltaVelocity / deltaVelocity);
+				double vel = (deltaVelocity == 0) ? 0 : (desiredDeltaVelocity / deltaVelocity);
+				impulse = impulse * vel;
 
 				//
 				//Applying the impulse

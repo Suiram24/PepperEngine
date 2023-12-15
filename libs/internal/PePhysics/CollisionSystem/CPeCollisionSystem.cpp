@@ -21,7 +21,7 @@ namespace engine {
 			CPeKDTree tree = CPeKDTree(X, collidersList);
 
 			std::vector<std::pair<CPeColliderComponent*, CPeColliderComponent*>> possibleCollisions = tree.GetPossibleCollisions();
-
+			
 			// Narrow phase
 			printf("Narrow phase\n");
 			CPeNarrowPhaseSystem narrowPhase = CPeNarrowPhaseSystem::GetInstance();

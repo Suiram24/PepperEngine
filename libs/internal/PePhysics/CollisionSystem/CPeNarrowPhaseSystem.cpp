@@ -93,7 +93,7 @@ namespace engine
 
 				double d = p_sphere1->GetWorldPosition().DistanceTo(p_sphere2->GetWorldPosition());
 
-				if (d * d < r1 * r1 + r2 * r2)
+				if (d > (r1 + r2))
 				{
 					return;
 				}
