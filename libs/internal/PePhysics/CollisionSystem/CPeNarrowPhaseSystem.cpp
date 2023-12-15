@@ -6,9 +6,9 @@ namespace engine
 			void CPeNarrowPhaseSystem::GenerateContacts(const CPePrimitiveShape* p_shape1, const CPePrimitiveShape* p_shape2, std::vector<SPeContactInfos*>* datas)
 			{
 				//Determine first shape type
-				CPeSpherePrimitiveShape* sphere1 = dynamic_cast<CPeSpherePrimitiveShape*>(p_shape1);
-				CPeBoxPrimitiveShape* box1 = dynamic_cast<CPeBoxPrimitiveShape*>(p_shape1);
-				CPePlanePrimitiveShape* plane1 = dynamic_cast<CPePlanePrimitiveShape*>(p_shape1);
+				const CPeSpherePrimitiveShape* sphere1 = dynamic_cast<const CPeSpherePrimitiveShape*>(p_shape1);
+				const CPeBoxPrimitiveShape* box1 = dynamic_cast<const CPeBoxPrimitiveShape*>(p_shape1);
+				const CPePlanePrimitiveShape* plane1 = dynamic_cast<const CPePlanePrimitiveShape*>(p_shape1);
 
 				EShapeTypes type1;
 				if (sphere1 != nullptr) { type1 = SPHERE; }
@@ -16,9 +16,9 @@ namespace engine
 				if (plane1 != nullptr){type1 = PLANE;}
 
 				//Determine second shape type
-				CPeSpherePrimitiveShape* sphere2 = dynamic_cast<CPeSpherePrimitiveShape*>(p_shape2);
-				CPeBoxPrimitiveShape* box2 = dynamic_cast<CPeBoxPrimitiveShape*>(p_shape2);
-				CPePlanePrimitiveShape* plane2 = dynamic_cast<CPePlanePrimitiveShape*>(p_shape2);
+				const CPeSpherePrimitiveShape* sphere2 = dynamic_cast<const CPeSpherePrimitiveShape*>(p_shape2);
+				const CPeBoxPrimitiveShape* box2 = dynamic_cast<const CPeBoxPrimitiveShape*>(p_shape2);
+				const CPePlanePrimitiveShape* plane2 = dynamic_cast<const CPePlanePrimitiveShape*>(p_shape2);
 
 				EShapeTypes type2;
 				if (sphere2 != nullptr) { type2 = SPHERE; }
@@ -69,11 +69,10 @@ namespace engine
 				{
 					datas->push_back(data);
 				}
-
-				//data->obj1 = p_sphere1->GetCollider();
-				//data->obj2 = p_sphere2->GetCollider();
-
-				
+				else
+				{
+					delete data;
+				}
 			}
 
 			void CPeNarrowPhaseSystem::GenContSphPla(const CPeSpherePrimitiveShape* p_sphere, const CPePlanePrimitiveShape* p_plane, std::vector<SPeContactInfos*>* datas)
@@ -91,10 +90,15 @@ namespace engine
 				data->normal = p_plane->GetNormal();
 				data->interpenetration = d;
 				data->contactPoint = p_sphere->GetWorldPosition() - r * data->normal;
-				data->obj1 = p_sphere->GetCollider();
-				data->obj2 = p_plane->GetCollider();
 
-				datas->push_back(data);
+				if (AddRigidbodyToContactInfos(data, p_sphere->GetOwningEntity(), p_plane->GetOwningEntity()))
+				{
+					datas->push_back(data);
+				}
+				else
+				{
+					delete data;
+				}
 			}
 
 			void CPeNarrowPhaseSystem::GenContBoxPla(const CPeBoxPrimitiveShape* p_box, const CPePlanePrimitiveShape* p_plane, std::vector<SPeContactInfos*>* datas)
@@ -106,14 +110,14 @@ namespace engine
 				double y = p_box->GetHalfSize().GetY();
 				double z = p_box->GetHalfSize().GetZ();
 
-				corners[0] = pos + pemaths::CPeVector( x,  y,  z);
-				corners[1] = pos + pemaths::CPeVector( x,  y, -z);
-				corners[2] = pos + pemaths::CPeVector( x, -y,  z);
-				corners[3] = pos + pemaths::CPeVector( x, -y, -z);
-				corners[4] = pos + pemaths::CPeVector(-x,  y,  z);
-				corners[5] = pos + pemaths::CPeVector(-x,  y, -z);
-				corners[6] = pos + pemaths::CPeVector(-x, -y,  z);
-				corners[7] = pos + pemaths::CPeVector(-x, -y, -z);
+				corners[0] = pos + pemaths::CPeVector3( x,  y,  z);
+				corners[1] = pos + pemaths::CPeVector3( x,  y, -z);
+				corners[2] = pos + pemaths::CPeVector3( x, -y,  z);
+				corners[3] = pos + pemaths::CPeVector3( x, -y, -z);
+				corners[4] = pos + pemaths::CPeVector3(-x,  y,  z);
+				corners[5] = pos + pemaths::CPeVector3(-x,  y, -z);
+				corners[6] = pos + pemaths::CPeVector3(-x, -y,  z);
+				corners[7] = pos + pemaths::CPeVector3(-x, -y, -z);
 
 				for (int i = 0; i < 8; i++)
 				{
@@ -129,10 +133,15 @@ namespace engine
 					data->normal = p_plane->GetNormal();
 					data->interpenetration = d;
 					data->contactPoint = corners[i];
-					data->obj1 = p_box->GetCollider();
-					data->obj2 = p_plane->GetCollider();
 
-					datas->push_back(data);
+					if (AddRigidbodyToContactInfos(data, p_box->GetOwningEntity(), p_plane->GetOwningEntity()))
+					{
+						datas->push_back(data);
+					}
+					else
+					{
+						delete data;
+					}
 				}
 			}
 
@@ -177,10 +186,15 @@ namespace engine
 				data->normal = (closestPoint - spherePos).NormalizeVector();
 				data->interpenetration = r - d;
 				data->contactPoint = spherePos + r * data->normal;
-				data->obj1 = p_box->GetCollider();
-				data->obj2 = p_sphere->GetCollider();
 
-				datas->push_back(data);
+				if (AddRigidbodyToContactInfos(data, p_box->GetOwningEntity(), p_sphere->GetOwningEntity()))
+				{
+					datas->push_back(data);
+				}
+				else
+				{
+					delete data;
+				}
 			}
 
 			void CPeNarrowPhaseSystem::GenContBoxBox(const CPeBoxPrimitiveShape* p_box1, const CPeBoxPrimitiveShape* p_box2, std::vector<SPeContactInfos*>* datas)
@@ -203,7 +217,7 @@ namespace engine
 				{
 					for (int j = 0; j < 3; j++)
 					{
-						axis[6 + i * 3 + j] = pemaths::CPeVector3::CrossProduct(axis[i], axis[3 + j]).NormalizeVector();
+						axes[6 + i * 3 + j] = pemaths::CPeVector3::CrossProduct(axes[i], axes[3 + j]).NormalizeVector();
 					}
 				}
 
@@ -221,16 +235,16 @@ namespace engine
 					}
 
 					//Compute penetration on axis
-					double proj1 = max(
+					double proj1 = std::max({
 						pemaths::CPeVector3::ScalarProduct(axes[0] * p_box1->GetHalfSize().GetX(),axe),
 						pemaths::CPeVector3::ScalarProduct(axes[1] * p_box1->GetHalfSize().GetY(),axe),
 						pemaths::CPeVector3::ScalarProduct(axes[2] * p_box1->GetHalfSize().GetZ(),axe)
-					);
-					double proj2 = max(
+					});
+					double proj2 = std::max({
 						pemaths::CPeVector3::ScalarProduct(axes[3] * p_box2->GetHalfSize().GetX(), axe),
 						pemaths::CPeVector3::ScalarProduct(axes[4] * p_box2->GetHalfSize().GetY(), axe),
 						pemaths::CPeVector3::ScalarProduct(axes[5] * p_box2->GetHalfSize().GetZ(), axe)
-					);
+					});
 
 					double dist = abs(pemaths::CPeVector3::ScalarProduct(toCenter, axe));
 
@@ -249,12 +263,12 @@ namespace engine
 				}
 
 				
-				pemaths::CPeVector3 contactAxis = axis[bestCase];
+				pemaths::CPeVector3 contactAxis = axes[bestCase];
 				// Contact based on face axis
 				if (bestCase < 6)
 				{
-					const CPeBoxPrimitiveShape& one;
-					const CPeBoxPrimitiveShape& two;
+					const CPeBoxPrimitiveShape* one;
+					const CPeBoxPrimitiveShape* two;
 
 					if (pemaths::CPeVector3::ScalarProduct(contactAxis, toCenter) < 0)
 					{
@@ -264,21 +278,21 @@ namespace engine
 					pemaths::CPeVector3 vertex;
 
 					// Contact based on face axis of box two
-					if (best case < 3)
+					if (bestCase < 3)
 					{
 						one = p_box1;
 						two = p_box2;
 
-						vertex = two.GetHalfSize();
-						if (pemaths::CPeVector3::ScalarProduct(axis[3], contactAxis) < 0)
+						vertex = two->GetHalfSize();
+						if (pemaths::CPeVector3::ScalarProduct(axes[3], contactAxis) < 0)
 						{
 							vertex.SetX(-vertex.GetX());
 						}
-						if (pemaths::CPeVector3::ScalarProduct(axis[4], contactAxis) < 0)
+						if (pemaths::CPeVector3::ScalarProduct(axes[4], contactAxis) < 0)
 						{
 							vertex.SetY(-vertex.GetY());
 						}
-						if (pemaths::CPeVector3::ScalarProduct(axis[5], contactAxis) < 0)
+						if (pemaths::CPeVector3::ScalarProduct(axes[5], contactAxis) < 0)
 						{
 							vertex.SetY(-vertex.GetY());
 						}
@@ -289,32 +303,37 @@ namespace engine
 						one = p_box2;
 						two = p_box1;
 
-						vertex = two.GetHalfSize();
-						if (pemaths::CPeVector3::ScalarProduct(axis[0], contactAxis) < 0)
+						vertex = two->GetHalfSize();
+						if (pemaths::CPeVector3::ScalarProduct(axes[0], contactAxis) < 0)
 						{
 							vertex.SetX(-vertex.GetX());
 						}
-						if (pemaths::CPeVector3::ScalarProduct(axis[1], contactAxis) < 0)
+						if (pemaths::CPeVector3::ScalarProduct(axes[1], contactAxis) < 0)
 						{
 							vertex.SetY(-vertex.GetY());
 						}
-						if (pemaths::CPeVector3::ScalarProduct(axis[2], contactAxis) < 0)
+						if (pemaths::CPeVector3::ScalarProduct(axes[2], contactAxis) < 0)
 						{
 							vertex.SetY(-vertex.GetY());
 						}
 					}
 
-					vertex = two.GetWorldTransform() * vertex;
+					vertex = two->GetWorldTransform() * vertex;
 
 					SPeContactInfos* data = new SPeContactInfos();
 
 					data->normal = contactAxis;
 					data->interpenetration = bestOverlap;
 					data->contactPoint = vertex;
-					data->obj1 = p_box1->GetCollider();
-					data->obj2 = p_box2->GetCollider();
 
-					datas->push_back(data);
+					if (AddRigidbodyToContactInfos(data, p_box1->GetOwningEntity(), p_box2->GetOwningEntity()))
+					{
+						datas->push_back(data);
+					}
+					else
+					{
+						delete data;
+					}
 				}
 				//Contact based on edge-edge
 				else
@@ -328,20 +347,20 @@ namespace engine
 					{
 						if (i == oneAxisIndex)
 						{
-							pointOnEdge1[i] = 0;
+							pointOnEdge1.Set(i,0);
 						}
-						else if (pemaths::CPeVector3::ScalarProduct(axis[i], contactAxis) > 0)
+						else if (pemaths::CPeVector3::ScalarProduct(axes[i], contactAxis) > 0)
 						{
-							pointOnEdge1[i] = -pointOnEdge1[i];
+							pointOnEdge1.Set(i, -pointOnEdge1.Get(i));
 						}
 
 						if (i == twoAxisIndex)
 						{
-							pointOnEdge2[i] = 0;
+							pointOnEdge2.Set(i, 0);
 						}
-						else if (pemaths::CPeVector3::ScalarProduct(axis[3+i], contactAxis) < 0)
+						else if (pemaths::CPeVector3::ScalarProduct(axes[3+i], contactAxis) < 0)
 						{
-							pointOnEdge2[i] = -pointOnEdge2[i];
+							pointOnEdge2.Set(i, -pointOnEdge2.Get(i));
 						}
 					}
 
@@ -364,17 +383,22 @@ namespace engine
 
 					data->normal = contactAxis;
 					data->interpenetration = bestOverlap;
-					data->contactPoint = getContactPoint(axis[oneAxisIndex], axis[3+twoAxisIndex], pointOnEdge1, pointOnEdge2);
-					data->obj1 = p_box1->GetCollider();
-					data->obj2 = p_box2->GetCollider();
-
-					datas->push_back(data);
+					data->contactPoint = GetContactPoint(axes[oneAxisIndex], axes[3+twoAxisIndex], pointOnEdge1, pointOnEdge2);
+					
+					if (AddRigidbodyToContactInfos(data, p_box1->GetOwningEntity(), p_box2->GetOwningEntity()))
+					{
+						datas->push_back(data);
+					}
+					else
+					{
+						delete data;
+					}
 				}
 			}
 
 			pemaths::CPeVector3 CPeNarrowPhaseSystem::GetContactPoint(const pemaths::CPeVector3& axisOne, const pemaths::CPeVector3& axisTwo, const pemaths::CPeVector3& pointOnEdgeOne, const pemaths::CPeVector3& pointOnEdgeTwo) const
 			{
-				pemaths::CPeVector3 toSt pointOnEdgeOne - pointOnEdgeTwo;
+				pemaths::CPeVector3 toSt = pointOnEdgeOne - pointOnEdgeTwo;
 
 				double dpStaOne = pemaths::CPeVector3::ScalarProduct(axisOne, toSt);
 				double dpStaTwo = pemaths::CPeVector3::ScalarProduct(axisTwo, toSt);
@@ -393,7 +417,7 @@ namespace engine
 			}
 
 
-			bool CPeNarrowPhaseSystem::AddRigidbodyToContactInfos(SPeContactInfos* data, pecore::CPeEntity& entity1, pecore::CPeEntity& entity2)
+			bool CPeNarrowPhaseSystem::AddRigidbodyToContactInfos(SPeContactInfos* data, const pecore::CPeEntity& entity1, const pecore::CPeEntity& entity2)
 			{
 				CPeRigidBody* body1 = entity1.GetComponent<CPeRigidBody>();
 				CPeRigidBody* body2 = entity2.GetComponent<CPeRigidBody>();

@@ -147,9 +147,16 @@ namespace engine
 			*/
 			double GetZ() const;
 
+			/**
+			 * @brief Accessor to axes indentified by p_indice.
+			*/
+			double Get(int p_indice) const;
+
 			void SetX(double p_x);
 			void SetY(double p_y);
 			void SetZ(double p_z);
+
+			void Set(int p_indice, double p_value);
 
 			/**
 			 * @brief Compute the distance to an other vector.
