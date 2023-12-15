@@ -56,6 +56,10 @@ namespace engine {
             return m_angularVelocity;
         }
 
+        void CPeRigidBody::SetAngularVelocity(pemaths::CPeVector3& p_newAngularVelocity)
+        {
+            m_angularVelocity = p_newAngularVelocity;
+        }
 
 
         void CPeRigidBody::SetSphereInertia(double p_radius)
