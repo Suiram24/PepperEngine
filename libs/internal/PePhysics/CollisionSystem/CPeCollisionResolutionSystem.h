@@ -22,26 +22,19 @@ namespace engine
 		}
 
 		class CPeCollisionResolutionSystem {
-		private:
-			const double DOUBLE_MAX = 1000000;
 
 		public:
 
-			static CPeCollisionResolutionSystem& GetInstance()
-			{
-				static CPeCollisionResolutionSystem instance;
-				return instance;
-			}
-
-			
-		private:
-
-			CPeCollisionResolutionSystem() {};
-
-			void ResolveCollisions(std::vector<SPeContactInfos*> p_contacts, double p_timeStep);
-
 			static void ResolveInterpenetrations(std::vector<SPeContactInfos*> p_contacts, double p_timeStep);
 			static void ResolveImpulsions(std::vector<SPeContactInfos*> p_contacts, double p_timeStep);
+
+		private:
+
+			//CPeCollisionResolutionSystem() {};
+
+			//void ResolveCollisions(std::vector<SPeContactInfos*> p_contacts, double p_timeStep);
+
+
 
 			
 		};

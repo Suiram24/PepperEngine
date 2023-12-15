@@ -3,10 +3,6 @@
 namespace engine
 {
 	namespace physics {
-		void CPeCollisionResolutionSystem::ResolveCollisions(std::vector<SPeContactInfos*> p_contacts, double p_timeStep)
-		{
-			
-		}
 
 
 		void CPeCollisionResolutionSystem::ResolveInterpenetrations(std::vector<SPeContactInfos*> p_contacts, double p_timeStep)

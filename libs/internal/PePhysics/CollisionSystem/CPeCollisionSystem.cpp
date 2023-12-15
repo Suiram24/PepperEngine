@@ -2,6 +2,7 @@
 #include "CPeCollisionSystem.h"
 #include "CPeKDTree.h"
 #include "CPeNarrowPhaseSystem.h"
+#include "CPeCollisionResolutionSystem.h"
 
 namespace engine {
 	namespace physics {
@@ -45,6 +46,9 @@ namespace engine {
 			}
 
 			// Resolution
+
+			CPeCollisionResolutionSystem::ResolveInterpenetrations(contactInfosList, p_timeStep);
+			CPeCollisionResolutionSystem::ResolveImpulsions(contactInfosList, p_timeStep);
 
 			//TODO call resolution system on contactInfoList
 
