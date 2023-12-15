@@ -186,7 +186,7 @@ namespace engine {
 
 			double sqDist = (p_collider1.GetWorldPosition() - p_collider2.GetWorldPosition()).GetSquaredNorm();
 
-			if (sqDist < sqRadius1 || sqDist < sqRadius2) return true;
+			if (sqDist <= (sqRadius1 + sqRadius2)) return true;
 			return false;
 		}
 
