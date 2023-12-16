@@ -56,7 +56,7 @@ namespace pedemo {
 
 		//pephy::CPeRigidBody* rigidbodyComp1 = forceSystem->CreateRigidBodyComponent(entity1, 0, 0.999, pemaths::CPeVector3(0,0,0));
 		//pephy::CPeRigidBody* rigidbodyComp2 = forceSystem->CreateRigidBodyComponent(entity2, 50);
-		pephy::CPeRigidBody* rigidbodyComp3 = forceSystem->CreateRigidBodyComponent(entity3, 10000);
+		pephy::CPeRigidBody* rigidbodyComp3 = forceSystem->CreateRigidBodyComponent(entity3, 1./1000.);
 
 		rigidbodyComp3->SetCubeInertia(1, 1, 1);
 		//rigidbodyComp2->SetSphereInertia(1);
