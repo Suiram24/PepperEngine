@@ -55,7 +55,7 @@ namespace engine
              * @brief Construct a new CPeQuaternion object with and axis-angle rotation
              * 
              * @param axis sNormalized axis of the rotation
-             * @param angle the angle of the rotation
+             * @param angle the angle of the rotation in rad
              */
             CPeQuaternion(const CPeVector3& axis, double angle);
 

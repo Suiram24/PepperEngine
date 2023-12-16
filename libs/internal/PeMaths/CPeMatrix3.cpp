@@ -125,7 +125,7 @@ namespace engine {
 		bool CPeMatrix3::IsInversible() const
 		{
 			double det = abs(Determinant());
-			return (det > 1e-12); //to prevent double imprecision
+			return (det > 1e-100); //to prevent double imprecision
 		}
 
 		CPeMatrix3 CPeMatrix3::Inverse() const

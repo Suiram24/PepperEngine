@@ -87,6 +87,10 @@ namespace engine {
 				p_vectorA.GetY() * p_vectorB.GetZ() - p_vectorA.GetZ() * p_vectorB.GetY(),
 				p_vectorA.GetZ() * p_vectorB.GetX() - p_vectorA.GetX() * p_vectorB.GetZ(),
 				p_vectorA.GetX() * p_vectorB.GetY() - p_vectorA.GetY() * p_vectorB.GetX());
+			if ((prodVector.GetX() + prodVector.GetY() + prodVector.GetZ()) <= 1.0e-12)
+			{
+				return CPeVector3();
+			} 
 			return prodVector;
 		}
 
