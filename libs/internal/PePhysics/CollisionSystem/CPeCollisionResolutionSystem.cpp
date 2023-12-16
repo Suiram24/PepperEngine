@@ -43,7 +43,7 @@ namespace engine
 				for (size_t i = 0; i < nbRigidbody; i++)
 				{
 					double linearMove = (1-2*i) * cInfo->interpenetration * linearInertia[0] * inverseIntertia;
-					double angularMove = (1-2*i) * cInfo->interpenetration * linearInertia[0] * inverseIntertia;
+					double angularMove = (1-2*i) * cInfo->interpenetration * angularInertia[0] * inverseIntertia;
 
 					localContactPoint = obj[i]->GetTransform().GetPositionPointInLocal(cInfo->contactPoint);
 					pemaths::CPeVector3 impulsePerMove = obj[i]->GetInverseInertia() * pemaths::CPeVector3::CrossProduct(localContactPoint, cInfo->normal);
