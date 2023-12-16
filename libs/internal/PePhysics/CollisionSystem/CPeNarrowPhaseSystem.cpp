@@ -366,7 +366,7 @@ namespace engine
 					data->interpenetration = bestOverlap;
 					data->contactPoint = vertex;
 
-					if (AddRigidbodyToContactInfos(data, p_box1->GetOwningEntity(), p_box2->GetOwningEntity()))
+					if (AddRigidbodyToContactInfos(data, one->GetOwningEntity(), two->GetOwningEntity()))
 					{
 						datas->push_back(data);
 					}
