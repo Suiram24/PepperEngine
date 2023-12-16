@@ -263,7 +263,7 @@ namespace engine
 				}
 
 				double bestOverlap = DOUBLE_MAX;
-				int bestCase;
+				int bestCase = -1;
 
 				for (int i = 0; i < 15; i++)
 				{
@@ -277,14 +277,14 @@ namespace engine
 
 					//Compute penetration on axis
 					double proj1 = std::max({
-						pemaths::CPeVector3::ScalarProduct(axes[0] * p_box1->GetHalfSize().GetX(),axe),
-						pemaths::CPeVector3::ScalarProduct(axes[1] * p_box1->GetHalfSize().GetY(),axe),
-						pemaths::CPeVector3::ScalarProduct(axes[2] * p_box1->GetHalfSize().GetZ(),axe)
+						abs(pemaths::CPeVector3::ScalarProduct(axes[0] * p_box1->GetHalfSize().GetX(),axe)),
+						abs(pemaths::CPeVector3::ScalarProduct(axes[1] * p_box1->GetHalfSize().GetY(),axe)),
+						abs(pemaths::CPeVector3::ScalarProduct(axes[2] * p_box1->GetHalfSize().GetZ(),axe))
 					});
 					double proj2 = std::max({
-						pemaths::CPeVector3::ScalarProduct(axes[3] * p_box2->GetHalfSize().GetX(), axe),
-						pemaths::CPeVector3::ScalarProduct(axes[4] * p_box2->GetHalfSize().GetY(), axe),
-						pemaths::CPeVector3::ScalarProduct(axes[5] * p_box2->GetHalfSize().GetZ(), axe)
+						abs(pemaths::CPeVector3::ScalarProduct(axes[3] * p_box2->GetHalfSize().GetX(), axe)),
+						abs(pemaths::CPeVector3::ScalarProduct(axes[4] * p_box2->GetHalfSize().GetY(), axe)),
+						abs(pemaths::CPeVector3::ScalarProduct(axes[5] * p_box2->GetHalfSize().GetZ(), axe))
 					});
 
 					double dist = abs(pemaths::CPeVector3::ScalarProduct(toCenter, axe));
@@ -294,7 +294,7 @@ namespace engine
 					//Save best overlap
 					if (overlap < 0)
 					{
-						break;
+						return;
 					}
 					if (overlap < bestOverlap)
 					{
@@ -303,7 +303,6 @@ namespace engine
 					}
 				}
 
-				
 				pemaths::CPeVector3 contactAxis = axes[bestCase];
 				// Contact based on face axis
 				if (bestCase < 6)
@@ -335,10 +334,10 @@ namespace engine
 						}
 						if (pemaths::CPeVector3::ScalarProduct(axes[5], contactAxis) < 0)
 						{
-							vertex.SetY(-vertex.GetY());
+							vertex.SetZ(-vertex.GetZ());
 						}
 					}
-					// Contact based on face axis of box two
+					// Contact based on face axis of box one
 					else
 					{
 						one = p_box2;
@@ -355,7 +354,7 @@ namespace engine
 						}
 						if (pemaths::CPeVector3::ScalarProduct(axes[2], contactAxis) < 0)
 						{
-							vertex.SetY(-vertex.GetY());
+							vertex.SetZ(-vertex.GetZ());
 						}
 					}
 
