@@ -70,6 +70,10 @@ namespace engine {
 		CPeVector3 CPeVector3::NormalizeVector() const
 		{
 			double norm = this->GetNorm();
+			if (norm == 0) //To avoid divisions by 0
+			{
+				return *this;
+			}
 			CPeVector3 normVector = CPeVector3(
 				m_x / norm,
 				m_y / norm,
