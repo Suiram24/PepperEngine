@@ -186,27 +186,29 @@ namespace engine
 
 			void CPeNarrowPhaseSystem::GenContBoxSph(const CPeBoxPrimitiveShape* p_box, const CPeSpherePrimitiveShape* p_sphere, std::vector<SPeContactInfos*>* datas)
 			{
-				pemaths::CPeVector3 boxPos = p_box->GetWorldPosition();
-				pemaths::CPeVector3 spherePos = p_box->GetWorldPosition();
+				pemaths::CPeMatrix4 T = p_box->GetWorldTransform();
+
+				pemaths::CPeVector3 boxPos = T.Inverse() * p_box->GetWorldPosition();
+				pemaths::CPeVector3 spherePos = T.Inverse() * p_sphere->GetWorldPosition();
 				
 				pemaths::CPeVector3 closestPoint = pemaths::CPeVector3();
 
 				double dist;
 				double pos;
 				
-				pos = p_box->GetHalfSize().GetX() + boxPos.GetX();
+				pos = p_box->GetHalfSize().GetX();
 				dist = spherePos.GetX();
 				if (dist > pos) dist = pos;
 				if (dist < -pos) dist = -pos;
 				closestPoint.SetX(dist);
 
-				pos = p_box->GetHalfSize().GetY() + boxPos.GetY();
+				pos = p_box->GetHalfSize().GetY();
 				dist = spherePos.GetY();
 				if (dist > pos) dist = pos;
 				if (dist < -pos) dist = -pos;
 				closestPoint.SetY(dist);
 
-				pos = p_box->GetHalfSize().GetZ() + boxPos.GetZ();
+				pos = p_box->GetHalfSize().GetZ();
 				dist = spherePos.GetZ();
 				if (dist > pos) dist = pos;
 				if (dist < -pos) dist = -pos;
@@ -215,16 +217,16 @@ namespace engine
 				double d = (closestPoint - spherePos).GetNorm();
 				double r = p_sphere->GetRadius();
 
-				if (d - r > 0)
+				if (d - r > 0) // Box doesn't collide
 				{
 					return;
 				}
 
 				SPeContactInfos* data = new SPeContactInfos();
 
-				data->normal = (closestPoint - spherePos).NormalizeVector();
+				data->normal = T * ((closestPoint - spherePos).NormalizeVector());
 				data->interpenetration = r - d;
-				data->contactPoint = spherePos + r * data->normal;
+				data->contactPoint = T * (spherePos + r * data->normal);
 
 				if (AddRigidbodyToContactInfos(data, p_box->GetOwningEntity(), p_sphere->GetOwningEntity()))
 				{
@@ -471,10 +473,12 @@ namespace engine
 					{
 						data->obj1 = body2;
 						data->obj2 = nullptr;
+						
 					}
 				}
 				else
 				{
+					data->normal = -1 * data->normal;
 					data->obj1 = body1;
 					if (body2 == nullptr || body2->GetMassInverse() == 0)
 					{

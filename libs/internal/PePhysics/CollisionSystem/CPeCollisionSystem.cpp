@@ -11,19 +11,19 @@ namespace engine {
 		void CPeCollisionSystem::UpdateCollision(double p_timeStep)
 		{
 
-			printf("Updating collision\n");
+			//printf("Updating collision\n");
 			//Get all colliders
 			std::vector<CPeColliderComponent*> collidersList = m_collidersPool;
 
 
 			// Broad phase
-			printf("Broad Phase\n");
+			//printf("Broad Phase\n");
 			CPeKDTree tree = CPeKDTree(X, collidersList);
 
 			std::vector<std::pair<CPeColliderComponent*, CPeColliderComponent*>> possibleCollisions = tree.GetPossibleCollisions();
 			
 			// Narrow phase
-			printf("Narrow phase\n");
+			//printf("Narrow phase\n");
 			CPeNarrowPhaseSystem narrowPhase = CPeNarrowPhaseSystem::GetInstance();
 
 			std::vector<SPeContactInfos*> contactInfosList = std::vector<SPeContactInfos*>();
@@ -43,7 +43,7 @@ namespace engine {
 			}
 
 			// Resolution
-			printf("Resolution phase\n");
+			//printf("Resolution phase\n");
 			CPeCollisionResolutionSystem::ResolveInterpenetrations(contactInfosList, p_timeStep);
 			CPeCollisionResolutionSystem::ResolveImpulsions(contactInfosList, p_timeStep);
 
@@ -72,12 +72,21 @@ namespace engine {
 			return sphereShape;
 		}
 
+		CPeBoxPrimitiveShape* CPeCollisionSystem::CreateBoxShape(const pecore::CPeEntity& p_owner, const pemaths::CPeVector3& p_size)
+		{
+			CPeBoxPrimitiveShape* Shape = new CPeBoxPrimitiveShape(p_owner, (p_size *0.5));
+			m_boxShapesPool.push_back(Shape);
+			return Shape;
+		}
+
+
 
 
 		void CPeCollisionSystem::AllocateObjectsPool()
 		{
 			//m_collidersPool = new pecore::CPeObjectPool<CPeColliderComponent, pecore::consts::maxEntityNumber>();
 			m_sphereShapesPool.reserve(4 * pecore::consts::maxEntityNumber);
+			m_boxShapesPool.reserve(4 * pecore::consts::maxEntityNumber);
 			m_collidersPool.reserve(pecore::consts::maxEntityNumber);
 		}
 
@@ -90,6 +99,10 @@ namespace engine {
 			}
 
 			for (CPeSpherePrimitiveShape* s : m_sphereShapesPool)
+			{
+				delete s;
+			}
+			for (CPeBoxPrimitiveShape* s : m_boxShapesPool)
 			{
 				delete s;
 			}

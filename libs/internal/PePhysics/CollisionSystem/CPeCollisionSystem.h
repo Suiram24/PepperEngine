@@ -6,6 +6,8 @@
 #include "../CPeParticle.h"
 #include "SPeContactInfos.h"
 
+#include "CPeBoxPrimitiveShape.h"
+
 namespace engine 
 {
 	class CPeGameManager;
@@ -30,6 +32,7 @@ namespace engine
 			//pecore::CPeObjectPool<CPeColliderComponent, pecore::consts::maxEntityNumber>* m_collidersPool;
 
 			std::vector<CPeSpherePrimitiveShape*> m_sphereShapesPool;
+			std::vector<CPeBoxPrimitiveShape*> m_boxShapesPool;
 			std::vector<CPeColliderComponent*> m_collidersPool;
 
 		public:
@@ -52,6 +55,7 @@ namespace engine
 			CPeColliderComponent* CreateColliderComponent(pecore::CPeEntity& p_owner, double p_radius = 1);
 
 			CPeSpherePrimitiveShape* CreateSphereShape(const pecore::CPeEntity& p_owner, double p_radius);
+			CPeBoxPrimitiveShape* CreateBoxShape(const pecore::CPeEntity& p_owner, const pemaths::CPeVector3& p_size);
 		private:
 
 			CPeCollisionSystem()

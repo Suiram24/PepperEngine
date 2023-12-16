@@ -181,12 +181,11 @@ namespace engine {
 			double radius1 = p_collider1.GetRadius();
 			double radius2 = p_collider2.GetRadius();
 
-			double sqRadius1 = radius1 * radius1;
-			double sqRadius2 = radius2 * radius2;
+			double sqSumRadius = (radius1 + radius2) * (radius1 + radius2);
 
 			double sqDist = (p_collider1.GetWorldPosition() - p_collider2.GetWorldPosition()).GetSquaredNorm();
 
-			if (sqDist <= (sqRadius1 + sqRadius2)) return true;
+			if (sqDist <= sqSumRadius) return true;
 			return false;
 		}
 

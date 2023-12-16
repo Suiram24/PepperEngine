@@ -43,7 +43,7 @@ namespace engine
 				for (size_t i = 0; i < nbRigidbody; i++)
 				{
 					double linearMove = (1-2*i) * cInfo->interpenetration * linearInertia[0] * inverseIntertia;
-					double angularMove = (1-2*i) * cInfo->interpenetration * angularInertia[0] * inverseIntertia;
+					double angularMove = (1-2*i) * cInfo->interpenetration * linearInertia[0] * inverseIntertia;
 
 					localContactPoint = obj[i]->GetTransform().GetPositionPointInLocal(cInfo->contactPoint);
 					pemaths::CPeVector3 impulsePerMove = obj[i]->GetInverseInertia() * pemaths::CPeVector3::CrossProduct(localContactPoint, cInfo->normal);
@@ -53,7 +53,7 @@ namespace engine
 					rot.RotateByVector(angularMove * (impulsePerMove * invAngIntertia));
 
 					obj[i]->GetTransform().SetOrientation(rot);
-					obj[i]->GetTransform().SetPosition(obj[i]->GetTransform().GetPosition() + (cInfo->normal * linearMove));
+					obj[i]->GetTransform().SetPosition(obj[i]->GetTransform().GetPosition() + (cInfo->normal * -linearMove));
 				}
 
 			}
@@ -75,10 +75,19 @@ namespace engine
 				{
 					nbRigidbody = 1;
 					SumMassInverse = obj[0]->GetMassInverse();
+					if (pemaths::CPeVector3::ScalarProduct(cInfo->normal, obj[0]->GetVelocity()) <= 0)
+					{
+						continue;
+					}
 				}
 				else
 				{
 					SumMassInverse = obj[0]->GetMassInverse() + obj[1]->GetMassInverse();
+					double scalar =  pemaths::CPeVector3::ScalarProduct(cInfo->normal, obj[0]->GetVelocity()) - pemaths::CPeVector3::ScalarProduct(cInfo->normal, obj[1]->GetVelocity());
+					if (scalar <= 0)
+					{
+						continue;
+					}
 				}
 
 				pemaths::CPeVector3 contactPointVector, pointVelocity, deltaWorld, velocity, contactVelocity;
