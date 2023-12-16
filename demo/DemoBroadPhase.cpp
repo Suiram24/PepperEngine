@@ -38,6 +38,7 @@ namespace pedemo {
 
 	void DemoBroadPhase::LoadLevel()
 	{
+		colliderSystem = &pephy::CPeCollisionSystem::GetInstance();
 		std::vector<vk::SphereMesh*> spheres;
 		for (int i = 0; i < 10; i++)
 		{
@@ -62,7 +63,7 @@ namespace pedemo {
 
 		entity1->m_transform.SetPosition(pemaths::CPeVector3(2, 2, -0.1));
 		entity2->m_transform.SetPosition(pemaths::CPeVector3(2, 2, -4));
-		entity3->m_transform.SetPosition(pemaths::CPeVector3(6, 2, -1));
+		entity3->m_transform.SetPosition(pemaths::CPeVector3(2, 2, -3));
 		entity4->m_transform.SetPosition(pemaths::CPeVector3(0, 2, 0));
 
 		entity1->m_transform.SetSize(pemaths::CPeVector3(1, 2, 2));
@@ -70,17 +71,17 @@ namespace pedemo {
 		entity3->m_transform.SetSize(pemaths::CPeVector3(0.5, 0.5, 0.5));
 		entity4->m_transform.SetSize(pemaths::CPeVector3(0.5, 0.5, 0.5));
 
+		std::vector<pephy::CPeColliderComponent*> colliders;
+		colliders.push_back(colliderSystem->CreateColliderComponent(*entity1, 2.0f));
+		colliders.push_back(colliderSystem->CreateColliderComponent(*entity2, 2.0f));
+		colliders.push_back(colliderSystem->CreateColliderComponent(*entity3, 0.5f));
+		colliders.push_back(colliderSystem->CreateColliderComponent(*entity4, 0.5f));
 
 		meshRenderSystem->CreateMeshComponent(entity1, *m_renderer, "models/companion_cube_simple.obj", "textures/viking_room.png");
 		meshRenderSystem->CreateMeshComponent(entity2, *m_renderer, "models/sphere.obj", "textures/viking_room.png");
 		meshRenderSystem->CreateMeshComponent(entity3, *m_renderer, "models/companion_cube_simple.obj", "textures/viking_room.png");
 		meshRenderSystem->CreateMeshComponent(entity4, *m_renderer, "models/viking_room.obj", "textures/viking_room.png");
 
-		std::vector<pephy::CPeColliderComponent*> colliders;
-		colliders.push_back(entity1->GetComponent<pephy::CPeColliderComponent>());
-		colliders.push_back(entity2->GetComponent<pephy::CPeColliderComponent>());
-		colliders.push_back(entity3->GetComponent<pephy::CPeColliderComponent>());
-		colliders.push_back(entity4->GetComponent<pephy::CPeColliderComponent>());
 
 		// Créer un KD Tree avec la liste de collider en paramètre
 		pephy::CPeKDTree broadPhaseTree(pephy::EPeDimension::X, colliders);
@@ -116,7 +117,7 @@ namespace pedemo {
 			else if (&possibleCollision.second->GetOwner() == entity4) {
 				std::cout << "entity4";
 			}
-			std::cout << std::endl;
+			std::cout << ">" << std::endl;
 		}
 	}
 
