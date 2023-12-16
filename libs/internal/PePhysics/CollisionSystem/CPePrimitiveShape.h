@@ -34,6 +34,8 @@ namespace engine {
 
 			pemaths::CPeVector3 GetWorldPosition() const;
 
+			pemaths::CPeVector3 ConvertWorldToLocal(const pemaths::CPeVector3& p_worldCoordinates) const;
+
 			const pecore::CPeEntity& GetOwningEntity() const;
 
 			
