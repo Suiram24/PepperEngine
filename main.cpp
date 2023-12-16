@@ -9,6 +9,7 @@
 ///////////////////////////////////////////////////////////////////////
 
 
+//#include "demo/DemoBroadPhase.h"
 #include "demo/DemoCollisionSystem.h"
 #include "CPeGameManager.h"
 
@@ -18,6 +19,7 @@ int main(int, char**)
 
     //engine::CPeGameMode* myGameMode = &pedemo::DemoPhase3();
     engine::CPeGameMode* myGameMode = &pedemo::DemoCollisionSystem();
+    //engine::CPeGameMode* myGameMode = &pedemo::DemoBroadPhase();
 
 
     engine::CPeGameManager::getInstance().SetGameMode(myGameMode);

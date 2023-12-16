@@ -60,7 +60,7 @@ namespace engine {
 		CPeColliderComponent* CPeCollisionSystem::CreateColliderComponent(pecore::CPeEntity& p_owner, double p_radius /*= 1*/)
 		{
 			//return &m_collidersPool->Create(p_owner, p_radius);
-			CPeColliderComponent* col = new CPeColliderComponent(p_owner, CreateSphereShape(p_owner, p_radius));
+			CPeColliderComponent* col = new CPeColliderComponent(p_owner, CreateSphereShape(dynamic_cast<const pecore::CPeEntity&>(p_owner), p_radius));
 			m_collidersPool.push_back(col);
 			return col;
 		}
