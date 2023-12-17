@@ -1,5 +1,5 @@
 #include "DemoCollisionSystem.h"
-
+#include <cmath>
 
 namespace pedemo {
 
@@ -46,17 +46,17 @@ namespace pedemo {
 
 		entity1->m_transform.SetPosition(pemaths::CPeVector3(0, 0, 0));
 		//entity2->m_transform.SetPosition(pemaths::CPeVector3(0, 3, 0));
-		entity3->m_transform.SetPosition(pemaths::CPeVector3(0, 6, 0));
+		entity3->m_transform.SetPosition(pemaths::CPeVector3(0.5, 6, 0));
 
 		entity1->m_transform.SetSize(pemaths::CPeVector3(1, 1, 1));
 		//entity2->m_transform.SetSize(pemaths::CPeVector3(1, 1, 1));
 		entity3->m_transform.SetSize(pemaths::CPeVector3(1, 1, 1));
-		pemaths::CPeQuaternion rot = pemaths::CPeQuaternion(pemaths::CPeVector3(1, 0, 0), 3.14 / 4);
-		entity3->m_transform.SetOrientation(rot);
+		pemaths::CPeQuaternion rot = pemaths::CPeQuaternion(pemaths::CPeVector3(1, 0, 0), 0.785398163397448309616);
+		//entity3->m_transform.SetOrientation(rot);
 
 		//pephy::CPeRigidBody* rigidbodyComp1 = forceSystem->CreateRigidBodyComponent(entity1, 0, 0.999, pemaths::CPeVector3(0,0,0));
 		//pephy::CPeRigidBody* rigidbodyComp2 = forceSystem->CreateRigidBodyComponent(entity2, 50);
-		pephy::CPeRigidBody* rigidbodyComp3 = forceSystem->CreateRigidBodyComponent(entity3, 1./1000.);
+		pephy::CPeRigidBody* rigidbodyComp3 = forceSystem->CreateRigidBodyComponent(entity3, 1./10000000.);
 
 		rigidbodyComp3->SetCubeInertia(1, 1, 1);
 		//rigidbodyComp2->SetSphereInertia(1);
