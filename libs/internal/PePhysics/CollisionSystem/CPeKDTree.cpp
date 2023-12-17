@@ -101,7 +101,7 @@ namespace engine {
 
 				// FOR loop on the left list to verify if they're also in the right part.
 				std::vector<CPeColliderComponent*> toAddRight;
-				for (auto i = firstLeft; i != lastLeft-1; ++i) {
+				for (auto i = firstLeft; i != lastLeft; ++i) {
 					if (IntersectKDPlane((*i)->GetGlobalVolume())) {
 						toAddRight.push_back(*i);
 					}
@@ -109,7 +109,7 @@ namespace engine {
 
 				// FOR loop on the right list to verify if they're also in the left part.
 				std::vector<CPeColliderComponent*> toAddLeft;
-				for (auto& i = firstRight+1; i != lastRight; ++i) {
+				for (auto& i = firstRight; i != lastRight; ++i) {
 					if (IntersectKDPlane((*i)->GetGlobalVolume())) {
 						toAddLeft.push_back(*i);
 					}
@@ -160,6 +160,7 @@ namespace engine {
 
 		bool CPeKDTree::IntersectKDPlane(const CPeSpherePrimitiveShape& p_collider) const {
 			double distCenterPlane = 0.0f;
+			double radius = p_collider.GetRadius();
 			switch (m_divisionDim) {
 			case X:
 				distCenterPlane = std::abs(p_collider.GetWorldPosition().GetX() - m_value);
@@ -171,7 +172,7 @@ namespace engine {
 				distCenterPlane = std::abs(p_collider.GetWorldPosition().GetZ() - m_value);
 				break;
 			}
-			if (distCenterPlane <= p_collider.GetRadius()) {
+			if (distCenterPlane <= radius) {
 				return true;
 			}
 			return false;
