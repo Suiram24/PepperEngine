@@ -164,7 +164,7 @@ namespace engine
 
 					if (d > 0)
 					{
-						break;
+						continue;
 					}
 
 					SPeContactInfos* data = new SPeContactInfos();
