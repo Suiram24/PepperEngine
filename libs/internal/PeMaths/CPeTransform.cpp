@@ -67,7 +67,6 @@ namespace engine {
 				.0, .0, .0
 			);
 
-			//m_transformMatrix = scale*(orientation*position);
 			m_transformMatrix = position*orientation*scale;
 			
         }
