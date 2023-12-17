@@ -18,6 +18,10 @@ namespace engine
 				{
 					nbRigidbody = 1;
 				}
+				else
+				{
+					nbRigidbody = 2;
+				}
 
 				double angularInertia[2] = { .0 ,.0 };
 				double linearInertia[2] = { .0,.0 };
@@ -42,8 +46,8 @@ namespace engine
 
 				for (size_t i = 0; i < nbRigidbody; i++)
 				{
-					double linearMove = (1-2*i) * cInfo->interpenetration * linearInertia[0] * inverseIntertia;
-					double angularMove = (1-2*i) * cInfo->interpenetration * angularInertia[0] * inverseIntertia;
+					double linearMove = cInfo->interpenetration * linearInertia[i] * inverseIntertia;
+					double angularMove = cInfo->interpenetration * angularInertia[i] * inverseIntertia;
 
 					localContactPoint = obj[i]->GetTransform().GetPositionPointInLocal(cInfo->contactPoint);
 					pemaths::CPeVector3 impulsePerMove = obj[i]->GetInverseInertia() * pemaths::CPeVector3::CrossProduct(localContactPoint, cInfo->normal);
@@ -54,7 +58,9 @@ namespace engine
 					rot.RotateByVector(rotationVect);
 
 					obj[i]->GetTransform().SetOrientation(rot);
-					obj[i]->GetTransform().SetPosition(obj[i]->GetTransform().GetPosition() + (cInfo->normal * linearMove));
+					obj[i]->GetTransform().SetPosition(obj[i]->GetTransform().GetPosition() + (cInfo->normal * -linearMove));
+
+					inverseIntertia *= -1;
 				}
 
 			}

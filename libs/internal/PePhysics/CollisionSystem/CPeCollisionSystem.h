@@ -18,7 +18,8 @@ namespace engine
 
 		namespace consts
 		{
-			constexpr int nbIterationCollider = 1;
+			constexpr int nbIterationCollider = 5;
+
 		}
 
 		/**
@@ -61,6 +62,8 @@ namespace engine
 			CPePlanePrimitiveShape* CreatePlaneShape(const pecore::CPeEntity& p_owner, pemaths::CPeVector3 p_normal, double p_offset);
 
 		private:
+
+			void SortContactInfos(std::vector<SPeContactInfos*>& contactInfos, int iteration);
 
 			CPeCollisionSystem()
 				: m_solverIteration(consts::nbIterationCollider)

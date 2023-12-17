@@ -127,7 +127,7 @@ namespace engine
 				SPeContactInfos* data = new SPeContactInfos();
 
 				data->normal = p_plane->GetNormal();
-				data->interpenetration = d;
+				data->interpenetration = abs(d);
 				data->contactPoint = p_sphere->GetWorldPosition() - r * data->normal;
 
 				if (AddRigidbodyToContactInfos(data, p_sphere->GetOwningEntity(), p_plane->GetOwningEntity()))

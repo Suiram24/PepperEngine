@@ -52,7 +52,10 @@ namespace pedemo {
 		}
 		//SpawnStaticBox(0, 2, 0);
 
-		SpawnSphere(0, 6, 0);
+		//SpawnStaticBox(0, 0, 0);
+		//SpawnBox(0, 3, 0);
+		SpawnSphere(0.5, 6, 0);
+		SpawnSphere(0, 3, 0);
 	}
 
 	void DemoCollisionSystem::SpawnBox(double p_x, double p_y, double p_z)
