@@ -47,8 +47,6 @@ namespace engine {
 			CPeCollisionResolutionSystem::ResolveInterpenetrations(contactInfosList, p_timeStep);
 			CPeCollisionResolutionSystem::ResolveImpulsions(contactInfosList, p_timeStep);
 
-			//TODO call resolution system on contactInfoList
-
 			//FREE
 			for (int k = 0; k < contactInfosList.size(); k++)
 			{
@@ -79,7 +77,12 @@ namespace engine {
 			return Shape;
 		}
 
-
+		CPePlanePrimitiveShape* CPeCollisionSystem::CreatePlaneShape(const pecore::CPeEntity& p_owner, pemaths::CPeVector3 p_normal, double p_offset)
+		{
+			CPePlanePrimitiveShape* Shape = new CPePlanePrimitiveShape(p_owner, p_normal, p_offset);
+			m_planeShapesPool.push_back(Shape);
+			return Shape;
+		}
 
 
 		void CPeCollisionSystem::AllocateObjectsPool()
@@ -87,6 +90,7 @@ namespace engine {
 			//m_collidersPool = new pecore::CPeObjectPool<CPeColliderComponent, pecore::consts::maxEntityNumber>();
 			m_sphereShapesPool.reserve(4 * pecore::consts::maxEntityNumber);
 			m_boxShapesPool.reserve(4 * pecore::consts::maxEntityNumber);
+			m_planeShapesPool.reserve(4 * pecore::consts::maxEntityNumber);
 			m_collidersPool.reserve(pecore::consts::maxEntityNumber);
 		}
 
@@ -103,6 +107,10 @@ namespace engine {
 				delete s;
 			}
 			for (CPeBoxPrimitiveShape* s : m_boxShapesPool)
+			{
+				delete s;
+			}
+			for (CPePlanePrimitiveShape* s : m_planeShapesPool)
 			{
 				delete s;
 			}

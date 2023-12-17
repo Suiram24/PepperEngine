@@ -46,7 +46,9 @@ namespace pedemo {
 		void LoadLevel();
 		void DrawImGuiInterface();
 
-
+		void SpawnBox(double p_x, double p_y, double p_z);
+		void SpawnStaticBox(double p_x, double p_y, double p_z);
+		void SpawnFloor();
 
 	public:
 	protected:

@@ -7,6 +7,7 @@
 #include "SPeContactInfos.h"
 
 #include "CPeBoxPrimitiveShape.h"
+#include "CPePlanePrimitiveShape.h"
 
 namespace engine 
 {
@@ -33,6 +34,7 @@ namespace engine
 
 			std::vector<CPeSpherePrimitiveShape*> m_sphereShapesPool;
 			std::vector<CPeBoxPrimitiveShape*> m_boxShapesPool;
+			std::vector<CPePlanePrimitiveShape*> m_planeShapesPool;
 			std::vector<CPeColliderComponent*> m_collidersPool;
 
 		public:
@@ -56,6 +58,8 @@ namespace engine
 
 			CPeSpherePrimitiveShape* CreateSphereShape(const pecore::CPeEntity& p_owner, double p_radius);
 			CPeBoxPrimitiveShape* CreateBoxShape(const pecore::CPeEntity& p_owner, const pemaths::CPeVector3& p_size);
+			CPePlanePrimitiveShape* CreatePlaneShape(const pecore::CPeEntity& p_owner, pemaths::CPeVector3 p_normal, double p_offset);
+
 		private:
 
 			CPeCollisionSystem()
