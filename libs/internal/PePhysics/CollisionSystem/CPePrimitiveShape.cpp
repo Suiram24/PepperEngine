@@ -24,6 +24,11 @@ namespace engine {
 			return pemaths::CPeVector3();
 		}
 
+		pemaths::CPeVector3 CPePrimitiveShape::ConvertLocalToWorld(const pemaths::CPeVector3& p_localCoordinates) const
+		{
+			return GetWorldTransform()*p_localCoordinates;
+		}
+
 		const pecore::CPeEntity& CPePrimitiveShape::GetOwningEntity() const
 		{
 			return m_owner;

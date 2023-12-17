@@ -144,19 +144,22 @@ namespace engine
 			{
 				pemaths::CPeVector3 corners[8];
 				pemaths::CPeVector3 pos = p_box->GetWorldPosition();
+				pemaths::CPeMatrix4 T = p_box->GetWorldTransform();
 
 				double x = p_box->GetHalfSize().GetX();
 				double y = p_box->GetHalfSize().GetY();
 				double z = p_box->GetHalfSize().GetZ();
 
-				corners[0] = pos + pemaths::CPeVector3( x,  y,  z);
-				corners[1] = pos + pemaths::CPeVector3( x,  y, -z);
-				corners[2] = pos + pemaths::CPeVector3( x, -y,  z);
-				corners[3] = pos + pemaths::CPeVector3( x, -y, -z);
-				corners[4] = pos + pemaths::CPeVector3(-x,  y,  z);
-				corners[5] = pos + pemaths::CPeVector3(-x,  y, -z);
-				corners[6] = pos + pemaths::CPeVector3(-x, -y,  z);
-				corners[7] = pos + pemaths::CPeVector3(-x, -y, -z);
+
+
+				corners[0] = T*pemaths::CPeVector3( x,  y,  z);
+				corners[1] = T*pemaths::CPeVector3( x,  y, -z);
+				corners[2] = T*pemaths::CPeVector3( x, -y,  z);
+				corners[3] = T*pemaths::CPeVector3( x, -y, -z);
+				corners[4] = T*pemaths::CPeVector3(-x,  y,  z);
+				corners[5] = T*pemaths::CPeVector3(-x,  y, -z);
+				corners[6] = T*pemaths::CPeVector3(-x, -y,  z);
+				corners[7] = T*pemaths::CPeVector3(-x, -y, -z);
 
 				for (int i = 0; i < 8; i++)
 				{
