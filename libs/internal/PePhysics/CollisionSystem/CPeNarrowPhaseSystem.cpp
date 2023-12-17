@@ -191,6 +191,7 @@ namespace engine
 			{
 				pemaths::CPeMatrix4 T = p_box->GetWorldTransform();
 
+				/** TODO: Delete boxPos */
 				pemaths::CPeVector3 boxPos = T.Inverse() * p_box->GetWorldPosition();
 				pemaths::CPeVector3 spherePos = T.Inverse() * p_sphere->GetWorldPosition();
 				
@@ -222,7 +223,7 @@ namespace engine
 				double d = (closestPoint - spherePos).GetNorm();
 				double r = p_sphere->GetRadius();
 
-				if (d - r > 0) // Box doesn't collide
+				if (d*d > r*r) // Box doesn't collide
 				{
 					return;
 				}
@@ -232,7 +233,8 @@ namespace engine
 				pemaths::CPeVector3 sp = T * spherePos;
 				data->normal = ((cp - sp).NormalizeVector());
 				data->interpenetration = r - d;
-				data->contactPoint = (sp + r * data->normal);
+				//data->contactPoint = (sp + r * data->normal);
+				data->contactPoint = cp;
 
 				if (AddRigidbodyToContactInfos(data, p_box->GetOwningEntity(), p_sphere->GetOwningEntity()))
 				{
