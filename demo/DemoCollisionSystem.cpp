@@ -127,6 +127,20 @@ namespace pedemo {
 		col->AddPrimitive(colliderSystem->CreatePlaneShape(*entity, pemaths::CPeVector3(0, 1, 0), 0));
 	}
 
+	void DemoCollisionSystem::SpawnStaticSphere(double p_x, double p_y, double p_z)
+	{
+		pecore::CPeEntity* entity = &engine::CPeGameManager::getInstance().CreateEntity();
+
+		entity->m_transform.SetPosition(pemaths::CPeVector3(p_x, p_y, p_z));
+
+		entity->m_transform.SetSize(pemaths::CPeVector3(0.5, 0.5, 0.5));
+
+		meshRenderSystem->CreateMeshComponent(entity, *m_renderer, "models/sphere.obj", "textures/viking_room.png");
+
+		pephy::CPeColliderComponent* col = colliderSystem->CreateColliderComponent(*entity, sqrt(3));
+
+		col->AddPrimitive(colliderSystem->CreateSphereShape(*entity, 0.5));
+	}
 
 
 }
