@@ -54,7 +54,7 @@ namespace engine
 					rot.RotateByVector(rotationVect);
 
 					obj[i]->GetTransform().SetOrientation(rot);
-					obj[i]->GetTransform().SetPosition(obj[i]->GetTransform().GetPosition() + (cInfo->normal * -linearMove));
+					obj[i]->GetTransform().SetPosition(obj[i]->GetTransform().GetPosition() + (cInfo->normal * linearMove));
 				}
 
 			}
@@ -101,9 +101,10 @@ namespace engine
 
 				
 				e = 1;
+				int sign = 1;
 				for (size_t i = 0; i < nbRigidbody; i++)
 				{
-					e *= 0.8; //TODO: replace with elasticity
+					e *= 0.6; //TODO: replace with elasticity
 					contactPointVector = cInfo->contactPoint - obj[i]->GetTransform().GetPosition() ;
 					pointVelocity = obj[i]->GetVelocity() + obj[i]->GetAngularVelocity() * contactPointVector.GetNorm();
 
@@ -118,10 +119,10 @@ namespace engine
 
 					//
 					// Closing velocity (TODO: inverse for second body ?)
-					velocity += pemaths::CPeVector3::CrossProduct(obj[i]->GetAngularVelocity(), contactPointVector);
-					velocity += obj[i]->GetVelocity();
+					velocity += sign * pemaths::CPeVector3::CrossProduct(obj[i]->GetAngularVelocity(), contactPointVector);
+					velocity += sign *obj[i]->GetVelocity();
 
-					
+					sign = -1;
 				}
 
 				if (pemaths::CPeVector3::ScalarProduct(n, velocity) <= 0)
