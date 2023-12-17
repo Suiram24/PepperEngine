@@ -47,6 +47,7 @@ namespace engine {
 		//
 		// Give the window and renderer to the gamemode
 		m_ActiveGameMode->InitGameMode(m_window, &m_renderer);
+		controls::CameraController::InitialiseView();
 
 		
 

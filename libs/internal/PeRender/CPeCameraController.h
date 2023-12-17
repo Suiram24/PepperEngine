@@ -10,10 +10,10 @@ namespace controls {
 	class CameraController {
 	private:
 		vk::GenericViewManager* viewManager;
-		float displacementSensivity = 0.01f;
+		float displacementSensivity = 0.1f;
 		float orientationSensivity = 0.005f;
 		double mousePositionX, mousePositionY;
-		bool moveMod = true;
+		bool moveMod = false;
 		bool mKeyPressed = false;
 		bool isQwerty = true;
 
@@ -53,6 +53,8 @@ namespace controls {
 		static CameraController& getInstance();
 
 		static void setViewManager(vk::GenericViewManager& viewManager);
+
+		static void InitialiseView();
 	};
 }
 #endif

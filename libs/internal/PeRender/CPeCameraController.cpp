@@ -6,7 +6,8 @@ controls::CameraController::CameraController() :
 	viewManager(nullptr),
 	mousePositionX(0.0f),
 	mousePositionY(0.0f)
-{}
+{
+}
 
 void controls::CameraController::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
 	if ((key == GLFW_KEY_M || key == GLFW_KEY_ESCAPE) && action == GLFW_PRESS) {
@@ -146,4 +147,9 @@ controls::CameraController& controls::CameraController::getInstance() {
 
 void controls::CameraController::setViewManager(vk::GenericViewManager& viewManager) {
 	getInstance().viewManager = &viewManager;
+}
+
+void controls::CameraController::InitialiseView()
+{
+	getInstance().viewManager->submitViewMatrix();
 }
