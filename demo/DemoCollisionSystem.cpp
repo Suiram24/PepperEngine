@@ -48,8 +48,9 @@ namespace pedemo {
 				SpawnBox(2*i, 6, 2*j);
 			}
 		}*/
+		//SpawnStaticBox(0, 2, 0);
 
-		SpawnBox(0, 6, 0);
+		SpawnSphere(0, 6, 0);
 	}
 
 	void DemoCollisionSystem::SpawnBox(double p_x, double p_y, double p_z)
@@ -72,6 +73,23 @@ namespace pedemo {
 		pephy::CPeColliderComponent* col = colliderSystem->CreateColliderComponent(*entity, sqrt(3));
 
 		col->AddPrimitive(colliderSystem->CreateBoxShape(*entity, pemaths::CPeVector3(1, 1, 1)));
+	}
+
+	void DemoCollisionSystem::SpawnSphere(double p_x, double p_y, double p_z)
+	{
+		pecore::CPeEntity* entity = &engine::CPeGameManager::getInstance().CreateEntity();
+
+		entity->m_transform.SetPosition(pemaths::CPeVector3(p_x, p_y, p_z));
+
+		entity->m_transform.SetSize(pemaths::CPeVector3(0.5, 0.5, 0.5));
+
+		pephy::CPeRigidBody* rigidbodyComp = forceSystem->CreateRigidBodyComponent(entity, 1e-12);
+
+		meshRenderSystem->CreateMeshComponent(entity, *m_renderer, "models/sphere.obj", "textures/viking_room.png");
+
+		pephy::CPeColliderComponent* col = colliderSystem->CreateColliderComponent(*entity, sqrt(3));
+
+		col->AddPrimitive(colliderSystem->CreateSphereShape(*entity, 0.5));
 	}
 
 	void DemoCollisionSystem::SpawnStaticBox(double p_x, double p_y, double p_z)
@@ -97,7 +115,7 @@ namespace pedemo {
 
 		entity->m_transform.SetSize(pemaths::CPeVector3(10, 1, 10));
 
-		meshRenderSystem->CreateMeshComponent(entity, *m_renderer, "models/plane.obj", "textures/viking_room.png");
+		meshRenderSystem->CreateMeshComponent(entity, *m_renderer, "models/plane.obj", "textures/debug_texture.png");
 
 		pephy::CPeColliderComponent* col = colliderSystem->CreateColliderComponent(*entity, 10);
 
