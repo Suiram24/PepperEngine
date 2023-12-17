@@ -89,7 +89,7 @@ namespace engine
 			void CPeNarrowPhaseSystem::GenContSphSph(const CPeSpherePrimitiveShape* p_sphere1, const CPeSpherePrimitiveShape* p_sphere2, std::vector<SPeContactInfos*>* datas)
 			{
 				double r1 = p_sphere1->GetRadius();
-				double r2 = p_sphere1->GetRadius();
+				double r2 = p_sphere2->GetRadius();
 
 				double d = p_sphere1->GetWorldPosition().DistanceTo(p_sphere2->GetWorldPosition());
 
@@ -164,7 +164,7 @@ namespace engine
 
 					if (d > 0)
 					{
-						break;
+						continue;
 					}
 
 					SPeContactInfos* data = new SPeContactInfos();
@@ -275,7 +275,7 @@ namespace engine
 
 					if (magnitude * magnitude < 0.001)
 					{
-						break;
+						continue;
 					}
 
 					//Compute penetration on axis
