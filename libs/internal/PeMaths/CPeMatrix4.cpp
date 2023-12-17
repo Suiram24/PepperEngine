@@ -56,27 +56,55 @@ namespace engine {
 		CPeMatrix4 CPeMatrix4::operator*(const CPeMatrix4& p_matrice) const
 		{
 			CPeMatrix4 multMatrice = CPeMatrix4();
-			for (int i = 0; i < 3; i++)
+			for (size_t i = 0; i < 3; i++)
 			{
-				for (int j = 0; j < 3; j++)
+				for (size_t j = 0; j < 4; j++)
 				{
 					double sum = 0;
-					for (int k = 0; k < 3; k++)
+					for (size_t k = 0; k < 4; k++)
 					{
 						sum += this->Get(i, k) * p_matrice.Get(k, j);
 					}
 					multMatrice.Set(i, j, sum);
 				}
+			}
 
-				double tmp = 0;
-				for (int l = 0; l < 4; l++)
+			//CPeMatrix4 multMatrice2 = CPeMatrix4();
+			//for (int i = 0; i < 3; i++)
+			//{
+			//	for (int j = 0; j < 3; j++)
+			//	{
+			//		double sum = 0;
+			//		for (int k = 0; k < 3; k++)
+			//		{
+			//			sum += this->Get(i, k) * p_matrice.Get(k, j);
+			//		}
+			//		multMatrice2.Set(i, j, sum);
+			//	}
+
+			//	double tmp = 0;
+			//	for (int l = 0; l < 4; l++)
+			//	{
+			//		tmp += this->Get(i, l) * p_matrice.Get(l, 3);
+			//	}
+			//	multMatrice2.Set(i, 3, tmp);
+			//}
+			return multMatrice;
+		}
+
+		CPeMatrix4 CPeMatrix4::operator*(double p_scalar) const
+		{
+			CPeMatrix4 multMatrice = CPeMatrix4();
+			for (size_t i = 0; i < 3; i++)
+			{
+				for (size_t j = 0; j < 4; j++)
 				{
-					tmp += this->Get(i, l) * p_matrice.Get(l, 3);
+					multMatrice.Set(i, j, this->Get(i, j) * p_scalar);
 				}
-				multMatrice.Set(i, 3, tmp);
 			}
 			return multMatrice;
 		}
+
 
 		CPeMatrix4 CPeMatrix4::operator+(const CPeMatrix4& p_matrice) const
 		{
@@ -132,6 +160,26 @@ namespace engine {
 			}
 
 			double minusV[3] = { -m_translation[0], -m_translation[1] , -m_translation[2] };
+
+			double a = m_matrice.Get(0,0);
+			double b = m_matrice.Get(0,1);
+			double c = m_matrice.Get(0,2);
+			double d = m_matrice.Get(1,0);
+			double e = m_matrice.Get(1,1);
+			double f = m_matrice.Get(1,2);
+			double g = m_matrice.Get(2,0);
+			double h = m_matrice.Get(2,1);
+			double i = m_matrice.Get(2,2);
+			double x = m_translation[0];
+			double y = m_translation[1];
+			double z = m_translation[2];
+
+			double det = m_matrice.Determinant();
+
+			minusV[0] = ((-b) * f * z + b * i * y + c * e * z - c * h * y - e * i * x + f * h * x) / ( det);
+			minusV[1] = (a * f * z - a * i * y +c * d * z - c * g * y + d * i * x - f * g * x) / (det);
+			minusV[2] = ((-a) *e*z + a*h*y + b*d*z - b*g*y - d*h*x + e*g*x) / (det);
+
 
 			CPeMatrix4 inverseMatrice = CPeMatrix4(m_matrice.Inverse(), minusV);
 			return inverseMatrice;

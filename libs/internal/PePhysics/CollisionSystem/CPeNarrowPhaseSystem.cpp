@@ -193,6 +193,8 @@ namespace engine
 				
 				pemaths::CPeVector3 closestPoint = pemaths::CPeVector3();
 
+
+
 				double dist;
 				double pos;
 				
@@ -223,10 +225,11 @@ namespace engine
 				}
 
 				SPeContactInfos* data = new SPeContactInfos();
-
-				data->normal = T * ((closestPoint - spherePos).NormalizeVector());
+				pemaths::CPeVector3 cp = T * closestPoint;
+				pemaths::CPeVector3 sp = T * spherePos;
+				data->normal = ((cp - sp).NormalizeVector());
 				data->interpenetration = r - d;
-				data->contactPoint = T * (spherePos + r * data->normal);
+				data->contactPoint = (sp + r * data->normal);
 
 				if (AddRigidbodyToContactInfos(data, p_box->GetOwningEntity(), p_sphere->GetOwningEntity()))
 				{
