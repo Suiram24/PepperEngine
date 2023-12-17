@@ -41,13 +41,15 @@ namespace pedemo {
 	{
 		SpawnFloor();
 
-		/*for (int i = -2; i < 2; i++)
+		for (int i = -2; i < 2; i++)
 		{
 			for (int j = -2; j < 2; j++)
 			{
-				SpawnBox(2*i, 6, 2*j);
+				//SpawnSphere(2 * i, 6, 2 * j);
+				//SpawnBox(2 * i, 10, 2 * j);
+				//SpawnStaticBox(2*i, 0, 2*j);
 			}
-		}*/
+		}
 		//SpawnStaticBox(0, 2, 0);
 
 		SpawnSphere(0, 6, 0);
@@ -113,11 +115,11 @@ namespace pedemo {
 
 		entity->m_transform.SetPosition(pemaths::CPeVector3(0, 0, 0));
 
-		entity->m_transform.SetSize(pemaths::CPeVector3(10, 1, 10));
+		entity->m_transform.SetSize(pemaths::CPeVector3(100, 1, 100));
 
 		meshRenderSystem->CreateMeshComponent(entity, *m_renderer, "models/plane.obj", "textures/debug_texture.png");
 
-		pephy::CPeColliderComponent* col = colliderSystem->CreateColliderComponent(*entity, 10);
+		pephy::CPeColliderComponent* col = colliderSystem->CreateColliderComponent(*entity, 100);
 
 		col->AddPrimitive(colliderSystem->CreatePlaneShape(*entity, pemaths::CPeVector3(0, 1, 0), 0));
 	}
