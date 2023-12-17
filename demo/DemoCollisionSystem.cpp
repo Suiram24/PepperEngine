@@ -39,27 +39,7 @@ namespace pedemo {
 
 	void DemoCollisionSystem::LoadLevel()
 	{
-		SpawnFloor();
-
-		for (int i = -2; i < 2; i++)
-		{
-			for (int j = -2; j < 2; j++)
-			{
-				//SpawnSphere(2 * i, 6, 2 * j);
-				//SpawnBox(2 * i, 10, 2 * j);
-				//SpawnStaticBox(2*i, 0, 2*j);
-			}
-		}
-		//SpawnStaticBox(0, 2, 0);
-
-		//SpawnStaticBox(0, 0, 0);
-		//SpawnBox(0, 3, 0);
-		SpawnSphere(0.5, 6, 0);
-		SpawnSphere(0, 3, 0);
-		SpawnStaticSphere(5, 1, 0);
-		SpawnStaticSphere(-5, 1, 0);
-		SpawnStaticSphere(-5, 2, 0);
-		SpawnStaticSphere(5, 2, 0);
+		DemoSpheres();
 	}
 
 	void DemoCollisionSystem::SpawnBox(double p_x, double p_y, double p_z)
@@ -146,5 +126,21 @@ namespace pedemo {
 		col->AddPrimitive(colliderSystem->CreateSphereShape(*entity, 0.5));
 	}
 
+	void DemoCollisionSystem::DemoSpheres()
+	{
+		SpawnFloor();
 
+		for (int i = -2; i < 1; i++)
+		{
+			for (int j = -2; j < 1; j++)
+			{
+				SpawnSphere(2 * i + 2, 6, 2 * j + 2);
+			}
+		}
+
+		for (int i = 0; i < 5; i++)
+		{
+			SpawnSphere((i % 2) * 0.5, 6 + 2 * i, ((i + 1) % 2) * 0.5);
+		}
+	}
 }
