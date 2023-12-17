@@ -64,8 +64,8 @@ namespace engine {
 
 				// Broad phase
 				//printf("Broad Phase\n");
-				tree = CPeKDTree(X, collidersList);
-				possibleCollisions = tree.GetPossibleCollisions();
+				CPeKDTree tree2 = CPeKDTree(X, collidersList);
+				possibleCollisions = tree2.GetPossibleCollisions();
 
 				// Narrow phase
 				//printf("Narrow phase\n");
