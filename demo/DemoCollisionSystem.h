@@ -52,6 +52,7 @@ namespace pedemo {
 		void SpawnStaticBox(double p_x, double p_y, double p_z);
 		void SpawnFloor();
 		void DemoSpheres();
+		void DemoBoxes();
 
 	public:
 	protected:

@@ -240,7 +240,7 @@ Une force de flottaison est simulée quand des entitées tombent en dessous de l
  Nous avons implémenté les quaternions comme indiqué dans le cours. Nous avons rajouté des méthodes au quaternion afin de depouvoir obtenir la norme et l'angle représéneté par le quaternion.
  Nous avons encore ajouté des méthodes pour normaliser le quaternion et changer le quaternion en matrice. Ces méthodes permettent de passer de la simple orientation d'u objet à sa position compl_te dans l'espace.
 
- ### Les Matrice
+ ### Les Matrices
 
  Pour tester le discriminant de nos matrices 3x3, on utilise une précision de 1e-12.
  Nos matrice 4x3 contiennent une matrice 3x3 ainsi qu'un Vecteur3.
@@ -274,3 +274,31 @@ Un mesh comonent a donc été crée afin de résoudre ce problème. Il récupèr
 En plus d'automatiser le rendu des meshs, le component permet également de déterminer la texture et le modèle à l'instanciation plutot que de devoir le hardcoder dans une classe.
 
  Nous avons également rajouté une force libre qui peut être appliquée en n'importe quel point de l'espace avec une norme définie par le programmeur.
+
+ # Phase 4
+
+ Pour cette nouvelle phase nous nous sommes beaucoup appuyé sur les expliquations de :
+ > **[Game Physics Engine Development : How to Build a Robust Commercial-Grade Physics Engine for Your Game
+]()**
+ >
+ > par [ Ian Millington ]()
+
+
+## Broad Phase
+
+ 
+## Narrow phase
+
+Nous avons 3 types de primitives d'implémentés : les boîtes, sphères et plans.
+ Elles possèdent les références sur leurs propriétaires ce qui permet au besoin de calculer le changement de base de leur matrice de transformation dans le monde.
+
+La méthode principale de cette classe génère le contact, s'il existe, entre deux primitives.
+Chaque type de paire de primitives est ensuite géré en conséquence par 5 méthodes spécialisées (il n'y a pas de collision plan sur plan).
+
+Pour cette partie nous avons essayé de suivre au plus proche le livre de Millington.
+Voici cependant une liste des erreurs que nous avons commises puis corrigées :
+	- Pour les collisions entre boîtes et plans et boîtes et sphères nous gardions les coordonnées mondes au lieu de passer en coordonnées locales.
+	- Dans le SAT tout les axes n'étaient pas testés. Au liau de juste sauter les axes parallèles on sautait tous les axes restants.
+
+
+ ## Résolution

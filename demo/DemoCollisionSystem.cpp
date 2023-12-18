@@ -40,6 +40,7 @@ namespace pedemo {
 	void DemoCollisionSystem::LoadLevel()
 	{
 		DemoSpheres();
+		//DemoBoxes();
 	}
 
 	void DemoCollisionSystem::SpawnBox(double p_x, double p_y, double p_z)
@@ -141,6 +142,24 @@ namespace pedemo {
 		for (int i = 0; i < 5; i++)
 		{
 			SpawnSphere((i % 2) * 0.5, 6 + 2 * i, ((i + 1) % 2) * 0.5);
+		}
+	}
+
+	void DemoCollisionSystem::DemoBoxes()
+	{
+		SpawnFloor();
+
+		for (int i = -2; i < 1; i++)
+		{
+			for (int j = -2; j < 1; j++)
+			{
+				SpawnBox(2 * i + 2, 6, 2 * j + 2);
+			}
+		}
+
+		for (int i = 0; i < 5; i++)
+		{
+			SpawnBox((i % 2) * 0.5, 6 + 2 * i, ((i + 1) % 2) * 0.5);
 		}
 	}
 }
