@@ -318,4 +318,11 @@ Voici cependant une liste des erreurs que nous avons commises puis corrigées :
 	- Dans le SAT tous les axes n'étaient pas testés. Au lieu de juste sauter les axes parallèles on sautait tous les axes restants.
 
 
- ## Résolution
+ ## Résolution des contacts
+
+ Afin de résoudres contacts, nous avons du nous baser sur le cours ainsi que sur le livre de Millington.
+
+ Nous avons donc implémenté deux fonctions: une pour résoudre l'interpénétration, et une pour résoudre la vélocité.
+ La fonction de résolution de l'interpénétration fonctionne plutot bien, mais celle de la vélocité rencontre encore de nombreux problème, nottament en précense de vélocité angulaire.
+
+ Nous avons rencontré un grand nombre de bugs lors de cette phase 4, où nous nous sommes par exemple rendu compte que la fonctione d'inversion de matrice du cours était éronné si la matrice de transformation avait subit une rotation.
