@@ -56,6 +56,10 @@ namespace controls {
 
 		static void InitialiseView();
 
+		static void ChangeCameraPosition(float eyeX, float eyeY, float eyeZ);
+
+		static void ChangeCameraOrientation(float centerX, float centerY, float centerZ);
+
 		static void ChangeDisplacementSensitivity(float p_sensitivity);
 
 		static void ChangeOrientationSensitivity(float p_sensitivity);

@@ -62,6 +62,9 @@ namespace vk {
         virtual void goUp(float fistance) = 0;
 
         virtual void submitViewMatrix() = 0;
+
+        virtual void changeCameraOrientation(float centerX, float centerY, float centerZ) = 0;
+        virtual void changeCameraPosition(float eyeX, float eyeY, float eyeZ) = 0;
     }; 
 }
 

@@ -154,6 +154,18 @@ void controls::CameraController::InitialiseView()
 	getInstance().viewManager->submitViewMatrix();
 }
 
+void controls::CameraController::ChangeCameraPosition(float eyeX, float eyeY, float eyeZ)
+{
+	getInstance().viewManager->changeCameraPosition(eyeX, eyeY, eyeZ);
+	getInstance().viewManager->submitViewMatrix();
+}
+
+void controls::CameraController::ChangeCameraOrientation(float centerX, float centerY, float centerZ)
+{
+	getInstance().viewManager->changeCameraOrientation(centerX, centerY, centerZ);
+	getInstance().viewManager->submitViewMatrix();
+}
+
 void controls::CameraController::ChangeDisplacementSensitivity(float p_sensitivity)
 {
 	getInstance().displacementSensivity = p_sensitivity;
