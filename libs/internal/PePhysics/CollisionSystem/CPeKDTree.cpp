@@ -177,7 +177,7 @@ namespace engine {
 		}
 		*/
 
-		bool CPeKDTree::IntersectKDPlane(const CPeSpherePrimitiveShape& p_collider) const {
+		bool CPeKDTree::IntersectKDPlane(CPeSpherePrimitiveShape& p_collider) const {
 			double distCenterPlane = 0.0f;
 			double radius = p_collider.GetRadius();
 			switch (m_divisionDim) {
@@ -197,7 +197,7 @@ namespace engine {
 			return false;
 		}
 
-		bool CPeKDTree::IsBroadIntersection(const CPeSpherePrimitiveShape& p_collider1, const CPeSpherePrimitiveShape& p_collider2) const {
+		bool CPeKDTree::IsBroadIntersection(CPeSpherePrimitiveShape& p_collider1, CPeSpherePrimitiveShape& p_collider2) const {
 			double radius1 = p_collider1.GetRadius();
 			double radius2 = p_collider2.GetRadius();
 
