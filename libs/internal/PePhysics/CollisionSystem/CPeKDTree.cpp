@@ -2,6 +2,7 @@
 #include "CPeKDTree.h"
 
 #include <algorithm>
+#include <set>
 #include <cmath>
 
 namespace engine {
@@ -145,17 +146,21 @@ namespace engine {
 		}
 
 		std::vector<std::pair<CPeColliderComponent*, CPeColliderComponent*>> CPeKDTree::GetNodeCollisions() {
-			std::vector<std::pair<CPeColliderComponent*, CPeColliderComponent*>> pairs;
+			std::set<std::pair<CPeColliderComponent*, CPeColliderComponent*>> pairs;
 			for (int i = 0; i < m_content.size()-1; ++i) {
 				for (int j = i+1; j < m_content.size(); ++j) {
 					if (IsBroadIntersection(m_content[i]->GetGlobalVolume(), m_content[j]->GetGlobalVolume())) {
-						pairs.push_back(
+						pairs.insert(
 							std::pair<CPeColliderComponent*, CPeColliderComponent*>(m_content[i], m_content[j])
 						);
 					}
 				}
 			}
-			return pairs;
+			std::vector<std::pair<CPeColliderComponent*, CPeColliderComponent*>> pairsVec;
+			for (auto& elem : pairs) {
+				pairsVec.push_back(elem);
+			}
+			return pairsVec;
 		}
 
 		bool CPeKDTree::IntersectKDPlane(const CPeSpherePrimitiveShape& p_collider) const {
