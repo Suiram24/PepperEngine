@@ -2,7 +2,6 @@
 
 namespace engine {
 	namespace physics {
-
 		void CPeColliderComponent::Initialise(pecore::CPeEntity* p_owner, double p_radius)
 		{
 			m_isActive = true;
