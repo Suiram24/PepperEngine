@@ -59,7 +59,9 @@ namespace pedemo {
 				forceSystem->AddForceToParticle(force, ball, 1);
 			}
 		}
-		
+
+		//DemoBoxes();
+		//DemoSpheres();
 	}
 
 	void DemoPenduleNewton::SpawnBox(double p_x, double p_y, double p_z)
