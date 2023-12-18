@@ -286,6 +286,17 @@ En plus d'automatiser le rendu des meshs, le component permet également de dét
 
 ## Broad Phase
 
+La broad phase a pour objectif de déterminer les possibles collisions qui peuvent advenir en évitant de traiter les éléments trop éloignés les uns des autre. Cela parmet d'éviter de trop de cas dans la narrow phase avec des formes plus complexes.
+
+### Volumes englobants
+
+Afin de pouvoir détecter grossièrement les possibles collisions, nous avons eu recourt à des volumes englobants. Ces volumes englobants sont des sphères englbant le reste du modèle. On se se sert de ces sphères pour détecter de possible collisions et ainis limiter le nombre de collisions traitées dans la narrow phase.
+
+### KD Tree
+
+Lors de la détection des collisions, l'une des étapes les plus longues est la vérification de collision entre duex objets. Cette vérification se fait en temps quadratique. afin de limiter cette vérification, nous utilisons une méthode séparation de l'espace sous forme de grille. 
+
+La méthode séparation en grille que nous avons choisi est l'utilisation d'un KD tree. Dans cette structure de données, on effectue des séparations successives de l'espace selon les axes X, Y et Z jusqu'à ce que l'on ai un nombre d'objets en collision assez faible.  
  
 ## Narrow phase
 
