@@ -296,7 +296,13 @@ Afin de pouvoir détecter grossièrement les possibles collisions, nous avons eu
 
 Lors de la détection des collisions, l'une des étapes les plus longues est la vérification de collision entre duex objets. Cette vérification se fait en temps quadratique. afin de limiter cette vérification, nous utilisons une méthode séparation de l'espace sous forme de grille. 
 
-La méthode séparation en grille que nous avons choisi est l'utilisation d'un KD tree. Dans cette structure de données, on effectue des séparations successives de l'espace selon les axes X, Y et Z jusqu'à ce que l'on ai un nombre d'objets en collision assez faible.  
+La méthode séparation en grille que nous avons choisi est l'utilisation d'un KD tree. Dans cette structure de données, on effectue des séparations successives de l'espace selon les axes X, Y et Z jusqu'à ce que l'on ai un nombre d'objets en collision assez faible.
+
+Nous avons fait le choix de placer le point médian de chaque noeud du KD tree sur l'élément central de chaque noeud. Cet élément est aisi placé dans le fils gauche et le fils droit du noeud courant.
+
+Nous avons également fait le choix de stopper la génération de nouveaux noeuds lorsuqe l'on a moins de 3 objets dans une feuille.
+
+Nous avons enfin effectué des tests de collision des volumes englobants pour déterminer les potentielles collisions.
  
 ## Narrow phase
 
