@@ -144,7 +144,6 @@ namespace engine {
 				}
 			}
 		}
-
 		std::vector<std::pair<CPeColliderComponent*, CPeColliderComponent*>> CPeKDTree::GetNodeCollisions() {
 			std::set<std::pair<CPeColliderComponent*, CPeColliderComponent*>> pairs;
 			for (int i = 0; i < m_content.size()-1; ++i) {
@@ -156,12 +155,27 @@ namespace engine {
 					}
 				}
 			}
-			std::vector<std::pair<CPeColliderComponent*, CPeColliderComponent*>> pairsVec;
-			for (auto& elem : pairs) {
-				pairsVec.push_back(elem);
-			}
+			std::vector<std::pair<CPeColliderComponent*, CPeColliderComponent*>> pairsVec(pairs.begin(), pairs.end());
 			return pairsVec;
 		}
+		/*
+		*/
+
+		/*
+		std::vector<std::pair<CPeColliderComponent*, CPeColliderComponent*>> CPeKDTree::GetNodeCollisions() {
+			std::vector<std::pair<CPeColliderComponent*, CPeColliderComponent*>> pairs;
+			for (int i = 0; i < m_content.size()-1; ++i) {
+				for (int j = i+1; j < m_content.size(); ++j) {
+					if (IsBroadIntersection(m_content[i]->GetGlobalVolume(), m_content[j]->GetGlobalVolume())) {
+						pairs.push_back(
+							std::pair<CPeColliderComponent*, CPeColliderComponent*>(m_content[i], m_content[j])
+						);
+					}
+				}
+			}
+			return pairs;
+		}
+		*/
 
 		bool CPeKDTree::IntersectKDPlane(const CPeSpherePrimitiveShape& p_collider) const {
 			double distCenterPlane = 0.0f;
