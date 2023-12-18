@@ -55,6 +55,10 @@ namespace controls {
 		static void setViewManager(vk::GenericViewManager& viewManager);
 
 		static void InitialiseView();
+
+		static void ChangeDisplacementSensitivity(float p_sensitivity);
+
+		static void ChangeOrientationSensitivity(float p_sensitivity);
 	};
 }
 #endif

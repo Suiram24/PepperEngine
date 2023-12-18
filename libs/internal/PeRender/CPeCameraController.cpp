@@ -153,3 +153,13 @@ void controls::CameraController::InitialiseView()
 {
 	getInstance().viewManager->submitViewMatrix();
 }
+
+void controls::CameraController::ChangeDisplacementSensitivity(float p_sensitivity)
+{
+	getInstance().displacementSensivity = p_sensitivity;
+}
+
+void controls::CameraController::ChangeOrientationSensitivity(float p_sensitivity)
+{
+	getInstance().orientationSensivity = p_sensitivity;
+}
