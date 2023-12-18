@@ -160,6 +160,10 @@ namespace engine
 			*/
 			CPeMatrix3 operator*(double p_number) const;
 
+			bool operator==(const CPeMatrix3& p_matrice) const;
+			bool operator!=(const CPeMatrix3& p_matrice) const;
+
+
 			CPeVector3 GetAxis1() const;
 			CPeVector3 GetAxis2() const;
 			CPeVector3 GetAxis3() const;

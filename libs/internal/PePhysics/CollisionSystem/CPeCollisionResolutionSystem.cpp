@@ -131,10 +131,14 @@ namespace engine
 					sign = -1;
 				}
 
+				double norm = velocity.GetNorm();
+
 				if (pemaths::CPeVector3::ScalarProduct(n, velocity) <= 0)
 				{
 					return;
 				}
+
+				
 
 
 
@@ -154,35 +158,6 @@ namespace engine
 				
 				return;
 
-				//
-				// retrieve the velocity that is in the direction of the normal
-				contactVelocity = pemaths::CPeVector3::OrthographicProjection(velocity, n);
-
-				double desiredDeltaVelocity = -contactVelocity.GetNorm() * (1 + e);
-
-				//
-				//Calculating the impulse
-				pemaths::CPeVector3 impulse = n.NormalizeVector();
-				double vel = (deltaVelocity == 0) ? 0 : (desiredDeltaVelocity / deltaVelocity);
-				impulse = impulse * vel;
-
-				//
-				//Applying the impulse
-				pemaths::CPeVector3 velocityChange, rotationChange;
-
-				for (size_t i = 0; i < nbRigidbody; i++)
-				{
-					contactPointVector = cInfo->contactPoint - obj[i]->GetTransform().GetPosition();
-
-					velocityChange = impulse * obj[i]->GetMassInverse();
-					pemaths::CPeVector3 impulsiveTorque = pemaths::CPeVector3::CrossProduct(impulse, contactPointVector);
-					rotationChange = obj[i]->GetInverseInertiaWorld() * impulsiveTorque;
-				
-					obj[i]->SetVelocity(obj[i]->GetVelocity() + velocityChange);
-					obj[i]->SetAngularVelocity(obj[i]->GetAngularVelocity() + rotationChange);
-
-					impulse = impulse * (-1); // inverse vector direction for second rigidbody if there is one
-				}
 
 
 			}

@@ -34,14 +34,14 @@ namespace engine
 			 * @param CPePrimitiveShape the second primitive.
 			 * @param SPeContactInfos the contact info to fill.
 			*/
-			void GenerateContacts(const CPePrimitiveShape* p_shape1, const CPePrimitiveShape* p_shape2, std::vector<SPeContactInfos*>* datas);
+			void GenerateContacts( CPePrimitiveShape* p_shape1,  CPePrimitiveShape* p_shape2, std::vector<SPeContactInfos*>* datas);
 
 		private:
-			void GenContSphSph(const CPeSpherePrimitiveShape* p_sphere1, const CPeSpherePrimitiveShape* p_sphere2, std::vector<SPeContactInfos*>* datas);
-			void GenContSphPla(const CPeSpherePrimitiveShape* p_sphere, const CPePlanePrimitiveShape* p_plane, std::vector<SPeContactInfos*>* datas);
-			void GenContBoxPla(const CPeBoxPrimitiveShape* p_box, const CPePlanePrimitiveShape* p_plane, std::vector<SPeContactInfos*>* datas);
-			void GenContBoxSph(const CPeBoxPrimitiveShape* p_box, const CPeSpherePrimitiveShape* p_sphere, std::vector<SPeContactInfos*>* datas);
-			void GenContBoxBox(const CPeBoxPrimitiveShape* p_box1, const CPeBoxPrimitiveShape* p_box2, std::vector<SPeContactInfos*>* datas);
+			void GenContSphSph( CPeSpherePrimitiveShape* p_sphere1,  CPeSpherePrimitiveShape* p_sphere2, std::vector<SPeContactInfos*>* datas);
+			void GenContSphPla( CPeSpherePrimitiveShape* p_sphere,  CPePlanePrimitiveShape* p_plane, std::vector<SPeContactInfos*>* datas);
+			void GenContBoxPla( CPeBoxPrimitiveShape* p_box,  CPePlanePrimitiveShape* p_plane, std::vector<SPeContactInfos*>* datas);
+			void GenContBoxSph( CPeBoxPrimitiveShape* p_box,  CPeSpherePrimitiveShape* p_sphere, std::vector<SPeContactInfos*>* datas);
+			void GenContBoxBox( CPeBoxPrimitiveShape* p_box1,  CPeBoxPrimitiveShape* p_box2, std::vector<SPeContactInfos*>* datas);
 			
 			static bool AddRigidbodyToContactInfos(SPeContactInfos* data, const pecore::CPeEntity& entity1, const pecore::CPeEntity& entity2);
 			 

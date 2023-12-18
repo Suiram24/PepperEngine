@@ -8,9 +8,15 @@ namespace engine {
 			return m_shapeTransform.GetTransformMatrix() * m_owner.m_transform.GetTransformMatrix();
 		}
 
-		pemaths::CPeVector3 CPePrimitiveShape::GetWorldPosition() const
+		const pemaths::CPeVector3& CPePrimitiveShape::GetWorldPosition()
 		{
-			return GetWorldTransform() * pemaths::CPeVector3(0, 0, 0);
+			if (m_owner.m_transform.GetTransformMatrix() != m_ownerTransformMat) //Compute world position only if the entity mooved
+			{
+				m_ownerTransformMat = m_owner.m_transform.GetTransformMatrix();
+				m_worldPosition = m_shapeTransform.GetTransformMatrix() * m_ownerTransformMat * pemaths::CPeVector3(0, 0, 0);
+			}
+
+			return m_worldPosition;
 		}
 
 		pemaths::CPeVector3 CPePrimitiveShape::ConvertWorldToLocal(const pemaths::CPeVector3& p_worldCoordinates) const

@@ -93,6 +93,7 @@ namespace engine {
 
 		void CPeParticle::SetVelocity(const pemaths::CPeVector3& p_velocity)
 		{
+			double norm = p_velocity.GetNorm();
 			m_velocity = p_velocity;
 		}
 

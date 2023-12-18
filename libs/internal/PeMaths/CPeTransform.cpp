@@ -38,7 +38,7 @@ namespace engine {
 			return m_size;
 		}
 
-		CPeMatrix4 CPeTransform::GetTransformMatrix() const
+		const CPeMatrix4& CPeTransform::GetTransformMatrix() const
 		{
 			return m_transformMatrix;
 		}

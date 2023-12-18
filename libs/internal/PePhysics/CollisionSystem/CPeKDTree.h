@@ -76,7 +76,7 @@ namespace engine {
 			 * @return true if the collider intersect the KD plane
 			 * @return false otherwise
 			 */
-			bool IntersectKDPlane(const CPeSpherePrimitiveShape& p_collider) const;
+			bool IntersectKDPlane(CPeSpherePrimitiveShape& p_collider) const;
 
 			/**
 			 * @brief Compute if two global sphere collider intersect
@@ -86,7 +86,7 @@ namespace engine {
 			 * @return true if the two colliders intersect
 			 * @return false otherwise
 			 */
-				bool IsBroadIntersection(const CPeSpherePrimitiveShape & p_collider1, const CPeSpherePrimitiveShape& p_collider2) const;
+				bool IsBroadIntersection(CPeSpherePrimitiveShape & p_collider1, CPeSpherePrimitiveShape& p_collider2) const;
 		};
 
 		class ComparatorX {

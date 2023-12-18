@@ -153,6 +153,10 @@ namespace engine
 			*/
 			CPeVector3 operator*(const CPeVector3& p_vector) const;
 
+
+			bool operator!=(const CPeMatrix4& p_matrix) const;
+			bool operator==(const CPeMatrix4& p_matrix) const;
+
 			CPeMatrix3 ToMatrix3() const;
 
 		};

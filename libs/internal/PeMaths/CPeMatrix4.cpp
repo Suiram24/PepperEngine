@@ -204,6 +204,17 @@ namespace engine {
 			return mult;
 		}
 
+		bool CPeMatrix4::operator!=(const CPeMatrix4& p_matrix) const
+		{
+			return (m_translation[0] != p_matrix.m_translation[0]) || (m_translation[1] != p_matrix.m_translation[1]) || (m_translation[2] != p_matrix.m_translation[2]) || (m_matrice != p_matrix.m_matrice);
+		}
+
+		bool CPeMatrix4::operator==(const CPeMatrix4& p_matrix) const
+		{
+			return !(*this != p_matrix);
+		}
+
+
 		CPeMatrix3 CPeMatrix4::ToMatrix3() const
 		{
 			//CPeMatrix3 mat = m_matrice;

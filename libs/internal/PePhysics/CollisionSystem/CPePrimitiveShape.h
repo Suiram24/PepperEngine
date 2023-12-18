@@ -20,6 +20,8 @@ namespace engine {
 		class CPePrimitiveShape {
 		protected:
 			pemaths::CPeTransform m_shapeTransform;
+			pemaths::CPeMatrix4 m_ownerTransformMat;
+			pemaths::CPeVector3 m_worldPosition;
 
 			const pecore::CPeEntity& m_owner;
 
@@ -32,7 +34,7 @@ namespace engine {
 
 			pemaths::CPeMatrix4 GetWorldTransform() const;
 
-			pemaths::CPeVector3 GetWorldPosition() const;
+			const pemaths::CPeVector3& GetWorldPosition();
 
 			pemaths::CPeVector3 ConvertWorldToLocal(const pemaths::CPeVector3& p_worldCoordinates) const;
 

@@ -4,6 +4,7 @@
 #include "CPeVector3.h"
 #include "CPeTransform.h"
 #include "CPeMatrix3.h"
+#include "CPeMatrix4.h"
 #include "CPeQuaternion.h"
 
 #endif /* PEMATHS_PEMATHS_H */

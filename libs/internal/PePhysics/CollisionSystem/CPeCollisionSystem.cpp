@@ -22,6 +22,7 @@ namespace engine {
 			CPeKDTree tree = CPeKDTree(X, collidersList);
 
 			std::vector<std::pair<CPeColliderComponent*, CPeColliderComponent*>> possibleCollisions = tree.GetPossibleCollisions();
+			
 
 			// Narrow phase
 			//printf("Narrow phase\n");
@@ -83,19 +84,19 @@ namespace engine {
 					}
 				}
 
-				if (contactInfosList.size() > 0)
-				{
-					printf("Iteration %i, contacts : %i \n", it, (contactInfosList.size()));
-				}
+				//if (contactInfosList.size() > 0)
+				//{
+				//	pintf("Iteration %i, contacts : %i \n", it, (contactInfosList.size()));
+				//}
 				
 
 			}  while (contactInfosList.size() > 0 && it < consts::nbIterationCollider);
 
 
-			if (contactInfosList.size() > 0)
-			{
-				printf("Incomplete iteration");
-			}
+			//if (contactInfosList.size() > 0)
+			//{
+			//	printf("Incomplete iteration");
+			//}
 			//FREE
 			for (int k = 0; k < contactInfosList.size(); k++)
 			{

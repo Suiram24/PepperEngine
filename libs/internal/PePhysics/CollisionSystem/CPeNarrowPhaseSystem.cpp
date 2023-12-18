@@ -5,7 +5,7 @@ namespace engine
 	namespace physics {
 		
 		
-			void CPeNarrowPhaseSystem::GenerateContacts(const CPePrimitiveShape* p_shape1, const CPePrimitiveShape* p_shape2, std::vector<SPeContactInfos*>* datas)
+			void CPeNarrowPhaseSystem::GenerateContacts(CPePrimitiveShape* p_shape1, CPePrimitiveShape* p_shape2, std::vector<SPeContactInfos*>* datas)
 			{
 				//Determine first shape type
 				EShapeTypes type1 = p_shape1->GetType();
@@ -20,22 +20,22 @@ namespace engine
 				case SPHERE:
 					if (type2 == SPHERE) { 
 						GenContSphSph(
-							dynamic_cast<const CPeSpherePrimitiveShape*>(p_shape1),
-							dynamic_cast<const CPeSpherePrimitiveShape*>(p_shape2),
+							dynamic_cast<CPeSpherePrimitiveShape*>(p_shape1),
+							dynamic_cast<CPeSpherePrimitiveShape*>(p_shape2),
 							datas
 						); 
 					}
 					else if (type2 == BOX) {
 						GenContBoxSph(
-							dynamic_cast<const CPeBoxPrimitiveShape*>(p_shape2),
-							dynamic_cast<const CPeSpherePrimitiveShape*>(p_shape1),
+							dynamic_cast<CPeBoxPrimitiveShape*>(p_shape2),
+							dynamic_cast<CPeSpherePrimitiveShape*>(p_shape1),
 							datas
 						);
 					}
 					else if (type2 == PLANE) { 
 						GenContSphPla(
-							dynamic_cast<const CPeSpherePrimitiveShape*>(p_shape1),
-							dynamic_cast<const CPePlanePrimitiveShape*>(p_shape2),
+							dynamic_cast<CPeSpherePrimitiveShape*>(p_shape1),
+							dynamic_cast<CPePlanePrimitiveShape*>(p_shape2),
 							datas
 						);
 					}
@@ -43,22 +43,22 @@ namespace engine
 				case BOX:
 					if (type2 == SPHERE) {
 						GenContBoxSph(
-							dynamic_cast<const CPeBoxPrimitiveShape*>(p_shape1),
-							dynamic_cast<const CPeSpherePrimitiveShape*>(p_shape2),
+							dynamic_cast<CPeBoxPrimitiveShape*>(p_shape1),
+							dynamic_cast<CPeSpherePrimitiveShape*>(p_shape2),
 							datas
 						);
 					}
 					else if (type2 == BOX) {
 						GenContBoxBox(
-							dynamic_cast<const CPeBoxPrimitiveShape*>(p_shape1),
-							dynamic_cast<const CPeBoxPrimitiveShape*>(p_shape2),
+							dynamic_cast<CPeBoxPrimitiveShape*>(p_shape1),
+							dynamic_cast<CPeBoxPrimitiveShape*>(p_shape2),
 							datas
 						);
 					}
 					else if (type2 == PLANE) {
 						GenContBoxPla(
-							dynamic_cast<const CPeBoxPrimitiveShape*>(p_shape1),
-							dynamic_cast<const CPePlanePrimitiveShape*>(p_shape2),
+							dynamic_cast<CPeBoxPrimitiveShape*>(p_shape1),
+							dynamic_cast<CPePlanePrimitiveShape*>(p_shape2),
 							datas
 						);
 					}
@@ -66,15 +66,15 @@ namespace engine
 				case PLANE:
 					if (type2 == SPHERE) {
 						GenContSphPla(
-							dynamic_cast<const CPeSpherePrimitiveShape*>(p_shape2),
-							dynamic_cast<const CPePlanePrimitiveShape*>(p_shape1),
+							dynamic_cast<CPeSpherePrimitiveShape*>(p_shape2),
+							dynamic_cast<CPePlanePrimitiveShape*>(p_shape1),
 							datas
 						);
 					}
 					else if (type2 == BOX) {
 						GenContBoxPla(
-							dynamic_cast<const CPeBoxPrimitiveShape*>(p_shape2),
-							dynamic_cast<const CPePlanePrimitiveShape*>(p_shape1),
+							dynamic_cast<CPeBoxPrimitiveShape*>(p_shape2),
+							dynamic_cast<CPePlanePrimitiveShape*>(p_shape1),
 							datas
 						); 
 					}
@@ -86,7 +86,7 @@ namespace engine
 		
 
 
-			void CPeNarrowPhaseSystem::GenContSphSph(const CPeSpherePrimitiveShape* p_sphere1, const CPeSpherePrimitiveShape* p_sphere2, std::vector<SPeContactInfos*>* datas)
+			void CPeNarrowPhaseSystem::GenContSphSph(CPeSpherePrimitiveShape* p_sphere1, CPeSpherePrimitiveShape* p_sphere2, std::vector<SPeContactInfos*>* datas)
 			{
 				double r1 = p_sphere1->GetRadius();
 				double r2 = p_sphere2->GetRadius();
@@ -114,7 +114,7 @@ namespace engine
 				}
 			}
 
-			void CPeNarrowPhaseSystem::GenContSphPla(const CPeSpherePrimitiveShape* p_sphere, const CPePlanePrimitiveShape* p_plane, std::vector<SPeContactInfos*>* datas)
+			void CPeNarrowPhaseSystem::GenContSphPla(CPeSpherePrimitiveShape* p_sphere, CPePlanePrimitiveShape* p_plane, std::vector<SPeContactInfos*>* datas)
 			{
 				double r  = p_sphere->GetRadius();
 				double d = pemaths::CPeVector3::ScalarProduct(p_sphere->GetWorldPosition(), p_plane->GetNormal()) - p_plane->GetOffset() - r;
@@ -140,7 +140,7 @@ namespace engine
 				}
 			}
 
-			void CPeNarrowPhaseSystem::GenContBoxPla(const CPeBoxPrimitiveShape* p_box, const CPePlanePrimitiveShape* p_plane, std::vector<SPeContactInfos*>* datas)
+			void CPeNarrowPhaseSystem::GenContBoxPla(CPeBoxPrimitiveShape* p_box, CPePlanePrimitiveShape* p_plane, std::vector<SPeContactInfos*>* datas)
 			{
 				pemaths::CPeVector3 corners[8];
 				pemaths::CPeVector3 pos = p_box->GetWorldPosition();
@@ -187,7 +187,7 @@ namespace engine
 				}
 			}
 
-			void CPeNarrowPhaseSystem::GenContBoxSph(const CPeBoxPrimitiveShape* p_box, const CPeSpherePrimitiveShape* p_sphere, std::vector<SPeContactInfos*>* datas)
+			void CPeNarrowPhaseSystem::GenContBoxSph(CPeBoxPrimitiveShape* p_box, CPeSpherePrimitiveShape* p_sphere, std::vector<SPeContactInfos*>* datas)
 			{
 				pemaths::CPeMatrix4 T = p_box->GetWorldTransform();
 
@@ -244,7 +244,7 @@ namespace engine
 				}
 			}
 
-			void CPeNarrowPhaseSystem::GenContBoxBox(const CPeBoxPrimitiveShape* p_box1, const CPeBoxPrimitiveShape* p_box2, std::vector<SPeContactInfos*>* datas)
+			void CPeNarrowPhaseSystem::GenContBoxBox(CPeBoxPrimitiveShape* p_box1, CPeBoxPrimitiveShape* p_box2, std::vector<SPeContactInfos*>* datas)
 			{
 				pemaths::CPeVector3 axes[15];
 
@@ -313,8 +313,8 @@ namespace engine
 				// Contact based on face axis
 				if (bestCase < 6)
 				{
-					const CPeBoxPrimitiveShape* one;
-					const CPeBoxPrimitiveShape* two;
+					CPeBoxPrimitiveShape* one;
+					CPeBoxPrimitiveShape* two;
 
 					if (pemaths::CPeVector3::ScalarProduct(contactAxis, toCenter) < 0)
 					{
