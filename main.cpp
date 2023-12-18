@@ -11,14 +11,17 @@
 
 //#include "demo/DemoBroadPhase.h"
 #include "demo/DemoCollisionSystem.h"
+#include "demo/DemoDoublePendulum.h"
+#include "demo/DemoPenduleNewton.h"
 #include "CPeGameManager.h"
 
 // Main code
 int main(int, char**)
 {
 
-    //engine::CPeGameMode* myGameMode = &pedemo::DemoPhase3();
-    engine::CPeGameMode* myGameMode = &pedemo::DemoCollisionSystem();
+    //engine::CPeGameMode* myGameMode = &pedemo::DemoDoublePendulum();
+    //engine::CPeGameMode* myGameMode = &pedemo::DemoCollisionSystem();
+    engine::CPeGameMode* myGameMode = &pedemo::DemoPenduleNewton();
     //engine::CPeGameMode* myGameMode = &pedemo::DemoBroadPhase();
 
 
