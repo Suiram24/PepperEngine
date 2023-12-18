@@ -46,6 +46,30 @@ namespace engine {
             m_sumTorques = pemaths::CPeVector3(0, 0, 0);
         }
 
+        const pemaths::CPeMatrix3& CPeRigidBody::GetInverseInertia() const
+        {
+            return m_inertiaInverse;
+        }
+
+        pemaths::CPeMatrix3 CPeRigidBody::GetInverseInertiaWorld()
+        {
+            pemaths::CPeMatrix3 worldMatrix = GetTransform().GetTransformMatrix().ToMatrix3();
+            pemaths::CPeMatrix3 intertiaInverseWorld = worldMatrix * m_inertiaInverse * worldMatrix.Inverse();
+            return intertiaInverseWorld;
+        }
+
+
+        const pemaths::CPeVector3& CPeRigidBody::GetAngularVelocity() const
+        {
+            return m_angularVelocity;
+        }
+
+        void CPeRigidBody::SetAngularVelocity(pemaths::CPeVector3& p_newAngularVelocity)
+        {
+            m_angularVelocity = p_newAngularVelocity;
+        }
+
+
         void CPeRigidBody::SetSphereInertia(double p_radius)
         {
             double value = 2.0f / 5.0f * GetMass() * p_radius * p_radius;

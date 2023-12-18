@@ -125,7 +125,7 @@ namespace engine {
 		bool CPeMatrix3::IsInversible() const
 		{
 			double det = abs(Determinant());
-			return (det > 1e-12); //to prevent double imprecision
+			return (det > 1e-100); //to prevent double imprecision
 		}
 
 		CPeMatrix3 CPeMatrix3::Inverse() const
@@ -189,5 +189,34 @@ namespace engine {
 			);
 			return multMatrice;
 		}
+
+		bool CPeMatrix3::operator==(const CPeMatrix3& p_matrice) const
+		{
+			return !(*this != p_matrice);
+		}
+
+		bool CPeMatrix3::operator!=(const CPeMatrix3& p_matrice) const
+		{
+			return (m_matrice[0] != p_matrice.m_matrice[0]) || (m_matrice[4] != p_matrice.m_matrice[4]) || (m_matrice[8] != p_matrice.m_matrice[8]) || (m_matrice[1] != p_matrice.m_matrice[1]) || (m_matrice[2] != p_matrice.m_matrice[2]) || (m_matrice[3] != p_matrice.m_matrice[3]) || (m_matrice[5] != p_matrice.m_matrice[5]) || (m_matrice[6] != p_matrice.m_matrice[6]) || (m_matrice[7] != p_matrice.m_matrice[7]);
+		}
+
+		CPeVector3 CPeMatrix3::GetAxis1() const
+		{
+			CPeVector3 axis = CPeVector3(Get(0, 0), Get(1, 0), Get(2, 0));
+			return axis;
+		}
+
+		CPeVector3 CPeMatrix3::GetAxis2() const
+		{
+			CPeVector3 axis = CPeVector3(Get(0, 1), Get(1, 1), Get(2, 1));
+			return axis;
+		}
+
+		CPeVector3 CPeMatrix3::GetAxis3() const
+		{
+			CPeVector3 axis = CPeVector3(Get(0, 2), Get(1, 2), Get(2, 2));
+			return axis;
+		}
+
 	}
 }

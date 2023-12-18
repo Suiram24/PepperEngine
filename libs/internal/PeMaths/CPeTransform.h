@@ -98,7 +98,7 @@ namespace engine {
 			*/
 			const CPeVector3& GetSize() const;
 
-			CPeMatrix4 GetTransformMatrix() const;
+			const CPeMatrix4& GetTransformMatrix() const;
 
 			/**
 			 * @brief Setter for m_position.

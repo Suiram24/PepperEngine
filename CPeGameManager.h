@@ -55,6 +55,7 @@ namespace engine
 		pecore::CPeEntity& CreateEntity(const pemaths::CPeTransform& p_transform = pemaths::CPeTransform());
 
 	protected:
+		void SetupCameraParameters();
 	private:
 
 		void PhysicUpdate(double p_deltaTime);
@@ -65,11 +66,11 @@ namespace engine
 
 	public:
 	protected:
+		vk::CPeVulkanRenderer m_renderer;
 	private:
 
 		CPeGameMode* m_ActiveGameMode;
 		GLFWwindow* m_window;
-		vk::CPeVulkanRenderer m_renderer;
 		engine::physics::CPeForceSystem* m_forceSystem;
 		engine::physics::CPeCollisionSystem* m_collisionSystem;
 		engine::render::CPeMeshRenderSystem* m_meshRenderSystem;

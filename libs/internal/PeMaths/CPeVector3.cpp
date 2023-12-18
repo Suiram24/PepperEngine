@@ -62,9 +62,18 @@ namespace engine {
 			return sqrt(m_x * m_x + m_y * m_y + m_z * m_z);
 		}
 
+		const double CPeVector3::GetSquaredNorm() const
+		{
+			return m_x * m_x + m_y * m_y + m_z * m_z;
+		}
+
 		CPeVector3 CPeVector3::NormalizeVector() const
 		{
 			double norm = this->GetNorm();
+			if (norm == 0) //To avoid divisions by 0
+			{
+				return *this;
+			}
 			CPeVector3 normVector = CPeVector3(
 				m_x / norm,
 				m_y / norm,
@@ -78,6 +87,10 @@ namespace engine {
 				p_vectorA.GetY() * p_vectorB.GetZ() - p_vectorA.GetZ() * p_vectorB.GetY(),
 				p_vectorA.GetZ() * p_vectorB.GetX() - p_vectorA.GetX() * p_vectorB.GetZ(),
 				p_vectorA.GetX() * p_vectorB.GetY() - p_vectorA.GetY() * p_vectorB.GetX());
+			if ((abs(prodVector.GetX()) + abs(prodVector.GetY()) + abs(prodVector.GetZ())) <= 1.0e-12)
+			{
+				return CPeVector3();
+			} 
 			return prodVector;
 		}
 
@@ -102,6 +115,25 @@ namespace engine {
 		{
 			return m_z;
 		}
+
+		double CPeVector3::Get(int p_indice) const
+		{
+			switch (p_indice)
+			{
+			case 0:
+				return m_x;
+				break;
+			case 1:
+				return m_y;
+				break;
+			case 2:
+				return m_z;
+				break;
+			default:
+				break;
+			}
+		}
+
 		
 		double CPeVector3::DistanceTo(const CPeVector3& p_vector) const
 		{
@@ -127,11 +159,30 @@ namespace engine {
 			m_z = p_z;
 		}
 
-    CPeVector3 operator*(double p_scalar, const CPeVector3 &vector)
-    {
-        return vector*p_scalar;
-    }
+		void CPeVector3::Set(int p_indice, double p_value)
+		{
+			switch (p_indice)
+			{
+			case 0:
+				m_x = p_value;
+				break;
+			case 1:
+				m_y = p_value;
+				break;
+			case 2:
+				m_z = p_value;
+				break;
+			default:
+				break;
+			}
+		}
 
 
-  }
+		CPeVector3 operator*(double p_scalar, const CPeVector3 &vector)
+		{
+			return vector*p_scalar;
+		}
+
+
+	}
 }

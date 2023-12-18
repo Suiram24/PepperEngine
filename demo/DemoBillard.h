@@ -1,5 +1,5 @@
-#ifndef DEMO_DEMOPHASE3_H
-#define DEMO_DEMOPHASE3_H
+#ifndef DEMO_BILLARD_H
+#define DEMO_BILLARD_H
 
 #include "..\CPeGameMode.h"
 #include "..\CPeGameManager.h"
@@ -10,23 +10,18 @@
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 
-#include <optional>
-
 namespace pedemo {
 	namespace pephy = engine::physics;
 
 	/**
-		* @brief A class for basic components regarding the physics of a 3D elements.
+		* @brief A billard demonstration
 	*/
-	class DemoPhase3 : public engine::CPeGameMode
+	class DemoBillard : public engine::CPeGameMode
 	{
 	public:
-		DemoPhase3()
+		DemoBillard()
 			: engine::CPeGameMode()
-			, entity1(nullptr)
-			, entity2(nullptr)
-			, entity3(nullptr)
-			, entity4(nullptr)
+			, whiteBall(nullptr)
 		{
 		}
 
@@ -47,7 +42,11 @@ namespace pedemo {
 	protected:
 	private:
 		void LoadLevel();
+		void DrawImGuiInterface();
 
+		pecore::CPeEntity* SpawnSphere(const pemaths::CPeVector3& p_pos, const pemaths::CPeVector3& p_size);
+		void SpawnStaticBox(const pemaths::CPeVector3& p_pos, const pemaths::CPeVector3& p_size);
+		void SpawnFloor();
 
 	public:
 	protected:
@@ -55,24 +54,12 @@ namespace pedemo {
 		pephy::CPeForceSystem* forceSystem;
 		pephy::CPeCollisionSystem* colliderSystem;
 		engine::render::CPeMeshRenderSystem* meshRenderSystem;
-		//std::optional<vk::SphereMesh> sphere1;
-		//std::optional<vk::SphereMesh> sphere2;
-		int i;
 
-		pecore::CPeEntity* entity1;
-		pecore::CPeEntity* entity2;
-		pecore::CPeEntity* entity3;
-		pecore::CPeEntity* entity4;
-
-		pephy::CPeForceCustomLocal* freeEditable1;
-		pephy::CPeForceCustomLocal* freeEditable2;
-
-		pecore::CPeEntity* floorEntities[10][10];
-
+		pecore::CPeEntity* whiteBall;
 
 
 	};
 
 }
 
-#endif /* DEMO_DEMOCUSTOMGAMEMODE_H */
+#endif /* DEMO_BILLARD_H */

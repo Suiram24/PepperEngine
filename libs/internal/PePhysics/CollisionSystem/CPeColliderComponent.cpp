@@ -2,25 +2,40 @@
 
 namespace engine {
 	namespace physics {
-
-		//void CPeColliderComponent::Initialise(pecore::CPeEntity* p_owner, double p_radius)
-		//{
-		//	m_isActive = true;
-		//	m_owner = p_owner;
-		//	m_radius = p_radius;
-
-		//	m_owner->AddComponent(this);
-		//}
-
-		pemaths::CPeVector3 CPeColliderComponent::GetBoundingSphereCenter() const
+		void CPeColliderComponent::Initialise(pecore::CPeEntity* p_owner, double p_radius)
 		{
-			return GetOwner().m_transform.GetPosition() + m_boundingSphere.GetOffset();
+			m_isActive = true;
+			m_owner = p_owner;
+
+			m_owner->AddComponent(this);
+		}
+		void CPeColliderComponent::SetActive(bool value)
+		{
+			if (!value)
+			{
+				m_owner = nullptr;
+			}
 		}
 
-		double CPeColliderComponent::GetBoundingSphereRadius() const
+		bool CPeColliderComponent::isActive() const
 		{
-			return m_boundingSphere.GetRadius();
+			return false;
 		}
+
+		CPeSpherePrimitiveShape& CPeColliderComponent::GetGlobalVolume() {
+			return *m_enclosingShape;
+		}
+
+		const std::vector<CPePrimitiveShape*>& CPeColliderComponent::GetPrimitives() const
+		{
+			return m_narrowShapes;
+		}
+
+		void CPeColliderComponent::AddPrimitive(CPePrimitiveShape* p_primitive)
+		{
+			m_narrowShapes.push_back(p_primitive);
+		}
+
 
 	}
 }

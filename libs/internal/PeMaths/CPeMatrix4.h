@@ -100,6 +100,13 @@ namespace engine
 			*/
 			CPeMatrix4 operator*(const CPeMatrix4& p_matrice) const;
 
+			/**
+			 * @brief Define the operator 'multiplication' for two CPeMatrix4.
+			 * @param p_matrice A CPeMatrix4 to multiply 'this'.
+			 * @return  A new CPeMatrix4.
+			*/
+			CPeMatrix4 operator*(double p_scalar) const;
+
 
 
 			/**
@@ -145,6 +152,10 @@ namespace engine
 			* @return  A new CPeVector3.
 			*/
 			CPeVector3 operator*(const CPeVector3& p_vector) const;
+
+
+			bool operator!=(const CPeMatrix4& p_matrix) const;
+			bool operator==(const CPeMatrix4& p_matrix) const;
 
 			CPeMatrix3 ToMatrix3() const;
 

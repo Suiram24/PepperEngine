@@ -38,7 +38,7 @@ namespace engine {
 			return m_size;
 		}
 
-		CPeMatrix4 CPeTransform::GetTransformMatrix() const
+		const CPeMatrix4& CPeTransform::GetTransformMatrix() const
 		{
 			return m_transformMatrix;
 		}
@@ -67,7 +67,6 @@ namespace engine {
 				.0, .0, .0
 			);
 
-			//m_transformMatrix = scale*(orientation*position);
 			m_transformMatrix = position*orientation*scale;
 			
         }

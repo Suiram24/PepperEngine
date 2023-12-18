@@ -240,7 +240,7 @@ Une force de flottaison est simulée quand des entitées tombent en dessous de l
  Nous avons implémenté les quaternions comme indiqué dans le cours. Nous avons rajouté des méthodes au quaternion afin de depouvoir obtenir la norme et l'angle représéneté par le quaternion.
  Nous avons encore ajouté des méthodes pour normaliser le quaternion et changer le quaternion en matrice. Ces méthodes permettent de passer de la simple orientation d'u objet à sa position compl_te dans l'espace.
 
- ### Les Matrice
+ ### Les Matrices
 
  Pour tester le discriminant de nos matrices 3x3, on utilise une précision de 1e-12.
  Nos matrice 4x3 contiennent une matrice 3x3 ainsi qu'un Vecteur3.
@@ -274,3 +274,48 @@ Un mesh comonent a donc été crée afin de résoudre ce problème. Il récupèr
 En plus d'automatiser le rendu des meshs, le component permet également de déterminer la texture et le modèle à l'instanciation plutot que de devoir le hardcoder dans une classe.
 
  Nous avons également rajouté une force libre qui peut être appliquée en n'importe quel point de l'espace avec une norme définie par le programmeur.
+
+ # Phase 4
+
+ Pour cette nouvelle phase nous nous sommes beaucoup appuyé sur les expliquations de :
+ > **[Game Physics Engine Development : How to Build a Robust Commercial-Grade Physics Engine for Your Game
+]()**
+ >
+ > par [ Ian Millington ]()
+
+
+## Broad Phase
+
+La broad phase a pour objectif de déterminer les possibles collisions qui peuvent advenir en évitant de traiter les éléments trop éloignés les uns des autre. Cela parmet d'éviter de trop de cas dans la narrow phase avec des formes plus complexes.
+
+### Volumes englobants
+
+Afin de pouvoir détecter grossièrement les possibles collisions, nous avons eu recourt à des volumes englobants. Ces volumes englobants sont des sphères englbant le reste du modèle. On se se sert de ces sphères pour détecter de possible collisions et ainis limiter le nombre de collisions traitées dans la narrow phase.
+
+### KD Tree
+
+Lors de la détection des collisions, l'une des étapes les plus longues est la vérification de collision entre duex objets. Cette vérification se fait en temps quadratique. afin de limiter cette vérification, nous utilisons une méthode séparation de l'espace sous forme de grille. 
+
+La méthode séparation en grille que nous avons choisi est l'utilisation d'un KD tree. Dans cette structure de données, on effectue des séparations successives de l'espace selon les axes X, Y et Z jusqu'à ce que l'on ai un nombre d'objets en collision assez faible.
+
+Nous avons fait le choix de placer le point médian de chaque noeud du KD tree sur l'élément central de chaque noeud. Cet élément est aisi placé dans le fils gauche et le fils droit du noeud courant.
+
+Nous avons également fait le choix de stopper la génération de nouveaux noeuds lorsuqe l'on a moins de 3 objets dans une feuille.
+
+Nous avons enfin effectué des tests de collision des volumes englobants pour déterminer les potentielles collisions.
+ 
+## Narrow phase
+
+Nous avons 3 types de primitives d'implémentés : les boîtes, sphères et plans.
+ Elles possèdent les références sur leurs propriétaires ce qui permet au besoin de calculer le changement de base de leur matrice de transformation dans le monde.
+
+La méthode principale de cette classe génère le contact, s'il existe, entre deux primitives.
+Chaque type de paire de primitives est ensuite géré en conséquence par 5 méthodes spécialisées (il n'y a pas de collision plan sur plan).
+
+Pour cette partie nous avons essayé de suivre au plus proche le livre de Millington.
+Voici cependant une liste des erreurs que nous avons commises puis corrigées :
+	- Pour les collisions entre boîtes et plans et boîtes et sphères nous gardions les coordonnées mondes au lieu de passer en coordonnées locales.
+	- Dans le SAT tous les axes n'étaient pas testés. Au lieu de juste sauter les axes parallèles on sautait tous les axes restants.
+
+
+ ## Résolution

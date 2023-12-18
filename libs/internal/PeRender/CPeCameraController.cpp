@@ -6,7 +6,8 @@ controls::CameraController::CameraController() :
 	viewManager(nullptr),
 	mousePositionX(0.0f),
 	mousePositionY(0.0f)
-{}
+{
+}
 
 void controls::CameraController::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
 	if ((key == GLFW_KEY_M || key == GLFW_KEY_ESCAPE) && action == GLFW_PRESS) {
@@ -146,4 +147,31 @@ controls::CameraController& controls::CameraController::getInstance() {
 
 void controls::CameraController::setViewManager(vk::GenericViewManager& viewManager) {
 	getInstance().viewManager = &viewManager;
+}
+
+void controls::CameraController::InitialiseView()
+{
+	getInstance().viewManager->submitViewMatrix();
+}
+
+void controls::CameraController::ChangeCameraPosition(float eyeX, float eyeY, float eyeZ)
+{
+	getInstance().viewManager->changeCameraPosition(eyeX, eyeY, eyeZ);
+	getInstance().viewManager->submitViewMatrix();
+}
+
+void controls::CameraController::ChangeCameraOrientation(float centerX, float centerY, float centerZ)
+{
+	getInstance().viewManager->changeCameraOrientation(centerX, centerY, centerZ);
+	getInstance().viewManager->submitViewMatrix();
+}
+
+void controls::CameraController::ChangeDisplacementSensitivity(float p_sensitivity)
+{
+	getInstance().displacementSensivity = p_sensitivity;
+}
+
+void controls::CameraController::ChangeOrientationSensitivity(float p_sensitivity)
+{
+	getInstance().orientationSensivity = p_sensitivity;
 }

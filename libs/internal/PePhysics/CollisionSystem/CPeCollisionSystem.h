@@ -2,20 +2,24 @@
 #define CPECOLLISIONSYSTEM_CPECOLLISIONSYSTEM_H
 
 #include <vector>
-#include "CPeParticleContact.h"
 #include "CPeColliderComponent.h"
-#include "CPeContactRod.h"
-#include "CPeContactCable.h"
+#include "../CPeParticle.h"
+#include "SPeContactInfos.h"
+
+#include "CPeBoxPrimitiveShape.h"
+#include "CPePlanePrimitiveShape.h"
 
 namespace engine 
 {
 	class CPeGameManager;
 
 	namespace physics {
+		
 
 		namespace consts
 		{
-			constexpr int nbIterationCollider = 1;
+			constexpr int nbIterationCollider = 5;
+
 		}
 
 		/**
@@ -23,16 +27,16 @@ namespace engine
 		*/
 		class CPeCollisionSystem {
 		private:
-			// vector of detected contacts
-			std::vector<CPeParticleContact*> m_oneTimeContacts;
-
-			// vector of permanent contacts
-			std::vector<CPeParticleContact*> m_permanentContacts;
 
 			// number of iteration for the solver
 			int m_solverIteration;
 
-			pecore::CPeObjectPool<CPeColliderComponent, 4 * pecore::consts::maxEntityNumber>* m_collidersPool;
+			//pecore::CPeObjectPool<CPeColliderComponent, pecore::consts::maxEntityNumber>* m_collidersPool;
+
+			std::vector<CPeSpherePrimitiveShape*> m_sphereShapesPool;
+			std::vector<CPeBoxPrimitiveShape*> m_boxShapesPool;
+			std::vector<CPePlanePrimitiveShape*> m_planeShapesPool;
+			std::vector<CPeColliderComponent*> m_collidersPool;
 
 		public:
 
@@ -49,60 +53,27 @@ namespace engine
 			 * @param p_timeStep The time of simulation in second.
 			 * @param p_particles A vector of the particles with a CPeColliderComponent.
 			*/
-			void UpdateCollision(double p_timeStep, std::vector<CPeParticle*>* p_particles);
+			void UpdateCollision(double p_timeStep);
 
-			CPeColliderComponent* CreateColliderComponent(pecore::CPeEntity* p_owner, double p_radius = 1);
+			CPeColliderComponent* CreateColliderComponent(pecore::CPeEntity& p_owner, double p_radius = 1);
 
-
-			/**
-			 * @brief Add a permanent rod contact between two particles.
-			 * @param p_particleA the first particle.
-			 * @param p_particleB the second particle.
-			 * @param p_restitution the restitution of the particles.
-			 * @param p_length the length of the rod.
-			*/
-			void CreateRodBetween(CPeParticle* p_particleA, CPeParticle* p_particleB, double p_restitution, double p_length);
-
-			/**
-			 * @brief Add a permanent rod contact between two particles.
-			 * @param p_particleA the first particle.
-			 * @param p_particleB the second particle.
-			 * @param p_restitution the restitution of the particles.
-			 * @param p_maxLength the maximum length of the cable.
-			*/
-			void CreateCableBetween(CPeParticle* p_particleA, CPeParticle* p_particleB, double p_restitution, double p_maxLength);
+			CPeSpherePrimitiveShape* CreateSphereShape(const pecore::CPeEntity& p_owner, double p_radius);
+			CPeBoxPrimitiveShape* CreateBoxShape(const pecore::CPeEntity& p_owner, const pemaths::CPeVector3& p_size);
+			CPePlanePrimitiveShape* CreatePlaneShape(const pecore::CPeEntity& p_owner, pemaths::CPeVector3 p_normal, double p_offset);
 
 		private:
 
+			void SortContactInfos(std::vector<SPeContactInfos*>& contactInfos, int iteration);
+
 			CPeCollisionSystem()
-				: m_oneTimeContacts(std::vector<CPeParticleContact*>())
-				, m_permanentContacts(std::vector<CPeParticleContact*>())
-				, m_solverIteration(consts::nbIterationCollider)
-				, m_collidersPool(nullptr)
+				: m_solverIteration(consts::nbIterationCollider)
+				, m_sphereShapesPool()
+				, m_collidersPool()
 			{
 			}
 
 			void AllocateObjectsPool();
 			void FreeObjectsPool();
-
-
-			/**
-			* @brief Register a permanent contact.
-			* @param p_contact The contact to register.
-			*/
-			void AddPermanentContact(CPeParticleContact* p_contact);
-
-			/**
-			 * @brief Detect the new collisions.
-			 * @param p_particles A vector of the particles with a CPeColliderComponent.
-			*/
-			void DetectCollions(std::vector<CPeParticle*>* p_particles);
-
-			/**
-			 * @brief Resolve both type of collisions.
-			 * @param p_timeStep The time of simulation in second.
-			*/
-			void ResolveCollisions(double p_timeStep);
 		};
 	}
 }
