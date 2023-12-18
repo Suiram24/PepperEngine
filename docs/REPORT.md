@@ -298,7 +298,7 @@ Chaque type de paire de primitives est ensuite géré en conséquence par 5 mét
 Pour cette partie nous avons essayé de suivre au plus proche le livre de Millington.
 Voici cependant une liste des erreurs que nous avons commises puis corrigées :
 	- Pour les collisions entre boîtes et plans et boîtes et sphères nous gardions les coordonnées mondes au lieu de passer en coordonnées locales.
-	- Dans le SAT tout les axes n'étaient pas testés. Au liau de juste sauter les axes parallèles on sautait tous les axes restants.
+	- Dans le SAT tous les axes n'étaient pas testés. Au lieu de juste sauter les axes parallèles on sautait tous les axes restants.
 
 
  ## Résolution
