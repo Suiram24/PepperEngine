@@ -39,6 +39,7 @@ namespace pedemo {
 
 	void DemoCollisionSystem::LoadLevel()
 	{
+		SetupCameraParameters();
 		DemoSpheres();
 		//DemoBoxes();
 	}
@@ -161,5 +162,19 @@ namespace pedemo {
 		{
 			SpawnBox((i % 2) * 0.5, 6 + 2 * i, ((i + 1) % 2) * 0.5);
 		}
+	}
+
+	void DemoCollisionSystem::SetupCameraParameters()
+	{
+		m_renderer->SetNearPlan(0.01f);
+		m_renderer->SetFarPlan(50.0f);
+
+		controls::CameraController::ChangeCameraPosition(0, 10, -5);
+		controls::CameraController::ChangeCameraOrientation(0, 0, 0);
+
+		controls::CameraController::ChangeDisplacementSensitivity(0.1f);
+		controls::CameraController::ChangeOrientationSensitivity(0.005f);
+
+		controls::CameraController::InitialiseView();
 	}
 }

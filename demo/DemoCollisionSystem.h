@@ -42,6 +42,7 @@ namespace pedemo {
 		*/
 		virtual void GameEnd();
 	protected:
+		void SetupCameraParameters();
 	private:
 		void LoadLevel();
 		void DrawImGuiInterface();

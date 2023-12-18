@@ -34,15 +34,11 @@ namespace engine {
 		glfwSetCursorPosCallback(m_window, controls::CameraController::cursorPositionCallback);
 		glfwSetKeyCallback(m_window, controls::CameraController::keyCallback);
 
-		view.changeCameraPosition(-5, 10, -5);
-		view.changeCameraOrientation(0,0,0);
-
 		//vk::CPeVulkanRenderer renderer;
 		//engine::render::CPeImGuiRenderer& imguiRenderer = engine::render::CPeImGuiRenderer::getInstance();
 		//imguiRenderer.SetupInterface();
 		m_renderer.init(m_window);
-		m_renderer.SetNearPlan(0.1f);
-		m_renderer.SetFarPlan(50.0f);
+		SetupCameraParameters();
 
 		//
 		// Give the window and renderer to the gamemode
@@ -136,6 +132,20 @@ namespace engine {
 	pecore::CPeEntity& CPeGameManager::CreateEntity(const pemaths::CPeTransform& p_transform)
 	{
 		return m_entityPool->Create(p_transform);
+	}
+
+	void CPeGameManager::SetupCameraParameters()
+	{
+		m_renderer.SetNearPlan(0.1f);
+		m_renderer.SetFarPlan(50.0f);
+
+		controls::CameraController::ChangeCameraPosition(-5, 10, -5);
+		controls::CameraController::ChangeCameraOrientation(0, 0, 0);
+
+		controls::CameraController::ChangeDisplacementSensitivity(0.1f);
+		controls::CameraController::ChangeOrientationSensitivity(0.005f);
+
+		controls::CameraController::InitialiseView();
 	}
 	
 }
