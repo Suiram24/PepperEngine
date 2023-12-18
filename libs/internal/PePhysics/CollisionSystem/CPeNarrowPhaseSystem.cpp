@@ -220,17 +220,19 @@ namespace engine
 				if (dist < -pos) dist = -pos;
 				closestPoint.SetZ(dist);
 
-				double d = (closestPoint - spherePos).GetNorm();
+				pemaths::CPeVector3 cp = T * closestPoint;
+				pemaths::CPeVector3 sp = T * spherePos;
+
+				double d = (cp - sp).GetNorm();
 				double r = p_sphere->GetRadius();
 
-				if (d*d > r*r) // Box doesn't collide
+				if (d > r) // Box doesn't collide
 				{
 					return;
 				}
 
 				SPeContactInfos* data = new SPeContactInfos();
-				pemaths::CPeVector3 cp = T * closestPoint;
-				pemaths::CPeVector3 sp = T * spherePos;
+
 				data->normal = ((cp - sp).NormalizeVector());
 				data->interpenetration = r - d;
 				//data->contactPoint = (sp + r * data->normal);

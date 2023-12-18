@@ -29,9 +29,9 @@ namespace engine
 				pemaths::CPeVector3 localContactPoint;
 
 
-				for (size_t i = 0; i < nbRigidbody; i++)
+ 				for (size_t i = 0; i < nbRigidbody; i++)
 				{
-					localContactPoint = obj[i]->GetTransform().GetPositionPointInLocal(cInfo->contactPoint);
+					localContactPoint = cInfo->contactPoint - obj[i]->GetTransform().GetPosition();
 					pemaths::CPeVector3 angularInertiaWorld = pemaths::CPeVector3::CrossProduct(localContactPoint, cInfo->normal);
 					angularInertiaWorld = obj[i]->GetInverseInertia() * angularInertiaWorld;
 					angularInertiaWorld = pemaths::CPeVector3::CrossProduct(localContactPoint, angularInertiaWorld);
@@ -84,19 +84,11 @@ namespace engine
 				{
 					nbRigidbody = 1;
 					SumMassInverse = obj[0]->GetMassInverse();
-					if (pemaths::CPeVector3::ScalarProduct(n, obj[0]->GetVelocity()) <= 0)
-					{
-						continue;
-					}
 				}
 				else
 				{
 					SumMassInverse = obj[0]->GetMassInverse() + obj[1]->GetMassInverse();
 					double scalar =  pemaths::CPeVector3::ScalarProduct(n, obj[0]->GetVelocity()) - pemaths::CPeVector3::ScalarProduct(n, obj[1]->GetVelocity());
-					if (scalar <= 0)
-					{
-						continue;
-					}
 				}
 
 				pemaths::CPeVector3 contactPointVector, pointVelocity, angVelocitybyImpulse, velocity, contactVelocity;
@@ -152,7 +144,7 @@ namespace engine
 					pemaths::CPeVector3 r = cInfo->contactPoint - obj[i]->GetTransform().GetPosition();
 
 					obj[i]->SetVelocity(obj[i]->GetVelocity() - (k * n *  obj[i]->GetMassInverse()));
-					obj[i]->SetAngularVelocity(obj[i]->GetAngularVelocity() - (obj[i]->GetInverseInertiaWorld() * pemaths::CPeVector3::CrossProduct(r, k * n)));
+					obj[i]->SetAngularVelocity(obj[i]->GetAngularVelocity() - (obj[i]->GetInverseInertiaWorld() * pemaths::CPeVector3::CrossProduct(r, k * n)));				
 					k *= -1;
 				}
 				

@@ -110,6 +110,7 @@ namespace engine {
 		{
 			//return &m_collidersPool->Create(p_owner, p_radius);
 			CPeColliderComponent* col = new CPeColliderComponent(p_owner, CreateSphereShape(dynamic_cast<const pecore::CPeEntity&>(p_owner), p_radius));
+			p_owner.AddComponent(col);
 			m_collidersPool.push_back(col);
 			return col;
 		}
