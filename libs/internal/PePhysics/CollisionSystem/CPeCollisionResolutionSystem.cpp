@@ -92,17 +92,16 @@ namespace engine
 				}
 
 				pemaths::CPeVector3 contactPointVector, pointVelocity, angVelocitybyImpulse, velocity, contactVelocity;
-				double e;
+				double e = cInfo->contactElasticity;
 				//double linearVelDelta[2] = { .0 ,.0 };
 				//double angularVelDelta[2] = { .0 ,.0 };
 				double deltaVelocity = 0;
 
 				
-				e = 1;
 				int sign = 1;
 				for (size_t i = 0; i < nbRigidbody; i++)
 				{
-					e *= 0.6; //TODO: replace with elasticity
+
 					contactPointVector = cInfo->contactPoint - obj[i]->GetTransform().GetPosition() ;
 					pointVelocity = obj[i]->GetVelocity() + obj[i]->GetAngularVelocity() * contactPointVector.GetNorm();
 

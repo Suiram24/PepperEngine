@@ -19,16 +19,40 @@ namespace engine {
 		*/
 		class CPePrimitiveShape {
 		protected:
+			const pecore::CPeEntity& m_owner;
+
+			double m_elasticity;
+
 			pemaths::CPeTransform m_shapeTransform;
 			pemaths::CPeMatrix4 m_ownerTransformMat;
 			pemaths::CPeVector3 m_worldPosition;
 
-			const pecore::CPeEntity& m_owner;
-
 		public:
 
-			CPePrimitiveShape(const pecore::CPeEntity& p_owner):
-				m_owner(p_owner)
+			CPePrimitiveShape(const pecore::CPeEntity& p_owner)
+				: m_owner(p_owner)
+				, m_elasticity(0.6)
+				, m_shapeTransform(pemaths::CPeTransform())
+				, m_ownerTransformMat(pemaths::CPeMatrix4())
+				, m_worldPosition(pemaths::CPeVector3())
+			{
+			}
+
+			CPePrimitiveShape(const pecore::CPeEntity& p_owner, double p_elasticity)
+				: m_owner(p_owner)
+				, m_elasticity(p_elasticity)
+				, m_shapeTransform(pemaths::CPeTransform())
+				, m_ownerTransformMat(pemaths::CPeMatrix4())
+				, m_worldPosition(pemaths::CPeVector3())
+			{
+			}
+
+			CPePrimitiveShape(const pecore::CPeEntity& p_owner, double p_elasticity, const pemaths::CPeTransform& p_shapeTransform)
+				: m_owner(p_owner)
+				, m_elasticity(p_elasticity)
+				, m_shapeTransform(p_shapeTransform)
+				, m_ownerTransformMat(pemaths::CPeMatrix4())
+				, m_worldPosition(pemaths::CPeVector3())
 			{
 			}
 
@@ -41,6 +65,8 @@ namespace engine {
 			pemaths::CPeVector3 ConvertLocalToWorld(const pemaths::CPeVector3& p_localCoordinates) const;
 
 			const pecore::CPeEntity& GetOwningEntity() const;
+
+			double GetElasticity() const;
 
 			
 			virtual EShapeTypes GetType() const = 0;

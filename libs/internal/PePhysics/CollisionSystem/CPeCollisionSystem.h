@@ -57,7 +57,7 @@ namespace engine
 
 			CPeColliderComponent* CreateColliderComponent(pecore::CPeEntity& p_owner, double p_radius = 1);
 
-			CPeSpherePrimitiveShape* CreateSphereShape(const pecore::CPeEntity& p_owner, double p_radius);
+			CPeSpherePrimitiveShape* CreateSphereShape(const pecore::CPeEntity& p_owner, double p_radius, double p_elasticity = 0.6);
 			CPeBoxPrimitiveShape* CreateBoxShape(const pecore::CPeEntity& p_owner, const pemaths::CPeVector3& p_size);
 			CPePlanePrimitiveShape* CreatePlaneShape(const pecore::CPeEntity& p_owner, pemaths::CPeVector3 p_normal, double p_offset);
 

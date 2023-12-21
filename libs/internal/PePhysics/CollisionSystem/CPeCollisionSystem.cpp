@@ -115,9 +115,9 @@ namespace engine {
 			return col;
 		}
 
-		CPeSpherePrimitiveShape* CPeCollisionSystem::CreateSphereShape(const pecore::CPeEntity& p_owner, double p_radius)
+		CPeSpherePrimitiveShape* CPeCollisionSystem::CreateSphereShape(const pecore::CPeEntity& p_owner, double p_radius, double p_elasticity /*= 0.6*/)
 		{
-			CPeSpherePrimitiveShape* sphereShape = new CPeSpherePrimitiveShape(p_owner, p_radius);
+			CPeSpherePrimitiveShape* sphereShape = new CPeSpherePrimitiveShape(p_owner, p_radius, p_elasticity);
 			m_sphereShapesPool.push_back(sphereShape);
 			return sphereShape;
 		}

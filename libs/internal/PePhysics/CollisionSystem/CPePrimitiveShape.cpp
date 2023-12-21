@@ -40,6 +40,11 @@ namespace engine {
 			return m_owner;
 		}
 
+		double CPePrimitiveShape::GetElasticity() const
+		{
+			return m_elasticity;
+		}
+
 
 		CPeRigidBody* CPePrimitiveShape::GetRigidbody() const
 		{

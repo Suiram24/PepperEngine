@@ -15,8 +15,8 @@ namespace engine {
 
 		public:
 
-			CPeSpherePrimitiveShape(const pecore::CPeEntity& p_owner,double p_radius):
-				CPePrimitiveShape(p_owner),
+			CPeSpherePrimitiveShape(const pecore::CPeEntity& p_owner,double p_radius, double p_elasticity):
+				CPePrimitiveShape(p_owner, p_elasticity),
 				m_radius(p_radius)
 			{
 			}

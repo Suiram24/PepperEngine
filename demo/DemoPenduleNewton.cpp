@@ -47,9 +47,9 @@ namespace pedemo {
 
 		for (int i = -2; i < count; i++)
 		{
-			pephy::CPeRigidBody* ball = SpawnSphere(i, 2, 0);
+			pephy::CPeRigidBody* ball = SpawnSphere(i, 1.75, 0);
 
-			pephy::CPeForceAnchoredSpring* spring = forceSystem->CreateForceAnchoredSpring(pemaths::CPeVector3(i, 13, 0), 10, 1, pemaths::CPeVector3(0, 0.5, 0));
+			pephy::CPeForceAnchoredSpring* spring = forceSystem->CreateForceAnchoredSpring(pemaths::CPeVector3(i, 13, 0), 100, 10, pemaths::CPeVector3(0, 0.5, 0));
 
 			forceSystem->AddForceToParticle(spring, ball);
 			
@@ -100,7 +100,7 @@ namespace pedemo {
 
 		pephy::CPeColliderComponent* col = colliderSystem->CreateColliderComponent(*entity, sqrt(3));
 
-		col->AddPrimitive(colliderSystem->CreateSphereShape(*entity, 0.5));
+		col->AddPrimitive(colliderSystem->CreateSphereShape(*entity, 0.5, 0.999));
 
 		return rigidbodyComp;
 	}

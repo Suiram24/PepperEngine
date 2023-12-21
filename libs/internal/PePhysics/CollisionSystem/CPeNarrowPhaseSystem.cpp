@@ -103,6 +103,7 @@ namespace engine
 				data->normal = (p_sphere1->GetWorldPosition() - p_sphere2->GetWorldPosition()).NormalizeVector();
 				data->interpenetration = r1 + r2 - d;
 				data->contactPoint = p_sphere2->GetWorldPosition() + r2 * data->normal;
+				data->contactElasticity = p_sphere1->GetElasticity() * p_sphere2->GetElasticity();
 
 				if (AddRigidbodyToContactInfos(data, p_sphere1->GetOwningEntity(), p_sphere2->GetOwningEntity()))
 				{
@@ -129,6 +130,7 @@ namespace engine
 				data->normal = p_plane->GetNormal();
 				data->interpenetration = abs(d);
 				data->contactPoint = p_sphere->GetWorldPosition() - r * data->normal;
+				data->contactElasticity = p_sphere->GetElasticity() * p_plane->GetElasticity();
 
 				if (AddRigidbodyToContactInfos(data, p_sphere->GetOwningEntity(), p_plane->GetOwningEntity()))
 				{
@@ -175,6 +177,7 @@ namespace engine
 					data->normal = p_plane->GetNormal();
 					data->interpenetration = d;
 					data->contactPoint = corners[i];
+					data->contactElasticity = p_box->GetElasticity() * p_plane->GetElasticity();
 
 					if (AddRigidbodyToContactInfos(data, p_box->GetOwningEntity(), p_plane->GetOwningEntity()))
 					{
@@ -237,6 +240,7 @@ namespace engine
 				data->interpenetration = r - d;
 				//data->contactPoint = (sp + r * data->normal);
 				data->contactPoint = cp;
+				data->contactElasticity = p_box->GetElasticity() * p_sphere->GetElasticity();
 
 				if (AddRigidbodyToContactInfos(data, p_box->GetOwningEntity(), p_sphere->GetOwningEntity()))
 				{
@@ -375,6 +379,7 @@ namespace engine
 					data->normal = contactAxis;
 					data->interpenetration = bestOverlap;
 					data->contactPoint = vertex;
+					data->contactElasticity = one->GetElasticity() * two->GetElasticity();
 
 					if (AddRigidbodyToContactInfos(data, one->GetOwningEntity(), two->GetOwningEntity()))
 					{
@@ -434,6 +439,7 @@ namespace engine
 					data->normal = contactAxis;
 					data->interpenetration = bestOverlap;
 					data->contactPoint = GetContactPoint(axes[oneAxisIndex], axes[3+twoAxisIndex], pointOnEdge1, pointOnEdge2);
+					data->contactElasticity = p_box1->GetElasticity() * p_box2->GetElasticity();
 					
 					if (AddRigidbodyToContactInfos(data, p_box1->GetOwningEntity(), p_box2->GetOwningEntity()))
 					{
