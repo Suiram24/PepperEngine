@@ -326,3 +326,37 @@ Voici cependant une liste des erreurs que nous avons commises puis corrigées :
  La fonction de résolution de l'interpénétration fonctionne plutot bien, mais celle de la vélocité rencontre encore de nombreux problème, nottament en précense de vélocité angulaire.
 
  Nous avons rencontré un grand nombre de bugs lors de cette phase 4, où nous nous sommes par exemple rendu compte que la fonctione d'inversion de matrice du cours était éronné si la matrice de transformation avait subit une rotation.
+
+ ## Tester le projet
+
+ Afin de tester le projet, nous avons réalisé plusieurs démos. Ces dernières sont accessible sdans le dossier `demo` à la racine du projet. Pour pouvoir changer la démo à exécuter, il faut la modifier dans le fichier `main.cpp` à la racine du projet :
+
+ ```cpp
+#include "demo/DemoPenduleNewton.h" // Importer la demo adéquate
+
+
+// Main code
+int main(int, char**)
+{
+
+    engine::CPeGameMode* myGameMode = &pedemo::DemoPenduleNewton(); // Tester la démo
+    //engine::CPeGameMode* myGameMode = &pedemo::DemoBillard();
+
+
+    engine::CPeGameManager::getInstance().SetGameMode(myGameMode);
+    engine::CPeGameManager::getInstance().StartGame();
+
+    return 0;
+}
+ ```
+
+ Le fichier de démonstration `demo/DemoCollisionSystem.cpp` présente une spécificté : Il faut commenter une ligne et décomenter l'autre pour tester l'un ou l'autre des cas. Dans la méthode `LoadLevel` de cette démo, il faut choisir d'appeler la méthode `DemoSpheres` ou `DemoBoxes` pour tester l'un ou l'autre des cas.
+
+ ```cpp
+void DemoCollisionSystem::LoadLevel()
+{
+	SetupCameraParameters();
+	DemoSpheres();
+	//DemoBoxes();
+}
+ ```
