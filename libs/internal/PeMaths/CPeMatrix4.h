@@ -12,7 +12,8 @@ namespace engine
 	namespace maths
 	{
 		/**
-		*@brief Class for a basic representation of a matrice 4x4.
+		*@brief Class for a basic representation of a 4x4 transformation matrix.
+		* This cannot be used as a generic 4x4 matrix, as the last column is hard coded to save memory
 		*/
 		class CPeMatrix4
 		{
@@ -157,6 +158,9 @@ namespace engine
 			bool operator!=(const CPeMatrix4& p_matrix) const;
 			bool operator==(const CPeMatrix4& p_matrix) const;
 
+			/**
+			* @brief Get the 3x3 Matrix that represent rotation and scale of this 4x4 matrix
+			*/
 			CPeMatrix3 ToMatrix3() const;
 
 		};

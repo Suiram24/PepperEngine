@@ -152,10 +152,25 @@ namespace engine
 			*/
 			double Get(int p_indice) const;
 
+
+			/**
+			 * @brief Setter for m_x.
+			*/
 			void SetX(double p_x);
+
+			/**
+			 * @brief Setter for m_y.
+			*/
 			void SetY(double p_y);
+
+			/**
+			 * @brief Setter for m_z.
+			*/
 			void SetZ(double p_z);
 
+			/**
+			 * @brief Setter for any m_x/m_y/m_z (0/1/2 indices).
+			*/
 			void Set(int p_indice, double p_value);
 
 			/**

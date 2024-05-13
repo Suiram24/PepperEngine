@@ -8,7 +8,7 @@
 namespace engine {
 	namespace maths {
 		/**
-		 * @brief A class for basic components regarding the physics of a 3D elements.
+		 * @brief A class that allow to position, rotate and scale objects in a 3D space
 		*/
 		class CPeTransform
 		{
@@ -17,7 +17,10 @@ namespace engine {
 			CPeVector3 m_position;
 
 			CPeQuaternion m_orientation;
-			CPeMatrix4 m_transformMatrix;
+
+			//The transform matrix (4*4), it is computed every time the transform is modified, to avoid computations every times it it read.
+			//Changing this does not update the position, rotation or size, so this should always be used as read only.
+			CPeMatrix4 m_transformMatrix; 
 
 			CPeVector3 m_size;
 
@@ -70,19 +73,19 @@ namespace engine {
 			const CPeVector3& GetPosition() const;
 
 			/**
-			 * @brief Get targeted point local coordinates in global coordinates
+			 * @brief Return the world space coordinates of a point in the local space coordinates of this transform
 			 * 
 			 */
 			CPeVector3 GetPositionPoint(const CPeVector3& p_localPoint);
 
 			/**
-			 * @brief Get targeted point global coordinates in local coordinates
+			 * @brief Return local space coordinates of a point in world space coordinates
 			 *
 			 */
 			CPeVector3 GetPositionPointInLocal(const CPeVector3& p_globalPoint) const;
 
 			/**
-			 * .
+			 * @brief Return the global vector multiplyed by this transform rotation matrix
 			 */
 			CPeVector3 GetVectorInLocal(const CPeVector3& p_globalVector) const;
 
@@ -98,6 +101,10 @@ namespace engine {
 			*/
 			const CPeVector3& GetSize() const;
 
+			/**
+			 * @brief Accessor for m_transformMatrix.
+			 * @return the transform matrix.
+			*/
 			const CPeMatrix4& GetTransformMatrix() const;
 
 			/**
