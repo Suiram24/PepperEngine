@@ -9,6 +9,8 @@
 #include "CPeForce.h"
 #include "CPeForceSystem.h"
 
+#include "PePhysicsComponents.h"
+
 #include "EngineForces/CPeForceDrag.h"
 #include "EngineForces/CPeForceAnchoredSpring.h"
 #include "EngineForces/CPeForceSpring.h"
