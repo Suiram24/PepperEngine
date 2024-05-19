@@ -19,15 +19,54 @@ namespace pedemo {
 		colliderSystem = &pephy::CPeCollisionSystem::GetInstance();
 		meshRenderSystem = &engine::render::CPeMeshRenderSystem::GetInstance();
 
+		printf("Game start");
+
 		LoadLevel();
 
+		world = flecs::world();
+
+		auto e = world.entity("e1");
+		e.set<Position>({ pemaths::CPeVector3()})
+		 .set<Velocity>({ pemaths::CPeVector3() })
+		 .set<Acceleration>({ pemaths::CPeVector3(0,0.1,0) })
+		 .set<Mass>({ 1. });
+
+		world.entity("e2")
+			.set<Position>({ pemaths::CPeVector3() })
+			.set<Velocity>({ pemaths::CPeVector3() })
+			.set<Acceleration>({ pemaths::CPeVector3(0,0.1,0) })
+			.set<Mass>({ 1. });
+
+		world.entity("e3")
+			.set<Position>({ pemaths::CPeVector3() })
+			.set<Velocity>({ pemaths::CPeVector3() })
+			.set<Acceleration>({ pemaths::CPeVector3(0,0.1,0) })
+			.set<Mass>({ 1. })
+			.set<ParticleCustomValues>({ pemaths::CPeVector3(0,-10,0),0.99 });
+
+		world.entity("e4")
+			.set<Position>({ pemaths::CPeVector3() })
+			.set<Velocity>({ pemaths::CPeVector3() })
+			.set<Mass>({ 1. })
+			.set<ParticleCustomValues>({ pemaths::CPeVector3(0,-10,0),0.99 });
+		
+		particleQuery = world.query<Position, Velocity, const Acceleration, const Mass>();
 	}
 
 	void DemoPenduleNewton::GameUpdate()
 	{
 
 		DrawImGuiInterface();
-
+		printf("Particle count : %i\n", particleQuery.count());
+		
+		particleQuery.each([](Position& p, Velocity& v, const Acceleration& a, const Mass m)
+			{
+				v.m_velocity = v.m_velocity + a.m_acceleration * ImGui::GetIO().DeltaTime;
+				p.m_position = p.m_position + v.m_velocity * ImGui::GetIO().DeltaTime;
+				printf("Particle position : %.3f \n", p.m_position.GetY());
+			});
+		
+		
 
 	}
 

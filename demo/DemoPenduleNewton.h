@@ -21,9 +21,7 @@ namespace pedemo {
 	public:
 		DemoPenduleNewton()
 			: engine::CPeGameMode()
-			, entity1(nullptr)
-			, entity2(nullptr)
-			, entity3(nullptr)
+			, world()
 		{
 		}
 
@@ -62,11 +60,8 @@ namespace pedemo {
 		pephy::CPeCollisionSystem* colliderSystem;
 		engine::render::CPeMeshRenderSystem* meshRenderSystem;
 
-		pecore::CPeEntity* entity1;
-		pecore::CPeEntity* entity2;
-		pecore::CPeEntity* entity3;
-
-
+		flecs::world world;
+		flecs::query<Position, Velocity, const Acceleration, const Mass> particleQuery;
 	};
 
 }
