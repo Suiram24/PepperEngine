@@ -25,7 +25,7 @@ namespace engine {
 		
 		namespace pemaths = engine::maths;
 		/**
-		 * @brief Class for all physics objects
+		 * @brief Class for all entities in the level. An entitie is defined by its compnents
 		*/
 		class CPeEntity
 		{
@@ -57,6 +57,11 @@ namespace engine {
 			void Initialise(const pemaths::CPeTransform& p_transform);
 			bool IsActive();
 
+			/**
+			 * @brief Return the first component of class T.
+			 * Usage: entity.GetComponent<T>();
+			 * @return Pointer to the component if found, nullptr otherwise
+			*/
 			template<class T>
 			T* GetComponent() const
 			{
@@ -71,9 +76,12 @@ namespace engine {
 				return nullptr;
 			}
 
-
+			/**
+			 * @brief Attach a component as a child of this entity.
+			 * Warning: this function does not set the entity as the owner of the component. It is made to be called from the component when it is initialized.
+			*/
 			void AddComponent(CPeComponent* p_component);
-
+			//TODO: Make this private/protected and add CPeComponent in friend class ?
 
 		};
 	}

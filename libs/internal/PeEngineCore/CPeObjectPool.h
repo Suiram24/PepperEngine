@@ -22,7 +22,7 @@ namespace engine
 		{
 
 		public:
-			//TODO change m_uuid
+		
 			CPeObjectPool()
 				: m_pool()
 			{
@@ -33,7 +33,7 @@ namespace engine
 			}
 
 			template<typename ... Args>
-			T& Create(Args ... p_params)
+			T& Create(Args ... p_params) //Return a reference to the initialized pooled object
 			{
 				if (!m_freeStack.empty())
 				{
@@ -50,18 +50,18 @@ namespace engine
 				}
 			}
 
-			void Release(T* p_ObjectPointer)
+			void Release(T* p_ObjectPointer) //Destroy the object and allow the object pool to reuse memory
 			{
 				p_ObjectPointer->SetActive(false);
 				m_freeStack.push(p_ObjectPointer);
 			}
 
-			int Size() const
+			int Size() const //Size of the object pool
 			{
 				return N;
 			}
 
-			T* First()
+			T* First() //Pointer toward the static array
 			{
 				return &m_pool[0];
 			}
