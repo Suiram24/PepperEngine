@@ -14,4 +14,5 @@ FetchContent_Declare(
 )
 
 FetchContent_MakeAvailable(flecs)
-target_link_libraries(PeEngineCore PeMaths, flecs)
+
+target_link_libraries(PeEngineCore PeMaths flecs::flecs_static)

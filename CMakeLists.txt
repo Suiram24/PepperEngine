@@ -45,6 +45,9 @@ include_directories(${TINYOBJ_L_DIR})
 # Use vulkan headers from glfw:
 include_directories(${GLFW_DIR}/deps)
 
+# Add flecs headers
+include_directories(${flecs_SOURCE_DIR}/include)
+
 #Pe libs
 add_subdirectory(libs/internal/PeRender)
 add_subdirectory(libs/internal/PeMaths)
