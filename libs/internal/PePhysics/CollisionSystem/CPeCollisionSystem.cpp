@@ -16,12 +16,17 @@ namespace engine {
 				//Get all colliders
 			std::vector<CPeColliderComponent*> collidersList = m_collidersPool;
 
+			if (collidersList.size() == 0)
+			{
+				return;
+			}
 
 			// Broad phase
 			//printf("Broad Phase\n");
 			CPeKDTree tree = CPeKDTree(X, collidersList);
 
 			std::vector<std::pair<CPeColliderComponent*, CPeColliderComponent*>> possibleCollisions = tree.GetPossibleCollisions();
+			
 			
 
 			// Narrow phase
