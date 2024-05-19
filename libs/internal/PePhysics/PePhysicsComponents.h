@@ -2,6 +2,13 @@
 
 #include "../PeEngineCore/PeEngineCore.h"
 
+//Default values (singleton components, do not add to entities)
+struct WorldDefaults
+{
+	engine::maths::CPeVector3 m_DefaultGravity;
+	double m_DefaultDamping;
+};
+
 //Particle components
 
 struct Position
@@ -17,6 +24,11 @@ struct Velocity
 struct Acceleration
 {
 	engine::maths::CPeVector3 m_acceleration;
+};
+
+struct ForceReceiver
+{
+	engine::maths::CPeVector3 m_sumForces;
 };
 
 struct Mass
