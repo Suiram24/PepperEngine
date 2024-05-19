@@ -13,6 +13,8 @@
 #include "EngineForces/CPeForceFree.h"
 #include "EngineForces/CPeForceCustomLocal.h"
 
+#include "PePhysicsComponents.h"
+
 namespace pemaths = engine::maths;
 namespace pecore = engine::core;
 
@@ -37,11 +39,11 @@ namespace engine {
 				return instance;
 			}
 
-			
+
 
 			CPeParticle* CreateParticleComponent(pecore::CPeEntity* p_owner, double p_massInverse = 1, double p_damping = 0.999, pemaths::CPeVector3 p_gravity = pemaths::CPeVector3(0, -10, 0));
 			CPeRigidBody* CreateRigidBodyComponent(pecore::CPeEntity* p_owner, double p_massInverse = 1, double p_damping = 0.999, pemaths::CPeVector3 p_gravity = pemaths::CPeVector3(0, -10, 0), double angular_dampling = 0.999);
-			
+
 			CPeForceDrag* CreateForceDrag(float p_k1, float p_k2, pemaths::CPeVector3 p_appPoint = pemaths::CPeVector3());
 			CPeForceAnchoredSpring* CreateForceAnchoredSpring(const pemaths::CPeVector3& p_anchor, float p_k, float p_restLength, pemaths::CPeVector3 p_bodyAnchor = pemaths::CPeVector3());
 			CPeForceSpring* CreateForceSpring(CPeParticle* p_other, float p_k, float p_restLength, pemaths::CPeVector3 p_bodyAnchor = pemaths::CPeVector3(), pemaths::CPeVector3 p_otherLocalAnchor = pemaths::CPeVector3());
@@ -53,6 +55,8 @@ namespace engine {
 			bool AddForceAtPoint(CPeForce* p_force, CPeRigidBody* p_rigidBody, pemaths::CPeVector3 localPoint, double p_lifespan = -1);
 
 			void Update(double p_timeStep);
+
+			void InitSystems(flecs::world& world);
 
 		protected:
 		private:
@@ -66,17 +70,21 @@ namespace engine {
 				, m_customLocalPool(nullptr)
 				, m_particlePool(nullptr)
 				, m_rigidbodyPool(nullptr)
+				, AccelerationIntegrator()
+				, VelocityIntegrator()
+				, PositionIntegrator()
+
 			{
 
 			}
 
 			void AllocateObjectsPool();
 			void FreeObjectsPool();
-
+			
 		public:
 		protected:
 		private:
-			
+
 
 			pecore::CPeObjectPool<SPeParticleForceEntry, 4 * pecore::consts::maxEntityNumber>* m_registry;
 
@@ -90,6 +98,9 @@ namespace engine {
 			pecore::CPeObjectPool<CPeParticle, pecore::consts::maxEntityNumber>* m_particlePool;
 			pecore::CPeObjectPool<CPeRigidBody, pecore::consts::maxEntityNumber>* m_rigidbodyPool;
 
+			flecs::system AccelerationIntegrator;
+			flecs::system VelocityIntegrator;
+			flecs::system PositionIntegrator;
 		};
 	}
 }

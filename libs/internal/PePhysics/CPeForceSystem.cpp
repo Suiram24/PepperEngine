@@ -3,6 +3,113 @@
 namespace engine {
 	namespace physics {
 
+		void CPeForceSystem::Update(double p_timeStep)
+		{
+			AccelerationIntegrator.run(p_timeStep);
+			VelocityIntegrator.run(p_timeStep);
+			PositionIntegrator.run(p_timeStep);
+		}
+
+		void CPeForceSystem::InitSystems(flecs::world& world)
+		{
+			AccelerationIntegrator = world.system<Acceleration, const ForceReceiver, const Mass, const ParticleCustomValues*>("Acceleration_Integrator")
+				.each([](flecs::iter& it, size_t, Acceleration& a, const ForceReceiver f, const Mass m, const ParticleCustomValues *cv)
+				{
+					if (cv)
+					{
+						a.m_acceleration = (f.m_sumForces *(1 / it.delta_time()) * m.m_massInverse + cv->m_gravity);
+					}
+					else
+					{
+						a.m_acceleration = (f.m_sumForces * (1 / it.delta_time())) * m.m_massInverse + pemaths::CPeVector3(0,-9.81,0);//TODO: use the world const singleton component
+					}						
+
+					//m_acceleration = (m_sumForces * (1 / p_timeStep)) * m_massInverse + m_gravity;
+				});
+
+			VelocityIntegrator = world.system<Velocity, const Acceleration, const ParticleCustomValues*>("Velocity_Integrator")
+				.each([](flecs::iter& it, size_t, Velocity& v, const Acceleration& a, const ParticleCustomValues* cv)
+				{
+					if (cv)
+					{
+						v.m_velocity = (v.m_velocity * cv->m_damping) +  (a.m_acceleration * it.delta_time());
+					}
+					else
+					{
+						v.m_velocity = (v.m_velocity * 0.99) + (a.m_acceleration * it.delta_time());;//TODO: use the world const singleton component
+					}
+
+					//m_velocity = (m_velocity * m_damping) + (m_acceleration * p_timeStep);
+				});
+
+			PositionIntegrator = world.system<Position, const Velocity>("Position_Integrator")
+				.each([](flecs::iter& it, size_t, Position& p, const Velocity& v)
+					{
+
+						p.m_position = p.m_position + v.m_velocity * it.delta_time();//TODO: use the world const singleton component
+
+						//m_owner->m_transform.SetPosition(m_owner->m_transform.GetPosition() + (m_velocity * p_timeStep));
+					});
+		}
+
+
+		//Old Update
+		/*void CPeForceSystem::Update(double p_timeStep)
+		{
+			//
+			// Add all forces to particles sumforces vector
+			SPeParticleForceEntry* regIt = m_registry->First();
+			for (size_t i = 0; i < m_registry->Size(); i++)
+			{
+				if (regIt->IsActive())
+				{
+					double lifeSpan = regIt->m_lifeSpan;
+
+					if (lifeSpan == -1) // Infinite lifespan
+					{
+						regIt->m_force->Compute(*regIt->m_particle, p_timeStep);
+					}
+					else if (lifeSpan > p_timeStep) // More lifespan left than the timestep
+					{
+						regIt->m_force->Compute(*regIt->m_particle, p_timeStep);
+						regIt->m_lifeSpan -= p_timeStep;
+					}
+					else //Less lifespan left than the timestep
+					{
+						regIt->m_force->Compute(*regIt->m_particle, lifeSpan);
+						regIt->m_lifeSpan = 0;
+
+						//TODO: Release force
+					}
+				}
+					
+				regIt++;
+			}
+
+			//
+			// Integrate particles
+			CPeParticle* partIt = m_particlePool->First();
+			for (size_t  i = 0; i < m_particlePool->Size(); i++)
+			{
+				if (partIt->IsActive())
+				{
+					partIt->UpdatePrecisely(p_timeStep);
+				}
+				partIt++;
+			}
+			
+			CPeRigidBody* rigIt = m_rigidbodyPool->First();
+			for (size_t  i = 0; i < m_rigidbodyPool->Size(); i++)
+			{
+				if (rigIt->IsActive())
+				{
+					rigIt->UpdatePrecisely(p_timeStep);
+				}
+				rigIt++;
+			}
+
+		}*/
+
 		CPeParticle* CPeForceSystem::CreateParticleComponent(pecore::CPeEntity* p_owner, double p_massInverse /*= 1*/, double p_damping /*= 0.999*/, pemaths::CPeVector3 p_gravity/* = pemaths::CPeVector3(0, -10, 0)*/)
 		{
 			return &m_particlePool->Create(p_owner, p_massInverse, p_damping, p_gravity);
@@ -74,65 +181,6 @@ namespace engine {
 			}
 		}
 
-
-
-		void CPeForceSystem::Update(double p_timeStep)
-		{
-			//
-			// Add all forces to particles sumforces vector
-			SPeParticleForceEntry* regIt = m_registry->First();
-			for (size_t i = 0; i < m_registry->Size(); i++)
-			{
-				if (regIt->IsActive())
-				{
-					double lifeSpan = regIt->m_lifeSpan;
-
-					if (lifeSpan == -1) // Infinite lifespan
-					{
-						regIt->m_force->Compute(*regIt->m_particle, p_timeStep);
-					}
-					else if (lifeSpan > p_timeStep) // More lifespan left than the timestep
-					{
-						regIt->m_force->Compute(*regIt->m_particle, p_timeStep);
-						regIt->m_lifeSpan -= p_timeStep;
-					}
-					else //Less lifespan left than the timestep
-					{
-						regIt->m_force->Compute(*regIt->m_particle, lifeSpan);
-						regIt->m_lifeSpan = 0;
-
-						//TODO: Release force
-					}
-				}
-					
-				regIt++;
-			}
-
-			//
-			// Integrate particles
-			CPeParticle* partIt = m_particlePool->First();
-			for (size_t  i = 0; i < m_particlePool->Size(); i++)
-			{
-				if (partIt->IsActive())
-				{
-					partIt->UpdatePrecisely(p_timeStep);
-				}
-				partIt++;
-			}
-			
-			CPeRigidBody* rigIt = m_rigidbodyPool->First();
-			for (size_t  i = 0; i < m_rigidbodyPool->Size(); i++)
-			{
-				if (rigIt->IsActive())
-				{
-					rigIt->UpdatePrecisely(p_timeStep);
-				}
-				rigIt++;
-			}
-
-		}
-
-
 		void CPeForceSystem::AllocateObjectsPool()
 		{
 
@@ -162,6 +210,6 @@ namespace engine {
 
 			delete m_particlePool;
 			delete m_rigidbodyPool;
-		}
+		}	
 	}
 }
