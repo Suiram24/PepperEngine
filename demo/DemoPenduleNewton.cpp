@@ -19,16 +19,19 @@ namespace pedemo {
 		colliderSystem = &pephy::CPeCollisionSystem::GetInstance();
 		meshRenderSystem = &engine::render::CPeMeshRenderSystem::GetInstance();
 
+		forceSystem->InitSystems(world);
+
 		printf("Game start");
 
-		LoadLevel();
+		SetupCameraParameters();
 
-		world = flecs::world();
+		//world = flecs::world();
 
 		auto e = world.entity("e1");
 		e.set<Position>({ pemaths::CPeVector3()})
 		 .set<Velocity>({ pemaths::CPeVector3() })
 		 .set<Acceleration>({ pemaths::CPeVector3(0,0.1,0) })
+		 .set<ForceReceiver>({ pemaths::CPeVector3(0,1,1) })
 		 .set<Mass>({ 1. });
 
 		world.entity("e2")
@@ -46,7 +49,7 @@ namespace pedemo {
 
 		world.entity("e4")
 			.set<Position>({ pemaths::CPeVector3() })
-			.set<Velocity>({ pemaths::CPeVector3() })
+			.set<Velocity>({ pemaths::CPeVector3(3,0,0) })
 			.set<Mass>({ 1. })
 			.set<ParticleCustomValues>({ pemaths::CPeVector3(0,-10,0),0.99 });
 		
@@ -59,11 +62,9 @@ namespace pedemo {
 		DrawImGuiInterface();
 		printf("Particle count : %i\n", particleQuery.count());
 		
-		particleQuery.each([](Position& p, Velocity& v, const Acceleration& a, const Mass m)
+		particleQuery.each([](flecs::entity e, Position& p, Velocity& v, const Acceleration& a, const Mass& m)
 			{
-				v.m_velocity = v.m_velocity + a.m_acceleration * ImGui::GetIO().DeltaTime;
-				p.m_position = p.m_position + v.m_velocity * ImGui::GetIO().DeltaTime;
-				printf("Particle position : %.3f \n", p.m_position.GetY());
+				printf("Particle %s position : %.3f \n", e.name(), p.m_position.GetY());
 			});
 		
 		
@@ -76,158 +77,158 @@ namespace pedemo {
 	}
 
 
-	void DemoPenduleNewton::LoadLevel()
-	{
-		SetupCameraParameters();
+	//void DemoPenduleNewton::LoadLevel()
+	//{
+	//	SetupCameraParameters();
 
-		pephy::CPeRigidBody* bar = SpawnStaticBox(0,5,0);
+	//	pephy::CPeRigidBody* bar = SpawnStaticBox(0,5,0);
 
-		int count = 3;
+	//	int count = 3;
 
-		for (int i = -2; i < count; i++)
-		{
-			pephy::CPeRigidBody* ball = SpawnSphere(i, 1.75, 0);
+	//	for (int i = -2; i < count; i++)
+	//	{
+	//		pephy::CPeRigidBody* ball = SpawnSphere(i, 1.75, 0);
 
-			pephy::CPeForceAnchoredSpring* spring = forceSystem->CreateForceAnchoredSpring(pemaths::CPeVector3(i, 13, 0), 100, 10, pemaths::CPeVector3(0, 0.5, 0));
+	//		pephy::CPeForceAnchoredSpring* spring = forceSystem->CreateForceAnchoredSpring(pemaths::CPeVector3(i, 13, 0), 100, 10, pemaths::CPeVector3(0, 0.5, 0));
 
-			forceSystem->AddForceToParticle(spring, ball);
-			
-			if (i == count - 1)
-			{
-				pephy::CPeForceCustomLocal* force = forceSystem->CreateForceCustomLocal(pemaths::CPeVector3(70, 0, 0), pemaths::CPeVector3());
-				forceSystem->AddForceToParticle(force, ball, 1);
-			}
-		}
+	//		forceSystem->AddForceToParticle(spring, ball);
+	//		
+	//		if (i == count - 1)
+	//		{
+	//			pephy::CPeForceCustomLocal* force = forceSystem->CreateForceCustomLocal(pemaths::CPeVector3(70, 0, 0), pemaths::CPeVector3());
+	//			forceSystem->AddForceToParticle(force, ball, 1);
+	//		}
+	//	}
 
-		//DemoBoxes();
-		//DemoSpheres();
-	}
+	//	//DemoBoxes();
+	//	//DemoSpheres();
+	//}
 
-	void DemoPenduleNewton::SpawnBox(double p_x, double p_y, double p_z)
-	{
-		pecore::CPeEntity* entity = &engine::CPeGameManager::getInstance().CreateEntity();
+	//void DemoPenduleNewton::SpawnBox(double p_x, double p_y, double p_z)
+	//{
+	//	pecore::CPeEntity* entity = &engine::CPeGameManager::getInstance().CreateEntity();
 
-		entity->m_transform.SetPosition(pemaths::CPeVector3(p_x, p_y, p_z));
+	//	entity->m_transform.SetPosition(pemaths::CPeVector3(p_x, p_y, p_z));
 
-		entity->m_transform.SetSize(pemaths::CPeVector3(1, 1, 1));
+	//	entity->m_transform.SetSize(pemaths::CPeVector3(1, 1, 1));
 
-		//pemaths::CPeQuaternion rot = pemaths::CPeQuaternion(pemaths::CPeVector3(1, 0, 0), 0.785398163397448309616);
-		//entity3->m_transform.SetOrientation(rot);
+	//	//pemaths::CPeQuaternion rot = pemaths::CPeQuaternion(pemaths::CPeVector3(1, 0, 0), 0.785398163397448309616);
+	//	//entity3->m_transform.SetOrientation(rot);
 
-		pephy::CPeRigidBody* rigidbodyComp = forceSystem->CreateRigidBodyComponent(entity, 1e-12);
+	//	pephy::CPeRigidBody* rigidbodyComp = forceSystem->CreateRigidBodyComponent(entity, 1e-12);
 
-		rigidbodyComp->SetCubeInertia(1, 1, 1);
+	//	rigidbodyComp->SetCubeInertia(1, 1, 1);
 
-		meshRenderSystem->CreateMeshComponent(entity, *m_renderer, "models/companion_cube_simple.obj", "textures/viking_room.png");
+	//	meshRenderSystem->CreateMeshComponent(entity, *m_renderer, "models/companion_cube_simple.obj", "textures/viking_room.png");
 
-		pephy::CPeColliderComponent* col = colliderSystem->CreateColliderComponent(*entity, sqrt(3));
+	//	pephy::CPeColliderComponent* col = colliderSystem->CreateColliderComponent(*entity, sqrt(3));
 
-		col->AddPrimitive(colliderSystem->CreateBoxShape(*entity, pemaths::CPeVector3(1, 1, 1)));
-	}
+	//	col->AddPrimitive(colliderSystem->CreateBoxShape(*entity, pemaths::CPeVector3(1, 1, 1)));
+	//}
 
-	pephy::CPeRigidBody* DemoPenduleNewton::SpawnSphere(double p_x, double p_y, double p_z)
-	{
-		pecore::CPeEntity* entity = &engine::CPeGameManager::getInstance().CreateEntity();
+	//pephy::CPeRigidBody* DemoPenduleNewton::SpawnSphere(double p_x, double p_y, double p_z)
+	//{
+	//	pecore::CPeEntity* entity = &engine::CPeGameManager::getInstance().CreateEntity();
 
-		entity->m_transform.SetPosition(pemaths::CPeVector3(p_x, p_y, p_z));
+	//	entity->m_transform.SetPosition(pemaths::CPeVector3(p_x, p_y, p_z));
 
-		entity->m_transform.SetSize(pemaths::CPeVector3(0.5, 0.5, 0.5));
+	//	entity->m_transform.SetSize(pemaths::CPeVector3(0.5, 0.5, 0.5));
 
-		pephy::CPeRigidBody* rigidbodyComp = forceSystem->CreateRigidBodyComponent(entity, 1e-1);
+	//	pephy::CPeRigidBody* rigidbodyComp = forceSystem->CreateRigidBodyComponent(entity, 1e-1);
 
-		meshRenderSystem->CreateMeshComponent(entity, *m_renderer, "models/sphere.obj", "textures/viking_room.png");
+	//	meshRenderSystem->CreateMeshComponent(entity, *m_renderer, "models/sphere.obj", "textures/viking_room.png");
 
-		pephy::CPeColliderComponent* col = colliderSystem->CreateColliderComponent(*entity, sqrt(3));
+	//	pephy::CPeColliderComponent* col = colliderSystem->CreateColliderComponent(*entity, sqrt(3));
 
-		col->AddPrimitive(colliderSystem->CreateSphereShape(*entity, 0.5, 0.999));
+	//	col->AddPrimitive(colliderSystem->CreateSphereShape(*entity, 0.5, 0.999));
 
-		return rigidbodyComp;
-	}
+	//	return rigidbodyComp;
+	//}
 
-	pephy::CPeRigidBody* DemoPenduleNewton::SpawnStaticBox(double p_x, double p_y, double p_z)
-	{
-		pecore::CPeEntity* entity = &engine::CPeGameManager::getInstance().CreateEntity();
+	//pephy::CPeRigidBody* DemoPenduleNewton::SpawnStaticBox(double p_x, double p_y, double p_z)
+	//{
+	//	pecore::CPeEntity* entity = &engine::CPeGameManager::getInstance().CreateEntity();
 
-		entity->m_transform.SetPosition(pemaths::CPeVector3(p_x, p_y, p_z));
+	//	entity->m_transform.SetPosition(pemaths::CPeVector3(p_x, p_y, p_z));
 
-		entity->m_transform.SetSize(pemaths::CPeVector3(10, 1, 1));
+	//	entity->m_transform.SetSize(pemaths::CPeVector3(10, 1, 1));
 
-		pephy::CPeRigidBody* rigidbodyComp = forceSystem->CreateRigidBodyComponent(entity, 0, 0.999, pemaths::CPeVector3(0, 0, 0));
+	//	pephy::CPeRigidBody* rigidbodyComp = forceSystem->CreateRigidBodyComponent(entity, 0, 0.999, pemaths::CPeVector3(0, 0, 0));
 
-		meshRenderSystem->CreateMeshComponent(entity, *m_renderer, "models/companion_cube_simple.obj", "textures/viking_room.png");
+	//	meshRenderSystem->CreateMeshComponent(entity, *m_renderer, "models/companion_cube_simple.obj", "textures/viking_room.png");
 
-		pephy::CPeColliderComponent* col = colliderSystem->CreateColliderComponent(*entity, 5);
+	//	pephy::CPeColliderComponent* col = colliderSystem->CreateColliderComponent(*entity, 5);
 
-		col->AddPrimitive(colliderSystem->CreateBoxShape(*entity, pemaths::CPeVector3(10, 1, 1)));
+	//	col->AddPrimitive(colliderSystem->CreateBoxShape(*entity, pemaths::CPeVector3(10, 1, 1)));
 
-		return rigidbodyComp;
-	}
+	//	return rigidbodyComp;
+	//}
 
-	void DemoPenduleNewton::SpawnFloor()
-	{
-		pecore::CPeEntity* entity = &engine::CPeGameManager::getInstance().CreateEntity();
+	//void DemoPenduleNewton::SpawnFloor()
+	//{
+	//	pecore::CPeEntity* entity = &engine::CPeGameManager::getInstance().CreateEntity();
 
-		entity->m_transform.SetPosition(pemaths::CPeVector3(0, 0, 0));
+	//	entity->m_transform.SetPosition(pemaths::CPeVector3(0, 0, 0));
 
-		entity->m_transform.SetSize(pemaths::CPeVector3(100, 1, 100));
+	//	entity->m_transform.SetSize(pemaths::CPeVector3(100, 1, 100));
 
-		meshRenderSystem->CreateMeshComponent(entity, *m_renderer, "models/plane.obj", "textures/debug_texture.png");
+	//	meshRenderSystem->CreateMeshComponent(entity, *m_renderer, "models/plane.obj", "textures/debug_texture.png");
 
-		pephy::CPeColliderComponent* col = colliderSystem->CreateColliderComponent(*entity, 100);
+	//	pephy::CPeColliderComponent* col = colliderSystem->CreateColliderComponent(*entity, 100);
 
-		col->AddPrimitive(colliderSystem->CreatePlaneShape(*entity, pemaths::CPeVector3(0, 1, 0), 0));
-	}
+	//	col->AddPrimitive(colliderSystem->CreatePlaneShape(*entity, pemaths::CPeVector3(0, 1, 0), 0));
+	//}
 
-	void DemoPenduleNewton::SpawnStaticSphere(double p_x, double p_y, double p_z)
-	{
-		pecore::CPeEntity* entity = &engine::CPeGameManager::getInstance().CreateEntity();
+	//void DemoPenduleNewton::SpawnStaticSphere(double p_x, double p_y, double p_z)
+	//{
+	//	pecore::CPeEntity* entity = &engine::CPeGameManager::getInstance().CreateEntity();
 
-		entity->m_transform.SetPosition(pemaths::CPeVector3(p_x, p_y, p_z));
+	//	entity->m_transform.SetPosition(pemaths::CPeVector3(p_x, p_y, p_z));
 
-		entity->m_transform.SetSize(pemaths::CPeVector3(0.5, 0.5, 0.5));
+	//	entity->m_transform.SetSize(pemaths::CPeVector3(0.5, 0.5, 0.5));
 
-		meshRenderSystem->CreateMeshComponent(entity, *m_renderer, "models/sphere.obj", "textures/viking_room.png");
+	//	meshRenderSystem->CreateMeshComponent(entity, *m_renderer, "models/sphere.obj", "textures/viking_room.png");
 
-		pephy::CPeColliderComponent* col = colliderSystem->CreateColliderComponent(*entity, sqrt(3));
+	//	pephy::CPeColliderComponent* col = colliderSystem->CreateColliderComponent(*entity, sqrt(3));
 
-		col->AddPrimitive(colliderSystem->CreateSphereShape(*entity, 0.5));
-	}
+	//	col->AddPrimitive(colliderSystem->CreateSphereShape(*entity, 0.5));
+	//}
 
-	void DemoPenduleNewton::DemoSpheres()
-	{
-		SpawnFloor();
+	//void DemoPenduleNewton::DemoSpheres()
+	//{
+	//	SpawnFloor();
 
-		for (int i = -2; i < 1; i++)
-		{
-			for (int j = -2; j < 1; j++)
-			{
-				SpawnSphere(2 * i + 2, 6, 2 * j + 2);
-			}
-		}
+	//	for (int i = -2; i < 1; i++)
+	//	{
+	//		for (int j = -2; j < 1; j++)
+	//		{
+	//			SpawnSphere(2 * i + 2, 6, 2 * j + 2);
+	//		}
+	//	}
 
-		for (int i = 0; i < 5; i++)
-		{
-			SpawnSphere((i % 2) * 0.5, 6 + 2 * i, ((i + 1) % 2) * 0.5);
-		}
-	}
+	//	for (int i = 0; i < 5; i++)
+	//	{
+	//		SpawnSphere((i % 2) * 0.5, 6 + 2 * i, ((i + 1) % 2) * 0.5);
+	//	}
+	//}
 
-	void DemoPenduleNewton::DemoBoxes()
-	{
-		SpawnFloor();
+	//void DemoPenduleNewton::DemoBoxes()
+	//{
+	//	SpawnFloor();
 
-		for (int i = -2; i < 1; i++)
-		{
-			for (int j = -2; j < 1; j++)
-			{
-				SpawnBox(2 * i + 2, 6, 2 * j + 2);
-			}
-		}
+	//	for (int i = -2; i < 1; i++)
+	//	{
+	//		for (int j = -2; j < 1; j++)
+	//		{
+	//			SpawnBox(2 * i + 2, 6, 2 * j + 2);
+	//		}
+	//	}
 
-		for (int i = 0; i < 5; i++)
-		{
-			SpawnBox((i % 2) * 0.5, 6 + 2 * i, ((i + 1) % 2) * 0.5);
-		}
-	}
+	//	for (int i = 0; i < 5; i++)
+	//	{
+	//		SpawnBox((i % 2) * 0.5, 6 + 2 * i, ((i + 1) % 2) * 0.5);
+	//	}
+	//}
 
 	void DemoPenduleNewton::SetupCameraParameters()
 	{
