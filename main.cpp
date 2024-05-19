@@ -9,7 +9,7 @@
 ///////////////////////////////////////////////////////////////////////
 
 
-//#include "demo/DemoBroadPhase.h"
+#include "demo/DemoBroadPhase.h"
 #include "demo/DemoPenduleNewton.h"
 #include "demo/DemoBillard.h"
 #include "CPeGameManager.h"
@@ -17,13 +17,15 @@
 // Main code
 int main(int, char**)
 {
-
-    engine::CPeGameMode* myGameMode = &pedemo::DemoPenduleNewton();
+    
+    pedemo::DemoPenduleNewton myGameMode = pedemo::DemoPenduleNewton();
     //engine::CPeGameMode* myGameMode = &pedemo::DemoBillard();
 
 
-    engine::CPeGameManager::getInstance().SetGameMode(myGameMode);
+    engine::CPeGameManager::getInstance().SetGameMode(&myGameMode);
     engine::CPeGameManager::getInstance().StartGame();
+
+
 
     return 0;
 }
