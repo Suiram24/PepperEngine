@@ -5,4 +5,6 @@
 #include "CPeComponent.h"
 #include "CPeObjectPool.h"
 
+#include "flecs.h"
+
 #endif /* PEENGINECORE_PEENGINECORE_H */
