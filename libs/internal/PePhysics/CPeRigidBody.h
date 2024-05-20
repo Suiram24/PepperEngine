@@ -64,6 +64,8 @@ namespace engine {
 
             void SetAngularVelocity(pemaths::CPeVector3& p_newAngularVelocity);
 
+            static void ComputeSphereInertia(pemaths::CPeMatrix3& resultMatrix, double p_radius, double mass = 1);
+
 
         };
     }

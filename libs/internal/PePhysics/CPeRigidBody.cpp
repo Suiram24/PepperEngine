@@ -79,6 +79,15 @@ namespace engine {
                 0,0,value).Inverse();
         }
 
+        void CPeRigidBody::ComputeSphereInertia(pemaths::CPeMatrix3& resultMatrix, double p_radius, double mass)
+        {
+            double value = 2.0f / 5.0f * mass * p_radius * p_radius;
+            resultMatrix = pemaths::CPeMatrix3(
+                value, 0, 0,
+                0, value, 0,
+                0, 0, value).Inverse();
+        }
+
         void CPeRigidBody::SetCubeInertia(double p_dx, double p_dy, double p_dz)
         {
             double value1 = 1.0f/12.0f * GetMass() * (p_dy * p_dy + p_dz * p_dz);
