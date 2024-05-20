@@ -98,9 +98,26 @@ namespace engine {
 			pecore::CPeObjectPool<CPeParticle, pecore::consts::maxEntityNumber>* m_particlePool;
 			pecore::CPeObjectPool<CPeRigidBody, pecore::consts::maxEntityNumber>* m_rigidbodyPool;
 
+			//Particle
+
 			flecs::system AccelerationIntegrator;
 			flecs::system VelocityIntegrator;
 			flecs::system PositionIntegrator;
+
+			//Rigidbody
+
+			flecs::system RotationIntegrator;
+			flecs::system AngVelocityIntegrator;
+			flecs::system AngAccelerationIntegrator;
+
+			//Forces
+
+			flecs::system AnchoredSpringSystem;
+			flecs::system DragForceSystem;
+			flecs::system FreeForceSystem;
+
+
+
 		};
 	}
 }

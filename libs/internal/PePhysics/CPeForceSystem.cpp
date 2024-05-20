@@ -5,15 +5,24 @@ namespace engine {
 
 		void CPeForceSystem::Update(double p_timeStep)
 		{
+			AnchoredSpringSystem.run(p_timeStep);
+
 			AccelerationIntegrator.run(p_timeStep);
 			VelocityIntegrator.run(p_timeStep);
 			PositionIntegrator.run(p_timeStep);
+
+			AngAccelerationIntegrator.run(p_timeStep);
+			AngVelocityIntegrator.run(p_timeStep);
+			RotationIntegrator.run(p_timeStep);
+			
 		}
 
 		void CPeForceSystem::InitSystems(flecs::world& world)
 		{
-			AccelerationIntegrator = world.system<Acceleration, const ForceReceiver, const Mass, const ParticleCustomValues*>("Acceleration_Integrator")
-				.each([](flecs::iter& it, size_t, Acceleration& a, const ForceReceiver f, const Mass m, const ParticleCustomValues *cv)
+			//
+			// Particle update
+			AccelerationIntegrator = world.system<Acceleration, ForceReceiver, const Mass, const ParticleCustomValues*>("Acceleration_Integrator")
+				.each([](flecs::iter& it, size_t, Acceleration& a, ForceReceiver& f, const Mass& m, const ParticleCustomValues *cv)
 				{
 					if (cv)
 					{
@@ -22,7 +31,9 @@ namespace engine {
 					else
 					{
 						a.m_acceleration = (f.m_sumForces * (1 / it.delta_time())) * m.m_massInverse + pemaths::CPeVector3(0,-9.81,0);//TODO: use the world const singleton component
-					}						
+					}
+
+					f.m_sumForces = pemaths::CPeVector3();//Reset accumulator
 
 					//m_acceleration = (m_sumForces * (1 / p_timeStep)) * m_massInverse + m_gravity;
 				});
@@ -44,13 +55,105 @@ namespace engine {
 
 			PositionIntegrator = world.system<Position, const Velocity>("Position_Integrator")
 				.each([](flecs::iter& it, size_t, Position& p, const Velocity& v)
+				{
+
+					p.m_position = p.m_position + v.m_velocity * it.delta_time();//TODO: use the world const singleton component
+
+					//m_owner->m_transform.SetPosition(m_owner->m_transform.GetPosition() + (m_velocity * p_timeStep));
+				});
+
+			//Rigidbody update
+
+			AngAccelerationIntegrator = world.system<AngularAcceleration, RigidBody, const Rotation, const Scale*>("Angular_Rotation_Integrator")
+				.each([](flecs::iter& it, size_t, AngularAcceleration& aa, RigidBody& rb, const Rotation& ro, const Scale* s)
+				{
+					if (s)
 					{
+						pemaths::CPeMatrix3 worldMatrix = ro.m_rotation.Normalize().ToMatrix3() * pemaths::CPeMatrix3(
+							s->m_scale.GetX(), .0, .0,
+							.0, s->m_scale.GetY(), .0,
+							.0, .0, s->m_scale.GetZ()
+						);
+						pemaths::CPeMatrix3 intertiaInverseWorld = worldMatrix * rb.m_inertiaInverse * worldMatrix.Inverse();
+						aa.m_angularAcceleration = intertiaInverseWorld * (rb.m_sumTorques * (1 / it.delta_time()));
+					}
+					else
+					{
+						pemaths::CPeMatrix3 worldMatrix = ro.m_rotation.Normalize().ToMatrix3();
+						pemaths::CPeMatrix3 intertiaInverseWorld = worldMatrix * rb.m_inertiaInverse * worldMatrix.Inverse();
+						aa.m_angularAcceleration = intertiaInverseWorld * (rb.m_sumTorques * (1 / it.delta_time()));
+					}
 
-						p.m_position = p.m_position + v.m_velocity * it.delta_time();//TODO: use the world const singleton component
+					rb.m_sumTorques = pemaths::CPeVector3();//Reset accumulator
 
-						//m_owner->m_transform.SetPosition(m_owner->m_transform.GetPosition() + (m_velocity * p_timeStep));
+					// pemaths::CPeMatrix3 worldMatrix = GetTransform().GetTransformMatrix().ToMatrix3();
+					//pemaths::CPeMatrix3 intertiaInverseWorld = worldMatrix * m_inertiaInverse * worldMatrix.Inverse();
+
+					//m_angularAcceleration = intertiaInverseWorld * (m_sumTorques * (1 / p_timeStep));
+				});
+
+			AngVelocityIntegrator = world.system<AngularVelocity, const AngularAcceleration, const RigidBody>("Angular_Velocity_Integrator")
+				.each([](flecs::iter& it, size_t, AngularVelocity& av, const AngularAcceleration& aa, const RigidBody& rb)
+				{
+
+					av.m_angularVelocity = av.m_angularVelocity * rb.m_angularDamping + aa.m_angularAcceleration * it.delta_time();
+
+					// m_angularVelocity = m_angularVelocity * m_angularDamping + m_angularAcceleration * p_timeStep;
+				});
+
+			RotationIntegrator = world.system<Rotation, const AngularVelocity>("Rotation_Integrator")
+				.each([](flecs::iter& it, size_t, Rotation& ro, const AngularVelocity& av)
+				{
+					pemaths::CPeQuaternion w(0, av.m_angularVelocity.GetX(), av.m_angularVelocity.GetY(), av.m_angularVelocity.GetZ());
+					ro.m_rotation = ro.m_rotation + ((it.delta_time() / 2.0f) * w * ro.m_rotation);
+
+					//pemaths::CPeTransform& transform = GetTransform();
+					//pemaths::CPeQuaternion w(0, m_angularVelocity.GetX(), m_angularVelocity.GetY(), m_angularVelocity.GetZ());
+
+					//transform.SetOrientation(transform.GetOrientation() + ((p_timeStep / 2.0f) * w * transform.GetOrientation()));
+				});
+
+
+			//Forces
+
+			AnchoredSpringSystem = world.system<ForceReceiver, const AnchoredSpring, const Position, const Rotation*, RigidBody*, const Scale*>("AnchoredSpring")
+				.each([](flecs::iter& it, size_t, ForceReceiver& fr, const AnchoredSpring& as, const Position& p, const Rotation* ro, RigidBody* rb, const Scale* s)
+					{
+						pemaths::CPeMatrix4 transformMatrix;
+						if (ro)
+						{
+							if (s)
+							{
+								pemaths::CPeTransform::ComputeMatrixFromTransform(transformMatrix, p.m_position, ro->m_rotation, s->m_scale);
+							}
+							else
+							{
+								pemaths::CPeTransform::ComputeMatrixFromTransform(transformMatrix, p.m_position, ro->m_rotation);
+							}
+						}
+						else
+						{
+							pemaths::CPeTransform::ComputeMatrixFromTransform(transformMatrix, p.m_position);
+						}
+
+						pemaths::CPeVector3 d = as.m_anchorPoint - (transformMatrix * as.m_bodyAnchor);
+						pemaths::CPeVector3 forceValue = d.NormalizeVector() * (as.m_k * (d.GetNorm() - as.m_restLength)) * it.delta_time();
+
+						if (rb)
+						{
+							rb->m_sumTorques += pemaths::CPeVector3::CrossProduct((transformMatrix * as.m_bodyAnchor) - p.m_position, forceValue);
+						}
+
+						fr.m_sumForces += forceValue;
+
+						//pemaths::CPeVector3 globalBodyAnchor = p_particule.GetTransform().GetPositionPoint(m_bodyAnchor);
+						//pemaths::CPeVector3 d = m_anchor - globalBodyAnchor;
+						//p_particule.AddForceAtBodyPoint(d.NormalizeVector()* (m_k* (d.GetNorm() - m_restLength))* p_timeStep, m_bodyAnchor);
 					});
 		}
+
+
+
 
 
 		//Old Update
