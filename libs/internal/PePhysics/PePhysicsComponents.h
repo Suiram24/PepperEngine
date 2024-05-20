@@ -46,17 +46,20 @@ struct ParticleCustomValues
 
 struct AnchoredSpring
 {
-	engine::maths::CPeVector3 m_anchorPoint;
+	engine::maths::CPeVector3 m_anchorPoint; //World point where the spring is anchored
+	engine::maths::CPeVector3 m_bodyAnchor; //Anchor point on self (local coordinates)
 	float m_k;
 	float m_restLength;
 };
 
-struct Spring
-{
-	engine::maths::CPeVector3 m_anchorPoint;
-	float m_k;
-	float m_restLength;
-};
+//struct Spring
+//{
+//	flecs::id other;
+//	engine::maths::CPeVector3 m_anchorPoint; //local point where the spring is anchored on other 
+//	engine::maths::CPeVector3 m_bodyAnchor; //Anchor point on self (local coordinates)
+//	float m_k;
+//	float m_restLength;
+//};
 
 struct BuoyancyForce
 {
@@ -75,6 +78,7 @@ struct DragForce
 struct FreeForce
 {
 	engine::maths::CPeVector3 m_forceValue;
+	double m_duration; //-1 for infinite
 };
 
 //Rigidbody
@@ -86,17 +90,26 @@ struct Rotation
 
 struct AngularVelocity
 {
-	engine::maths::CPeQuaternion m_angularVelocity;
+	engine::maths::CPeVector3 m_angularVelocity;
 };
 
 struct AngularAcceleration
 {
-	engine::maths::CPeQuaternion m_angularAcceleration;
+	engine::maths::CPeVector3 m_angularAcceleration;
 };
 
 struct RigidBody
 {
 	engine::maths::CPeVector3 m_sumTorques; 
-	engine::maths::CPeVector3 m_inertiaInverse; //Custom Gravity
+	engine::maths::CPeMatrix3 m_inertiaInverse; //Equivalent of mass inverse for rotations
 	double m_angularDamping;
 };
+
+//Optional for rigibody
+
+struct Scale 
+{
+	engine::maths::CPeVector3 m_scale;
+};
+
+
