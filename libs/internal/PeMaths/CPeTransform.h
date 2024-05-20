@@ -127,12 +127,16 @@ namespace engine {
 			*/
 			void SetSize(const CPeVector3& p_size);
 
+			static void ComputeMatrixFromTransform(CPeMatrix4& resultMatrix, const CPeVector3& _position, const CPeQuaternion& _orientation = CPeQuaternion(1,0,0,0), const CPeVector3& _size = CPeVector3(1,1,1));
+
 		private:
 			/**
 				* @brief Update transform matrix with the current position, orientation & size
 				*
 			*/
 			void UpdateTransformMatrix();
+
+			
 
 		};
 	}
