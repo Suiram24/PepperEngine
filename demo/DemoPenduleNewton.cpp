@@ -21,39 +21,75 @@ namespace pedemo {
 
 		forceSystem->InitSystems(world);
 
+		AnchorPoint = new vk::ModelWatcher(*m_renderer, "models/companion_cube_simple.obj", "textures/viking_room.png");
+		Sphere = new vk::ModelWatcher(*m_renderer, "models/sphere.obj", "textures/viking_room.png");
+
 		printf("Game start");
 
 		SetupCameraParameters();
 
 		//world = flecs::world();
 
-		auto e = world.entity("e1");
-		e.set<Position>({ pemaths::CPeVector3()})
-		 .set<Velocity>({ pemaths::CPeVector3() })
-		 .set<Acceleration>({ pemaths::CPeVector3(0,0.1,0) })
-		 .set<ForceReceiver>({ pemaths::CPeVector3(0,1,1) })
-		 .set<Mass>({ 1. });
+		//auto e = world.entity("e1");
+		//e.set<Position>({ pemaths::CPeVector3()})
+		// .set<Velocity>({ pemaths::CPeVector3() })
+		// .set<Acceleration>({ pemaths::CPeVector3(0,0.1,0) })
+		// .set<ForceReceiver>({ pemaths::CPeVector3(0,1,1) })
+		// .set<Mass>({ 1. });
 
-		world.entity("e2")
-			.set<Position>({ pemaths::CPeVector3() })
+		//world.entity("e2")
+		//	.set<Position>({ pemaths::CPeVector3() })
+		//	.set<Velocity>({ pemaths::CPeVector3() })
+		//	.set<Acceleration>({ pemaths::CPeVector3(0,0.1,0) })
+		//	.set<Mass>({ 1. });
+
+		//world.entity("e3")
+		//	.set<Position>({ pemaths::CPeVector3() })
+		//	.set<Velocity>({ pemaths::CPeVector3() })
+		//	.set<Acceleration>({ pemaths::CPeVector3(0,0.1,0) })
+		//	.set<Mass>({ 1. })
+		//	.set<ParticleCustomValues>({ pemaths::CPeVector3(0,-10,0),0.99 });
+
+		//world.entity("e4")
+		//	.set<Position>({ pemaths::CPeVector3() })
+		//	.set<Velocity>({ pemaths::CPeVector3(3,0,0) })
+		//	.set<Mass>({ 1. })
+		//	.set<ParticleCustomValues>({ pemaths::CPeVector3(0,-10,0),0.99 })
+		//	.set<ForceReceiver>({ pemaths::CPeVector3(0,0,0) });
+
+
+		world.entity("anchor")
+			.set<Position>({ pemaths::CPeVector3() });
+
+		pemaths::CPeMatrix3 sphereInertia;
+		pephy::CPeRigidBody::ComputeSphereInertia(sphereInertia, 1, 10);
+
+		world.entity("sphere")
+			.set<Position>({ pemaths::CPeVector3(2,2,0) })
+			.set<Rotation>({ pemaths::CPeQuaternion(1,0,0,0) })
 			.set<Velocity>({ pemaths::CPeVector3() })
-			.set<Acceleration>({ pemaths::CPeVector3(0,0.1,0) })
-			.set<Mass>({ 1. });
+			.set<Acceleration>({ pemaths::CPeVector3() })
+			.set<Mass>({ 0.1})
+			.set<AngularVelocity>({ pemaths::CPeVector3() })
+			.set<ParticleCustomValues>({ pemaths::CPeVector3(0,-10,0), 0.99 })
+			.set<ForceReceiver>({ pemaths::CPeVector3() })
+			.set<AngularAcceleration>({ pemaths::CPeVector3() })
+			.set<AnchoredSpring>({ pemaths::CPeVector3(0,2,0), pemaths::CPeVector3(0,0,0), 100, 2 })
+			.set<RigidBody>({ pemaths::CPeVector3(), sphereInertia, 0.99 })
+;
+			
+		pemaths::CPeMatrix4 peTMatrix;
+		pemaths::CPeTransform::ComputeMatrixFromTransform(peTMatrix, pemaths::CPeVector3(0, 2, 0));
 
-		world.entity("e3")
-			.set<Position>({ pemaths::CPeVector3() })
-			.set<Velocity>({ pemaths::CPeVector3() })
-			.set<Acceleration>({ pemaths::CPeVector3(0,0.1,0) })
-			.set<Mass>({ 1. })
-			.set<ParticleCustomValues>({ pemaths::CPeVector3(0,-10,0),0.99 });
+		glm::mat4 glmTMatrix = glm::mat4(
+			peTMatrix.Get(0, 0), peTMatrix.Get(1, 0), peTMatrix.Get(2, 0), 0,
+			peTMatrix.Get(0, 1), peTMatrix.Get(1, 1), peTMatrix.Get(2, 1), 0,
+			peTMatrix.Get(0, 2), peTMatrix.Get(1, 2), peTMatrix.Get(2, 2), 0,
+			peTMatrix.Get(0, 3), peTMatrix.Get(1, 3), peTMatrix.Get(2, 3), 1
+		);
 
-		world.entity("e4")
-			.set<Position>({ pemaths::CPeVector3() })
-			.set<Velocity>({ pemaths::CPeVector3(3,0,0) })
-			.set<Mass>({ 1. })
-			.set<ParticleCustomValues>({ pemaths::CPeVector3(0,-10,0),0.99 });
-		
-		particleQuery = world.query<Position, Velocity, const Acceleration, const Mass>();
+		AnchorPoint->SetTransformMatrix(glmTMatrix);
+		particleQuery = world.query< const Position, const Rotation, const RigidBody>();
 	}
 
 	void DemoPenduleNewton::GameUpdate()
@@ -62,18 +98,34 @@ namespace pedemo {
 		DrawImGuiInterface();
 		printf("Particle count : %i\n", particleQuery.count());
 		
-		particleQuery.each([](flecs::entity e, Position& p, Velocity& v, const Acceleration& a, const Mass& m)
+		//Update mesh
+		particleQuery.each([](flecs::entity e, const Position& p, const Rotation& r, const RigidBody& a)
 			{
-				printf("Particle %s position : %.3f \n", e.name(), p.m_position.GetY());
+				printf("Particle %s position : %.3f \n", e.name().c_str(), p.m_position.GetY());
+				
 			});
 		
-		
+		pemaths::CPeVector3 pos = world.lookup("sphere").get<Position>()->m_position;
+		pemaths::CPeQuaternion rot = world.lookup("sphere").get<Rotation>()->m_rotation;
+
+		pemaths::CPeMatrix4 peTMatrix;
+		pemaths::CPeTransform::ComputeMatrixFromTransform(peTMatrix, pos, rot);
+
+		glm::mat4 glmTMatrix = glm::mat4(
+			peTMatrix.Get(0, 0), peTMatrix.Get(1, 0), peTMatrix.Get(2, 0), 0,
+			peTMatrix.Get(0, 1), peTMatrix.Get(1, 1), peTMatrix.Get(2, 1), 0,
+			peTMatrix.Get(0, 2), peTMatrix.Get(1, 2), peTMatrix.Get(2, 2), 0,
+			peTMatrix.Get(0, 3), peTMatrix.Get(1, 3), peTMatrix.Get(2, 3), 1
+		);
+
+		Sphere->SetTransformMatrix(glmTMatrix);
 
 	}
 
 	void DemoPenduleNewton::GameEnd()
 	{
-
+		delete &AnchorPoint;
+		delete &Sphere;
 	}
 
 

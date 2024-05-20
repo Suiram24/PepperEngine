@@ -13,6 +13,7 @@
 namespace pedemo {
 	namespace pephy = engine::physics;
 
+
 	/**
 		* @brief A class for basic components regarding the physics of a 3D elements.
 	*/
@@ -61,7 +62,10 @@ namespace pedemo {
 		engine::render::CPeMeshRenderSystem* meshRenderSystem;
 
 		flecs::world world;
-		flecs::query<Position, Velocity, const Acceleration, const Mass> particleQuery;
+		flecs::query<const Position, const Rotation, const RigidBody> particleQuery;
+
+		vk::ModelWatcher* AnchorPoint;
+		vk::ModelWatcher* Sphere;
 	};
 
 }
