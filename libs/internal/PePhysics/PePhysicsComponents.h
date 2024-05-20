@@ -42,19 +42,61 @@ struct ParticleCustomValues
 	double m_damping;
 };
 
+// Forces
+
+struct AnchoredSpring
+{
+	engine::maths::CPeVector3 m_anchorPoint;
+	float m_k;
+	float m_restLength;
+};
+
+struct Spring
+{
+	engine::maths::CPeVector3 m_anchorPoint;
+	float m_k;
+	float m_restLength;
+};
+
+struct BuoyancyForce
+{
+	float m_immersionDepth;// depth for half immersion of the particle in m (particle "radius")
+	float m_volume;//particle volume in m**3
+	float m_liquidLevel;// in m
+	float m_liquidDensity;
+};
+
+struct DragForce
+{
+	float k1;
+	float k2;
+};
+
+struct FreeForce
+{
+	engine::maths::CPeVector3 m_forceValue;
+};
+
 //Rigidbody
 
-//struct Rotation
-//{
-//	engine::maths::CPeQuaternion m_rotation;
-//};
-//
-//double m_angularDamping;
-//
-//pemaths::CPeVector3 m_angularAcceleration;
-//
-//pemaths::CPeVector3 m_angularVelocity;
-//
-//pemaths::CPeVector3 m_sumTorques;
-//
-//pemaths::CPeMatrix3 m_inertiaInverse;
+struct Rotation
+{
+	engine::maths::CPeQuaternion m_rotation;
+};
+
+struct AngularVelocity
+{
+	engine::maths::CPeQuaternion m_angularVelocity;
+};
+
+struct AngularAcceleration
+{
+	engine::maths::CPeQuaternion m_angularAcceleration;
+};
+
+struct RigidBody
+{
+	engine::maths::CPeVector3 m_sumTorques; 
+	engine::maths::CPeVector3 m_inertiaInverse; //Custom Gravity
+	double m_angularDamping;
+};
