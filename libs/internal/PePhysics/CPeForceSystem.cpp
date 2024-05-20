@@ -47,7 +47,7 @@ namespace engine {
 					}
 					else
 					{
-						v.m_velocity = (v.m_velocity * 0.99) + (a.m_acceleration * it.delta_time());;//TODO: use the world const singleton component
+						v.m_velocity = (v.m_velocity * 0.999) + (a.m_acceleration * it.delta_time());;//TODO: use the world const singleton component
 					}
 
 					//m_velocity = (m_velocity * m_damping) + (m_acceleration * p_timeStep);

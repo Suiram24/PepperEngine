@@ -65,21 +65,21 @@ namespace pedemo {
 		pephy::CPeRigidBody::ComputeSphereInertia(sphereInertia, 1, 10);
 
 		world.entity("sphere")
-			.set<Position>({ pemaths::CPeVector3(2,2,0) })
+			.set<Position>({ pemaths::CPeVector3(0,-0.5,0) })
 			.set<Rotation>({ pemaths::CPeQuaternion(1,0,0,0) })
-			.set<Velocity>({ pemaths::CPeVector3() })
+			.set<Velocity>({ pemaths::CPeVector3(-5,0,0) })
 			.set<Acceleration>({ pemaths::CPeVector3() })
 			.set<Mass>({ 0.1})
 			.set<AngularVelocity>({ pemaths::CPeVector3() })
-			.set<ParticleCustomValues>({ pemaths::CPeVector3(0,-10,0), 0.99 })
+			.set<ParticleCustomValues>({ pemaths::CPeVector3(0,-10,0), 0.999 })
 			.set<ForceReceiver>({ pemaths::CPeVector3() })
 			.set<AngularAcceleration>({ pemaths::CPeVector3() })
-			.set<AnchoredSpring>({ pemaths::CPeVector3(0,2,0), pemaths::CPeVector3(0,0,0), 100, 2 })
-			.set<RigidBody>({ pemaths::CPeVector3(), sphereInertia, 0.99 })
+			.set<AnchoredSpring>({ pemaths::CPeVector3(0,3,0), pemaths::CPeVector3(0.0,0.5,0), 100,2 })
+			.set<RigidBody>({ pemaths::CPeVector3(), sphereInertia,0.999 })
 ;
 			
 		pemaths::CPeMatrix4 peTMatrix;
-		pemaths::CPeTransform::ComputeMatrixFromTransform(peTMatrix, pemaths::CPeVector3(0, 2, 0));
+		pemaths::CPeTransform::ComputeMatrixFromTransform(peTMatrix, pemaths::CPeVector3(0, 3, 0));
 
 		glm::mat4 glmTMatrix = glm::mat4(
 			peTMatrix.Get(0, 0), peTMatrix.Get(1, 0), peTMatrix.Get(2, 0), 0,
