@@ -11,10 +11,6 @@ struct WorldDefaults
 
 //Particle components
 
-struct Position
-{
-	engine::maths::CPeVector3 m_position;
-};
 
 struct Velocity
 {
@@ -83,10 +79,6 @@ struct FreeForce
 
 //Rigidbody
 
-struct Rotation
-{
-	engine::maths::CPeQuaternion m_rotation;
-};
 
 struct AngularVelocity
 {
@@ -105,11 +97,7 @@ struct RigidBody
 	double m_angularDamping;
 };
 
-//Optional for rigibody
 
-struct Scale 
-{
-	engine::maths::CPeVector3 m_scale;
-};
+
 
 
