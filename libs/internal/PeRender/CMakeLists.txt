@@ -13,5 +13,5 @@ add_library(
 	CPeViewManager.h		CPeViewManager.cpp
 	CPeCameraController.h	CPeCameraController.cpp
 	CPeBluePrints.h
-)
+ "PeRenderComponents.h")
 target_link_libraries(PeRender "Vulkan::Vulkan")
