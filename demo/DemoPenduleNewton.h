@@ -64,8 +64,8 @@ namespace pedemo {
 		flecs::world world;
 		flecs::query<const Position, const Rotation, const RigidBody> particleQuery;
 
-		vk::ModelWatcher* AnchorPoint;
-		vk::ModelWatcher* Sphere;
+		//vk::ModelWatcher* AnchorPoint;
+		//vk::ModelWatcher* Sphere;
 	};
 
 }

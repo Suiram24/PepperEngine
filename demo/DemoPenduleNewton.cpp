@@ -20,9 +20,10 @@ namespace pedemo {
 		meshRenderSystem = &engine::render::CPeMeshRenderSystem::GetInstance();
 
 		forceSystem->InitSystems(world);
+		meshRenderSystem->InitSystems(world, *m_renderer);
 
-		AnchorPoint = new vk::ModelWatcher(*m_renderer, "models/companion_cube_simple.obj", "textures/viking_room.png");
-		Sphere = new vk::ModelWatcher(*m_renderer, "models/sphere.obj", "textures/viking_room.png");
+		//AnchorPoint = new vk::ModelWatcher(*m_renderer, "models/companion_cube_simple.obj", "textures/viking_room.png");
+		//Sphere = new vk::ModelWatcher(*m_renderer, "models/sphere.obj", "textures/viking_room.png");
 
 		printf("Game start");
 
@@ -59,7 +60,8 @@ namespace pedemo {
 
 
 		world.entity("anchor")
-			.set<Position>({ pemaths::CPeVector3() });
+			.set<Position>({ pemaths::CPeVector3(0,3,0)})
+			.set<MeshPlaceholder>({ "models/companion_cube_simple.obj", "textures/viking_room.png" });
 
 		pemaths::CPeMatrix3 sphereInertia;
 		pephy::CPeRigidBody::ComputeSphereInertia(sphereInertia, 1, 10);
@@ -76,9 +78,10 @@ namespace pedemo {
 			.set<AngularAcceleration>({ pemaths::CPeVector3() })
 			.set<AnchoredSpring>({ pemaths::CPeVector3(0,3,0), pemaths::CPeVector3(0.0,0.5,0), 100,2 })
 			.set<RigidBody>({ pemaths::CPeVector3(), sphereInertia,0.999 })
+			.set<MeshPlaceholder>({ "models/sphere.obj", "textures/viking_room.png" })
 ;
 			
-		pemaths::CPeMatrix4 peTMatrix;
+		/*pemaths::CPeMatrix4 peTMatrix;
 		pemaths::CPeTransform::ComputeMatrixFromTransform(peTMatrix, pemaths::CPeVector3(0, 3, 0));
 
 		glm::mat4 glmTMatrix = glm::mat4(
@@ -86,9 +89,9 @@ namespace pedemo {
 			peTMatrix.Get(0, 1), peTMatrix.Get(1, 1), peTMatrix.Get(2, 1), 0,
 			peTMatrix.Get(0, 2), peTMatrix.Get(1, 2), peTMatrix.Get(2, 2), 0,
 			peTMatrix.Get(0, 3), peTMatrix.Get(1, 3), peTMatrix.Get(2, 3), 1
-		);
+		);*/
 
-		AnchorPoint->SetTransformMatrix(glmTMatrix);
+		//AnchorPoint->SetTransformMatrix(glmTMatrix);
 		particleQuery = world.query< const Position, const Rotation, const RigidBody>();
 	}
 
@@ -105,27 +108,27 @@ namespace pedemo {
 				
 			});
 		
-		pemaths::CPeVector3 pos = world.lookup("sphere").get<Position>()->m_position;
-		pemaths::CPeQuaternion rot = world.lookup("sphere").get<Rotation>()->m_rotation;
+		//pemaths::CPeVector3 pos = world.lookup("sphere").get<Position>()->m_position;
+		//pemaths::CPeQuaternion rot = world.lookup("sphere").get<Rotation>()->m_rotation;
 
-		pemaths::CPeMatrix4 peTMatrix;
-		pemaths::CPeTransform::ComputeMatrixFromTransform(peTMatrix, pos, rot);
+		//pemaths::CPeMatrix4 peTMatrix;
+		//pemaths::CPeTransform::ComputeMatrixFromTransform(peTMatrix, pos, rot);
 
-		glm::mat4 glmTMatrix = glm::mat4(
-			peTMatrix.Get(0, 0), peTMatrix.Get(1, 0), peTMatrix.Get(2, 0), 0,
-			peTMatrix.Get(0, 1), peTMatrix.Get(1, 1), peTMatrix.Get(2, 1), 0,
-			peTMatrix.Get(0, 2), peTMatrix.Get(1, 2), peTMatrix.Get(2, 2), 0,
-			peTMatrix.Get(0, 3), peTMatrix.Get(1, 3), peTMatrix.Get(2, 3), 1
-		);
+		//glm::mat4 glmTMatrix = glm::mat4(
+		//	peTMatrix.Get(0, 0), peTMatrix.Get(1, 0), peTMatrix.Get(2, 0), 0,
+		//	peTMatrix.Get(0, 1), peTMatrix.Get(1, 1), peTMatrix.Get(2, 1), 0,
+		//	peTMatrix.Get(0, 2), peTMatrix.Get(1, 2), peTMatrix.Get(2, 2), 0,
+		//	peTMatrix.Get(0, 3), peTMatrix.Get(1, 3), peTMatrix.Get(2, 3), 1
+		//);
 
-		Sphere->SetTransformMatrix(glmTMatrix);
+		//Sphere->SetTransformMatrix(glmTMatrix);
 
 	}
 
 	void DemoPenduleNewton::GameEnd()
 	{
-		delete &AnchorPoint;
-		delete &Sphere;
+		//delete &AnchorPoint;
+		//delete &Sphere;
 	}
 
 
