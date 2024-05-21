@@ -19,10 +19,14 @@ namespace engine {
 
 		void CPeForceSystem::InitSystems(flecs::world& world)
 		{
+
+			world.set<WorldDefaults>({ pemaths::CPeVector3(0,-9.81,0),0.999 });
+
 			//
 			// Particle update
-			AccelerationIntegrator = world.system<Acceleration, ForceReceiver, const Mass, const ParticleCustomValues*>("Acceleration_Integrator")
-				.each([](flecs::iter& it, size_t, Acceleration& a, ForceReceiver& f, const Mass& m, const ParticleCustomValues *cv)
+			AccelerationIntegrator = world.system<Acceleration, ForceReceiver, const Mass, const WorldDefaults, const ParticleCustomValues*>("Acceleration_Integrator")
+				.term_at(4).singleton()
+				.each([](flecs::iter& it, size_t, Acceleration& a, ForceReceiver& f, const Mass& m, const WorldDefaults& wd, const ParticleCustomValues *cv)
 				{
 					if (cv)
 					{
@@ -30,7 +34,7 @@ namespace engine {
 					}
 					else
 					{
-						a.m_acceleration = (f.m_sumForces * (1 / it.delta_time())) * m.m_massInverse + pemaths::CPeVector3(0,-9.81,0);//TODO: use the world const singleton component
+						a.m_acceleration = (f.m_sumForces * (1 / it.delta_time())) * m.m_massInverse + wd.m_DefaultGravity;
 					}
 
 					f.m_sumForces = pemaths::CPeVector3();//Reset accumulator
@@ -38,8 +42,9 @@ namespace engine {
 					//m_acceleration = (m_sumForces * (1 / p_timeStep)) * m_massInverse + m_gravity;
 				});
 
-			VelocityIntegrator = world.system<Velocity, const Acceleration, const ParticleCustomValues*>("Velocity_Integrator")
-				.each([](flecs::iter& it, size_t, Velocity& v, const Acceleration& a, const ParticleCustomValues* cv)
+			VelocityIntegrator = world.system<Velocity, const Acceleration, const WorldDefaults, const ParticleCustomValues*>("Velocity_Integrator")
+				.term_at(3).singleton()
+				.each([](flecs::iter& it, size_t, Velocity& v, const Acceleration& a, const WorldDefaults& wd, const ParticleCustomValues* cv)
 				{
 					if (cv)
 					{
@@ -47,7 +52,7 @@ namespace engine {
 					}
 					else
 					{
-						v.m_velocity = (v.m_velocity * 0.999) + (a.m_acceleration * it.delta_time());;//TODO: use the world const singleton component
+						v.m_velocity = (v.m_velocity * wd.m_DefaultDamping) + (a.m_acceleration * it.delta_time());;//TODO: use the world const singleton component
 					}
 
 					//m_velocity = (m_velocity * m_damping) + (m_acceleration * p_timeStep);
@@ -57,8 +62,7 @@ namespace engine {
 				.each([](flecs::iter& it, size_t, Position& p, const Velocity& v)
 				{
 
-					p.m_position = p.m_position + v.m_velocity * it.delta_time();//TODO: use the world const singleton component
-
+					p.m_position = p.m_position + v.m_velocity * it.delta_time();
 					//m_owner->m_transform.SetPosition(m_owner->m_transform.GetPosition() + (m_velocity * p_timeStep));
 				});
 
