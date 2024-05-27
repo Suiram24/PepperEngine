@@ -51,15 +51,15 @@ namespace engine {
 			//
 			// Particle update
 			initializer = world.system<MeshPlaceholder>("Mesh initializer")
-				.each([](flecs::entity e, MeshPlaceholder& mp)
+				.each([this](flecs::entity e, MeshPlaceholder& mp)
 				{
-						int id = CPeMeshRenderSystem::GetInstance().InitializeModelWatcher(mp.m_modelPath, mp.m_texturePath);
+						int id = InitializeModelWatcher(mp.m_modelPath, mp.m_texturePath);
 						e.set<MeshRenderer>({ id });
 						e.remove<MeshPlaceholder>();
 				});
 
 			updater = world.system<const MeshRenderer, const Position, const Rotation*, const Scale*>("ModelWatcher Updater")
-				.each([](const MeshRenderer& mr, const Position& p, const Rotation* r, const Scale* s)
+				.each([this](const MeshRenderer& mr, const Position& p, const Rotation* r, const Scale* s)
 					{
 
 						pemaths::CPeMatrix4 peTMatrix;
@@ -88,7 +88,7 @@ namespace engine {
 							peTMatrix.Get(0, 3), peTMatrix.Get(1, 3), peTMatrix.Get(2, 3), 1
 						);
 
-						CPeMeshRenderSystem::GetInstance().UpdateModelWatcher(mr.ModelWatcherID, glmTMatrix);
+						UpdateModelWatcher(mr.ModelWatcherID, glmTMatrix);
 					});
 		}
 
