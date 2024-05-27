@@ -21,6 +21,7 @@ namespace pedemo {
 
 		forceSystem->InitSystems(world);
 		meshRenderSystem->InitSystems(world, *m_renderer);
+		colliderSystem->InitSystems(world);
 
 		//AnchorPoint = new vk::ModelWatcher(*m_renderer, "models/companion_cube_simple.obj", "textures/viking_room.png");
 		//Sphere = new vk::ModelWatcher(*m_renderer, "models/sphere.obj", "textures/viking_room.png");
@@ -60,38 +61,38 @@ namespace pedemo {
 
 
 		world.entity("anchor")
-			.set<Position>({ pemaths::CPeVector3(0,3,0)})
+			.set<Position>({ pemaths::CPeVector3(0,5,0)})
+			.set<Rotation>({ pemaths::CPeQuaternion(1,0,0,0) })
+			.set<Scale>({ pemaths::CPeVector3(5,1,1) })
 			.set<MeshPlaceholder>({ "models/companion_cube_simple.obj", "textures/viking_room.png" });
 
 		pemaths::CPeMatrix3 sphereInertia;
 		pephy::CPeRigidBody::ComputeSphereInertia(sphereInertia, 1, 10);
 
-		world.entity("sphere")
-			.set<Position>({ pemaths::CPeVector3(0,-0.5,0) })
-			.set<Rotation>({ pemaths::CPeQuaternion(1,0,0,0) })
-			.set<Velocity>({ pemaths::CPeVector3(-5,0,0) })
-			.set<Acceleration>({ pemaths::CPeVector3() })
-			.set<Mass>({ 0.1})
-			.set<AngularVelocity>({ pemaths::CPeVector3() })
-			.set<ParticleCustomValues>({ pemaths::CPeVector3(0,-10,0), 0.999 })
-			.set<ForceReceiver>({ pemaths::CPeVector3() })
-			.set<AngularAcceleration>({ pemaths::CPeVector3() })
-			.set<AnchoredSpring>({ pemaths::CPeVector3(0,3,0), pemaths::CPeVector3(0.0,0.5,0), 100,2 })
-			.set<RigidBody>({ pemaths::CPeVector3(), sphereInertia,0.999 })
-			.set<MeshPlaceholder>({ "models/sphere.obj", "textures/viking_room.png" })
-;
-			
-		/*pemaths::CPeMatrix4 peTMatrix;
-		pemaths::CPeTransform::ComputeMatrixFromTransform(peTMatrix, pemaths::CPeVector3(0, 3, 0));
+		for (int i = 0; i < 5; ++i)
+		{
+			auto e = world.entity()
+				.set<Position>({ pemaths::CPeVector3(-2+i,1.75,0) })
+				.set<Rotation>({ pemaths::CPeQuaternion(1,0,0,0) })
+				.set<Velocity>({ pemaths::CPeVector3(0,0,0) })
+				.set<Acceleration>({ pemaths::CPeVector3() })
+				.set<Mass>({ 1e-1 })
+				.set<AngularVelocity>({ pemaths::CPeVector3() })
+				.set<ParticleCustomValues>({ pemaths::CPeVector3(0,-10,0), 0.9999 })
+				.set<ForceReceiver>({ pemaths::CPeVector3() })
+				.set<AngularAcceleration>({ pemaths::CPeVector3() })
+				.set<AnchoredSpring>({ pemaths::CPeVector3(-2 + i,13,0), pemaths::CPeVector3(0.0,0.5,0), 100,10 })
+				.set<RigidBody>({ pemaths::CPeVector3(), sphereInertia,0.9999 })
+				.set<SphereCollider>({ 0.5 })
+				.set<Scale>({ pemaths::CPeVector3(0.5,0.5,0.5) })
+				.set<MeshPlaceholder>({ "models/sphere.obj", "textures/viking_room.png" });
 
-		glm::mat4 glmTMatrix = glm::mat4(
-			peTMatrix.Get(0, 0), peTMatrix.Get(1, 0), peTMatrix.Get(2, 0), 0,
-			peTMatrix.Get(0, 1), peTMatrix.Get(1, 1), peTMatrix.Get(2, 1), 0,
-			peTMatrix.Get(0, 2), peTMatrix.Get(1, 2), peTMatrix.Get(2, 2), 0,
-			peTMatrix.Get(0, 3), peTMatrix.Get(1, 3), peTMatrix.Get(2, 3), 1
-		);*/
+			if (i == 0)
+			{
+				e.set<Velocity>({ pemaths::CPeVector3(-2,0,0) });
+			}
+		}
 
-		//AnchorPoint->SetTransformMatrix(glmTMatrix);
 		particleQuery = world.query< const Position, const Rotation, const RigidBody>();
 	}
 
@@ -99,12 +100,12 @@ namespace pedemo {
 	{
 
 		DrawImGuiInterface();
-		printf("Particle count : %i\n", particleQuery.count());
+		//printf("Particle count : %i\n", particleQuery.count());
 		
 		//Update mesh
 		particleQuery.each([](flecs::entity e, const Position& p, const Rotation& r, const RigidBody& a)
 			{
-				printf("Particle %s position : %.3f \n", e.name().c_str(), p.m_position.GetY());
+				//printf("Particle %s position : %.3f \n", e.name().c_str(), p.m_position.GetY());
 				
 			});
 		
