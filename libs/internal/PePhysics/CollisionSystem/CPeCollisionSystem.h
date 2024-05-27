@@ -22,6 +22,8 @@ namespace engine
 
 		}
 
+		
+
 		/**
 		 * @brief The class that detect contacts and resolve collisions. Provides an interface to add permanent contacts.
 		*/
@@ -37,6 +39,10 @@ namespace engine
 			std::vector<CPeBoxPrimitiveShape*> m_boxShapesPool;
 			std::vector<CPePlanePrimitiveShape*> m_planeShapesPool;
 			std::vector<CPeColliderComponent*> m_collidersPool;
+
+			flecs::system collisionUpdater;
+			std::vector<ColliderInfos> colInfoList;
+			std::vector<ColliderInfos*> colInfoRefs;
 
 		public:
 
@@ -60,6 +66,8 @@ namespace engine
 			CPeSpherePrimitiveShape* CreateSphereShape(const pecore::CPeEntity& p_owner, double p_radius, double p_elasticity = 0.6);
 			CPeBoxPrimitiveShape* CreateBoxShape(const pecore::CPeEntity& p_owner, const pemaths::CPeVector3& p_size);
 			CPePlanePrimitiveShape* CreatePlaneShape(const pecore::CPeEntity& p_owner, pemaths::CPeVector3 p_normal, double p_offset);
+
+			void InitSystems(flecs::world& world);
 
 		private:
 

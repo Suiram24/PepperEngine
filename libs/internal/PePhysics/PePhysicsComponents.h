@@ -98,6 +98,15 @@ struct RigidBody
 };
 
 
+//Collisions
+struct SphereCollider
+{
+	double radius;
+};
+
+
+
+
 
 
 

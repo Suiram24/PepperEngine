@@ -12,8 +12,8 @@ namespace engine {
 			pemaths::CPeVector3 normal;
 			double interpenetration;
 			double contactElasticity;
-			CPeRigidBody* obj1;
-			CPeRigidBody* obj2;
+			flecs::entity obj1;
+			flecs::entity obj2;
 		};
 	}
 }

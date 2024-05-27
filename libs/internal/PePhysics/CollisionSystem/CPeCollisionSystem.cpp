@@ -3,29 +3,57 @@
 #include "CPeKDTree.h"
 #include "CPeNarrowPhaseSystem.h"
 #include "CPeCollisionResolutionSystem.h"
+#include "../PePhysicsComponents.h"
 
 namespace engine {
 	namespace physics {
-		
-		
+
+
+		void CPeCollisionSystem::InitSystems(flecs::world& world)
+		{
+			collisionUpdater = world.system<const Position, const SphereCollider, const Rotation*>("Collision_Updater")
+				.each([this](flecs::entity& e, const Position& p, const SphereCollider& sc, const Rotation* r)
+				{
+						if (r)
+						{
+							colInfoList.push_back({e,p.m_position, r->m_rotation, sc.radius });
+						}
+						else
+						{
+							colInfoList.push_back({ e,p.m_position, pemaths::CPeQuaternion(1,0,0,0), sc.radius});
+						}
+						
+				});
+		}
+
+
 		void CPeCollisionSystem::UpdateCollision(double p_timeStep)
 		{
 			int it = 0;
 
 			//printf("Updating collision\n");
 				//Get all colliders
-			std::vector<CPeColliderComponent*> collidersList = m_collidersPool;
+			//std::vector<CPeColliderComponent*> collidersList = m_collidersPool;
 
-			if (collidersList.size() == 0)
+			colInfoList.clear();
+			colInfoRefs.clear();
+			collisionUpdater.run();
+
+			for (auto& c : colInfoList)
+			{
+				colInfoRefs.push_back(&c);
+			}
+
+			if (colInfoRefs.size() == 0)
 			{
 				return;
 			}
 
 			// Broad phase
 			//printf("Broad Phase\n");
-			CPeKDTree tree = CPeKDTree(X, collidersList);
+			CPeKDTree tree = CPeKDTree(X, colInfoRefs);
 
-			std::vector<std::pair<CPeColliderComponent*, CPeColliderComponent*>> possibleCollisions = tree.GetPossibleCollisions();
+			std::vector<std::pair<ColliderInfos*, ColliderInfos*>> possibleCollisions = tree.GetPossibleCollisions();
 			
 			
 
@@ -37,16 +65,30 @@ namespace engine {
 
 			for (int k = 0; k < possibleCollisions.size(); k++)
 			{
-				const std::vector<CPePrimitiveShape*>& shapeList1 = possibleCollisions[k].first->GetPrimitives();
-				const std::vector<CPePrimitiveShape*>& shapeList2 = possibleCollisions[k].second->GetPrimitives();
 
-				for (int i = 0; i < shapeList1.size(); i++)
+				double r1 = possibleCollisions[k].first->radius;
+				double r2 = possibleCollisions[k].second->radius;
+
+				double d = possibleCollisions[k].first->position.DistanceTo(possibleCollisions[k].second->position);
+
+				if (d > (r1 + r2))
 				{
-					for (int j = 0; j < shapeList2.size(); j++)
-					{
-						narrowPhase.GenerateContacts(shapeList1[i], shapeList2[j], &contactInfosList);
-					}
+					continue;
 				}
+
+				SPeContactInfos* data = new SPeContactInfos();
+
+				data->normal = (possibleCollisions[k].first->position - possibleCollisions[k].second->position).NormalizeVector();
+				data->interpenetration = r1 + r2 - d;
+				data->contactPoint = possibleCollisions[k].second->position + r2 * data->normal;
+				data->contactElasticity = 1;
+
+				data->obj1 = possibleCollisions[k].second->owner;
+				data->obj2 = possibleCollisions[k].first->owner;
+
+				contactInfosList.push_back(data);
+				printf("Collision detected %i\n");
+			
 			}
 
 			do
@@ -67,26 +109,47 @@ namespace engine {
 				}
 				contactInfosList.clear();
 
+				colInfoList.clear();
+				colInfoRefs.clear();
+				collisionUpdater.run();
+
+				if (colInfoRefs.size() == 0)
+				{
+					return;
+				}
 
 				// Broad phase
 				//printf("Broad Phase\n");
-				CPeKDTree tree2 = CPeKDTree(X, collidersList);
+				CPeKDTree tree2 = CPeKDTree(X, colInfoRefs);
 				possibleCollisions = tree2.GetPossibleCollisions();
 
 				// Narrow phase
 				//printf("Narrow phase\n");
 				for (int k = 0; k < possibleCollisions.size(); k++)
 				{
-					const std::vector<CPePrimitiveShape*>& shapeList1 = possibleCollisions[k].first->GetPrimitives();
-					const std::vector<CPePrimitiveShape*>& shapeList2 = possibleCollisions[k].second->GetPrimitives();
 
-					for (int i = 0; i < shapeList1.size(); i++)
+					double r1 = possibleCollisions[k].first->radius;
+					double r2 = possibleCollisions[k].second->radius;
+
+					double d = possibleCollisions[k].first->position.DistanceTo(possibleCollisions[k].second->position);
+
+					if (d > (r1 + r2))
 					{
-						for (int j = 0; j < shapeList2.size(); j++)
-						{
-							narrowPhase.GenerateContacts(shapeList1[i], shapeList2[j], &contactInfosList);
-						}
+						continue;
 					}
+
+					SPeContactInfos* data = new SPeContactInfos();
+
+					data->normal = (possibleCollisions[k].first->position - possibleCollisions[k].second->position).NormalizeVector();
+					data->interpenetration = r1 + r2 - d;
+					data->contactPoint = possibleCollisions[k].second->position + r2 * data->normal;
+					data->contactElasticity = 1;
+
+					data->obj1 = possibleCollisions[k].first->owner;
+					data->obj2 = possibleCollisions[k].second->owner;
+
+					contactInfosList.push_back(data);
+
 				}
 
 				//if (contactInfosList.size() > 0)
@@ -150,19 +213,7 @@ namespace engine {
 				return;
 			}
 
-			if (iteration >= consts::nbIterationCollider - 1)
-			{
-				for (SPeContactInfos* cInfos : contactInfos)
-				{
-					if (cInfos->obj2 != nullptr)
-					{
-						//if (cInfos->obj2->GetTransform().GetPosition().GetY() < )
-						//{
-
-						//}
-					}
-				}
-			}
+			
 
 			for (size_t i = 0; i < contactInfos.size()-1; i++)
 			{

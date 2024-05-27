@@ -9,6 +9,15 @@ namespace pecore = engine::core;
 
 namespace engine {
 	namespace physics {
+
+		struct ColliderInfos
+		{
+			flecs::entity owner;
+			pemaths::CPeVector3 position;
+			pemaths::CPeQuaternion rotation;
+			double radius;
+		};
+
 		class CPePrimitiveShape;
 
 		/**

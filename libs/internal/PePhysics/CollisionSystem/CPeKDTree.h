@@ -26,7 +26,7 @@ namespace engine {
 		private:
 			CPeKDTree* m_leftChild;
 			CPeKDTree* m_rightChild;
-			std::vector<CPeColliderComponent*> m_content;
+			std::vector<ColliderInfos*> m_content;
 			EPeDimension m_divisionDim;
 			double m_value;
 			int m_contenSizeMax;
@@ -39,14 +39,14 @@ namespace engine {
 			 * @param p_objects vector<CPeColliderComponent> - Colliders of objects to consider
 			 * @param p_contentSizeMax int - maximal size value to stop the generation of childs
 			 */
-			CPeKDTree(EPeDimension p_dimensionAlong, std::vector<CPeColliderComponent*>& p_objects, int p_contentSizeMax = 3);
+			CPeKDTree(EPeDimension p_dimensionAlong, std::vector<ColliderInfos*>& p_objects, int p_contentSizeMax = 3);
 
 			/**
 			 * @brief Get the Possible Collisions listed by the KD tree
 			 * 
 			 * @return vector<pair<CPeColliderComponent*, CPeColliderComponent*>> pair of colliders representing the possible collisions 
 			 */
-			std::vector<std::pair<CPeColliderComponent*, CPeColliderComponent*>> GetPossibleCollisions();
+			std::vector<std::pair<ColliderInfos*, ColliderInfos*>> GetPossibleCollisions();
 
 			~CPeKDTree();
 		private:
@@ -67,7 +67,7 @@ namespace engine {
 			 * 
 			 * @return vector<pair<CPeColliderComponent*, CPeColliderComponent*>> All possible collisions for the targeted node
 			 */
-			std::vector<std::pair<CPeColliderComponent*, CPeColliderComponent*>> GetNodeCollisions();
+			std::vector<std::pair<ColliderInfos*, ColliderInfos*>> GetNodeCollisions();
 
 			/**
 			 * @brief Compute if the sphere collider intersect the KD plane
@@ -76,7 +76,7 @@ namespace engine {
 			 * @return true if the collider intersect the KD plane
 			 * @return false otherwise
 			 */
-			bool IntersectKDPlane(CPeSpherePrimitiveShape& p_collider) const;
+			bool IntersectKDPlane(ColliderInfos* p_collider) const;
 
 			/**
 			 * @brief Compute if two global sphere collider intersect
@@ -86,22 +86,22 @@ namespace engine {
 			 * @return true if the two colliders intersect
 			 * @return false otherwise
 			 */
-				bool IsBroadIntersection(CPeSpherePrimitiveShape & p_collider1, CPeSpherePrimitiveShape& p_collider2) const;
+				bool IsBroadIntersection(ColliderInfos* p_collider1, ColliderInfos* p_collider2) const;
 		};
 
 		class ComparatorX {
 		public:
-			bool operator()(CPeColliderComponent* p_a, CPeColliderComponent* p_b);
+			bool operator()(ColliderInfos* p_a, ColliderInfos* p_b);
 		};
 
 		class ComparatorY {
 		public:
-			bool operator()(CPeColliderComponent* p_a, CPeColliderComponent* p_b);
+			bool operator()(ColliderInfos* p_a, ColliderInfos* p_b);
 		};
 
 		class ComparatorZ {
 		public:
-			bool operator()(CPeColliderComponent* p_a, CPeColliderComponent* p_b);
+			bool operator()(ColliderInfos* p_a, ColliderInfos* p_b);
 		};
 	}
 }

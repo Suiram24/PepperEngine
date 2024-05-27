@@ -7,7 +7,7 @@
 
 namespace engine {
 	namespace physics {
-		CPeKDTree::CPeKDTree(EPeDimension p_dimensionAlong, std::vector<CPeColliderComponent*>& p_objects, int p_contentSizeMax):
+		CPeKDTree::CPeKDTree(EPeDimension p_dimensionAlong, std::vector<ColliderInfos*>& p_objects, int p_contentSizeMax):
 			m_leftChild(nullptr),
 			m_rightChild(nullptr),
 			m_content(p_objects),
@@ -18,11 +18,11 @@ namespace engine {
 			divideSpace();
 		}
 
-		std::vector<std::pair<CPeColliderComponent*, CPeColliderComponent*>> CPeKDTree::GetPossibleCollisions()
+		std::vector<std::pair<ColliderInfos*, ColliderInfos*>> CPeKDTree::GetPossibleCollisions()
 		{
 			std::vector<CPeKDTree*> leaves;
-			std::vector<std::pair<CPeColliderComponent*, CPeColliderComponent*>> possibleCollisions;
-			std::vector<std::pair<CPeColliderComponent*, CPeColliderComponent*>> currentCollisions;
+			std::vector<std::pair<ColliderInfos*, ColliderInfos*>> possibleCollisions;
+			std::vector<std::pair<ColliderInfos*, ColliderInfos*>> currentCollisions;
 			GetLeaves(&leaves);
 
 			for (int i = 0; i < leaves.size(); ++i) {
@@ -82,36 +82,36 @@ namespace engine {
 
 				switch (m_divisionDim) {
 				case X:
-					m_value = m_content[medianIndex]->GetOwner().m_transform.GetPosition().GetX();
+					m_value = m_content[medianIndex]->position.GetX();
 					break;
 				case Y:
-					m_value = m_content[medianIndex]->GetOwner().m_transform.GetPosition().GetY();
+					m_value = m_content[medianIndex]->position.GetY();
 					break;
 				case Z:
-					m_value = m_content[medianIndex]->GetOwner().m_transform.GetPosition().GetZ();
+					m_value = m_content[medianIndex]->position.GetZ();
 					break;
 				}
 
 				auto firstLeft = m_content.begin();
 				auto lastLeft = m_content.begin() + medianIndex;
-				std::vector<CPeColliderComponent*> leftVector(firstLeft, lastLeft);
+				std::vector<ColliderInfos*> leftVector(firstLeft, lastLeft);
 
 				auto firstRight = m_content.begin() + medianIndex;
 				auto lastRight = m_content.end();
-				std::vector<CPeColliderComponent*> rightVector(firstRight, lastRight);
+				std::vector<ColliderInfos*> rightVector(firstRight, lastRight);
 
 				// FOR loop on the left list to verify if they're also in the right part.
-				std::vector<CPeColliderComponent*> toAddRight;
+				std::vector<ColliderInfos*> toAddRight;
 				for (auto i = firstLeft; i != lastLeft; ++i) {
-					if (IntersectKDPlane((*i)->GetGlobalVolume())) {
+					if (IntersectKDPlane(*i)) {
 						toAddRight.push_back(*i);
 					}
 				}
 
 				// FOR loop on the right list to verify if they're also in the left part.
-				std::vector<CPeColliderComponent*> toAddLeft;
+				std::vector<ColliderInfos*> toAddLeft;
 				for (auto& i = firstRight; i != lastRight; ++i) {
-					if (IntersectKDPlane((*i)->GetGlobalVolume())) {
+					if (IntersectKDPlane(*i)) {
 						toAddLeft.push_back(*i);
 					}
 				}
@@ -144,18 +144,19 @@ namespace engine {
 				}
 			}
 		}
-		std::vector<std::pair<CPeColliderComponent*, CPeColliderComponent*>> CPeKDTree::GetNodeCollisions() {
-			std::set<std::pair<CPeColliderComponent*, CPeColliderComponent*>> pairs;
+		std::vector<std::pair<ColliderInfos*, ColliderInfos*>> CPeKDTree::GetNodeCollisions()
+		{
+			std::set<std::pair<ColliderInfos*, ColliderInfos*>> pairs;
 			for (int i = 0; i < m_content.size()-1; ++i) {
 				for (int j = i+1; j < m_content.size(); ++j) {
-					if (IsBroadIntersection(m_content[i]->GetGlobalVolume(), m_content[j]->GetGlobalVolume())) {
+					if (IsBroadIntersection(m_content[i], m_content[j])) {
 						pairs.insert(
-							std::pair<CPeColliderComponent*, CPeColliderComponent*>(m_content[i], m_content[j])
+							std::pair<ColliderInfos*, ColliderInfos*>(m_content[i], m_content[j])
 						);
 					}
 				}
 			}
-			std::vector<std::pair<CPeColliderComponent*, CPeColliderComponent*>> pairsVec(pairs.begin(), pairs.end());
+			std::vector<std::pair<ColliderInfos*, ColliderInfos*>> pairsVec(pairs.begin(), pairs.end());
 			return pairsVec;
 		}
 		/*
@@ -177,18 +178,18 @@ namespace engine {
 		}
 		*/
 
-		bool CPeKDTree::IntersectKDPlane(CPeSpherePrimitiveShape& p_collider) const {
+		bool CPeKDTree::IntersectKDPlane(ColliderInfos* p_collider) const {
 			double distCenterPlane = 0.0f;
-			double radius = p_collider.GetRadius();
+			double radius = p_collider->radius;
 			switch (m_divisionDim) {
 			case X:
-				distCenterPlane = std::abs(p_collider.GetWorldPosition().GetX() - m_value);
+				distCenterPlane = std::abs(p_collider->position.GetX() - m_value);
 				break;
 			case Y:
-				distCenterPlane = std::abs(p_collider.GetWorldPosition().GetY() - m_value);
+				distCenterPlane = std::abs(p_collider->position.GetY() - m_value);
 				break;
 			case Z:
-				distCenterPlane = std::abs(p_collider.GetWorldPosition().GetZ() - m_value);
+				distCenterPlane = std::abs(p_collider->position.GetZ() - m_value);
 				break;
 			}
 			if (distCenterPlane <= radius) {
@@ -197,30 +198,30 @@ namespace engine {
 			return false;
 		}
 
-		bool CPeKDTree::IsBroadIntersection(CPeSpherePrimitiveShape& p_collider1, CPeSpherePrimitiveShape& p_collider2) const {
-			double radius1 = p_collider1.GetRadius();
-			double radius2 = p_collider2.GetRadius();
+		bool CPeKDTree::IsBroadIntersection(ColliderInfos* p_collider1, ColliderInfos* p_collider2) const {
+			double radius1 = p_collider1->radius;
+			double radius2 = p_collider2->radius;
 
 			double sqSumRadius = (radius1 + radius2) * (radius1 + radius2);
 
-			double sqDist = (p_collider1.GetWorldPosition() - p_collider2.GetWorldPosition()).GetSquaredNorm();
+			double sqDist = (p_collider1->position - p_collider2->position).GetSquaredNorm();
 
 			if (sqDist <= sqSumRadius) return true;
 			return false;
 		}
 
 
-		bool ComparatorX::operator()(CPeColliderComponent* p_a, CPeColliderComponent* p_b)
+		bool ComparatorX::operator()(ColliderInfos* p_a, ColliderInfos* p_b)
 		{
-			return p_a->GetOwner().m_transform.GetPosition().GetX() < p_b->GetOwner().m_transform.GetPosition().GetX();
+			return p_a->position.GetX() < p_b->position.GetX();
 		}
-		bool ComparatorY::operator()(CPeColliderComponent* p_a, CPeColliderComponent* p_b)
+		bool ComparatorY::operator()(ColliderInfos* p_a, ColliderInfos* p_b)
 		{
-			return p_a->GetOwner().m_transform.GetPosition().GetY() < p_b->GetOwner().m_transform.GetPosition().GetY();;
+			return p_a->position.GetY() < p_b->position.GetY();;
 		}
-		bool ComparatorZ::operator()(CPeColliderComponent* p_a, CPeColliderComponent* p_b)
+		bool ComparatorZ::operator()(ColliderInfos* p_a, ColliderInfos* p_b)
 		{
-			return p_a->GetOwner().m_transform.GetPosition().GetZ() < p_b->GetOwner().m_transform.GetPosition().GetZ();;
+			return p_a->position.GetZ() < p_b->position.GetZ();;
 		}
 	}
 }
