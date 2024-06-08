@@ -13,8 +13,10 @@ namespace engine {
 			int it = 0;
 
 			//printf("Updating collision\n");
-				//Get all colliders
+			//Get all colliders
 			std::vector<CPeColliderComponent*> collidersList = m_collidersPool;
+
+			if (collidersList.size() == 0)	{return;}
 
 
 			// Broad phase
@@ -62,6 +64,7 @@ namespace engine {
 				}
 				contactInfosList.clear();
 
+				if (collidersList.size() == 0) { return; }
 
 				// Broad phase
 				//printf("Broad Phase\n");

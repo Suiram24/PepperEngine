@@ -18,11 +18,9 @@
 int main(int, char**)
 {
 
-    engine::CPeGameMode* myGameMode = &pedemo::DemoPenduleNewton();
-    //engine::CPeGameMode* myGameMode = &pedemo::DemoBillard();
+    pedemo::DemoPenduleNewton myGameMode = pedemo::DemoPenduleNewton();
 
-
-    engine::CPeGameManager::getInstance().SetGameMode(myGameMode);
+    engine::CPeGameManager::getInstance().SetGameMode(&myGameMode);
     engine::CPeGameManager::getInstance().StartGame();
 
     return 0;
