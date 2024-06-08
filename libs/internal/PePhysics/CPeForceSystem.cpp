@@ -7,13 +7,18 @@ namespace engine {
 		{
 			AnchoredSpringSystem.run(p_timeStep);
 
+
 			AccelerationIntegrator.run(p_timeStep);
 			VelocityIntegrator.run(p_timeStep);
 			PositionIntegrator.run(p_timeStep);
 
+
 			AngAccelerationIntegrator.run(p_timeStep);
 			AngVelocityIntegrator.run(p_timeStep);
 			RotationIntegrator.run(p_timeStep);
+
+			pecore::CPeJobSystem::GetInstance().Wait();
+			
 			
 		}
 

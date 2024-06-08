@@ -3,7 +3,7 @@ add_library(PeEngineCore	PeEngineCore.h
 							"CPeEntity.h" "CPeEntity.cpp"
 							"CPeComponent.h" "CPeComponent.cpp"
 							"CPeObjectPool.h"
-							)
+							 "CPeJobSystem.cpp" "CPeJobSystem.h" "CPeThreadSafeQueue.h" "CPeSpinlock.h")
 
 #Flecs
 include(FetchContent)
@@ -14,5 +14,11 @@ FetchContent_Declare(
 )
 
 FetchContent_MakeAvailable(flecs)
+
+IF (WIN32)
+  add_compile_definitions(PLATFORM_WINDOWS)
+ELSE()
+  # set stuff for other systems
+ENDIF()
 
 target_link_libraries(PeEngineCore PeMaths flecs::flecs_static)

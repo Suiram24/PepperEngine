@@ -4,6 +4,8 @@
 #include "CPeEntity.h"
 #include "CPeComponent.h"
 #include "CPeObjectPool.h"
+#include "CPeJobSystem.h"
+#include "CPeSpinlock.h"
 
 #include "flecs.h"
 

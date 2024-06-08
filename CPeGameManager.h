@@ -45,6 +45,8 @@ namespace engine
 			m_forceSystem = &engine::physics::CPeForceSystem::GetInstance();
 			m_collisionSystem = &engine::physics::CPeCollisionSystem::GetInstance();
 			m_meshRenderSystem = &engine::render::CPeMeshRenderSystem::GetInstance();
+			m_jobSystem = &engine::core::CPeJobSystem::GetInstance();
+			m_jobSystem->Initialize();
 			AllocateObjectsPool();		
 		}
 
@@ -74,6 +76,7 @@ namespace engine
 		engine::physics::CPeForceSystem* m_forceSystem;
 		engine::physics::CPeCollisionSystem* m_collisionSystem;
 		engine::render::CPeMeshRenderSystem* m_meshRenderSystem;
+		engine::core::CPeJobSystem* m_jobSystem;
 
 	
 		//
