@@ -12,14 +12,16 @@ namespace engine {
 
 	void CPeGameManager::StartGame()
 	{
-		//
-		// Render setup
+		
 		if (m_ActiveGameMode == nullptr)
 		{
 			printf("Error: game cannot start: GameMode no set");
 			return;
 		}
 
+
+		//
+		// Render setup
 		glfwInit();
 
 		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);

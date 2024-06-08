@@ -20,7 +20,7 @@ namespace engine
 	}
 	
 	/**
-		* @brief A class for basic components regarding the physics of a 3D elements.
+		* @brief The class that will manage the gameloop of a given gamemode
 	*/
 	class CPeGameManager
 	{
@@ -48,10 +48,19 @@ namespace engine
 			AllocateObjectsPool();		
 		}
 
+		/**
+		 * @brief Set the Gamemode of the Game manager
+		*/
 		void SetGameMode(CPeGameMode* p_gameMode);
 
+		/**
+		 * @brief Start the game loop. The gamemode must be set. 
+		*/
 		void StartGame();
 
+		/**
+		 * @brief Create an entity in the game world and return a reference.
+		*/
 		pecore::CPeEntity& CreateEntity(const pemaths::CPeTransform& p_transform = pemaths::CPeTransform());
 
 	protected:

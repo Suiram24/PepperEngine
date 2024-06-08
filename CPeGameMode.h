@@ -9,7 +9,7 @@
 namespace engine {
 	
 	/**
-		* @brief A class for basic components regarding the physics of a 3D elements.
+		* @brief A parent class for all game modes instance.
 	*/
 	class CPeGameMode
 	{
