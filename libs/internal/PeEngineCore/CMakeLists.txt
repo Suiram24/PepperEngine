@@ -3,5 +3,6 @@ add_library(PeEngineCore	PeEngineCore.h
 							"CPeEntity.h" "CPeEntity.cpp"
 							"CPeComponent.h" "CPeComponent.cpp"
 							"CPeObjectPool.h"
+							"CPeWorld.h" "CPeWorld.cpp"
 							)
 target_link_libraries(PeEngineCore PeMaths)
