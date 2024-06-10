@@ -135,7 +135,10 @@ namespace engine
 
 		bool CPeWorld::HasComponent(const PeEntity entity, const  PeComponentID component) const
 		{
-			return false;
+			const PeArchetypeID archetypeID = m_EntitiesArchetypeMap.at(entity).archetypeID; //O(1)
+			const ComponentDataMap& componentData = m_ComponentArchetypeMap.at(component); //O(1)
+
+			return componentData.count(archetypeID) != 0; // O(1)
 		}
 
 	}
