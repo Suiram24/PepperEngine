@@ -20,6 +20,7 @@ namespace engine
 
 		using ComponentDataMap = std::unordered_map< PeArchetypeID, ComponentDataArray>;
 
+
 		struct EntityArchetype
 		{
 			PeArchetypeID archetypeID;
@@ -31,6 +32,43 @@ namespace engine
 		{
 			PeArchetypeID archetypeID; //Base archetype
 			PeComponentID componentID; //Component to be added or removed
+
+			bool operator==(const ArchetypeChange& other) const
+			{
+				return archetypeID == other.archetypeID && componentID == other.componentID;
+			}
+		};
+
+		struct ComponentArrayHash {
+			size_t operator()(const std::vector<PeComponentID>& a) const
+			{
+				size_t res = 0;
+
+				for (const PeComponentID& c : a)
+				{
+					res = res ^ std::hash<int>()(c);
+				}
+				// Combine hashes of x and y using the bitwise XOR
+				return res;
+			}
+		};
+
+		struct ComponentIDHash {
+			size_t operator()(const PeComponentID& c) const
+			{
+				// Combine hashes of x and y using the bitwise XOR
+				return std::hash<int>()(c);
+			}
+		};
+
+
+
+		struct ArchetypChangeHash {
+			size_t operator()(const ArchetypeChange& ac) const
+			{
+				// Combine hashes of x and y using the bitwise XOR
+				return std::hash<int>()(ac.archetypeID) ^ (std::hash<int>()(ac.componentID) << 1);
+			}
 		};
 
 		
@@ -45,9 +83,9 @@ namespace engine
 
 			PeEntity CreateEntity();
 
-			PeEntity Add(PeEntity, PeComponentID);
-			PeEntity Remove(PeEntity, PeComponentID);
-			bool HasComponent(PeEntity, PeComponentID) const;
+			PeEntity Add(const PeEntity entity, const PeComponentID component);
+			PeEntity Remove(const PeEntity entity, const PeComponentID component);
+			bool HasComponent(const PeEntity entity, const PeComponentID component) const;
 
 
 		protected:
@@ -58,14 +96,14 @@ namespace engine
 		protected:
 		private:
 			std::unordered_map<PeEntity, EntityArchetype> m_EntitiesArchetypeMap; //Map that store the archetype of every entity of the world
-			std::unordered_map<PeComponentID, ComponentDataMap> m_ComponentArchetypeMap; //Map that store the archetypes that use every component, and store the components data
-			std::unordered_map<std::vector<PeComponentID>, PeArchetypeID> m_ArchetypesRegistry; //Store all the uniques combinaisons of components and the archetype ID associated with it
+			std::unordered_map<PeComponentID, ComponentDataMap, ComponentIDHash> m_ComponentArchetypeMap; //Map that store the archetypes that use every component, and store the components data
+			std::unordered_map<std::vector<PeComponentID>, PeArchetypeID, ComponentArrayHash> m_ArchetypesRegistry; //Store all the uniques combinaisons of components and the archetype ID associated with it
 			std::unordered_map<PeArchetypeID, std::vector<PeComponentID>> m_ArchetypesComponentList; //Store all the componant that form an archetype
 
 
 			//Archetype graph: 
-			std::unordered_map<ArchetypeChange, PeArchetypeID> m_nextArchetype; // Store the archetype that has all the initial archetype components and the new component
-			std::unordered_map<ArchetypeChange, PeArchetypeID> m_prevArchetype;// Store the archetype that has all the initial archetype components exept the new component
+			std::unordered_map<ArchetypeChange, PeArchetypeID, ArchetypChangeHash> m_nextArchetype; // Store the archetype that has all the initial archetype components and the new component
+			std::unordered_map<ArchetypeChange, PeArchetypeID, ArchetypChangeHash> m_prevArchetype;// Store the archetype that has all the initial archetype components exept the new component
 
 
 			PeEntity LastEntityCreated = 0;
