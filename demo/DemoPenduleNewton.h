@@ -13,6 +13,11 @@
 namespace pedemo {
 	namespace pephy = engine::physics;
 
+	struct vector {
+		float x;
+		float y;
+	};
+
 	/**
 		* @brief A class for basic components regarding the physics of a 3D elements.
 	*/

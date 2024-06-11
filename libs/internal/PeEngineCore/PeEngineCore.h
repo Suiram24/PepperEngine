@@ -4,5 +4,6 @@
 #include "CPeEntity.h"
 #include "CPeComponent.h"
 #include "CPeObjectPool.h"
+#include "CPeWorld.h"
 
 #endif /* PEENGINECORE_PEENGINECORE_H */

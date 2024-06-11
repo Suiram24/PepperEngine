@@ -8,21 +8,21 @@ namespace engine
 	{
 
 		CPeWorld::CPeWorld()
-		:m_EntitiesArchetypeMap()
-		,m_ComponentArchetypeMap()
-		,m_ArchetypesRegistry()
-		,m_ArchetypesComponentList()
-		,m_nextArchetype()
-		,m_prevArchetype()
+			:m_EntitiesArchetypeMap()
+			, m_ComponentArchetypeMap()
+			, m_ArchetypesRegistry()
+			, m_ArchetypesComponentList()
+			, m_nextArchetype()
+			, m_prevArchetype()
 		{
 			//Initialize the void archetype
 			std::vector<PeComponentID> voidVector;
-			m_ArchetypesRegistry.insert(std::pair<std::vector<PeComponentID>, PeArchetypeID>(voidVector,0));
+			m_ArchetypesRegistry.insert(std::pair<std::vector<PeComponentID>, PeArchetypeID>(voidVector, 0));
 		}
 
 		PeEntity CPeWorld::CreateEntity()
 		{
-			m_EntitiesArchetypeMap.insert(std::pair<PeEntity, EntityArchetype>(++LastEntityCreated, EntityArchetype{0}));
+			m_EntitiesArchetypeMap.insert(std::pair<PeEntity, EntityArchetype>(++LastEntityCreated, EntityArchetype{ 0 }));
 
 			return LastEntityCreated;
 		}
@@ -51,15 +51,14 @@ namespace engine
 
 				componentsArray.push_back(component);
 				std::sort(componentsArray.begin(), componentsArray.end()); //Make sure components are sorted so same components = same hash
-				
+
 				if (m_ArchetypesRegistry.count(componentsArray) != 0) //The new archetype already exist
 				{
 					nextArchetype = m_ArchetypesRegistry.at(componentsArray);
 				}
 				else //The new archetype doesn't exist yet, we have to create it
 				{
-					m_ArchetypesRegistry.insert(std::pair<std::vector<PeComponentID>, PeArchetypeID>{componentsArray, ++LastArchetypeCreated});
-					nextArchetype = LastArchetypeCreated;
+					nextArchetype = CreateArchetype(componentsArray);
 				}
 
 				//
@@ -100,7 +99,7 @@ namespace engine
 							{
 								componentsArray.push_back(c);
 							}
-							
+
 						}
 						break;
 					}
@@ -114,8 +113,7 @@ namespace engine
 				}
 				else //The new archetype doesn't exist yet, we have to create it
 				{
-					m_ArchetypesRegistry.insert(std::pair<std::vector<PeComponentID>, PeArchetypeID>{componentsArray, ++LastArchetypeCreated});
-					prevArchetype = LastArchetypeCreated;
+					prevArchetype = CreateArchetype(componentsArray);
 				}
 
 				//
@@ -141,5 +139,18 @@ namespace engine
 			return componentData.count(archetypeID) != 0; // O(1)
 		}
 
+		PeArchetypeID CPeWorld::CreateArchetype(const std::vector<PeComponentID>& componentsVector)
+		{
+			m_ArchetypesRegistry.insert(std::pair<std::vector<PeComponentID>, PeArchetypeID>{componentsVector, ++LastArchetypeCreated});
+
+			//Register the new archetype in the component->archetypes map
+			for (auto& c : componentsVector)
+			{
+				ComponentDataMap& cDataMap = m_ComponentArchetypeMap.at(c);
+				cDataMap.insert(std::make_pair(LastArchetypeCreated, ComponentDataArray{ nullptr,0,0 }));
+			}
+
+			return LastArchetypeCreated;
+		}
 	}
 }

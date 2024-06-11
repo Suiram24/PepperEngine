@@ -2,6 +2,7 @@
 
 #include <unordered_map>
 #include <unordered_set>
+#include <typeinfo>
 
 namespace engine
 {
@@ -61,6 +62,13 @@ namespace engine
 			}
 		};
 
+		struct TypeInfoHash {
+			size_t operator()(const std::type_info& t) const
+			{
+				// Combine hashes of x and y using the bitwise XOR
+				return t.hash_code();
+			}
+		};
 
 
 		struct ArchetypChangeHash {
@@ -87,9 +95,29 @@ namespace engine
 			PeEntity Remove(const PeEntity entity, const PeComponentID component);
 			bool HasComponent(const PeEntity entity, const PeComponentID component) const;
 
+			template<typename T>
+			PeComponentID GetID(T& component)
+			{
+				size_t cinfo = typeid(component).hash_code();
+				if (m_componentsID.count(cinfo) != 0)
+				{
+					return m_componentsID.at(cinfo);
+				}
+				else
+				{
+					m_componentsID.insert(std::make_pair(cinfo, ++LastComponentRegistred));
+					ComponentDataMap newEmptyMap = ComponentDataMap();
+					m_ComponentArchetypeMap.insert(std::make_pair(LastComponentRegistred, newEmptyMap));
+					return LastComponentRegistred;
+				}
+
+			}
+
 
 		protected:
 		private:
+
+			PeArchetypeID CreateArchetype(const std::vector<PeComponentID>& componentsVector);
 
 
 		public:
@@ -105,9 +133,11 @@ namespace engine
 			std::unordered_map<ArchetypeChange, PeArchetypeID, ArchetypChangeHash> m_nextArchetype; // Store the archetype that has all the initial archetype components and the new component
 			std::unordered_map<ArchetypeChange, PeArchetypeID, ArchetypChangeHash> m_prevArchetype;// Store the archetype that has all the initial archetype components exept the new component
 
+			std::unordered_map<size_t, PeComponentID> m_componentsID;
 
 			PeEntity LastEntityCreated = 0;
 			PeArchetypeID LastArchetypeCreated = 0;
+			PeComponentID LastComponentRegistred = 0;
 		};
 	}
 }
