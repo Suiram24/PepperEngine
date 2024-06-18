@@ -25,6 +25,8 @@ namespace pedemo {
 
 		vector test = { 2,3 };
 		vector test2 = { 8,9 };
+		hp defaultHP = { 100,100 };
+		hp bossHP = { 50,100 };
 
 		pecore::PeComponentID id = world.GetID<vector>();
 		pecore::PeComponentID id2 = world.GetID<vector>();
@@ -37,6 +39,34 @@ namespace pedemo {
 		world.Add<ally>(e1);
 		test2 = *(world.Get<vector>(e1));
 
+		pecore::PeEntity a1 = world.CreateEntity();
+		world.Set<hp>(a1, { 150,150 });
+		world.Add<ally>(a1);
+		pecore::PeEntity a2 = world.CreateEntity();
+		world.Set<hp>(a2, { 100,150 });
+		world.Add<ally>(a2);
+		pecore::PeEntity e2 = world.CreateEntity();
+		world.Set<hp>(e2, { 100,100 });
+		world.Add<ennemy>(e2);
+		pecore::PeEntity e3 = world.CreateEntity();
+		world.Set<hp>(e3, { 50,100 });
+		world.Add<ennemy>(e3);
+		pecore::PeEntity e4 = world.CreateEntity();
+		world.Set<hp>(e4, { 500,500 });
+		world.Add<ennemy>(e4);
+
+		printf("Allies:\n");
+		world.ForEach<hp, ally>([](hp& hpComponent, ally& allyComponent) 
+		{
+				printf("HP : %.0f", hpComponent.currentHP);
+				printf("/%.0f\n", hpComponent.maxHP);
+		});
+		printf("Ennemies:\n");
+		world.ForEach<hp, ennemy>([](hp& hpComponent, ennemy& allyComponent)
+			{
+				printf("HP : %.0f", hpComponent.currentHP);
+				printf("/%.0f\n", hpComponent.maxHP);
+			});
 
 	}
 

@@ -14,7 +14,7 @@ namespace pedemo {
 	namespace pephy = engine::physics;
 
 	struct vector {
-		PECOMPONENT(1)
+		PECOMPONENT("Vector",1)
 		//static constexpr int compTypeID = 1;					
 		//static int CompId()												
 		//{															
@@ -23,20 +23,30 @@ namespace pedemo {
 
 		float x;
 		float y;
+
+		void PrintString()
+		{
+			printf("Vector : %f,%f \n", x, y);
+		}
 	};
 
 	struct hp {
-		PECOMPONENT(2)
+		PECOMPONENT("HP",2)
 		float currentHP = 100;
 		float maxHP = 100;
+
+		void PrintString()
+		{
+			printf("HP : %.1f/%.1f \n", currentHP, maxHP);
+		}
 	};
 
 	struct ally {
-		PECOMPONENT(3)
+		PECOMPONENT("Ally",3)
 	};
 
 	struct ennemy {
-		PECOMPONENT(4)
+		PECOMPONENT("Ennemy",4)
 	};
 
 
