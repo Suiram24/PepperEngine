@@ -37,6 +37,35 @@ namespace engine
 				
 			}
 
+			template<typename T>
+			T* Begin() const
+			{
+				if (T::CompId() != m_ComponentTypeID)
+				{
+					throw std::exception("Component Data Array error: components types do not match");
+					return nullptr;
+				}
+
+				return static_cast<T*>(m_First);
+			}
+
+			template<typename T>
+			T* End() const
+			{
+				if (T::CompId() != m_ComponentTypeID)
+				{
+					throw std::exception("Component Data Array error: components types do not match");
+					return nullptr;
+				}
+
+				void* res = static_cast<char*>(m_First) + m_ElementCount * m_ElementSize;
+				return static_cast<T*>(res);
+			}
+
+			bool IsValid(int index) const;
+			int Count() const;
+
+
 			template<typename T> 
 			void Initialize()
 			{

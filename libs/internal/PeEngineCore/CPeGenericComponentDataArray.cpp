@@ -5,6 +5,18 @@ namespace engine
 	namespace core
 	{
 		
+		bool CPeGenericComponentDataArray::IsValid(int index) const
+		{
+			if (m_FreeIndexes.count(index) == 0)
+			{
+				return index < m_ElementCount;
+			}
+		}
+
+		int CPeGenericComponentDataArray::Count() const
+		{
+			return m_ElementCount;
+		}
 
 
 		void CPeGenericComponentDataArray::MoveEntityDataFrom(CPeGenericComponentDataArray& originArray, int oldIndex, int newIndex)
