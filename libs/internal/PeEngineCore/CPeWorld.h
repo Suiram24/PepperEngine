@@ -3,6 +3,8 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <typeinfo>
+#include <any>
+#include "CRC32.h"
 
 namespace engine
 {
@@ -19,7 +21,15 @@ namespace engine
 			size_t count; //Number of entities in the array
 		};
 
-		using ComponentDataMap = std::unordered_map< PeArchetypeID, ComponentDataArray>;
+#define PECOMPONENT(X)										\
+static constexpr int compTypeID = X;						\
+static int CompId()											\
+{															\
+	return compTypeID;										\
+}
+
+
+		using ComponentDataMap = std::unordered_map< PeArchetypeID, std::any>;
 
 
 		struct EntityArchetype
@@ -91,21 +101,135 @@ namespace engine
 
 			PeEntity CreateEntity();
 
-			PeEntity Add(const PeEntity entity, const PeComponentID component);
-			PeEntity Remove(const PeEntity entity, const PeComponentID component);
-			bool HasComponent(const PeEntity entity, const PeComponentID component) const;
+			template<typename T>
+			PeEntity Add(const PeEntity entity)
+			{
+				PeComponentID component = GetID<T>();
+				EntityArchetype& entityArchetype = m_EntitiesArchetypeMap.at(entity);
+				ArchetypeChange pair = { entityArchetype.archetypeID, component };
+				PeArchetypeID nextArchetype;
+
+				if (m_nextArchetype.count(pair) != 0) //Great, we have already added this component to this archetype
+				{
+					nextArchetype = m_nextArchetype.at(pair);
+				}
+				else //We have to find the destination archetype
+				{
+					std::vector<PeComponentID> componentsArray;
+					for (auto& p : m_ArchetypesRegistry) //Retrieve current entity component (O(n))
+					{
+						if (p.second == entityArchetype.archetypeID)
+						{
+							componentsArray = p.first;
+							break;
+						}
+					}
+
+					componentsArray.push_back(component);
+
+					if (m_ArchetypesRegistry.count(componentsArray) != 0) //The new archetype already exist
+					{
+						nextArchetype = m_ArchetypesRegistry.at(componentsArray);
+					}
+					else //The new archetype doesn't exist yet, we have to create it
+					{
+						nextArchetype = CreateArchetype<T>(componentsArray);
+					}
+
+					//
+					//Register the next archetypeID, so we don't have to do this search again and can access it in O(1)
+					m_nextArchetype.insert(std::pair<ArchetypeChange, PeArchetypeID>{pair, nextArchetype});
+
+					//Register the reverse operation 
+					pair.archetypeID = nextArchetype;
+				}
+
+				entityArchetype.archetypeID = nextArchetype;
+				//TODO: move entity data from old to new archetype here
+
+				return entity;
+			}
 
 			template<typename T>
-			PeComponentID GetID(T& component)
+			PeEntity Remove(const PeEntity entity)
 			{
-				size_t cinfo = typeid(component).hash_code();
-				if (m_componentsID.count(cinfo) != 0)
+				PeComponentID component = GetID<T>();
+				EntityArchetype& entityArchetype = m_EntitiesArchetypeMap.at(entity);
+				ArchetypeChange pair = { entityArchetype.archetypeID, component };
+				PeArchetypeID prevArchetype;
+
+				if (m_nextArchetype.count(pair) != 0) //Great, we have already added this component to this archetype
 				{
-					return m_componentsID.at(cinfo);
+					prevArchetype = m_prevArchetype.at(pair);
 				}
-				else
+				else //We have to find the destination archetype
 				{
-					m_componentsID.insert(std::make_pair(cinfo, ++LastComponentRegistred));
+					std::vector<PeComponentID> componentsArray;
+					for (auto& p : m_ArchetypesRegistry) //Retrieve current entity component (O(n))
+					{
+						if (p.second == entityArchetype.archetypeID)
+						{
+							for (auto& c : p.first)
+							{
+								if (c != component) //Add all the components expet the one we want to remove
+								{
+									componentsArray.push_back(c);
+								}
+
+							}
+							break;
+						}
+					}
+
+
+					if (m_ArchetypesRegistry.count(componentsArray) != 0) //The new archetype already exist
+					{
+						prevArchetype = m_ArchetypesRegistry.at(componentsArray);
+					}
+					else //The new archetype doesn't exist yet, we have to create it
+					{
+						prevArchetype = CreateArchetype<T>(componentsArray);
+					}
+
+					//
+					//Register the next archetypeID, so we don't have to do this search again and can access it in O(1)
+					m_prevArchetype.insert(std::pair<ArchetypeChange, PeArchetypeID>{pair, prevArchetype});
+
+					//Register the reverse operation 
+					pair.archetypeID = prevArchetype;
+					m_nextArchetype.insert(std::pair<ArchetypeChange, PeArchetypeID>{pair, entityArchetype.archetypeID});
+				}
+
+				entityArchetype.archetypeID = prevArchetype;
+				//TODO: move entity data from old to new archetype here
+
+				return entity;
+			}
+
+			template<typename T>
+			bool HasComponent(const PeEntity entity)
+			{
+				PeComponentID component = GetID<T>();
+				const PeArchetypeID archetypeID = m_EntitiesArchetypeMap.at(entity).archetypeID; //O(1)
+				const ComponentDataMap& componentData = m_ComponentArchetypeMap.at(component); //O(1)
+
+				return componentData.count(archetypeID) != 0; // O(1)
+			}
+
+			
+
+			template<typename T>
+			PeComponentID GetID()
+			{
+				
+				size_t compID = T::CompId();
+				if (m_componentsID.count(compID) != 0) //Component already registred, return the id
+				{
+					return m_componentsID.at(compID);
+				}
+				else //Register the new component in the tables, and return the new ID
+				{
+					m_componentsID.insert(std::make_pair(compID, ++LastComponentRegistred));
 					ComponentDataMap newEmptyMap = ComponentDataMap();
 					m_ComponentArchetypeMap.insert(std::make_pair(LastComponentRegistred, newEmptyMap));
 					return LastComponentRegistred;
@@ -117,7 +241,21 @@ namespace engine
 		protected:
 		private:
 
-			PeArchetypeID CreateArchetype(const std::vector<PeComponentID>& componentsVector);
+			template<typename T>
+			PeArchetypeID CreateArchetype(const std::vector<PeComponentID>& componentsVector)
+			{
+				m_ArchetypesRegistry.insert(std::pair<std::vector<PeComponentID>, PeArchetypeID>{componentsVector, ++LastArchetypeCreated});
+
+				//Register the new archetype in the component->archetypes map
+				for (auto& c : componentsVector)
+				{
+					ComponentDataMap& cDataMap = m_ComponentArchetypeMap.at(c);
+
+					cDataMap.insert(std::make_pair(LastArchetypeCreated, std::vector<T>()));
+				}
+
+				return LastArchetypeCreated;
+			}
 
 
 		public:
