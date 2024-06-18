@@ -8,6 +8,15 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(PepperEngine_VERSION_MAJOR 1)
 set(PepperEngine_VERSION_MINOR 0)
 
+#config
+SET(PE_DEBUG FALSE CACHE BOOL "Enable debug preprocessor define if true")
+if(PE_DEBUG)
+    add_compile_definitions(PE_DEBUG)
+else()
+    add_compile_definitions(PE_RELEASE)
+endif()
+
+
 
 # GLFW
 set(GLFW_DIR libs/external/GLFW/glfw-3.3.8) # Set this to point to an up-to-date GLFW repo
