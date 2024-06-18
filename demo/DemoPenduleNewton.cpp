@@ -31,7 +31,12 @@ namespace pedemo {
 
 		pecore::PeEntity e1 = world.CreateEntity();
 		world.Add<vector>(e1);
+		world.Set<vector>(e1, test);
 		bool bTest = world.HasComponent<vector>(e1);
+		test2 = *(world.Get<vector>(e1));
+		world.Add<ally>(e1);
+		test2 = *(world.Get<vector>(e1));
+
 
 	}
 
