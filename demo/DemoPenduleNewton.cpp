@@ -26,12 +26,12 @@ namespace pedemo {
 		vector test = { 2,3 };
 		vector test2 = { 8,9 };
 
-		pecore::PeComponentID id = world.GetID<vector>(test);
-		pecore::PeComponentID id2 = world.GetID<vector>(test2);
+		pecore::PeComponentID id = world.GetID<vector>();
+		pecore::PeComponentID id2 = world.GetID<vector>();
 
 		pecore::PeEntity e1 = world.CreateEntity();
-		world.Add(e1, id);
-		bool bTest = world.HasComponent(e1, id2);
+		world.Add<vector>(e1);
+		bool bTest = world.HasComponent<vector>(e1);
 
 	}
 

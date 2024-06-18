@@ -14,9 +14,31 @@ namespace pedemo {
 	namespace pephy = engine::physics;
 
 	struct vector {
+		PECOMPONENT(1)
+		//static constexpr int compTypeID = 1;					
+		//static int CompId()												
+		//{															
+		//	return 1;										
+		//}
+
 		float x;
 		float y;
 	};
+
+	struct hp {
+		PECOMPONENT(2)
+		float currentHP = 100;
+		float maxHP = 100;
+	};
+
+	struct ally {
+		PECOMPONENT(3)
+	};
+
+	struct ennemy {
+		PECOMPONENT(4)
+	};
+
 
 	/**
 		* @brief A class for basic components regarding the physics of a 3D elements.
