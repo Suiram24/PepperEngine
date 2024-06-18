@@ -64,7 +64,7 @@ namespace engine {
             return m_angularVelocity;
         }
 
-        void CPeRigidBody::SetAngularVelocity(pemaths::CPeVector3& p_newAngularVelocity)
+        void CPeRigidBody::SetAngularVelocity(const pemaths::CPeVector3& p_newAngularVelocity)
         {
             m_angularVelocity = p_newAngularVelocity;
         }

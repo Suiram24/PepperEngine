@@ -62,7 +62,7 @@ namespace engine {
 
             const pemaths::CPeVector3& GetAngularVelocity() const;
 
-            void SetAngularVelocity(pemaths::CPeVector3& p_newAngularVelocity);
+            void SetAngularVelocity(const pemaths::CPeVector3& p_newAngularVelocity);
 
 
         };
