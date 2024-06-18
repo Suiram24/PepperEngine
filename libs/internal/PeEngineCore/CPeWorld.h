@@ -5,6 +5,7 @@
 #include <typeinfo>
 #include <any>
 #include "CRC32.h"
+#include "CPeGenericComponentDataArray.h"
 
 namespace engine
 {
@@ -29,13 +30,13 @@ static int CompId()											\
 }
 
 
-		using ComponentDataMap = std::unordered_map< PeArchetypeID, std::any>;
+		using ComponentDataMap = std::unordered_map< PeArchetypeID, CPeGenericComponentDataArray>;
 
 
 		struct EntityArchetype
 		{
 			PeArchetypeID archetypeID;
-			//int EntityIndex; //index of the entity inside the archetype entities arrays
+			int EntityIndex; //index of the entity inside the archetype entities arrays
 			//int archetypeIndex; //Index of the archetype in the component unordered map
 		};
 
@@ -144,8 +145,24 @@ static int CompId()											\
 					pair.archetypeID = nextArchetype;
 				}
 
-				entityArchetype.archetypeID = nextArchetype;
+				
+				CPeGenericComponentDataArray& dataArray = m_ComponentArchetypeMap.find(component)->second.find(nextArchetype)->second;
+				T emptyComponent;
+				int newIndex = dataArray.AddEntityData<T>(&emptyComponent);
+				std::vector<PeComponentID>& archetypeComponents = m_ArchetypesComponentList.find(nextArchetype)->second;
+				for (PeComponentID componentID : archetypeComponents)
+				{
+					if (componentID == component)
+					{
+						continue;
+					}
+					ComponentDataMap& compDataMap = m_ComponentArchetypeMap.find(componentID)->second;
+					compDataMap.find(nextArchetype)->second.MoveEntityDataFrom(compDataMap.find(entityArchetype.archetypeID)->second, entityArchetype.EntityIndex, newIndex);
+				}
 				//TODO: move entity data from old to new archetype here
+
+				entityArchetype.archetypeID = nextArchetype;
+				entityArchetype.EntityIndex = newIndex;
 
 				return entity;
 			}
@@ -223,18 +240,47 @@ static int CompId()											\
 			{
 				
 				size_t compID = T::CompId();
-				if (m_componentsID.count(compID) != 0) //Component already registred, return the id
+				if (m_ComponentArchetypeMap.count(compID) != 0) //Component already registred, return the id
 				{
-					return m_componentsID.at(compID);
+					return compID;
 				}
 				else //Register the new component in the tables, and return the new ID
 				{
-					m_componentsID.insert(std::make_pair(compID, ++LastComponentRegistred));
 					ComponentDataMap newEmptyMap = ComponentDataMap();
-					m_ComponentArchetypeMap.insert(std::make_pair(LastComponentRegistred, newEmptyMap));
-					return LastComponentRegistred;
+					m_ComponentArchetypeMap.insert(std::make_pair(compID, newEmptyMap));
+					return compID;
 				}
 
+			}
+
+			template<typename T>
+			T* Get(const PeEntity entity)
+			{
+				PeComponentID component = GetID<T>();
+				const EntityArchetype archetype = m_EntitiesArchetypeMap.at(entity); //O(1)
+				const ComponentDataMap& componentData = m_ComponentArchetypeMap.at(component); //O(1)
+
+				
+				if (auto mapIterator = componentData.find(archetype.archetypeID); mapIterator != componentData.end()) // O(1)
+				{
+					const CPeGenericComponentDataArray& datarow = mapIterator->second;
+					return datarow.GetEntityData<T>(archetype.EntityIndex);
+				}
+
+				return nullptr;
+			}
+
+			template<typename T>
+			PeEntity Set(const PeEntity entity, const T& component)
+			{
+				if (!HasComponent<T>(entity))
+				{
+					Add<T>(entity);
+				}
+
+				*Get<T>(entity) = component;
+
+				return entity;
 			}
 
 
@@ -245,13 +291,25 @@ static int CompId()											\
 			PeArchetypeID CreateArchetype(const std::vector<PeComponentID>& componentsVector)
 			{
 				m_ArchetypesRegistry.insert(std::pair<std::vector<PeComponentID>, PeArchetypeID>{componentsVector, ++LastArchetypeCreated});
+				m_ArchetypesComponentList.insert(std::pair<PeArchetypeID, std::vector<PeComponentID>>{LastArchetypeCreated, componentsVector});
 
 				//Register the new archetype in the component->archetypes map
-				for (auto& c : componentsVector)
+				for (auto c : componentsVector)
 				{
-					ComponentDataMap& cDataMap = m_ComponentArchetypeMap.at(c);
-
-					cDataMap.insert(std::make_pair(LastArchetypeCreated, std::vector<T>()));
+					if (c == GetID<T>())
+					{
+						ComponentDataMap& cDataMap = m_ComponentArchetypeMap.at(c);
+						cDataMap.insert(std::make_pair(LastArchetypeCreated, CPeGenericComponentDataArray()));
+						cDataMap.at(LastArchetypeCreated).Initialize<T>();
+					}
+					else
+					{
+						ComponentDataMap& cDataMap = m_ComponentArchetypeMap.at(c);
+						cDataMap.insert(std::make_pair(LastArchetypeCreated, CPeGenericComponentDataArray()));
+						cDataMap.at(LastArchetypeCreated).CopyInitialize(cDataMap.begin()->second);
+					}
+				
+					
 				}
 
 				return LastArchetypeCreated;
@@ -270,8 +328,6 @@ static int CompId()											\
 			//Archetype graph: 
 			std::unordered_map<ArchetypeChange, PeArchetypeID, ArchetypChangeHash> m_nextArchetype; // Store the archetype that has all the initial archetype components and the new component
 			std::unordered_map<ArchetypeChange, PeArchetypeID, ArchetypChangeHash> m_prevArchetype;// Store the archetype that has all the initial archetype components exept the new component
-
-			std::unordered_map<size_t, PeComponentID> m_componentsID;
 
 			PeEntity LastEntityCreated = 0;
 			PeArchetypeID LastArchetypeCreated = 0;
