@@ -4,6 +4,7 @@
 #include <unordered_set>
 #include <typeinfo>
 #include <any>
+#include <functional>
 #include "CRC32.h"
 #include "CPeGenericComponentDataArray.h"
 
@@ -22,12 +23,28 @@ namespace engine
 			size_t count; //Number of entities in the array
 		};
 
-#define PECOMPONENT(X)										\
+#if PE_DEBUG
+#define PECOMPONENT(NAME,X)									\
 static constexpr int compTypeID = X;						\
 static int CompId()											\
 {															\
 	return compTypeID;										\
+}															\
+static void PrintTypeName()									\
+{															\
+	printf(NAME);											\
 }
+#else
+#define PECOMPONENT(NAME,X)									\
+static constexpr int compTypeID = X;						\
+static int CompId()											\
+{															\
+	return compTypeID;										\
+}															
+#endif // PE_DEBUG
+
+
+
 
 
 		using ComponentDataMap = std::unordered_map< PeArchetypeID, CPeGenericComponentDataArray>;
@@ -100,11 +117,16 @@ static int CompId()											\
 		public:
 			CPeWorld();
 
+
 			PeEntity CreateEntity();
 
 			template<typename T>
 			PeEntity Add(const PeEntity entity)
 			{
+				if (HasComponent<T>(entity))
+				{
+					return entity;
+				}
 				PeComponentID component = GetID<T>();
 				EntityArchetype& entityArchetype = m_EntitiesArchetypeMap.at(entity);
 				ArchetypeChange pair = { entityArchetype.archetypeID, component };
@@ -143,6 +165,8 @@ static int CompId()											\
 
 					//Register the reverse operation 
 					pair.archetypeID = nextArchetype;
+
+					m_prevArchetype.insert(std::pair<ArchetypeChange, PeArchetypeID>{pair, entityArchetype.archetypeID});
 				}
 
 				
@@ -231,6 +255,49 @@ static int CompId()											\
 				const ComponentDataMap& componentData = m_ComponentArchetypeMap.at(component); //O(1)
 
 				return componentData.count(archetypeID) != 0; // O(1)
+			}
+
+			template<typename T>
+			void ForEach(std::function<void(T& component)> function)
+			{
+				PeComponentID componentID = GetID<T>();
+				const ComponentDataMap& componentData = m_ComponentArchetypeMap.at(componentID);
+				for (auto& arch : componentData)
+				{
+					for (int i = 0; i < arch.second.Count(); ++i)
+					{
+						if (arch.second.IsValid(i))
+						{
+							function(*(arch.second.GetEntityData<T>(i)));
+						}
+					}
+				}
+			}
+
+			template<typename T, typename U>
+			void ForEach(std::function<void(T& component, U& Component2)> function)
+			{
+				PeComponentID componentID = GetID<T>();
+				PeComponentID componentID2 = GetID<U>();
+				const ComponentDataMap& componentData = m_ComponentArchetypeMap.at(componentID);
+				const ComponentDataMap& componentData2 = m_ComponentArchetypeMap.at(componentID2);
+				for (auto& arch : componentData) //For every archetype of first component
+				{
+					if (componentData2.count(arch.first) != 0) //if the second component also posses the archetype
+					{
+						for (int i = 0; i < arch.second.Count(); ++i)
+						{
+							if (arch.second.IsValid(i))
+							{
+								T& c1 = *(arch.second.GetEntityData<T>(i));
+								U& c2 = *(componentData2.at(arch.first).GetEntityData<U>(i));
+
+								function(c1, c2);
+							}
+						}
+					}
+					
+				}
 			}
 
 			
