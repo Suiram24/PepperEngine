@@ -1,4 +1,5 @@
 #include "CPeGenericComponentDataArray.h"
+#include <cassert>
 
 namespace engine
 {
@@ -23,11 +24,11 @@ namespace engine
 		{
 			if (newIndex >= m_AllocatedSlotsCount)
 			{
-				throw std::exception("Component Data Array error: Index out of bounds");
+				assert(false && "Component Data Array error: new index out of bounds");
 			}
 			if (m_ComponentTypeID != originArray.m_ComponentTypeID)
 			{
-				throw std::exception("Component Data Array error: components types do not match");
+				assert(false && "Component Data Array error: components types do not match");
 			}
 
 			//
@@ -46,7 +47,7 @@ namespace engine
 			}
 			else
 			{
-				throw std::exception("Component Data Array error: new index cannot be found");
+				assert(false && "Component Data Array error: new index cannot be found");
 			}
 
 			//Free the index in the original array
@@ -59,7 +60,7 @@ namespace engine
 		{
 			if (index >= m_AllocatedSlotsCount)
 			{
-				throw std::exception("Component Data Array error: Index out of bounds");
+				assert(false && "Component Data Array error : Index out of bounds");
 			}
 			if (m_FreeIndexes.count(index) != 0)
 			{
@@ -81,7 +82,7 @@ namespace engine
 			}
 			else
 			{
-				throw std::exception("Component Data Array realloc failed");
+				assert(false && "Component Data Array realloc failed");
 				return false;
 			}
 		}

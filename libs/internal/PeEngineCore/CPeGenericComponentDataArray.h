@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include <exception>
+#include <cassert>
 #include <unordered_set>
 
 namespace engine
@@ -40,11 +40,10 @@ namespace engine
 			template<typename T>
 			T* Begin() const
 			{
-				if (T::CompId() != m_ComponentTypeID)
-				{
-					throw std::exception("Component Data Array error: components types do not match");
-					return nullptr;
-				}
+
+                //"Component Data Array error: components types do not match"
+                // assert(T::CompId() == m_ComponentTypeID);
+
 
 				return static_cast<T*>(m_First);
 			}
@@ -54,7 +53,7 @@ namespace engine
 			{
 				if (T::CompId() != m_ComponentTypeID)
 				{
-					throw std::exception("Component Data Array error: components types do not match");
+					assert(false && "Component Data Array error: components types do not match");
 					return nullptr;
 				}
 
@@ -91,7 +90,7 @@ namespace engine
 
 				if (T::CompId() != m_ComponentTypeID)
 				{
-					throw std::exception("Component Data Array error: components types do not match");
+					assert(false && "Component Data Array error: components types do not match");
 					return -1;
 				}
 
@@ -127,17 +126,17 @@ namespace engine
 				{
 					if (entityIndex < m_ElementCount)
 					{
-						void* res = static_cast<char*>(m_First) + entityIndex * m_ElementSize;
-						return static_cast<T*>(res);
+						T* res = reinterpret_cast<T*>(m_First) + entityIndex;
+						return res;
 					}
 					else
 					{
-						throw std::exception("Component Data Array error: Index out of bounds");
+						assert(false && "Component Data Array error: Index out of bounds");
 					}
 				}
 				else
 				{
-					throw std::exception("Component Data Array error: components types do not match");
+					assert(false && "Component Data Array error: components types do not match");
 				}
 			}
 
