@@ -24,9 +24,9 @@ namespace engine
 		};
 
 #if PE_DEBUG
-#define PECOMPONENT(NAME,X)									\
-static constexpr int compTypeID = X;						\
-static int CompId()											\
+#define PECOMPONENT(NAME)									\
+static constexpr int compTypeID = engine::core::crc32(NAME);\
+static constexpr int CompId()								\
 {															\
 	return compTypeID;										\
 }															\
@@ -35,9 +35,9 @@ static void PrintTypeName()									\
 	printf(NAME);											\
 }
 #else
-#define PECOMPONENT(NAME,X)									\
-static constexpr int compTypeID = X;						\
-static int CompId()											\
+#define PECOMPONENT(NAME)									\
+static constexpr int compTypeID = engine::core::crc32(NAME);\
+static constexpr int CompId()								\
 {															\
 	return compTypeID;										\
 }															

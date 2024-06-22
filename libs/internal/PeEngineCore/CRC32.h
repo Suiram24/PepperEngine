@@ -8,38 +8,68 @@ namespace engine
 
     namespace core
     {
-        template <unsigned c, int k = 8>
-        struct f : f<((c & 1) ? 0xedb88320 : 0) ^ (c >> 1), k - 1> {};
-        template <unsigned c> struct f<c, 0> { enum { value = c }; };
 
-#define A(x) B(x) B(x + 128)
-#define B(x) C(x) C(x +  64)
-#define C(x) D(x) D(x +  32)
-#define D(x) E(x) E(x +  16)
-#define E(x) F(x) F(x +   8)
-#define F(x) G(x) G(x +   4)
-#define G(x) H(x) H(x +   2)
-#define H(x) I(x) I(x +   1)
-#define I(x) f<x>::value ,
+        namespace cexp
+        {
 
-        constexpr unsigned crc_table[] = { A(0) };
+            // Small implementation of std::array, needed until constexpr
+            // is added to the function 'reference operator[](size_type)'
+            template <typename T, size_t N>
+            struct array {
+                T m_data[N];
 
-        constexpr uint32_t crc32_impl(const uint8_t* p, size_t len, uint32_t crc) {
-            return len ?
-                crc32_impl(p + 1, len - 1, (crc >> 8) ^ crc_table[(crc & 0xFF) ^ *p])
-                : crc;
+                using value_type = T;
+                using reference = value_type&;
+                using const_reference = const value_type&;
+                using size_type = size_t;
+
+                // This is NOT constexpr in std::array until C++17
+                constexpr reference operator[](size_type i) noexcept {
+                    return m_data[i];
+                }
+
+                constexpr const_reference operator[](size_type i) const noexcept {
+                    return m_data[i];
+                }
+
+                constexpr size_type size() const noexcept {
+                    return N;
+                }
+            };
+
         }
 
-        constexpr uint32_t crc32(const uint8_t* data, size_t length) {
-            return ~crc32_impl(data, length, ~0);
+        constexpr auto gen_crc32_table() {
+            constexpr auto num_bytes = 256;
+            constexpr auto num_iterations = 8;
+            constexpr auto polynomial = 0xEDB88320;
+
+            auto crc32_table = cexp::array<uint32_t, num_bytes>{};
+
+            for (auto byte = 0u; byte < num_bytes; ++byte) {
+                auto crc = byte;
+
+                for (auto i = 0; i < num_iterations; ++i) {
+                    auto mask = -(crc & 1);
+                    crc = (crc >> 1) ^ (polynomial & mask);
+                }
+
+                crc32_table[byte] = crc;
+            }
+
+            return crc32_table;
         }
 
-        constexpr size_t strlen_c(const char* str) {
-            return *str ? 1 + strlen_c(str + 1) : 0;
-        }
+        static constexpr auto crc32_table = gen_crc32_table();
 
-        constexpr int WSID(const char* str) {
-            return crc32((const uint8_t*)str, strlen_c(str));
+        constexpr auto crc32(const char* in) {
+            auto crc = 0xFFFFFFFFu;
+
+            for (auto i = 0u; auto c = in[i]; ++i) {
+                crc = crc32_table[(crc ^ c) & 0xFF] ^ (crc >> 8);
+            }
+
+            return ~crc;
         }
     }
     
