@@ -55,6 +55,7 @@ namespace engine {
 			if (p_force != nullptr && p_particle != nullptr)
 			{
 				m_registry->Create(p_force, p_particle, p_lifespan);
+				return true;
 			}
 			else
 			{
