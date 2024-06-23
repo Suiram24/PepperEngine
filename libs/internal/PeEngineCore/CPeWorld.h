@@ -2,8 +2,6 @@
 
 #include <unordered_map>
 #include <unordered_set>
-#include <typeinfo>
-#include <any>
 #include <functional>
 #include "CRC32.h"
 #include "CPeGenericComponentDataArray.h"

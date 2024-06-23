@@ -20,22 +20,22 @@ namespace engine
 				case SPHERE:
 					if (type2 == SPHERE) { 
 						GenContSphSph(
-							dynamic_cast<CPeSpherePrimitiveShape*>(p_shape1),
-							dynamic_cast<CPeSpherePrimitiveShape*>(p_shape2),
+							static_cast<CPeSpherePrimitiveShape*>(p_shape1),
+							static_cast<CPeSpherePrimitiveShape*>(p_shape2),
 							datas
 						); 
 					}
 					else if (type2 == BOX) {
 						GenContBoxSph(
-							dynamic_cast<CPeBoxPrimitiveShape*>(p_shape2),
-							dynamic_cast<CPeSpherePrimitiveShape*>(p_shape1),
+							static_cast<CPeBoxPrimitiveShape*>(p_shape2),
+							static_cast<CPeSpherePrimitiveShape*>(p_shape1),
 							datas
 						);
 					}
 					else if (type2 == PLANE) { 
 						GenContSphPla(
-							dynamic_cast<CPeSpherePrimitiveShape*>(p_shape1),
-							dynamic_cast<CPePlanePrimitiveShape*>(p_shape2),
+							static_cast<CPeSpherePrimitiveShape*>(p_shape1),
+							static_cast<CPePlanePrimitiveShape*>(p_shape2),
 							datas
 						);
 					}
@@ -43,22 +43,22 @@ namespace engine
 				case BOX:
 					if (type2 == SPHERE) {
 						GenContBoxSph(
-							dynamic_cast<CPeBoxPrimitiveShape*>(p_shape1),
-							dynamic_cast<CPeSpherePrimitiveShape*>(p_shape2),
+							static_cast<CPeBoxPrimitiveShape*>(p_shape1),
+							static_cast<CPeSpherePrimitiveShape*>(p_shape2),
 							datas
 						);
 					}
 					else if (type2 == BOX) {
 						GenContBoxBox(
-							dynamic_cast<CPeBoxPrimitiveShape*>(p_shape1),
-							dynamic_cast<CPeBoxPrimitiveShape*>(p_shape2),
+							static_cast<CPeBoxPrimitiveShape*>(p_shape1),
+							static_cast<CPeBoxPrimitiveShape*>(p_shape2),
 							datas
 						);
 					}
 					else if (type2 == PLANE) {
 						GenContBoxPla(
-							dynamic_cast<CPeBoxPrimitiveShape*>(p_shape1),
-							dynamic_cast<CPePlanePrimitiveShape*>(p_shape2),
+							static_cast<CPeBoxPrimitiveShape*>(p_shape1),
+							static_cast<CPePlanePrimitiveShape*>(p_shape2),
 							datas
 						);
 					}
@@ -66,15 +66,15 @@ namespace engine
 				case PLANE:
 					if (type2 == SPHERE) {
 						GenContSphPla(
-							dynamic_cast<CPeSpherePrimitiveShape*>(p_shape2),
-							dynamic_cast<CPePlanePrimitiveShape*>(p_shape1),
+							static_cast<CPeSpherePrimitiveShape*>(p_shape2),
+							static_cast<CPePlanePrimitiveShape*>(p_shape1),
 							datas
 						);
 					}
 					else if (type2 == BOX) {
 						GenContBoxPla(
-							dynamic_cast<CPeBoxPrimitiveShape*>(p_shape2),
-							dynamic_cast<CPePlanePrimitiveShape*>(p_shape1),
+							static_cast<CPeBoxPrimitiveShape*>(p_shape2),
+							static_cast<CPePlanePrimitiveShape*>(p_shape1),
 							datas
 						); 
 					}
