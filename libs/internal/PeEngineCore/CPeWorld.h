@@ -255,46 +255,49 @@ static constexpr int CompId()								\
 				return componentData.count(archetypeID) != 0; // O(1)
 			}
 
-			template<typename T>
-			void ForEach(std::function<void(T& component)> function)
+			template<typename ... Args>
+			void ForEach(std::function<void(Args& ... p_params)> function)
 			{
-				PeComponentID componentID = GetID<T>();
-				const ComponentDataMap& componentData = m_ComponentArchetypeMap.at(componentID);
-				for (auto& arch : componentData)
+				//
+				// Retrieve the components ID and Data maps of every component in Args
+				std::vector<PeComponentID> componentsID;
+				std::vector<const ComponentDataMap*> componentsData;
+				int cnt = 0;
+				([&]
+					{
+						componentsID.push_back(GetID<Args>());
+						componentsData.push_back(&m_ComponentArchetypeMap.at(componentsID.back()));
+						++cnt;
+					} (), ...);//Fold Expression that will iterate over Args from first to last type
+			
+				for (auto& arch : *(componentsData[0])) //For every archetype of first component
 				{
+					//Check if the archetype is possesed by all the components
+					bool result = true;
+					for (int j = 0; j < componentsData.size(); ++j)
+					{
+						if (componentsData[j]->count(arch.first) == 0) //This component doesn't have the archetype being tested
+						{
+							result = false;
+							break;
+						}
+					}
+
+					if (!result) { continue; }
+					//
+					// We confirmed this archetype has all the components, now let's call the function for the components of this archetype
+
+					//For every used slot in the Component Data Array
 					for (int i = 0; i < arch.second.Count(); ++i)
 					{
 						if (arch.second.IsValid(i))
 						{
-							function(*(arch.second.GetEntityData<T>(i)));
+							int j = cnt;
+
+							//Another Fold Expression, that for some reason goes from last to first type, hence the decreasing j
+							function(*(componentsData[--j]->at(arch.first).GetEntityData<Args>(i))...);
 						}
 					}
-				}
-			}
-
-			template<typename T, typename U>
-			void ForEach(std::function<void(T& component, U& Component2)> function)
-			{
-				PeComponentID componentID = GetID<T>();
-				PeComponentID componentID2 = GetID<U>();
-				const ComponentDataMap& componentData = m_ComponentArchetypeMap.at(componentID);
-				const ComponentDataMap& componentData2 = m_ComponentArchetypeMap.at(componentID2);
-				for (auto& arch : componentData) //For every archetype of first component
-				{
-					if (componentData2.count(arch.first) != 0) //if the second component also posses the archetype
-					{
-						for (int i = 0; i < arch.second.Count(); ++i)
-						{
-							if (arch.second.IsValid(i))
-							{
-								T& c1 = *(arch.second.GetEntityData<T>(i));
-								U& c2 = *(componentData2.at(arch.first).GetEntityData<U>(i));
-
-								function(c1, c2);
-							}
-						}
-					}
-					
 				}
 			}
 
