@@ -56,17 +56,29 @@ namespace pedemo {
 		world.Add<ennemy>(e4);
 
 		printf("Allies:\n");
-		world.ForEach<hp, ally>([](hp& hpComponent, ally& allyComponent) 
+		std::function<void(hp&, ally&)> allyIt = [](hp& hpComponent, ally& allyComponent)
 		{
-				printf("HP : %.0f", hpComponent.currentHP);
-				printf("/%.0f\n", hpComponent.maxHP);
-		});
+			printf("HP : %.0f", hpComponent.currentHP);
+			printf("/%.0f\n", hpComponent.maxHP);
+		};
+		std::function<void(hp&, ennemy&)> ennemyIt = [](hp& hpComponent, ennemy& ennemyComponent)
+		{
+			printf("HP : %.0f", hpComponent.currentHP);
+			printf("/%.0f\n", hpComponent.maxHP);
+		};
+		std::function<void(hp&)> impossibleIT = [](hp& hpComponent)
+		{
+			printf("HP : %.0f", hpComponent.currentHP);
+			printf("/%.0f\n", hpComponent.maxHP);
+		};
+
+
+
+		world.ForEach(allyIt);
 		printf("Ennemies:\n");
-		world.ForEach<hp, ennemy>([](hp& hpComponent, ennemy& allyComponent)
-			{
-				printf("HP : %.0f", hpComponent.currentHP);
-				printf("/%.0f\n", hpComponent.maxHP);
-			});
+		world.ForEach(ennemyIt);
+		printf("All:\n");
+		world.ForEach(impossibleIT);
 
 	}
 
