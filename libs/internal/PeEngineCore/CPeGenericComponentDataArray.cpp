@@ -12,6 +12,7 @@ namespace engine
 			{
 				return index < m_ElementCount;
 			}
+			return false;
 		}
 
 		int CPeGenericComponentDataArray::Count() const
