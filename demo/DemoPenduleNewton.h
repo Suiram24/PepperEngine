@@ -99,6 +99,9 @@ namespace pedemo {
 		pecore::CPeEntity* entity2;
 		pecore::CPeEntity* entity3;
 
+		pecore::CPeQuery<vector> query;
+		std::function<void(vector& vec)> queryFunction;
+
 
 	};
 

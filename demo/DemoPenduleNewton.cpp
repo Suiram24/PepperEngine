@@ -74,11 +74,19 @@ namespace pedemo {
 
 
 
+
+
 		world.ForEach(allyIt);
 		printf("Ennemies:\n");
 		world.ForEach(ennemyIt);
 		printf("All:\n");
 		world.ForEach(impossibleIT);
+
+		//query = world.Build<vector>();
+		queryFunction = [](vector& vec)
+			{
+				vec.y -= 0.98;
+			};
 
 	}
 
@@ -86,7 +94,7 @@ namespace pedemo {
 	{
 
 		DrawImGuiInterface();
-
+		//query.ForEach(queryFunction);
 
 	}
 
