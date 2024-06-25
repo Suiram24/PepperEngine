@@ -5,5 +5,7 @@ add_library(PeEngineCore	PeEngineCore.h
 							"CPeObjectPool.h"
 							"CPeWorld.h" "CPeWorld.cpp"
 							 "CRC32.h"
-							 "CPeGenericComponentDataArray.h" "CPeGenericComponentDataArray.cpp")
+							 "CPeGenericComponentDataArray.h" "CPeGenericComponentDataArray.cpp"
+							 "CPeQuery.cpp" "CPeQuery.h"
+							 "PeECSDefinitions.h")
 target_link_libraries(PeEngineCore PeMaths)

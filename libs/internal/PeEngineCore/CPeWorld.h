@@ -3,122 +3,31 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <functional>
-#include "CRC32.h"
+#include <any>
+
 #include "CPeGenericComponentDataArray.h"
+#include "PeECSDefinitions.h"
+#include "CPeQuery.h"
 
 namespace engine
 {
 	namespace core
 	{
-		typedef signed long long PeEntity; //an int64 ID that identify an entity
-		typedef signed long PeComponentID; //an int32 ID that identify a component
-		typedef signed long PeArchetypeID; //an int32 ID that identify an archetype, a unique combinaison of components
-
-		struct ComponentDataArray
-		{
-			void* first;
-			size_t ComponentSize; //Size of a single component data
-			size_t count; //Number of entities in the array
-		};
-
-#if PE_DEBUG
-#define PECOMPONENT(NAME)									\
-static constexpr int compTypeID = engine::core::crc32(NAME);\
-static constexpr int CompId()								\
-{															\
-	return compTypeID;										\
-}															\
-static void PrintTypeName()									\
-{															\
-	printf(NAME);											\
-}
-#else
-#define PECOMPONENT(NAME)									\
-static constexpr int compTypeID = engine::core::crc32(NAME);\
-static constexpr int CompId()								\
-{															\
-	return compTypeID;										\
-}															
-#endif // PE_DEBUG
-
-
-
-
-
-		using ComponentDataMap = std::unordered_map< PeArchetypeID, CPeGenericComponentDataArray>;
-
-
-		struct EntityArchetype
-		{
-			PeArchetypeID archetypeID;
-			int EntityIndex; //index of the entity inside the archetype entities arrays
-			//int archetypeIndex; //Index of the archetype in the component unordered map
-		};
-
-		struct ArchetypeChange
-		{
-			PeArchetypeID archetypeID; //Base archetype
-			PeComponentID componentID; //Component to be added or removed
-
-			bool operator==(const ArchetypeChange& other) const
-			{
-				return archetypeID == other.archetypeID && componentID == other.componentID;
-			}
-		};
-
-		struct ComponentArrayHash {
-			size_t operator()(const std::vector<PeComponentID>& a) const
-			{
-				size_t res = 0;
-
-				for (const PeComponentID& c : a)
-				{
-					res = res ^ std::hash<int>()(c);
-				}
-				// Combine hashes of x and y using the bitwise XOR
-				return res;
-			}
-		};
-
-		struct ComponentIDHash {
-			size_t operator()(const PeComponentID& c) const
-			{
-				// Combine hashes of x and y using the bitwise XOR
-				return std::hash<int>()(c);
-			}
-		};
-
-		struct TypeInfoHash {
-			size_t operator()(const std::type_info& t) const
-			{
-				// Combine hashes of x and y using the bitwise XOR
-				return t.hash_code();
-			}
-		};
-
-
-		struct ArchetypChangeHash {
-			size_t operator()(const ArchetypeChange& ac) const
-			{
-				// Combine hashes of x and y using the bitwise XOR
-				return std::hash<int>()(ac.archetypeID) ^ (std::hash<int>()(ac.componentID) << 1);
-			}
-		};
-
-		
 
 		/**
-		 * @brief ECS Class that will hold all the data
+		 * @brief ECS Class that will hold all the data of a single "world"
 		*/
 		class CPeWorld
 		{
+			template<PeComponentStruct...Args>
+			friend class CPeQuery;
 		public:
 			CPeWorld();
 
 
 			PeEntity CreateEntity();
 
-			template<typename T>
+			template<PeComponentStruct T>
 			PeEntity Add(const PeEntity entity)
 			{
 				if (HasComponent<T>(entity))
@@ -189,7 +98,7 @@ static constexpr int CompId()								\
 				return entity;
 			}
 
-			template<typename T>
+			template<PeComponentStruct T>
 			PeEntity Remove(const PeEntity entity)
 			{
 				PeComponentID component = GetID<T>();
@@ -245,7 +154,7 @@ static constexpr int CompId()								\
 				return entity;
 			}
 
-			template<typename T>
+			template<PeComponentStruct T>
 			bool HasComponent(const PeEntity entity)
 			{
 				PeComponentID component = GetID<T>();
@@ -255,8 +164,8 @@ static constexpr int CompId()								\
 				return componentData.count(archetypeID) != 0; // O(1)
 			}
 
-			template<typename ... Args>
-			void ForEach(std::function<void(Args& ... p_params)> function)
+			template<PeComponentStruct ... Args>
+			void ForEach(const std::function<void(Args& ... p_params)>& function)
 			{
 				//
 				// Retrieve the components ID and Data maps of every component in Args
@@ -301,9 +210,62 @@ static constexpr int CompId()								\
 				}
 			}
 
+
 			
 
-			template<typename T>
+			template<PeComponentStruct ... Args>
+			CPeQuery<Args...>& Build()
+			{
+
+
+				static constexpr int hash = (std::hash<int>::_Do_hash(Args::CompId())^...^0);
+				if (m_QueriesRegistry.count(hash) == 0)
+				{
+					
+					m_QueriesRegistry.insert(std::make_pair<int, std::any>(hash, CPeQueryInternal<Args...>()));
+					CPeQueryInternal<Args...>* query = static_cast<CPeQueryInternal<Args...>*>(&m_QueriesRegistry.at(hash));
+					query.UpdateComponentsDataMap(m_ComponentArchetypeMap);
+
+					//
+					// Build the archetype list
+					std::unordered_set<PeArchetypeID> archetypelist;
+					std::vector<PeComponentID> componentsID;
+					std::vector<ComponentDataMap*> componentsData;
+
+					([&]
+						{
+							componentsID.push_back(GetID<Args>());
+							componentsData.push_back(&m_ComponentArchetypeMap.at(componentsID.back()));
+						} (), ...);
+
+					for (auto& arch : *(componentsData[0])) //For every archetype of first component
+					{
+						//Check if the archetype is possesed by all the components
+						bool result = true;
+						for (int j = 0; j < componentsData.size(); ++j)
+						{
+							if (componentsData[j]->count(arch.first) == 0) //This component doesn't have the archetype being tested
+							{
+								result = false;
+								break;
+							}
+						}
+
+						if (!result) { continue; }
+
+						archetypelist.insert(arch.first); //Add the archetype to the list
+					}
+
+				}
+
+				CPeQuery<Args...> queryRef = new CPeQuery<Args...>(*this);
+				return queryRef;
+				
+			}
+
+			
+
+			template<PeComponentStruct T>
 			PeComponentID GetID()
 			{
 				
@@ -321,7 +283,7 @@ static constexpr int CompId()								\
 
 			}
 
-			template<typename T>
+			template<PeComponentStruct T>
 			T* Get(const PeEntity entity)
 			{
 				PeComponentID component = GetID<T>();
@@ -338,7 +300,7 @@ static constexpr int CompId()								\
 				return nullptr;
 			}
 
-			template<typename T>
+			template<PeComponentStruct T>
 			PeEntity Set(const PeEntity entity, const T& component)
 			{
 				if (!HasComponent<T>(entity))
@@ -353,9 +315,16 @@ static constexpr int CompId()								\
 
 
 		protected:
+			//Query For each
+			template<PeComponentStruct ... Args>
+			void ForEach(int p_queryID, std::function<void(Args& ... p_params)>& p_function) const
+			{
+				CPeQueryInternal<Args...>* query = static_cast<CPeQueryInternal<Args...>*>(&(m_QueriesRegistry.at(p_queryID)));
+				query.ForEach(p_function);
+			}
 		private:
 
-			template<typename T>
+			template<PeComponentStruct T>
 			PeArchetypeID CreateArchetype(const std::vector<PeComponentID>& componentsVector)
 			{
 				m_ArchetypesRegistry.insert(std::pair<std::vector<PeComponentID>, PeArchetypeID>{componentsVector, ++LastArchetypeCreated});
@@ -396,6 +365,9 @@ static constexpr int CompId()								\
 			//Archetype graph: 
 			std::unordered_map<ArchetypeChange, PeArchetypeID, ArchetypChangeHash> m_nextArchetype; // Store the archetype that has all the initial archetype components and the new component
 			std::unordered_map<ArchetypeChange, PeArchetypeID, ArchetypChangeHash> m_prevArchetype;// Store the archetype that has all the initial archetype components exept the new component
+
+			//Queries
+			std::unordered_map<int, std::any> m_QueriesRegistry;
 
 			PeEntity LastEntityCreated = 0;
 			PeArchetypeID LastArchetypeCreated = 0;
