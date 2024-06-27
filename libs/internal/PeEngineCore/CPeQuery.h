@@ -31,6 +31,8 @@ namespace engine
 				assert(m_owner && "The query hasn't been build before ForEach is called !");
 				m_owner->ForEach(m_queryID, p_function);
 			}
+
+			
 		protected:
 			CPeQuery(const CPeWorld* p_owner)
 				: m_owner(p_owner)
@@ -41,7 +43,7 @@ namespace engine
 
 			static constexpr int computeHash()
 			{
-				return (std::hash<int>()(Args::CompId())^...^0);
+				return (Args::CompId()^...^0);
 			}
 
 		public:
@@ -65,16 +67,15 @@ namespace engine
 				* @brief Default constructor
 			*/
 			CPeQueryInternal()
-				: 
 			{
 			}
 
-			void ForEach(std::function<void (Args...p_params)>& p_function) const
+			void ForEach(std::function<void (Args&...p_params)>& p_function) const
 			{
 				for (auto archetype : m_archetypes)
 				{
 
-					for (int i = 0; i < m_componentsDataMap[0].at(archetype).Count(), ++i)
+					for (int i = 0; i < m_componentsDataMap[0]->at(archetype).Count(); ++i)
 					{
 						int j = sizeof...(Args);
 						p_function(*(m_componentsDataMap[--j]->at(archetype).GetEntityData<Args>(i))...);
@@ -86,7 +87,7 @@ namespace engine
 
 			
 		protected:
-			void UpdateComponentsDataMap(const std::unordered_map<PeComponentID, ComponentDataMap>& p_ComponentArchetypesMap)
+			void UpdateComponentsDataMap(std::unordered_map<PeComponentID, ComponentDataMap, ComponentIDHash>& p_ComponentArchetypesMap)
 			{
 				int i = 0;
 				([&]

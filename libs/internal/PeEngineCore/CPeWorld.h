@@ -214,16 +214,16 @@ namespace engine
 			
 
 			template<PeComponentStruct ... Args>
-			CPeQuery<Args...>& Build()
+			CPeQuery<Args...>&& Build()
 			{
 
 
-				static constexpr int hash = (std::hash<int>::_Do_hash(Args::CompId())^...^0);
+				static constexpr int hash = (Args::CompId()^...^0);
 				if (m_QueriesRegistry.count(hash) == 0)
 				{
-					
-					m_QueriesRegistry.insert(std::make_pair<int, std::any>(hash, CPeQueryInternal<Args...>()));
-					CPeQueryInternal<Args...>* query = static_cast<CPeQueryInternal<Args...>*>(&m_QueriesRegistry.at(hash));
+					std::any internalQuery = CPeQueryInternal<Args...>();
+					m_QueriesRegistry.insert(std::make_pair(hash, internalQuery));
+					CPeQueryInternal<Args...> query = std::any_cast<CPeQueryInternal<Args...>>(m_QueriesRegistry.at(hash));
 					query.UpdateComponentsDataMap(m_ComponentArchetypeMap);
 
 					//
@@ -255,10 +255,13 @@ namespace engine
 
 						archetypelist.insert(arch.first); //Add the archetype to the list
 					}
+					query.m_archetypes = archetypelist;
+					m_QueriesRegistry.at(hash) = query;
 
 				}
 
-				CPeQuery<Args...> queryRef = new CPeQuery<Args...>(*this);
+				
+				CPeQuery<Args...>&& queryRef = CPeQuery<Args...>(this);
 				return queryRef;
 				
 			}
@@ -319,7 +322,8 @@ namespace engine
 			template<PeComponentStruct ... Args>
 			void ForEach(int p_queryID, std::function<void(Args& ... p_params)>& p_function) const
 			{
-				CPeQueryInternal<Args...>* query = static_cast<CPeQueryInternal<Args...>*>(&(m_QueriesRegistry.at(p_queryID)));
+				const std::any& anyQuery = (m_QueriesRegistry.find(p_queryID)->second);
+				CPeQueryInternal<Args...> query = std::any_cast<CPeQueryInternal<Args...>>(anyQuery);
 				query.ForEach(p_function);
 			}
 		private:
