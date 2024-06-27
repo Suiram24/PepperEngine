@@ -21,7 +21,7 @@ namespace pedemo {
 
 		LoadLevel();
 
-		pecore::CPeWorld world = pecore::CPeWorld();
+		world = pecore::CPeWorld();
 
 		vector test = { 2,3 };
 		vector test2 = { 8,9 };
@@ -82,20 +82,22 @@ namespace pedemo {
 		printf("All:\n");
 		world.ForEach(impossibleIT);
 
-		//query = world.Build<vector>();
+		query = world.Build<vector>();
 		queryFunction = [](vector& vec)
 			{
 				vec.y -= 0.98;
+				printf("%.2f|", vec.y);
 			};
-
+		
 	}
 
 	void DemoPenduleNewton::GameUpdate()
 	{
 
 		DrawImGuiInterface();
-		//query.ForEach(queryFunction);
-
+		printf("Vectors y : ");
+		query.ForEach(queryFunction);
+		printf("\n");
 	}
 
 	void DemoPenduleNewton::GameEnd()
