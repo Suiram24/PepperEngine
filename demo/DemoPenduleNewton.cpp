@@ -19,7 +19,7 @@ namespace pedemo {
 		colliderSystem = &pephy::CPeCollisionSystem::GetInstance();
 		meshRenderSystem = &engine::render::CPeMeshRenderSystem::GetInstance();
 
-		LoadLevel();
+		SetupCameraParameters();
 
 		world = pecore::CPeWorld();
 
@@ -42,12 +42,18 @@ namespace pedemo {
 		pecore::PeEntity a1 = world.CreateEntity();
 		world.Set<hp>(a1, { 150,150 });
 		world.Add<ally>(a1);
+		world.Set<pecore::Position>(a1, { pemaths::CPeVector3() });
+		world.Set<engine::render::MeshPlaceholder>(a1, { "models/sphere.obj", "textures/viking_room.png" });
 		pecore::PeEntity a2 = world.CreateEntity();
 		world.Set<hp>(a2, { 100,150 });
 		world.Add<ally>(a2);
+		world.Set<pecore::Position>(a2, { pemaths::CPeVector3(-2,0,0) });
+		world.Set<engine::render::MeshPlaceholder>(a2, { "models/sphere.obj", "textures/viking_room.png" });
 		pecore::PeEntity e2 = world.CreateEntity();
 		world.Set<hp>(e2, { 100,100 });
 		world.Add<ennemy>(e2);
+		world.Set<pecore::Position>(e2, { pemaths::CPeVector3(-1,0,3) });
+		world.Set<engine::render::MeshPlaceholder>(e2, { "models/companion_cube_simple.obj", "textures/viking_room.png" });
 		pecore::PeEntity e3 = world.CreateEntity();
 		world.Set<hp>(e3, { 50,100 });
 		world.Add<ennemy>(e3);
@@ -88,6 +94,8 @@ namespace pedemo {
 				vec.y -= 0.98;
 				printf("%.2f|", vec.y);
 			};
+
+		meshRenderSystem->InitSystems(world, *m_renderer);
 		
 	}
 
