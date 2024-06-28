@@ -87,12 +87,12 @@ namespace engine
 
 			
 		protected:
-			void UpdateComponentsDataMap(std::unordered_map<PeComponentID, ComponentDataMap, ComponentIDHash>& p_ComponentArchetypesMap)
+			void UpdateComponentsDataMap(const std::unordered_map<PeComponentID, ComponentDataMap, ComponentIDHash>& p_ComponentArchetypesMap)
 			{
 				int i = 0;
 				([&]
 					{
-						m_componentsDataMap[i] = &(p_ComponentArchetypesMap.at(Args::CompId()));
+						m_componentsDataMap[i++] = &(p_ComponentArchetypesMap.at(Args::CompId()));
 					}(),...);
 			}
 
@@ -148,7 +148,7 @@ namespace engine
 		private:
 
 			std::unordered_set<PeArchetypeID> m_archetypes; //List of all the archetypes that match the query types
-			ComponentDataMap* m_componentsDataMap[sizeof...(Args)];
+			const ComponentDataMap* m_componentsDataMap[sizeof...(Args)];
 			static constexpr auto m_componentsID = gen_compsID_table();
 
 

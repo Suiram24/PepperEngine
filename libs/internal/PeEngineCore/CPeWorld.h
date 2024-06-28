@@ -11,6 +11,7 @@
 
 namespace engine
 {
+	namespace render{ class CPeMeshRenderSystem; }//Forward declaration, temp to allow the render system to work until queries functions can acces entities
 	namespace core
 	{
 
@@ -20,7 +21,9 @@ namespace engine
 		class CPeWorld
 		{
 			template<PeComponentStruct...Args>
+			
 			friend class CPeQuery;
+			friend class engine::render::CPeMeshRenderSystem;
 		public:
 			CPeWorld();
 
@@ -311,7 +314,7 @@ namespace engine
 					Add<T>(entity);
 				}
 
-				*Get<T>(entity) = component;
+				*(Get<T>(entity)) = component;
 
 				return entity;
 			}
@@ -346,8 +349,9 @@ namespace engine
 					else
 					{
 						ComponentDataMap& cDataMap = m_ComponentArchetypeMap.at(c);
+						CPeGenericComponentDataArray& model = cDataMap.begin()->second;
 						cDataMap.insert(std::make_pair(LastArchetypeCreated, CPeGenericComponentDataArray()));
-						cDataMap.at(LastArchetypeCreated).CopyInitialize(cDataMap.begin()->second);
+						cDataMap.at(LastArchetypeCreated).CopyInitialize(model);
 					}
 				
 					
