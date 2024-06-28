@@ -74,9 +74,17 @@ namespace engine
 			{
 				for (auto archetype : m_archetypes)
 				{
-
-					for (int i = 0; i < m_componentsDataMap[0]->at(archetype).Count(); ++i)
+					const CPeGenericComponentDataArray& dataArray = m_componentsDataMap[0]->at(archetype);
+					if (dataArray.ElementCount() == 0)
 					{
+						continue;
+					}
+					for (int i = 0; i < dataArray.Count(); ++i)
+					{
+						if (!dataArray.IsValid(i))
+						{
+							continue;
+						}
 						int j = sizeof...(Args);
 						p_function(*(m_componentsDataMap[--j]->at(archetype).GetEntityData<Args>(i))...);
 					}

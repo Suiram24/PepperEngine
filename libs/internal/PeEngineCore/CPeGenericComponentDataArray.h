@@ -20,7 +20,7 @@ namespace engine
 			CPeGenericComponentDataArray(int ElementAllocationStride = 16)
 				: m_First(nullptr)
 				, m_ElementSize(0)
-				, m_ElementCount(0)
+				, m_InstanciedSlotsCount(0)
 				, m_ComponentTypeID(0)
 				, m_AllocatedSlotsCount(0)
 				, m_ElementAllocationStride(ElementAllocationStride)
@@ -57,12 +57,13 @@ namespace engine
 					return nullptr;
 				}
 
-				void* res = static_cast<char*>(m_First) + m_ElementCount * m_ElementSize;
+				void* res = static_cast<char*>(m_First) + m_InstanciedSlotsCount * m_ElementSize;
 				return static_cast<T*>(res);
 			}
 
 			bool IsValid(int index) const;
 			int Count() const;
+			int ElementCount() const;
 
 
 			template<typename T> 
@@ -70,14 +71,14 @@ namespace engine
 			{
 				m_ElementSize = sizeof(T);
 				m_ComponentTypeID = T::CompId();
-				Allocate(m_ElementAllocationStride);
+				Allocate();
 			}
 
 			void CopyInitialize(const CPeGenericComponentDataArray& target)
 			{
 				m_ElementSize = target.m_ElementSize;
 				m_ComponentTypeID = target.m_ComponentTypeID;
-				Allocate(m_ElementAllocationStride);
+				Allocate();
 			}
 
 			/**
@@ -103,12 +104,12 @@ namespace engine
 				}
 				else 
 				{
-					if (m_ElementCount == m_AllocatedSlotsCount)
+					if (m_InstanciedSlotsCount == m_AllocatedSlotsCount)
 					{
-						Allocate(m_ElementAllocationStride);
+						Allocate();
 					}
-					index = m_ElementCount;
-					++m_ElementCount;
+					index = m_InstanciedSlotsCount;
+					++m_InstanciedSlotsCount;
 					memcpy(static_cast<T*>(m_First) + index, entityData, m_ElementSize);
 				}
 
@@ -124,7 +125,7 @@ namespace engine
 			{
 				if (T::CompId() == m_ComponentTypeID)
 				{
-					if (entityIndex < m_ElementCount)
+					if (entityIndex < m_InstanciedSlotsCount)
 					{
 						T* res = reinterpret_cast<T*>(m_First) + entityIndex;
 						return res;
@@ -152,7 +153,7 @@ namespace engine
 			/**
 				* @brief Allocate memory for the number of elements specified wwith slotNumber
 			*/
-			bool Allocate(int slotNumber);
+			bool Allocate();
 
 		public:
 		protected:
@@ -160,7 +161,7 @@ namespace engine
 
 			void* m_First;
 			size_t m_ElementSize;
-			size_t m_ElementCount;
+			size_t m_InstanciedSlotsCount;
 			int m_ComponentTypeID;
 
 			//Memory management

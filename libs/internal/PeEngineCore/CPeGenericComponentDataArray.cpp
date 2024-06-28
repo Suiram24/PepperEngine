@@ -10,26 +10,37 @@ namespace engine
 		{
 			if (m_FreeIndexes.count(index) == 0)
 			{
-				return index < m_ElementCount;
+				return index < m_InstanciedSlotsCount;
 			}
 			return false;
 		}
 
 		int CPeGenericComponentDataArray::Count() const
 		{
-			return m_ElementCount;
+			return m_InstanciedSlotsCount;
 		}
+
+		int CPeGenericComponentDataArray::ElementCount() const
+		{
+			return m_InstanciedSlotsCount - m_FreeIndexes.size();
+		}
+
 
 
 		void CPeGenericComponentDataArray::MoveEntityDataFrom(CPeGenericComponentDataArray& originArray, int oldIndex, int newIndex)
 		{
-			if (newIndex >= m_AllocatedSlotsCount)
+			if (newIndex > m_AllocatedSlotsCount)
 			{
 				assert(false && "Component Data Array error: new index out of bounds");
 			}
 			if (m_ComponentTypeID != originArray.m_ComponentTypeID)
 			{
 				assert(false && "Component Data Array error: components types do not match");
+			}
+
+			if (newIndex == m_AllocatedSlotsCount)
+			{
+				Allocate();
 			}
 
 			//
@@ -42,9 +53,9 @@ namespace engine
 			{
 				m_FreeIndexes.erase(newIndex);
 			}
-			else if (newIndex == m_ElementCount)
+			else if (newIndex == m_InstanciedSlotsCount)
 			{
-				++m_ElementCount;
+				++m_InstanciedSlotsCount;
 			}
 			else
 			{
@@ -72,13 +83,14 @@ namespace engine
 		}
 
 
-		bool CPeGenericComponentDataArray::Allocate(int slotNumber)
+		bool CPeGenericComponentDataArray::Allocate()
 		{
-			void* newPtr = realloc(m_First, (m_ElementCount + slotNumber) * m_ElementSize);
+			m_ElementAllocationStride *= 2;
+			void* newPtr = realloc(m_First, (m_InstanciedSlotsCount + m_ElementAllocationStride) * m_ElementSize);
 			if (newPtr != nullptr)
 			{
 				m_First = newPtr;
-				m_AllocatedSlotsCount = m_ElementCount + slotNumber;
+				m_AllocatedSlotsCount = m_InstanciedSlotsCount + m_ElementAllocationStride;
 				return true;
 			}
 			else
