@@ -79,7 +79,16 @@ namespace pedemo {
 		};
 
 
-
+		for (int i = 0; i < 10; ++i)
+		{
+			for (int j = 0; j < 10; ++j)
+			{
+				pecore::PeEntity entity = world.CreateEntity();
+				world.Set<randomAccumulator>(entity, {rand()*0.001f, rand()*0.000001f});
+				world.Set<pecore::Position>(entity, { pemaths::CPeVector3(2*i-10,0,2*j-10)});
+				world.Set<engine::render::MeshPlaceholder>(entity, { "models/sphere.obj", "textures/viking_room.png" });
+			}
+		}
 
 
 		world.ForEach(allyIt);
@@ -88,14 +97,12 @@ namespace pedemo {
 		printf("All:\n");
 		world.ForEach(impossibleIT);
 
-		query = world.Build<vector>();
-		queryFunction = [](vector& vec)
-			{
-				vec.y -= 0.98;
-				printf("%.2f|", vec.y);
-			};
-
+		
+		
+		printf("Initializing systems:\n");
 		meshRenderSystem->InitSystems(world, *m_renderer);
+		printf("Building query:\n");
+		query = world.Build<pecore::Position, randomAccumulator>();
 		
 	}
 
@@ -103,9 +110,16 @@ namespace pedemo {
 	{
 
 		DrawImGuiInterface();
-		printf("Vectors y : ");
+		//printf("Calling update function");
+		float dt = ImGui::GetIO().DeltaTime;
+		queryFunction = [dt](pecore::Position& pos, randomAccumulator& ra)
+			{
+				ra.accumulator += dt;
+				pos.m_position.SetY(-10+2*cos(ra.accumulator));
+				//printf("%.2f|", pos.m_position.GetY());
+			};
 		query.ForEach(queryFunction);
-		printf("\n");
+		//printf("\n");
 	}
 
 	void DemoPenduleNewton::GameEnd()

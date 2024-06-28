@@ -45,6 +45,12 @@ namespace pedemo {
 		PECOMPONENT("Ennemy")
 	};
 
+	struct randomAccumulator {
+		PECOMPONENT("randomAccumulator")
+		float accumulator;
+		float speed;
+	};
+
 
 	/**
 		* @brief A class for basic components regarding the physics of a 3D elements.
@@ -101,8 +107,8 @@ namespace pedemo {
 
 		pecore::CPeWorld world;
 
-		pecore::CPeQuery<vector> query;
-		std::function<void(vector& vec)> queryFunction;
+		pecore::CPeQuery<pecore::Position, randomAccumulator> query;
+		std::function<void(pecore::Position&, randomAccumulator&)> queryFunction;
 
 
 	};
