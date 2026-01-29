@@ -86,11 +86,15 @@ target_link_libraries(PepperEngine ${LIBRARIES})
 target_compile_definitions(PepperEngine PUBLIC -DImTextureID=ImU64)
 
 # Compile shaders
-if (${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL "AMD64")
-  set(GLSL_VALIDATOR "$ENV{VULKAN_SDK}/Bin/glslangValidator.exe")
-else()
-  set(GLSL_VALIDATOR "$ENV{VULKAN_SDK}/Bin32/glslangValidator.exe")
-endif()
+if(WIN32)
+    if (${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL "AMD64")
+      set(GLSL_VALIDATOR "$ENV{VULKAN_SDK}/Bin/glslangValidator.exe")
+    else()
+      set(GLSL_VALIDATOR "$ENV{VULKAN_SDK}/Bin32/glslangValidator.exe")
+    endif()
+else ()
+    set(GLSL_VALIDATOR "glslangValidator")
+endif ()
 
 file(GLOB_RECURSE GLSL_SOURCE_FILES
     "shaders/*.frag"

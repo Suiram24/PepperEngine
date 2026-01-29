@@ -1,4 +1,5 @@
 #include "CPeNarrowPhaseSystem.h"
+#include <algorithm>
 
 namespace engine
 {

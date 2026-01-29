@@ -5,7 +5,7 @@
 #include "CPeBluePrints.h"
 #include <vector>
 #include <optional>
-#include <string>
+#include <cstring>
 
 namespace vk {
     class ModelWatcher: public ModelObject {

@@ -1,7 +1,7 @@
 #ifndef PEPHYSICS_CPEFORCEFREE_H
 #define PEPHYSICS_CPEFORCEFREE_H
 
-#include "..\CPeForce.h"
+#include "../CPeForce.h"
 
 namespace pemaths = engine::maths;
 
