@@ -119,7 +119,11 @@ namespace engine {
 			*/
 			void SetOrientation(const CPeQuaternion& p_orientation);
 
-
+			static void ComputeMatrixFromTransform(
+				CPeMatrix4& resultMatrix,
+				const CPeVector3& _position,
+				const CPeQuaternion& _orientation = CPeQuaternion(1, 0, 0, 0),
+				const CPeVector3& _size = CPeVector3(1, 1, 1));
 
 			/**
 			 * @brief Setter for m_size.

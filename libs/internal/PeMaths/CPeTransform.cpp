@@ -71,6 +71,21 @@ namespace engine {
 			
         }
 
+		void CPeTransform::ComputeMatrixFromTransform(CPeMatrix4& resultMatrix, const CPeVector3& _position, const CPeQuaternion& _orientation, const CPeVector3& _size)
+		{
+			CPeMatrix4 position = CPeMatrix4(CPeMatrix3::Identity(), _position);
+			CPeMatrix4 orientation = CPeMatrix4(_orientation.Normalize().ToMatrix3(), CPeVector3());
+			CPeMatrix4 scale = CPeMatrix4(
+				_size.GetX(), .0, .0,
+				.0, _size.GetY(), .0,
+				.0, .0, _size.GetZ(),
+				.0, .0, .0
+			);
+
+			resultMatrix = position * orientation * scale;
+
+		}
+
         void CPeTransform::SetSize(const CPeVector3& p_size)
 		{
 			m_size = p_size;

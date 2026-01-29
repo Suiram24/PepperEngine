@@ -19,16 +19,107 @@ namespace pedemo {
 		colliderSystem = &pephy::CPeCollisionSystem::GetInstance();
 		meshRenderSystem = &engine::render::CPeMeshRenderSystem::GetInstance();
 
-		LoadLevel();
+		SetupCameraParameters();
 
+		world = pecore::CPeWorld();
+
+		vector test = { 2,3 };
+		vector test2 = { 8,9 };
+		hp defaultHP = { 100,100 };
+		hp bossHP = { 50,100 };
+
+		pecore::PeComponentID id = world.GetID<vector>();
+		pecore::PeComponentID id2 = world.GetID<vector>();
+
+		pecore::PeEntity e1 = world.CreateEntity();
+		world.Add<vector>(e1);
+		world.Set<vector>(e1, test);
+		bool bTest = world.HasComponent<vector>(e1);
+		test2 = *(world.Get<vector>(e1));
+		world.Add<ally>(e1);
+		test2 = *(world.Get<vector>(e1));
+
+		pecore::PeEntity a1 = world.CreateEntity();
+		world.Set<hp>(a1, { 150,150 });
+		world.Add<ally>(a1);
+		world.Set<pecore::Position>(a1, { pemaths::CPeVector3() });
+		world.Set<engine::render::MeshPlaceholder>(a1, { "models/sphere.obj", "textures/viking_room.png" });
+		pecore::PeEntity a2 = world.CreateEntity();
+		world.Set<hp>(a2, { 100,150 });
+		world.Add<ally>(a2);
+		world.Set<pecore::Position>(a2, { pemaths::CPeVector3(-2,0,0) });
+		world.Set<engine::render::MeshPlaceholder>(a2, { "models/sphere.obj", "textures/viking_room.png" });
+		pecore::PeEntity e2 = world.CreateEntity();
+		world.Set<hp>(e2, { 100,100 });
+		world.Add<ennemy>(e2);
+		world.Set<pecore::Position>(e2, { pemaths::CPeVector3(-1,0,3) });
+		world.Set<engine::render::MeshPlaceholder>(e2, { "models/companion_cube_simple.obj", "textures/viking_room.png" });
+		pecore::PeEntity e3 = world.CreateEntity();
+		world.Set<hp>(e3, { 50,100 });
+		world.Add<ennemy>(e3);
+		pecore::PeEntity e4 = world.CreateEntity();
+		world.Set<hp>(e4, { 500,500 });
+		world.Add<ennemy>(e4);
+
+		printf("Allies:\n");
+		std::function<void(hp&, ally&)> allyIt = [](hp& hpComponent, ally& allyComponent)
+		{
+			printf("HP : %.0f", hpComponent.currentHP);
+			printf("/%.0f\n", hpComponent.maxHP);
+		};
+		std::function<void(hp&, ennemy&)> ennemyIt = [](hp& hpComponent, ennemy& ennemyComponent)
+		{
+			printf("HP : %.0f", hpComponent.currentHP);
+			printf("/%.0f\n", hpComponent.maxHP);
+		};
+		std::function<void(hp&)> impossibleIT = [](hp& hpComponent)
+		{
+			printf("HP : %.0f", hpComponent.currentHP);
+			printf("/%.0f\n", hpComponent.maxHP);
+		};
+
+
+		for (int i = 0; i < 10; ++i)
+		{
+			for (int j = 0; j < 10; ++j)
+			{
+				pecore::PeEntity entity = world.CreateEntity();
+				world.Set<randomAccumulator>(entity, {rand()*0.001f, rand()*0.000001f});
+				world.Set<pecore::Position>(entity, { pemaths::CPeVector3(2*i-10,0,2*j-10)});
+				world.Set<engine::render::MeshPlaceholder>(entity, { "models/sphere.obj", "textures/viking_room.png" });
+			}
+		}
+
+
+		world.ForEach(allyIt);
+		printf("Ennemies:\n");
+		world.ForEach(ennemyIt);
+		printf("All:\n");
+		world.ForEach(impossibleIT);
+
+		
+		
+		printf("Initializing systems:\n");
+		meshRenderSystem->InitSystems(world, *m_renderer);
+		printf("Building query:\n");
+		query = world.Build<pecore::Position, randomAccumulator>();
+		
 	}
 
 	void DemoPenduleNewton::GameUpdate()
 	{
 
 		DrawImGuiInterface();
-
-
+		//printf("Calling update function");
+		float dt = ImGui::GetIO().DeltaTime;
+		queryFunction = [dt](pecore::Position& pos, randomAccumulator& ra)
+			{
+				ra.accumulator += dt;
+				pos.m_position.SetY(-10+2*cos(ra.accumulator));
+				//printf("%.2f|", pos.m_position.GetY());
+			};
+		query.ForEach(queryFunction);
+		//printf("\n");
 	}
 
 	void DemoPenduleNewton::GameEnd()

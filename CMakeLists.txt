@@ -2,12 +2,32 @@ cmake_minimum_required(VERSION 3.10)
 project(PepperEngine)
 
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 set(PepperEngine_VERSION_MAJOR 1)
 set(PepperEngine_VERSION_MINOR 0)
 
+#config
+SET(PE_DEBUG FALSE CACHE BOOL "Enable debug preprocessor define if true")
+if(PE_DEBUG)
+    add_compile_definitions(PE_DEBUG)
+else()
+    add_compile_definitions(PE_RELEASE)
+endif()
+
+
+if (MSVC)
+    # Disable RTTI and exceptions for MSVC
+    string(REPLACE "/GR" "/GR-" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+    string(REPLACE "/EHsc" "/EHs-c-" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+else()
+    # Assume Clang if not MSVC
+    # Disable RTTI and exceptions for Clang
+    add_compile_options(-fno-rtti -fno-exceptions)
+endif()
+
+message(STATUS "Compile options: ${CMAKE_CXX_FLAGS}")
 
 # GLFW
 set(GLFW_DIR libs/external/GLFW/glfw-3.3.8) # Set this to point to an up-to-date GLFW repo

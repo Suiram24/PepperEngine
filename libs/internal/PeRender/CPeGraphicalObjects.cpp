@@ -3,6 +3,8 @@
 //#define TINYOBJLOADER_IMPLEMENTATION
 #include <tiny_obj_loader.h>
 #include<stdexcept>
+#include<cassert>
+
 
 vk::ModelWatcher::ModelWatcher(vk::GenericRenderer& renderer, std::string modelPath, std::string texture) :
     device(renderer.getDevice()),
@@ -94,7 +96,8 @@ void vk::ModelWatcher::loadModel(const char* path) {
     std::string warn, err;
 
     if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, path)) {
-        throw std::runtime_error(warn + err);
+        //assert(false && (warn + err));
+        assert(false && "vk::modelwatcher error when loading object");
     }
 
     std::unordered_map<Vertex, uint32_t> uniqueVertices{};
@@ -134,7 +137,7 @@ void vk::ModelWatcher::createBuffer(VkDeviceSize size, VkBufferUsageFlags usage,
     bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
     if (vkCreateBuffer(device, &bufferInfo, nullptr, &buffer) != VK_SUCCESS) {
-        throw std::runtime_error("failed to create buffer!");
+        assert(false && "failed to create buffer!");
     }
 
     VkMemoryRequirements memRequirements;
@@ -146,7 +149,7 @@ void vk::ModelWatcher::createBuffer(VkDeviceSize size, VkBufferUsageFlags usage,
     allocInfo.memoryTypeIndex = findMemoryType(memRequirements.memoryTypeBits, properties);
 
     if (vkAllocateMemory(device, &allocInfo, nullptr, &bufferMemory) != VK_SUCCESS) {
-        throw std::runtime_error("failed to allocate buffer memory!");
+        assert(false && "failed to allocate buffer memory!");
     }
 
     vkBindBufferMemory(device, buffer, bufferMemory, 0);
@@ -162,7 +165,7 @@ uint32_t vk::ModelWatcher::findMemoryType(uint32_t typeFilter, VkMemoryPropertyF
         }
     }
 
-    throw std::runtime_error("failed to find suitable memory type!");
+    assert(false && "failed to find suitable memory type!");
 }
 
 void vk::ModelWatcher::createVertexBuffer() {

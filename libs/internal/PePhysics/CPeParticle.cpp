@@ -72,7 +72,7 @@ namespace engine {
 		{
 			if (p_massInverse < 0.)
 			{
-				throw "A mass inverse cannot have negative value.";
+				assert(false && "A mass inverse cannot have negative value.");
 			}
 			m_massInverse = p_massInverse;
 		}
@@ -81,7 +81,7 @@ namespace engine {
 		{
 			if (p_mass <= 0.)
 			{
-				throw "A mass cannot have zero or negative value.";
+				assert(false && "A mass cannot have zero or negative value.");
 			}
 			SetMassInverse(1 / p_mass);
 		}

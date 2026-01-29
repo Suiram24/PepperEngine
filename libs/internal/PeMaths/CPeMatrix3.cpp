@@ -1,6 +1,8 @@
 #include <cstdio>
 
 #include "CPeMatrix3.h"
+#include<cassert>
+
 
 
 namespace engine {
@@ -18,7 +20,7 @@ namespace engine {
 		{
 			if (p_i > 2 || p_j > 2)
 			{
-				throw std::invalid_argument("You cannot set values outside of the 3x3 matrice.");
+				assert(false && "You cannot set values outside of the 3x3 matrice.");
 			}
 			m_matrice[p_i * 3 + p_j] = p_value;
 		}
@@ -27,7 +29,7 @@ namespace engine {
 		{
 			if (p_i > 2 || p_j > 2)
 			{
-				throw std::invalid_argument("You cannot get values outside of the 3x3 matrice.");
+				assert(false && "You cannot get values outside of the 3x3 matrice.");
 			}
 			return m_matrice[p_i * 3 + p_j];
 		}
@@ -132,7 +134,7 @@ namespace engine {
 		{
 			if (!IsInversible())
 			{
-				throw std::invalid_argument("You cannot inverse a matrice of determinant 0.");
+				assert(false && "You cannot inverse a matrice of determinant 0.");
 			}
 
 			CPeMatrix3 inverseMatrice = CPeMatrix3();

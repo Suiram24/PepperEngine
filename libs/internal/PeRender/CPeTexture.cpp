@@ -1,10 +1,9 @@
 #include "CPeTexture.h"
 
-#include <stdexcept>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
-#include <stdexcept>
+#include<cassert>
 
 vk::CPeTexture::CPeTexture(GenericRenderer& renderer, std::string texturePath) :
     device(renderer.getDevice()),
@@ -50,7 +49,7 @@ void vk::CPeTexture::createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, V
     bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
     if (vkCreateBuffer(device, &bufferInfo, nullptr, &buffer) != VK_SUCCESS) {
-        throw std::runtime_error("failed to create buffer!");
+        assert(false && "failed to create buffer!");
     }
 
     VkMemoryRequirements memRequirements;
@@ -62,7 +61,7 @@ void vk::CPeTexture::createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, V
     allocInfo.memoryTypeIndex = findMemoryType(memRequirements.memoryTypeBits, properties);
 
     if (vkAllocateMemory(device, &allocInfo, nullptr, &bufferMemory) != VK_SUCCESS) {
-        throw std::runtime_error("failed to allocate buffer memory!");
+        assert(false && "failed to allocate buffer memory!");
     }
 
     vkBindBufferMemory(device, buffer, bufferMemory, 0);
@@ -78,7 +77,7 @@ uint32_t vk::CPeTexture::findMemoryType(uint32_t typeFilter, VkMemoryPropertyFla
         }
     }
 
-    throw std::runtime_error("failed to find suitable memory type!");
+    assert(false && "failed to find suitable memory type!");
 }
 
 void vk::CPeTexture::copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size) {
@@ -138,7 +137,7 @@ VkImageView vk::CPeTexture::createImageView(VkImage image, VkFormat format, VkIm
 
     VkImageView imageView;
     if (vkCreateImageView(device, &viewInfo, nullptr, &imageView) != VK_SUCCESS) {
-        throw std::runtime_error("failed to create texture image view!");
+        assert(false && "failed to create texture image view!");
     }
 
     return imageView;
@@ -172,7 +171,7 @@ void vk::CPeTexture::createImage(
     imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
     if (vkCreateImage(device, &imageInfo, nullptr, &image) != VK_SUCCESS) {
-        throw std::runtime_error("failed to create image!");
+        assert(false && "failed to create image!");
     }
 
     VkMemoryRequirements memRequirements;
@@ -184,7 +183,7 @@ void vk::CPeTexture::createImage(
     allocInfo.memoryTypeIndex = findMemoryType(memRequirements.memoryTypeBits, properties);
 
     if (vkAllocateMemory(device, &allocInfo, nullptr, &imageMemory) != VK_SUCCESS) {
-        throw std::runtime_error("failed to allocate image memory!");
+        assert(false && "failed to allocate image memory!");
     }
 
     vkBindImageMemory(device, image, imageMemory, 0);
@@ -230,7 +229,7 @@ void vk::CPeTexture::transitionImageLayout(
         destinationStage = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
     }
     else {
-        throw std::invalid_argument("unsupported layout transition!");
+        assert(false && "unsupported layout transition!");
     }
 
     vkCmdPipelineBarrier(
@@ -281,7 +280,7 @@ void vk::CPeTexture::createTextureImage(const char* path) {
     mipLevels = static_cast<uint32_t>(std::floor(std::log2(std::max(texWidth, texHeight)))) + 1;
 
     if (!pixels) {
-        throw std::runtime_error("failed to load texture image!");
+        assert(false && "failed to load texture image!");
     }
 
     VkBuffer stagingBuffer;
@@ -328,7 +327,7 @@ void vk::CPeTexture::generateMipmaps(VkImage image, VkFormat imageFormat, int32_
     vkGetPhysicalDeviceFormatProperties(physicalDevice, imageFormat, &formatProperties);
 
     if (!(formatProperties.optimalTilingFeatures & VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT)) {
-        throw std::runtime_error("texture image format does not support linear blitting!");
+        assert(false && "texture image format does not support linear blitting!");
     }
 
     VkCommandBuffer commandBuffer = beginSingleTimeCommands();
@@ -440,7 +439,7 @@ void vk::CPeTexture::createTextureSampler() {
     samplerInfo.mipLodBias = 0.0f; // Optional
 
     if (vkCreateSampler(device, &samplerInfo, nullptr, &textureSampler) != VK_SUCCESS) {
-        throw std::runtime_error("failed to create texture sampler!");
+        assert(false && "failed to create texture sampler!");
     }
 }
 
@@ -454,7 +453,7 @@ void vk::CPeTexture::createTextureDescriptorSet()
 
 
     if (vkAllocateDescriptorSets(device, &allocInfo, &descriptorSet) != VK_SUCCESS) {
-        throw std::runtime_error("failed to allocate descriptor sets!");
+        assert(false && "failed to allocate descriptor sets!");
     }
 
     VkDescriptorImageInfo imageInfo{};

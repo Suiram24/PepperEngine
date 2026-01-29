@@ -5,6 +5,7 @@
 #include "../PeEngineCore/PeEngineCore.h"
 #include <vector>
 #include "CPeMeshComponent.h"
+#include "PeRenderComponents.h"
 
 
 namespace pemaths = engine::maths;
@@ -46,10 +47,20 @@ namespace engine {
 			*/
 			void Update();
 
+			void InitSystems(pecore::CPeWorld& world, vk::GenericRenderer& _renderer);
+
+			int InitializeModelWatcher(std::string& modelPath, std::string& texture);
+
+			void UpdateModelWatcher(int id, const glm::mat4& transform);
+
 		protected:
 		private:
 			CPeMeshRenderSystem()
 				: m_meshComponentPool()
+				, m_modelWatcherPool()
+				, initializer()
+				, updater()
+				, renderer(nullptr)
 			{
 			}
 
@@ -62,6 +73,13 @@ namespace engine {
 			
 			//TODO: make this an object pool (may need to work on vk modelwatcher)
 			std::vector<CPeMeshComponent*> m_meshComponentPool; 
+
+			std::vector<vk::ModelWatcher*> m_modelWatcherPool;
+			pecore::CPeQuery<MeshPlaceholder> initializer;
+			pecore::CPeQuery<MeshRenderer, pecore::Position> updater;
+			vk::GenericRenderer* renderer;
+			std::function<void(MeshPlaceholder&)> initializeFunction;
+			std::function<void(MeshRenderer&, pecore::Position&)> updaterFunction;
 
 
 		};

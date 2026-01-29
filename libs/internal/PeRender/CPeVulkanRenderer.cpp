@@ -298,7 +298,7 @@ void vk::CPeVulkanRenderer::recreateSwapChain() {
 
 void vk::CPeVulkanRenderer::createInstance() {
     if (enableValidationLayers && !checkValidationLayerSupport()) {
-        throw std::runtime_error("validation layers requested, but not available!");
+        assert(false && "validation layers requested, but not available!");
     }
 
     VkApplicationInfo appInfo{};
@@ -332,7 +332,7 @@ void vk::CPeVulkanRenderer::createInstance() {
     }
 
     if (vkCreateInstance(&createInfo, nullptr, &instance) != VK_SUCCESS) {
-        throw std::runtime_error("failed to create instance!");
+        assert(false && "failed to create instance!");
     }
 }
 
@@ -351,13 +351,13 @@ void vk::CPeVulkanRenderer::setupDebugMessenger() {
     populateDebugMessengerCreateInfo(createInfo);
 
     if (CreateDebugUtilsMessengerEXT(instance, &createInfo, nullptr, &debugMessenger) != VK_SUCCESS) {
-        throw std::runtime_error("failed to set up debug messenger!");
+        assert(false && "failed to set up debug messenger!");
     }
 }
 
 void vk::CPeVulkanRenderer::createSurface() {
     if (glfwCreateWindowSurface(instance, window, nullptr, &surface) != VK_SUCCESS) {
-        throw std::runtime_error("failed to create window surface!");
+        assert(false && "failed to create window surface!");
     }
 }
 
@@ -366,7 +366,7 @@ void vk::CPeVulkanRenderer::pickPhysicalDevice() {
     vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr);
 
     if (deviceCount == 0) {
-        throw std::runtime_error("failed to find GPUs with Vulkan support!");
+        assert(false && "failed to find GPUs with Vulkan support!");
     }
 
     std::vector<VkPhysicalDevice> devices(deviceCount);
@@ -381,7 +381,7 @@ void vk::CPeVulkanRenderer::pickPhysicalDevice() {
     }
 
     if (physicalDevice == VK_NULL_HANDLE) {
-        throw std::runtime_error("failed to find a suitable GPU!");
+        assert(false && "failed to find a suitable GPU!");
     }
 }
 
@@ -425,7 +425,7 @@ void vk::CPeVulkanRenderer::createLogicalDevice() {
     }
 
     if (vkCreateDevice(physicalDevice, &createInfo, nullptr, &device) != VK_SUCCESS) {
-        throw std::runtime_error("failed to create logical device!");
+        assert(false && "failed to create logical device!");
     }
 
     vkGetDeviceQueue(device, indices.graphicsFamily.value(), 0, &graphicsQueue);
@@ -473,7 +473,7 @@ void vk::CPeVulkanRenderer::createSwapChain() {
     createInfo.clipped = VK_TRUE;
 
     if (vkCreateSwapchainKHR(device, &createInfo, nullptr, &swapChain) != VK_SUCCESS) {
-        throw std::runtime_error("failed to create swap chain!");
+        assert(false && "failed to create swap chain!");
     }
 
     vkGetSwapchainImagesKHR(device, swapChain, &imageCount, nullptr);
@@ -562,7 +562,7 @@ void vk::CPeVulkanRenderer::createRenderPass() {
     renderPassInfo.pDependencies = &dependency;
 
     if (vkCreateRenderPass(device, &renderPassInfo, nullptr, &renderPass) != VK_SUCCESS) {
-        throw std::runtime_error("failed to create render pass!");
+        assert(false && "failed to create render pass!");
     }
 }
 
@@ -587,13 +587,13 @@ void vk::CPeVulkanRenderer::createDescriptorSetLayout() {
     layoutInfo.pBindings = &uboLayoutBinding;
 
     if (vkCreateDescriptorSetLayout(device, &layoutInfo, nullptr, &uniformDescriptorSetLayout) != VK_SUCCESS) {
-        throw std::runtime_error("failed to create uniform descriptor set layout!");
+        assert(false && "failed to create uniform descriptor set layout!");
     }
 
     layoutInfo.pBindings = &samplerLayoutBinding;
 
     if (vkCreateDescriptorSetLayout(device, &layoutInfo, nullptr, &textureDescriptorSetLayout) != VK_SUCCESS) {
-        throw std::runtime_error("failed to create texture descriptor set layout!");
+        assert(false && "failed to create texture descriptor set layout!");
     }
 }
 
@@ -703,7 +703,7 @@ void vk::CPeVulkanRenderer::createGraphicsPipeline() {
     pipelineLayoutInfo.pPushConstantRanges = &psRange;
 
     if (vkCreatePipelineLayout(device, &pipelineLayoutInfo, nullptr, &pipelineLayout) != VK_SUCCESS) {
-        throw std::runtime_error("failed to create pipeline layout!");
+        assert(false && "failed to create pipeline layout!");
     }
 
     VkGraphicsPipelineCreateInfo pipelineInfo{};
@@ -724,7 +724,7 @@ void vk::CPeVulkanRenderer::createGraphicsPipeline() {
     pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 
     if (vkCreateGraphicsPipelines(device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &graphicsPipeline) != VK_SUCCESS) {
-        throw std::runtime_error("failed to create graphics pipeline!");
+        assert(false && "failed to create graphics pipeline!");
     }
 
     vkDestroyShaderModule(device, fragShaderModule, nullptr);
@@ -751,7 +751,7 @@ void vk::CPeVulkanRenderer::createFramebuffers() {
         framebufferInfo.layers = 1;
 
         if (vkCreateFramebuffer(device, &framebufferInfo, nullptr, &swapChainFramebuffers[i]) != VK_SUCCESS) {
-            throw std::runtime_error("failed to create framebuffer!");
+            assert(false && "failed to create framebuffer!");
         }
     }
 }
@@ -765,7 +765,7 @@ void vk::CPeVulkanRenderer::createCommandPool() {
     poolInfo.queueFamilyIndex = queueFamilyIndices.graphicsFamily.value();
 
     if (vkCreateCommandPool(device, &poolInfo, nullptr, &commandPool) != VK_SUCCESS) {
-        throw std::runtime_error("failed to create graphics command pool!");
+        assert(false && "failed to create graphics command pool!");
     }
 }
 
@@ -853,7 +853,7 @@ VkFormat vk::CPeVulkanRenderer::findSupportedFormat(const std::vector<VkFormat>&
         }
     }
 
-    throw std::runtime_error("failed to find supported format!");
+    assert(false && "failed to find supported format!");
 }
 
 VkFormat vk::CPeVulkanRenderer::findDepthFormat() {
@@ -897,7 +897,7 @@ VkImageView vk::CPeVulkanRenderer::createImageView(VkImage image, VkFormat forma
 
     VkImageView imageView;
     if (vkCreateImageView(device, &viewInfo, nullptr, &imageView) != VK_SUCCESS) {
-        throw std::runtime_error("failed to create texture image view!");
+        assert(false && "failed to create texture image view!");
     }
 
     return imageView;
@@ -931,7 +931,7 @@ void vk::CPeVulkanRenderer::createImage(
     imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
     if (vkCreateImage(device, &imageInfo, nullptr, &image) != VK_SUCCESS) {
-        throw std::runtime_error("failed to create image!");
+        assert(false && "failed to create image!");
     }
 
     VkMemoryRequirements memRequirements;
@@ -943,7 +943,7 @@ void vk::CPeVulkanRenderer::createImage(
     allocInfo.memoryTypeIndex = findMemoryType(memRequirements.memoryTypeBits, properties);
 
     if (vkAllocateMemory(device, &allocInfo, nullptr, &imageMemory) != VK_SUCCESS) {
-        throw std::runtime_error("failed to allocate image memory!");
+        assert(false && "failed to allocate image memory!");
     }
 
     vkBindImageMemory(device, image, imageMemory, 0);
@@ -989,7 +989,7 @@ void vk::CPeVulkanRenderer::transitionImageLayout(
         destinationStage = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
     }
     else {
-        throw std::invalid_argument("unsupported layout transition!");
+        assert(false && "unsupported layout transition!");
     }
 
     vkCmdPipelineBarrier(
@@ -1078,7 +1078,7 @@ void vk::CPeVulkanRenderer::createDescriptorPool() {
     poolInfo.maxSets = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT) + 3;
 
     if (vkCreateDescriptorPool(device, &poolInfo, nullptr, &descriptorPool) != VK_SUCCESS) {
-        throw std::runtime_error("failed to create descriptor pool!");
+        assert(false && "failed to create descriptor pool!");
     }
 }
 
@@ -1092,7 +1092,7 @@ void vk::CPeVulkanRenderer::createDescriptorSets() {
 
     descriptorSets.resize(MAX_FRAMES_IN_FLIGHT);
     if (vkAllocateDescriptorSets(device, &allocInfo, descriptorSets.data()) != VK_SUCCESS) {
-        throw std::runtime_error("failed to allocate descriptor sets!");
+        assert(false && "failed to allocate descriptor sets!");
     }
 
     for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
@@ -1123,7 +1123,7 @@ void vk::CPeVulkanRenderer::createBuffer(VkDeviceSize size, VkBufferUsageFlags u
     bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
     if (vkCreateBuffer(device, &bufferInfo, nullptr, &buffer) != VK_SUCCESS) {
-        throw std::runtime_error("failed to create buffer!");
+        assert(false && "failed to create buffer!");
     }
 
     VkMemoryRequirements memRequirements;
@@ -1135,7 +1135,7 @@ void vk::CPeVulkanRenderer::createBuffer(VkDeviceSize size, VkBufferUsageFlags u
     allocInfo.memoryTypeIndex = findMemoryType(memRequirements.memoryTypeBits, properties);
 
     if (vkAllocateMemory(device, &allocInfo, nullptr, &bufferMemory) != VK_SUCCESS) {
-        throw std::runtime_error("failed to allocate buffer memory!");
+        assert(false && "failed to allocate buffer memory!");
     }
 
     vkBindBufferMemory(device, buffer, bufferMemory, 0);
@@ -1194,7 +1194,7 @@ uint32_t vk::CPeVulkanRenderer::findMemoryType(uint32_t typeFilter, VkMemoryProp
         }
     }
 
-    throw std::runtime_error("failed to find suitable memory type!");
+    assert(false && "failed to find suitable memory type!");
 }
 
 void vk::CPeVulkanRenderer::createCommandBuffers() {
@@ -1207,7 +1207,7 @@ void vk::CPeVulkanRenderer::createCommandBuffers() {
     allocInfo.commandBufferCount = (uint32_t)commandBuffers.size();
 
     if (vkAllocateCommandBuffers(device, &allocInfo, commandBuffers.data()) != VK_SUCCESS) {
-        throw std::runtime_error("failed to allocate command buffers!");
+        assert(false && "failed to allocate command buffers!");
     }
 }
 
@@ -1217,7 +1217,7 @@ void vk::CPeVulkanRenderer::beginRecordCommandBuffer(VkCommandBuffer& commandBuf
     beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
 
     if (vkBeginCommandBuffer(commandBuffer, &beginInfo) != VK_SUCCESS) {
-        throw std::runtime_error("failed to begin recording command buffer!");
+        assert(false && "failed to begin recording command buffer!");
     }
 
     VkRenderPassBeginInfo renderPassInfo{};
@@ -1269,7 +1269,7 @@ void vk::CPeVulkanRenderer::endRecordCommandBuffer(VkCommandBuffer& commandBuffe
     vkCmdEndRenderPass(commandBuffer);
 
     if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
-        throw std::runtime_error("failed to record command buffer!");
+        assert(false && "failed to record command buffer!");
     }
 }
 
@@ -1289,7 +1289,7 @@ void vk::CPeVulkanRenderer::createSyncObjects() {
         if (vkCreateSemaphore(device, &semaphoreInfo, nullptr, &imageAvailableSemaphores[i]) != VK_SUCCESS ||
             vkCreateSemaphore(device, &semaphoreInfo, nullptr, &renderFinishedSemaphores[i]) != VK_SUCCESS ||
             vkCreateFence(device, &fenceInfo, nullptr, &inFlightFences[i]) != VK_SUCCESS) {
-            throw std::runtime_error("failed to create synchronization objects for a frame!");
+            assert(false && "failed to create synchronization objects for a frame!");
         }
     }
 }
@@ -1323,7 +1323,7 @@ void vk::CPeVulkanRenderer::beginDrawFrame() {
         return;
     }
     else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR) {
-        throw std::runtime_error("failed to acquire swap chain image!");
+        assert(false && "failed to acquire swap chain image!");
     }
 
     updateUniformBuffer(currentFrame);
@@ -1353,7 +1353,7 @@ void vk::CPeVulkanRenderer::endDrawFrame() {
     submitInfo.pSignalSemaphores = signalSemaphores;
 
     if (vkQueueSubmit(graphicsQueue, 1, &submitInfo, inFlightFences[currentFrame]) != VK_SUCCESS) {
-        throw std::runtime_error("failed to submit draw command buffer!");
+        assert(false && "failed to submit draw command buffer!");
     }
 
     VkPresentInfoKHR presentInfo{};
@@ -1375,7 +1375,7 @@ void vk::CPeVulkanRenderer::endDrawFrame() {
         recreateSwapChain();
     }
     else if (result != VK_SUCCESS) {
-        throw std::runtime_error("failed to present swap chain image!");
+        assert(false && "failed to present swap chain image!");
     }
 
     currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
@@ -1389,7 +1389,7 @@ VkShaderModule vk::CPeVulkanRenderer::createShaderModule(const std::vector<char>
 
     VkShaderModule shaderModule;
     if (vkCreateShaderModule(device, &createInfo, nullptr, &shaderModule) != VK_SUCCESS) {
-        throw std::runtime_error("failed to create shader module!");
+        assert(false && "failed to create shader module!");
     }
 
     return shaderModule;
@@ -1567,7 +1567,7 @@ std::vector<char> vk::CPeVulkanRenderer::readFile(const std::string& filename) {
     std::ifstream file(filename, std::ios::ate | std::ios::binary);
 
     if (!file.is_open()) {
-        throw std::runtime_error("failed to open file!");
+        assert(false && "failed to open file!");
     }
 
     size_t fileSize = (size_t)file.tellg();

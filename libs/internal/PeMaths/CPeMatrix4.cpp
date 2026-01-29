@@ -1,5 +1,5 @@
 #include <cstdio>
-
+#include<cassert>
 #include "CPeMatrix4.h"
 
 
@@ -10,7 +10,7 @@ namespace engine {
 		{
 			if (p_i > 2 || p_j > 3)
 			{
-				throw std::invalid_argument("You cannot set values outside of the 3x4 matrice.");
+				assert(false && "You cannot set values outside of the 3x4 matrice.");
 			}
  
 			if (p_j == 3)
@@ -28,7 +28,7 @@ namespace engine {
 		{
 			if (p_i > 3 || p_j > 3)
 			{
-				throw std::invalid_argument("You cannot get values outside of the 4x4 matrice.");
+				assert(false && "You cannot get values outside of the 4x4 matrice.");
 			}
 
 			if (p_i == 3)//Hardcoded last line of the model matrix to save memory
@@ -156,7 +156,7 @@ namespace engine {
 		{
 			if (!IsInversible())
 			{
-				throw std::invalid_argument("You cannot inverse a matrice of determinant 0.");
+				assert(false && "You cannot inverse a matrice of determinant 0.");
 			}
 
 			double minusV[3] = { -m_translation[0], -m_translation[1] , -m_translation[2] };

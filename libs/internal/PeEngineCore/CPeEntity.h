@@ -67,7 +67,7 @@ namespace engine {
 			{
 				for (size_t i =0; i < consts::maxComponentsPerEntity; i++)
 				{
-					T* pointer = dynamic_cast<T*>(m_components[i].m_component);
+					T* pointer = static_cast<T*>(m_components[i].m_component);
 					if (pointer != nullptr)
 					{
 						return pointer;

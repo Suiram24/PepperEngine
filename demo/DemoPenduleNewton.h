@@ -13,6 +13,45 @@
 namespace pedemo {
 	namespace pephy = engine::physics;
 
+	struct vector {
+		//PECOMPONENT("Vector",engine::core::WSID("vector"))
+		PECOMPONENT("Vector")
+
+		float x;
+		float y;
+
+		void PrintString()
+		{
+			printf("Vector : %f,%f \n", x, y);
+		}
+	};
+
+	struct hp {
+		PECOMPONENT("HP")
+		float currentHP = 100;
+		float maxHP = 100;
+
+		void PrintString()
+		{
+			printf("HP : %.1f/%.1f \n", currentHP, maxHP);
+		}
+	};
+
+	struct ally {
+		PECOMPONENT("Ally")
+	};
+
+	struct ennemy {
+		PECOMPONENT("Ennemy")
+	};
+
+	struct randomAccumulator {
+		PECOMPONENT("randomAccumulator")
+		float accumulator;
+		float speed;
+	};
+
+
 	/**
 		* @brief A class for basic components regarding the physics of a 3D elements.
 	*/
@@ -65,6 +104,11 @@ namespace pedemo {
 		pecore::CPeEntity* entity1;
 		pecore::CPeEntity* entity2;
 		pecore::CPeEntity* entity3;
+
+		pecore::CPeWorld world;
+
+		pecore::CPeQuery<pecore::Position, randomAccumulator> query;
+		std::function<void(pecore::Position&, randomAccumulator&)> queryFunction;
 
 
 	};
