@@ -1,11 +1,11 @@
 #ifndef DEMO_PENDULENEWTON_H
 #define DEMO_PENDULENEWTON_H
 
-#include "..\CPeGameMode.h"
-#include "..\CPeGameManager.h"
-#include "..\libs\internal\PeRender\PeRender.h"
-#include "..\Libs\internal\PeEngineCore\PeEngineCore.h"
-#include "..\Libs\internal\PePhysics\PePhysics.h"
+#include "../CPeGameMode.h"
+#include "../CPeGameManager.h"
+#include "../libs/internal/PeRender/PeRender.h"
+#include "../libs/internal/PeEngineCore/PeEngineCore.h"
+#include "../libs/internal/PePhysics/PePhysics.h"
 
 #include "imgui.h"
 #include "imgui_impl_glfw.h"

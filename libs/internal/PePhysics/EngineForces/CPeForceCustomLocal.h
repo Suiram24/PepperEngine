@@ -1,7 +1,7 @@
 #ifndef PEPHYSICS_CPEFORCECUSTOMLOCA_H
 #define PEPHYSICS_CPEFORCECUSTOMLOCAL_H
 
-#include "..\CPeForce.h"
+#include "../CPeForce.h"
 
 namespace pemaths = engine::maths;
 

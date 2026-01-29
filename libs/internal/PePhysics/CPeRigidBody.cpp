@@ -64,7 +64,7 @@ namespace engine {
             return m_angularVelocity;
         }
 
-        void CPeRigidBody::SetAngularVelocity(pemaths::CPeVector3& p_newAngularVelocity)
+        void CPeRigidBody::SetAngularVelocity(const pemaths::CPeVector3& p_newAngularVelocity)
         {
             m_angularVelocity = p_newAngularVelocity;
         }
@@ -102,7 +102,7 @@ namespace engine {
 
         void CPeRigidBody::Initialise(pecore::CPeEntity* p_owner, double p_massInverse, double p_damping, pemaths::CPeVector3 p_gravity, double p_angularDamping)
         {
-            __super::Initialise(p_owner, p_massInverse, p_damping, p_gravity);
+            CPeParticle::Initialise(p_owner, p_massInverse, p_damping, p_gravity);
             m_angularDamping = p_angularDamping;
             SetSphereInertia(1);
         }
