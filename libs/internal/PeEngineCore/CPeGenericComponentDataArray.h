@@ -3,6 +3,9 @@
 #include <vector>
 #include <cassert>
 #include <unordered_set>
+#include <cstdlib>
+#include <cstring>
+
 
 namespace engine
 {

@@ -86,7 +86,7 @@ namespace engine
 							continue;
 						}
 						int j = sizeof...(Args);
-						p_function(*(m_componentsDataMap[--j]->at(archetype).GetEntityData<Args>(i))...);
+						p_function(*(m_componentsDataMap[--j]->at(archetype).template GetEntityData<Args>(i))...);
 					}
 					
 				}

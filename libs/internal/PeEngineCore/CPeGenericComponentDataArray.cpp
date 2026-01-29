@@ -1,5 +1,6 @@
 #include "CPeGenericComponentDataArray.h"
 #include <cassert>
+#include <cstring>
 
 namespace engine
 {
