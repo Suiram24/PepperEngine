@@ -34,6 +34,11 @@ namespace engine {
 
 		void CPeMeshRenderSystem::Update()
 		{
+			if (m_meshComponentPool.size() == 0)
+			{
+				return;
+			}
+
 			for (CPeMeshComponent* c : m_meshComponentPool)
 			{
 				c->UpdateTransformMatrix();
