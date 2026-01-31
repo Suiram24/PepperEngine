@@ -26,6 +26,17 @@ namespace engine
 			return m_InstanciedSlotsCount - m_FreeIndexes.size();
 		}
 
+		int CPeGenericComponentDataArray::FirstAvailableIndex() const
+		{
+			if (m_FreeIndexes.size() != 0)
+			{
+				return *m_FreeIndexes.begin();
+			}
+			else
+			{
+				return m_InstanciedSlotsCount;
+			}
+		}
 
 
 		void CPeGenericComponentDataArray::MoveEntityDataFrom(CPeGenericComponentDataArray& originArray, int oldIndex, int newIndex)

@@ -151,8 +151,48 @@ namespace engine
 					m_nextArchetype.insert(std::pair<ArchetypeChange, PeArchetypeID>{pair, entityArchetype.archetypeID});
 				}
 
-				entityArchetype.archetypeID = prevArchetype;
 				//TODO: move entity data from old to new archetype here
+				// First remove on current archetype the data of the component we are removing
+				CPeGenericComponentDataArray& removedComponentDataArray = m_ComponentArchetypeMap.find(component)->second.find(entityArchetype.archetypeID)->second;
+				removedComponentDataArray.RemoveEntityData(entityArchetype.EntityIndex);
+
+				// Then retrieve what will be the entity index in the new archetype
+				//CPeGenericComponentDataArray& newDataArray = m_ComponentArchetypeMap.find(component)->second.find(prevArchetype)->second;
+				//int newIndex = newDataArray.FirstAvailableIndex();
+
+				//ComponentDataMap* cdm = m_ComponentArchetypeMap.find(component)->second.find(prevArchetype);
+				//int newIndex;
+				//if (cdm)
+				//{
+				//	CPeGenericComponentDataArray& newDataArray = cdm->second;
+				//	newIndex = newDataArray.FirstAvailableIndex();
+				//}
+				//else // Here there is not yet a ComponentDataMap for this archetype yet.
+				//{
+				//	m_ComponentArchetypeMap
+				//}
+				int newIndex = -1;
+
+				// Next transfer all the components
+				std::vector<PeComponentID>& archetypeComponents = m_ArchetypesComponentList.find(prevArchetype)->second;
+				for (PeComponentID componentID : archetypeComponents)
+				{
+					if (componentID == component)
+					{
+						continue;
+					}
+					CPeGenericComponentDataArray& newDataArray = m_ComponentArchetypeMap.find(componentID)->second.find(prevArchetype)->second;
+					CPeGenericComponentDataArray& oldDataArray = m_ComponentArchetypeMap.find(componentID)->second.find(entityArchetype.archetypeID)->second;
+
+					assert(newIndex == -1 || newIndex == newDataArray.FirstAvailableIndex()); // Index should not change after the first one
+					newIndex = newDataArray.FirstAvailableIndex();
+					newDataArray.MoveEntityDataFrom(oldDataArray, entityArchetype.EntityIndex, newIndex);
+				}
+
+
+				// Update the entityArchetype
+				entityArchetype.archetypeID = prevArchetype;
+				entityArchetype.EntityIndex = newIndex;
 
 				return entity;
 			}

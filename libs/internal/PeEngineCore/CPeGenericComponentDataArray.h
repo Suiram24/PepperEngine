@@ -67,6 +67,7 @@ namespace engine
 			bool IsValid(int index) const;
 			int Count() const;
 			int ElementCount() const;
+			int FirstAvailableIndex() const;
 
 
 			template<typename T> 
