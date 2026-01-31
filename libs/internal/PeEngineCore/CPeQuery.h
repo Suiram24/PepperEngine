@@ -144,7 +144,7 @@ namespace engine
 				int i = 0;
 				([&]
 					{
-						compsID_table[i] = Args::CompId();
+						compsID_table[i++] = Args::CompId();
 					}
 				(), ...);
 
