@@ -24,7 +24,7 @@ namespace pedemo {
 
 	}
 
-	void DemoDoublePendulum::GameUpdate()
+	void DemoDoublePendulum::GameUpdate(float deltaTime)
 	{
 
 		DrawImGuiInterface4();

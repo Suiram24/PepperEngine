@@ -39,7 +39,7 @@ namespace pedemo {
 
 	}
 
-	void DemoBillard::GameUpdate()
+	void DemoBillard::GameUpdate(float deltaTime)
 	{
 		static float angle, power;
 		//DrawImGuiInterface();

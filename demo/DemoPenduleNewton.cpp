@@ -19,6 +19,12 @@ namespace pedemo {
 		colliderSystem = &pephy::CPeCollisionSystem::GetInstance();
 		meshRenderSystem = &engine::render::CPeMeshRenderSystem::GetInstance();
 
+		int a, b, c;
+		a = 10;
+		b = a++;
+		c = ++a;
+		printf("Value = %i, %i, %i\n", a,b,c);
+
 		SetupCameraParameters();
 
 		world = pecore::CPeWorld();
@@ -79,14 +85,14 @@ namespace pedemo {
 		};
 
 
-		for (int i = 0; i < 10; ++i)
+		for (int i = 0; i < 1000; ++i)
 		{
-			for (int j = 0; j < 10; ++j)
+			for (int j = 0; j < 1000; ++j)
 			{
 				pecore::PeEntity entity = world.CreateEntity();
 				world.Set<randomAccumulator>(entity, {rand()*0.001f, rand()*0.000001f});
 				world.Set<pecore::Position>(entity, { pemaths::CPeVector3(2*i-10,0,2*j-10)});
-				world.Set<engine::render::MeshPlaceholder>(entity, { "models/sphere.obj", "textures/viking_room.png" });
+				//world.Set<engine::render::MeshPlaceholder>(entity, { "models/sphere.obj", "textures/viking_room.png" });
 			}
 		}
 
@@ -102,11 +108,12 @@ namespace pedemo {
 		printf("Initializing systems:\n");
 		meshRenderSystem->InitSystems(world, *m_renderer);
 		printf("Building query:\n");
+
 		query = world.Build<pecore::Position, randomAccumulator>();
 		
 	}
 
-	void DemoPenduleNewton::GameUpdate()
+	void DemoPenduleNewton::GameUpdate(float deltaTime)
 	{
 
 		DrawImGuiInterface();

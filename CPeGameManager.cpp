@@ -58,11 +58,15 @@ namespace engine {
 			controls::CameraController::getKeyboardInputs(m_window);
 
 			m_renderer.beginDrawFrame();
+			float dt = ImGui::GetIO().DeltaTime;
 
 
-			m_ActiveGameMode->GameUpdate();
+			m_ActiveGameMode->GameUpdate(dt);
 
-			PhysicUpdate(ImGui::GetIO().DeltaTime);
+			PhysicUpdate(dt);
+			FixedUpdate(dt);
+
+			m_ActiveGameMode->PostUpdate(dt);
 
 			m_meshRenderSystem->Update();
 
@@ -84,6 +88,18 @@ namespace engine {
 		}
 
 		m_UncomputedTimeLeft = totalTime;		
+	}
+
+	void CPeGameManager::FixedUpdate(double p_deltaTime)
+	{
+		double totalTime = m_fixedUpdateUncomputedTimeLeft + p_deltaTime;
+		while (totalTime > m_fixedUpdateTimeStep)
+		{
+			m_ActiveGameMode->FixedUpdate(m_fixedUpdateTimeStep);
+			totalTime -= m_fixedUpdateTimeStep;
+		}
+
+		m_fixedUpdateUncomputedTimeLeft = totalTime;
 	}
 
 	void CPeGameManager::CollisionUpdate(double p_timeStep)

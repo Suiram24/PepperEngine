@@ -35,7 +35,7 @@ namespace pedemo {
 		/**
 		 * @brief Function called once every frame. Put your game logic here.
 		*/
-		virtual void GameUpdate();
+		virtual void GameUpdate(float deltaTime);
 
 		/**
 		 * @brief Function called once at the end of the game

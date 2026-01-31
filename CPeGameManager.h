@@ -17,6 +17,7 @@ namespace engine
 	namespace consts
 	{
 		const int physicsFrameRate = 300; //Physics fps
+		const int defaultFixedUpdateFrameRate = 60; // FixedUpdate() fps
 	}
 	
 	/**
@@ -68,6 +69,7 @@ namespace engine
 	private:
 
 		void PhysicUpdate(double p_deltaTime);
+		void FixedUpdate(double p_deltaTime);
 		void CollisionUpdate(double m_timeStep);
 
 		void AllocateObjectsPool();
@@ -89,6 +91,11 @@ namespace engine
 		// Physics
 		double m_UncomputedTimeLeft;
 		const double m_timeStep = double(1)/consts::physicsFrameRate;
+
+		//
+		// FixedUPdate
+		double m_fixedUpdateUncomputedTimeLeft;
+		double m_fixedUpdateTimeStep = double(1)/consts::defaultFixedUpdateFrameRate;
 
 		pecore::CPeObjectPool<pecore::CPeEntity, pecore::consts::maxEntityNumber>* m_entityPool;
 		

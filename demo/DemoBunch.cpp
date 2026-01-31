@@ -23,7 +23,7 @@ namespace pedemo {
 
 	}
 
-	void DemoBunch::GameUpdate()
+	void DemoBunch::GameUpdate(float deltaTime)
 	{
 
 		DrawImGuiInterface();

@@ -23,7 +23,7 @@ namespace pedemo {
 
 	}
 
-	void DemoCollisionSystem::GameUpdate()
+	void DemoCollisionSystem::GameUpdate(float deltaTime)
 	{
 
 		DrawImGuiInterface();

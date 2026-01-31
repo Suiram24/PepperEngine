@@ -26,7 +26,7 @@ namespace pedemo {
 
 	}
 
-	void DemoBroadPhase::GameUpdate()
+	void DemoBroadPhase::GameUpdate(float DeltaTime)
 	{
 	}
 

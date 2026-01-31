@@ -7,9 +7,17 @@ namespace engine {
 
 	}
 
-	void CPeGameMode::GameUpdate()
+	void CPeGameMode::GameUpdate(float deltaTime)
 	{
 
+	}
+
+	void CPeGameMode::FixedUpdate(float deltaTime)
+	{
+	}
+
+	void CPeGameMode::PostUpdate(float deltaTime)
+	{
 	}
 
 	void CPeGameMode::GameEnd()
