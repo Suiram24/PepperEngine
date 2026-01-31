@@ -151,26 +151,9 @@ namespace engine
 					m_nextArchetype.insert(std::pair<ArchetypeChange, PeArchetypeID>{pair, entityArchetype.archetypeID});
 				}
 
-				//TODO: move entity data from old to new archetype here
 				// First remove on current archetype the data of the component we are removing
 				CPeGenericComponentDataArray& removedComponentDataArray = m_ComponentArchetypeMap.find(component)->second.find(entityArchetype.archetypeID)->second;
 				removedComponentDataArray.RemoveEntityData(entityArchetype.EntityIndex);
-
-				// Then retrieve what will be the entity index in the new archetype
-				//CPeGenericComponentDataArray& newDataArray = m_ComponentArchetypeMap.find(component)->second.find(prevArchetype)->second;
-				//int newIndex = newDataArray.FirstAvailableIndex();
-
-				//ComponentDataMap* cdm = m_ComponentArchetypeMap.find(component)->second.find(prevArchetype);
-				//int newIndex;
-				//if (cdm)
-				//{
-				//	CPeGenericComponentDataArray& newDataArray = cdm->second;
-				//	newIndex = newDataArray.FirstAvailableIndex();
-				//}
-				//else // Here there is not yet a ComponentDataMap for this archetype yet.
-				//{
-				//	m_ComponentArchetypeMap
-				//}
 				int newIndex = -1;
 
 				// Next transfer all the components
