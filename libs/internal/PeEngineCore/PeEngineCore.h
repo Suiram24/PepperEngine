@@ -4,6 +4,7 @@
 #include "CPeEntity.h"
 #include "CPeComponent.h"
 #include "CPeObjectPool.h"
+#include "CPeQuery.h"
 #include "CPeWorld.h"
 #include "PeMathsComponents.h"
 

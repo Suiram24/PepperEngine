@@ -4,10 +4,11 @@
 #include <unordered_set>
 #include <functional>
 #include <any>
+#include <cstdio>
 
 #include "CPeGenericComponentDataArray.h"
 #include "PeECSDefinitions.h"
-#include "CPeQuery.h"
+#include "CPeQueryInternal.h"
 
 namespace engine
 {
@@ -21,7 +22,6 @@ namespace engine
 		class CPeWorld
 		{
 			template<PeComponentStruct...Args>
-			
 			friend class CPeQuery;
 			friend class engine::render::CPeMeshRenderSystem;
 		public:
@@ -240,7 +240,7 @@ namespace engine
 			
 
 			template<PeComponentStruct ... Args>
-			CPeQuery<Args...>&& Build()
+			CPeBuiltQuery<Args...> Build()
 			{
 
 
@@ -286,10 +286,7 @@ namespace engine
 
 				}
 
-				
-				CPeQuery<Args...>&& queryRef = CPeQuery<Args...>(this);
-				return queryRef;
-				
+				return CPeBuiltQuery<Args...>(this);
 			}
 
 			

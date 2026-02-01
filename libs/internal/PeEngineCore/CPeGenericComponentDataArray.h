@@ -141,6 +141,7 @@ namespace engine
 				{
 					assert(false && "Component Data Array error: components types do not match");
 				}
+				return nullptr;
 			}
 
 			/**

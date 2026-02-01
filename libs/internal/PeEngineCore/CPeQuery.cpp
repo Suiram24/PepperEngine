@@ -1,4 +1,4 @@
-#include "CPeGenericComponentDataArray.h"
+#include "CPeQuery.h"
 #include <cassert>
 
 namespace engine
