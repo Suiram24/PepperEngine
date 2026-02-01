@@ -1,9 +1,18 @@
 #include "CPeVector3.h"
+#include "CPeVector2.h"
 #include <cmath>
 #include <cstdio>
 
 namespace engine {
 	namespace maths {
+
+		CPeVector3::CPeVector3(const CPeVector2& p_vector) :
+			m_x(p_vector.GetX()),
+			m_y(p_vector.GetY()),
+			m_z(0)
+		{
+		}
+
 		
 		CPeVector3& CPeVector3::operator=(const CPeVector3& p_vector)
 		{
@@ -27,6 +36,13 @@ namespace engine {
 			m_x += p_vector.GetX();
 			m_y += p_vector.GetY();
 			m_z += p_vector.GetZ();
+			return *this;
+		}
+
+		CPeVector3& CPeVector3::operator+=(const CPeVector2& p_vector)
+		{
+			m_x += p_vector.GetX();
+			m_y += p_vector.GetY();
 			return *this;
 		}
 
@@ -138,6 +154,12 @@ namespace engine {
 		double CPeVector3::DistanceTo(const CPeVector3& p_vector) const
 		{
 			return (*this - p_vector).GetNorm();
+		}
+
+		void CPeVector3::RotateSelfAroundZAxis(double p_angle)
+		{
+			//m_x += std::cos(p_angle);
+			//m_y += std::sin(p_angle);
 		}
 
 

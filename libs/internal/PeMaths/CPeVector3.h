@@ -5,6 +5,7 @@ namespace engine
 {
 	namespace maths
 	{
+		class CPeVector2;
 		/**
 		 * @brief Class for a basic representation of a 3D vector.
 		*/
@@ -33,6 +34,8 @@ namespace engine
 			{
 			}
 
+			CPeVector3(const CPeVector2& p_vector);
+
 			CPeVector3() :
 				m_x(0),
 				m_y(0),
@@ -60,6 +63,13 @@ namespace engine
 			 * @return 'this'.
 			*/
 			CPeVector3& operator+=(const CPeVector3& p_vector);
+
+			/**
+			 * @brief Redefine the operator '+=' to work on CPeVector2.
+			 * @param p_vector A CPeVector3 to add to 'this'.
+			 * @return 'this'.
+			*/
+			CPeVector3& operator+=(const CPeVector2& p_vector);
 
 			/**
 			 * @brief Define the operator 'minus' for two CPeVector3. None of the vectors are modified.
@@ -180,6 +190,8 @@ namespace engine
 			 * @return Distance to p_vector.
 			*/
 			double DistanceTo(const CPeVector3& p_vector) const;
+
+			void RotateSelfAroundZAxis(double p_angle);
 
 			/**
 			 * @brief A simple print method. Meant for deggug.

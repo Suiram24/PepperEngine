@@ -2,6 +2,7 @@
 #define PEMATHS_PEMATHS_H
 
 #include "CPeVector3.h"
+#include "CPeVector2.h"
 #include "CPeTransform.h"
 #include "CPeMatrix3.h"
 #include "CPeMatrix4.h"
