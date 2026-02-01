@@ -8,5 +8,6 @@ add_library(PeEngineCore	PeEngineCore.h
 							 "CPeGenericComponentDataArray.h" "CPeGenericComponentDataArray.cpp"
 							 "CPeQuery.cpp" "CPeQuery.h"
 							 "PeECSDefinitions.h"
-							"PeMathsComponents.h")
+							"PeMathsComponents.h"
+							"CPeQueryInternal.h")
 target_link_libraries(PeEngineCore PeMaths)
