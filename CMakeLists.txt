@@ -16,6 +16,10 @@ else()
     add_compile_definitions(PE_RELEASE)
 endif()
 
+# Enable pdb in Release
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /Zi")
+set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /DEBUG /OPT:REF /OPT:ICF")
+
 
 if (MSVC)
     # Disable RTTI and exceptions for MSVC

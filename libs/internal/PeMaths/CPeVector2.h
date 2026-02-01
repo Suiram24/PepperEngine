@@ -105,7 +105,7 @@ namespace engine
 			 * @param p_vectorB A CPeVector2.
 			 * @return A double.
 			*/
-			static const double ScalarProduct(const CPeVector2& p_vectorA, const CPeVector2& p_vectorB)
+			static double ScalarProduct(const CPeVector2& p_vectorA, const CPeVector2& p_vectorB)
 			{
 				return
 					p_vectorA.GetX() * p_vectorB.GetX() +

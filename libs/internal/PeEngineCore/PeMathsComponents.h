@@ -12,6 +12,11 @@ namespace engine
 		{
 			PECOMPONENT("Position")
 			engine::maths::CPeVector3 m_position;
+
+			void PrintString()
+			{
+				printf("Position : %f,%f,%f \n", m_position.GetX(), m_position.GetY(), m_position.GetZ());
+			}
 		};
 
 		struct Rotation

@@ -14,8 +14,8 @@
 
 namespace vk {
 
-    const uint32_t WIDTH = 800;
-    const uint32_t HEIGHT = 600;
+    const uint32_t WIDTH = 1800;
+    const uint32_t HEIGHT = 900;
 
     const std::string MODEL_PATH = "models/viking_room.obj";
     const std::string DEBUG_TEXTURE_PATH = "textures/debug_texture.png";
