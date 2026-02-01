@@ -13,8 +13,6 @@ namespace engine
 	{
 		class CPeGenericComponentDataArray
 		{
-			friend class CPeGenericComponentDataArray;
-
 		public:
 
 			/**
