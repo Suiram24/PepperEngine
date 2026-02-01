@@ -29,7 +29,7 @@ else()
     # Disable RTTI and exceptions for Clang
     add_compile_options(-fno-rtti -fno-exceptions)
     # Enable pdb in Release
-    (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -g")
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -g")
 endif()
 
 message(STATUS "Compile options: ${CMAKE_CXX_FLAGS}")
