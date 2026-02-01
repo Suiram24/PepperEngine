@@ -16,12 +16,11 @@ else()
     add_compile_definitions(PE_RELEASE)
 endif()
 
-# Enable pdb in Release
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /Zi")
-set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /DEBUG /OPT:REF /OPT:ICF")
-
-
 if (MSVC)
+    # Enable pdb in Release
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /Zi")
+    set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /DEBUG /OPT:REF /OPT:ICF")
+
     # Disable RTTI and exceptions for MSVC
     string(REPLACE "/GR" "/GR-" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
     string(REPLACE "/EHsc" "/EHs-c-" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
@@ -29,6 +28,8 @@ else()
     # Assume Clang if not MSVC
     # Disable RTTI and exceptions for Clang
     add_compile_options(-fno-rtti -fno-exceptions)
+    # Enable pdb in Release
+    (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -g")
 endif()
 
 message(STATUS "Compile options: ${CMAKE_CXX_FLAGS}")
@@ -51,6 +52,7 @@ find_package(Vulkan REQUIRED)
 set(LIBRARIES "glfw;Vulkan::Vulkan")
 
 # Dear ImGui
+add_compile_definitions(IMGUI_DEFINE_MATH_OPERATORS)
 set(IMGUI_DIR libs/external/ImGui)
 include_directories(${IMGUI_DIR})
 
