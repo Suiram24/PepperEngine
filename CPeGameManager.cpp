@@ -157,8 +157,8 @@ namespace engine {
 		m_renderer.SetNearPlan(0.1f);
 		m_renderer.SetFarPlan(50.0f);
 
-		controls::CameraController::ChangeCameraPosition(-5, 10, -5);
-		controls::CameraController::ChangeCameraOrientation(0, 0, 0);
+		controls::CameraController::ChangeCameraPosition(3, 3, 3);
+		controls::CameraController::ChangeCameraOrientation(0, 0, -2);
 
 		controls::CameraController::ChangeDisplacementSensitivity(0.1f);
 		controls::CameraController::ChangeOrientationSensitivity(0.005f);

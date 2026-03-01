@@ -5,7 +5,7 @@ namespace pedemo {
 
 	void DemoPenduleNewton::DrawImGuiInterface()
 	{
-		ImGuiIO io = ImGui::GetIO();
+		const ImGuiIO io = ImGui::GetIO();
 
 		ImGui::Begin("Debug");
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
@@ -110,23 +110,28 @@ namespace pedemo {
 		printf("Building query:\n");
 
 		query = world.Build<pecore::Position, randomAccumulator>();
+		printf("GameStart Ended\n");
 		
 	}
 
 	void DemoPenduleNewton::GameUpdate(float deltaTime)
 	{
+		printf("GameUpdate begin\n");
 
 		DrawImGuiInterface();
-		//printf("Calling update function");
+		printf("Calling update function");
 		float dt = ImGui::GetIO().DeltaTime;
 		queryFunction = [dt](pecore::Position& pos, randomAccumulator& ra)
 			{
 				ra.accumulator += dt;
 				pos.m_position.SetY(-10+2*cos(ra.accumulator));
-				//printf("%.2f|", pos.m_position.GetY());
+				printf("%.2f|", pos.m_position.GetY());
 			};
 		query.ForEach(queryFunction);
-		//printf("\n");
+		printf("\n");
+
+		printf("GameUpdate end\n");
+
 	}
 
 	void DemoPenduleNewton::GameEnd()

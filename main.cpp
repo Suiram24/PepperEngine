@@ -12,13 +12,14 @@
 //#include "demo/DemoBroadPhase.h"
 #include "demo/DemoPenduleNewton.h"
 #include "demo/DemoBillard.h"
+#include "games/MaskedRobots/MaskedRobots.h"
 #include "CPeGameManager.h"
 
 // Main code
 int main(int, char**)
 {
 
-    pedemo::DemoPenduleNewton myGameMode = pedemo::DemoPenduleNewton();
+    masked_robots::MaskedRobots myGameMode = masked_robots::MaskedRobots();
 
     engine::CPeGameManager::getInstance().SetGameMode(&myGameMode);
     engine::CPeGameManager::getInstance().StartGame();

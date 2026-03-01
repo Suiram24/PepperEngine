@@ -84,7 +84,8 @@ namespace pedemo {
 		void SetupCameraParameters();
 	private:
 		void LoadLevel();
-		void DrawImGuiInterface();
+
+		static void DrawImGuiInterface();
 
 		void SpawnBox(double p_x, double p_y, double p_z);
 		pephy::CPeRigidBody* SpawnSphere(double p_x, double p_y, double p_z);
