@@ -11,6 +11,7 @@ namespace engine
 		{
 			PECOMPONENT("MeshRenderer")
 			int32_t ModelWatcherID;
+			bool visible;
 		};
 
 		struct MeshPlaceholder

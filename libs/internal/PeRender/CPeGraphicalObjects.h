@@ -16,6 +16,7 @@ namespace vk {
 
         const char* modelPath;
         bool loaded = false;
+        bool visible = true;
 
         ModelWatcher(vk::GenericRenderer& renderer, std::string modelPath, std::string texture);
         ModelWatcher(vk::GenericRenderer& renderer, std::string modelPath);

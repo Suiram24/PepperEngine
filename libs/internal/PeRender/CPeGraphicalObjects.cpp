@@ -58,6 +58,12 @@ void vk::ModelWatcher::Load() {
 }
 
 void vk::ModelWatcher::Render(VkCommandBuffer commandBuffer, VkPipelineLayout& pipelineLayout) {
+
+    if (!visible)
+    {
+        return;
+    }
+
     vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 1, 1, &texture.GetTextureDescriptorSet(), 0, nullptr);
 
     //glm::mat4 transform = glm::translate(glm::mat4(1.0), pos);

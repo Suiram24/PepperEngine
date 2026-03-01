@@ -34,15 +34,15 @@ namespace engine {
 
 		void CPeMeshRenderSystem::Update()
 		{
-			if (m_meshComponentPool.size() == 0)
-			{
-				return;
-			}
-
-			for (CPeMeshComponent* c : m_meshComponentPool)
-			{
-				c->UpdateTransformMatrix();
-			}
+			// if (m_meshComponentPool.size() == 0)
+			// {
+			// 	return;
+			// }
+			//
+			// for (CPeMeshComponent* c : m_meshComponentPool)
+			// {
+			// 	c->UpdateTransformMatrix();
+			// }
 
 			updater.ForEach(updaterFunction);
 
@@ -69,7 +69,7 @@ namespace engine {
 
 			for (auto pair : ModelwatcherAddList)
 			{
-				world.Set<MeshRenderer>(pair.first, { pair.second });
+				world.Set<MeshRenderer>(pair.first, { pair.second, true });
 				world.Remove<MeshPlaceholder>(pair.first);
 			}
 
@@ -77,6 +77,11 @@ namespace engine {
 			updaterFunction =[this](MeshRenderer& mr, pecore::Position& p)
 					{
 
+						if (!mr.visible)
+						{
+							m_modelWatcherPool[mr.ModelWatcherID]->visible = false;
+							return;
+						}
 						pemaths::CPeMatrix4 peTMatrix;
 
 						pemaths::CPeTransform::ComputeMatrixFromTransform(peTMatrix, p.m_position);
@@ -104,6 +109,7 @@ namespace engine {
 		void CPeMeshRenderSystem::UpdateModelWatcher(int id, const glm::mat4& transform)
 		{
 			m_modelWatcherPool[id]->SetTransformMatrix(transform);
+			m_modelWatcherPool[id]->visible = true;
 		}
 
 	}
